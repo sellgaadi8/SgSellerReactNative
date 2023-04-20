@@ -77,4 +77,20 @@ type FontSize =
   | 25
   | 34;
 
-type AppColors = 'Primary' | 'White' | 'Black' | '#000000' | '#FFFFFF';
+type AppColors = 'Primary' | 'White' | 'Black';
+
+type InputProps = {
+  disableCopyPaste?: boolean;
+  callOnFocus?: () => any;
+  textButton?: TextButtonProps;
+  showTextButton?: boolean;
+  error?: string;
+  noMargin?: boolean;
+  endIcon?: IconDefinition;
+  endIconPress?: () => void;
+  renderEndIcon?: () => any;
+  label?: string;
+  propsStyle?: ViewStyle;
+  labelStyle?: ViewStyle;
+  input?: ViewStyle;
+};

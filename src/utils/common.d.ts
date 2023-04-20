@@ -1,0 +1,1 @@
+type AppTheme = 'dark' | 'light';
