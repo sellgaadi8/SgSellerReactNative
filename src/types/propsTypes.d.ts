@@ -1,16 +1,27 @@
-// import {RouteProp} from '@react-navigation/native';
-// import {StackNavigationProp} from '@react-navigation/stack';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
-// type LoginProps = {
-//   navigation: StackNavigationProp<RootStackParamList, 'Login'>;
-//   route: RouteProp<RootStackParamList, 'Login'>;
-// };
+type LoginProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'Login'>;
+  route: RouteProp<RootStackParamList, 'Login'>;
+};
+
+type CreatePasswordProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'CreatePassword'>;
+  route: RouteProp<RootStackParamList, 'CreatePassword'>;
+};
+
+type ForgotPasswordProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'ForgotPassword'>;
+  route: RouteProp<RootStackParamList, 'ForgotPassword'>;
+};
 
 type BoxProps = {
   children: React.ReactNode;
   flexDirection?: 'row' | 'column';
   justifyContent?: 'center' | 'space-between' | 'space-around' | 'space-evenly';
   alignItems?: 'center' | 'space-between';
+  alignSelf?: 'center';
   height?: number | string;
   width?: number | string;
   p?: Spacing;
@@ -93,4 +104,24 @@ type InputProps = {
   propsStyle?: ViewStyle;
   labelStyle?: ViewStyle;
   input?: ViewStyle;
+};
+
+type TextButtonProps = {
+  label: string;
+  onPress?: () => void;
+  color?: string;
+  borderColor?: string;
+  fontSize?: string;
+  containerStyles?: EStyleSheet.AnyObject;
+  labelStyles?: EStyleSheet.AnyObject;
+};
+
+type PrimaryButtonProps = {
+  onPress: () => void;
+  label: string;
+};
+
+type TabLabelProps = {
+  value: string;
+  focused: boolean;
 };

@@ -1,11 +1,13 @@
 import React, {useMemo} from 'react';
 import {View, ViewProps} from 'react-native';
+import {BoxProps} from '../types/propsTypes';
 
 export default function Box({
   children,
   mv,
   justifyContent,
   alignItems,
+  alignSelf,
   flexDirection,
   pv,
   ph,
@@ -23,6 +25,7 @@ export default function Box({
           marginVertical: mv,
           justifyContent,
           alignItems,
+          alignSelf,
           flexDirection,
           paddingVertical: pv,
           paddingHorizontal: ph,

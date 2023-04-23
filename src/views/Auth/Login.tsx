@@ -1,5 +1,5 @@
-import {Image, StyleSheet} from 'react-native';
-import React from 'react';
+import {Image, Keyboard} from 'react-native';
+import React, {useState} from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -9,10 +9,37 @@ import CustomText from '../../components/CustomText';
 import {pixelSizeHorizontal, pixelSizeVertical} from '../../utils/responsive';
 import colors from '../../utils/colors';
 import Input from '../../components/Input';
-// import {useEffect} from 'react';
-// import {LoginProps} from '../../types/propsTypes';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import PrimaryButton from '../../components/PrimaryButton';
+import {LoginProps} from '../../types/propsTypes';
+import TextButton from '../../components/TextButton';
 
-export default function Login() {
+export default function Login({navigation}: LoginProps) {
+  const [mobile, setMobile] = useState('');
+  const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState<LoginErrors>();
+
+  function onSubmit() {
+    Keyboard.dismiss();
+    const isValid = validateInputs();
+    // if (isValid) {
+    navigation.navigate('HomeStack');
+    // }
+  }
+
+  function validateInputs() {
+    const tempErrors: LoginErrors = {};
+
+    if (mobile.length < 10) {
+      tempErrors.mobile = 'Enter a valid number';
+    }
+    if (password.length === 0) {
+      tempErrors.password = 'Enter a valid Otp';
+    }
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  }
+
   return (
     <Box style={styles.container}>
       <Box>
@@ -28,15 +55,48 @@ export default function Login() {
           fontFamily="Roboto-Bold"
           fontSize={22}
           lineHeight={28}>
-          Sign Up
+          Signup
         </CustomText>
-        <Input label="Mobile Number" />
+        <Box style={styles.inputContainer}>
+          <Input
+            label="Mobile Number"
+            keyboardType="numeric"
+            value={mobile}
+            onChangeText={setMobile}
+            error={errors?.mobile}
+            maxLength={10}
+            noMargin
+          />
+          <Input
+            label="Password"
+            showTextButton={true}
+            value={password}
+            onChangeText={setPassword}
+            error={errors?.password}
+            noMargin
+            textButton={{
+              label: 'Login with OTP',
+              containerStyles: styles.link,
+              onPress: () => console.log('test'),
+              labelStyles: styles.labelButton,
+            }}
+          />
+        </Box>
+        <Box width={'40%'} alignSelf="center" mv={10}>
+          <PrimaryButton label="Submit" onPress={onSubmit} />
+        </Box>
+      </Box>
+      <Box alignItems="center" mv={'7.5%'}>
+        <TextButton
+          label="Forgot password?"
+          onPress={() => navigation.navigate('ForgotPassword')}
+        />
       </Box>
     </Box>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.primary,
@@ -56,5 +116,8 @@ const styles = StyleSheet.create({
   body: {
     paddingHorizontal: wp('6%'),
     paddingVertical: hp('5%'),
+  },
+  inputContainer: {
+    marginTop: '4rem',
   },
 });

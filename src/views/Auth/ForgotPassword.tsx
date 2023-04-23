@@ -1,5 +1,5 @@
-import {Image, Keyboard} from 'react-native';
-import React, {useState} from 'react';
+import {Image} from 'react-native';
+import React from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -11,36 +11,12 @@ import colors from '../../utils/colors';
 import Input from '../../components/Input';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import PrimaryButton from '../../components/PrimaryButton';
-import {CreatePasswordProps} from '../../types/propsTypes';
-// import {useEffect} from 'react';
 
-export default function CreatePassword({navigation}: CreatePasswordProps) {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [errors, setErrors] = useState<PasswordErrors>();
+import {ForgotPasswordProps} from '../../types/propsTypes';
 
+export default function ForgotPassword({navigation}: ForgotPasswordProps) {
   function onSubmit() {
-    Keyboard.dismiss();
-    const isValid = validateInputs();
-    // if (isValid) {
     navigation.navigate('Login');
-    // }
-  }
-
-  function validateInputs() {
-    const tempErrors: PasswordErrors = {};
-
-    if (password.length === 0) {
-      tempErrors.password = 'Enter a Password';
-    }
-    if (confirmPassword.length === 0) {
-      tempErrors.confirmPassword = 'Enter a Confirm Password';
-    }
-    if (password !== confirmPassword) {
-      tempErrors.confirmPassword = 'Password does not match';
-    }
-    setErrors(tempErrors);
-    return Object.keys(tempErrors).length === 0;
   }
 
   return (
@@ -58,23 +34,10 @@ export default function CreatePassword({navigation}: CreatePasswordProps) {
           fontFamily="Roboto-Bold"
           fontSize={22}
           lineHeight={28}>
-          Set password
+          Forgot Password
         </CustomText>
         <Box style={styles.inputContainer}>
-          <Input
-            label="Enter new password"
-            value={password}
-            onChangeText={setPassword}
-            error={errors?.password}
-            noMargin
-          />
-          <Input
-            label="Confirm new password"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            error={errors?.confirmPassword}
-            noMargin
-          />
+          <Input label="Mobile Number" keyboardType="numeric" />
         </Box>
         <Box width={'40%'} alignSelf="center" mv={10}>
           <PrimaryButton label="Submit" onPress={onSubmit} />

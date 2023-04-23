@@ -18,6 +18,8 @@ import Box from './Box';
 import CustomText from './CustomText';
 import colors from '../utils/colors';
 import {fontPixel} from '../utils/responsive';
+import TextButton from './TextButton';
+import {InputProps} from '../types/propsTypes';
 
 export default function Input(props: TextInputProps & InputProps) {
   const {
@@ -26,8 +28,8 @@ export default function Input(props: TextInputProps & InputProps) {
     value,
     placeholder,
     keyboardType,
-    // textButton,
-    // showTextButton,
+    textButton,
+    showTextButton,
     error,
     noMargin,
     renderEndIcon,
@@ -128,7 +130,7 @@ export default function Input(props: TextInputProps & InputProps) {
             {error}
           </CustomText>
         )}
-        {/* {showTextButton && textButton && (
+        {showTextButton && textButton && (
           <TextButton
             {...textButton}
             containerStyles={[
@@ -138,7 +140,7 @@ export default function Input(props: TextInputProps & InputProps) {
             ]}
             labelStyles={textButton.labelStyles}
           />
-        )} */}
+        )}
       </Box>
       {/* Render custom end icon */}
       {renderEndIcon && renderEndIcon()}
@@ -160,7 +162,7 @@ export default function Input(props: TextInputProps & InputProps) {
 const styles = EStyleSheet.create({
   container: {
     width: '100%',
-    marginBottom: hp('2%'),
+    marginBottom: hp('4%'),
     ...contentCenter,
   },
   inputContainer: {
@@ -169,17 +171,19 @@ const styles = EStyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#FFF',
+    borderColor: '#79747E',
     width: '100%',
-    paddingHorizontal: wp('4%'),
+    paddingHorizontal: wp('5%'),
     borderRadius: '0.5rem',
+    fontSize: fontPixel(16),
+    lineHeight: 24,
     fontFamily: 'Roboto-Regular',
-    color: '#919191',
+    color: colors.textColor,
     backgroundColor: 'transparent',
     height: 50,
   },
   focused: {
-    borderColor: colors.primary,
+    borderColor: '#FFF',
   },
   link: {marginLeft: 'auto'},
   top: {top: -8},
@@ -209,22 +213,23 @@ const styles = EStyleSheet.create({
     ...contentCenter,
   },
   disabled: {
-    borderColor: '#CCCCCC',
+    borderColor: '#FFF',
     borderBottomWidth: 2,
     borderRadius: '0.6rem',
     color: 'rgba(38, 38, 38, 0.3)',
   },
   label: {
-    fontSize: fontPixel(18),
+    fontSize: fontPixel(12),
+    lineHeight: 18,
     fontFamily: 'Roboto-Medium',
-    color: '#919191',
-    backgroundColor: '#fff',
+    color: colors.White,
+    backgroundColor: colors.primary,
     position: 'absolute',
     paddingRight: '0.2rem',
     paddingLeft: '0.2rem',
   },
   floatingLabel: {
-    fontSize: fontPixel(17),
-    color: colors.primary,
+    fontSize: fontPixel(12),
+    color: colors.White,
   },
 });
