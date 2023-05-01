@@ -216,7 +216,6 @@ const styles = EStyleSheet.create({
     borderColor: '#FFF',
     borderBottomWidth: 2,
     borderRadius: '0.6rem',
-    color: 'rgba(38, 38, 38, 0.3)',
   },
   label: {
     fontSize: fontPixel(12),
