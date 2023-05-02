@@ -88,7 +88,14 @@ type FontSize =
   | 25
   | 34;
 
-type AppColors = 'Primary' | 'White' | 'Black';
+type AppColors =
+  | 'Primary'
+  | 'White'
+  | 'Black'
+  | '#201A1B'
+  | '#1C1B1F'
+  | '#49454F'
+  | '#FF0000';
 
 type InputProps = {
   disableCopyPaste?: boolean;
@@ -124,4 +131,8 @@ type PrimaryButtonProps = {
 type TabLabelProps = {
   value: string;
   focused: boolean;
+};
+
+type HeaderProps = {
+  title: string;
 };

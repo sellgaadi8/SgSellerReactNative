@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
 import {Text, TextProps} from 'react-native';
 import {moderateScale} from 'react-native-size-matters';
+import {CustomTextProps} from '../types/propsTypes';
 import colors from '../utils/colors';
 
 const FONT_SCALE = 0.3;
