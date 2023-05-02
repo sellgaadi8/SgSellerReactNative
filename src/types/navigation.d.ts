@@ -4,6 +4,8 @@ type RootStackParamList = {
   ForgotPassword: undefined;
   BottomNavigation: undefined;
   HomeStack: undefined;
+  Profile: undefined;
+  ProfileDetails: {title: string};
 };
 
 type BottomStackParamList = {

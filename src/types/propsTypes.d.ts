@@ -113,6 +113,22 @@ type InputProps = {
   input?: ViewStyle;
 };
 
+type ProfileInputProps = {
+  disableCopyPaste?: boolean;
+  callOnFocus?: () => any;
+  textButton?: TextButtonProps;
+  showTextButton?: boolean;
+  error?: string;
+  noMargin?: boolean;
+  endIcon?: IconDefinition;
+  endIconPress?: () => void;
+  renderEndIcon?: () => any;
+  label?: string;
+  propsStyle?: ViewStyle;
+  labelStyle?: ViewStyle;
+  input?: ViewStyle;
+};
+
 type TextButtonProps = {
   label: string;
   onPress?: () => void;
@@ -134,5 +150,22 @@ type TabLabelProps = {
 };
 
 type HeaderProps = {
-  title: string;
+  headerProps: HeaderOptions;
+  title?: string;
+};
+
+type ProfileProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'Profile'>;
+};
+
+type HeaderOptions =
+  | StackHeaderProps
+  | {
+      navigation: StackNavigationProp<RootStackParamList>;
+      route: RouteProp<RootStackParamList>;
+    };
+
+type ProfileDetailsProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'ProfileDetails'>;
+  route: RouteProp<RootStackParamList, 'ProfileDetails'>;
 };

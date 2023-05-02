@@ -11,6 +11,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import {ProfileProps} from '../../types/propsTypes';
 
 const Button = [
   {name: 'Personal details', detail: 'Edit & review personal details'},
@@ -19,7 +20,15 @@ const Button = [
   {name: 'Support', detail: ''},
 ];
 
-export default function Profile() {
+export default function Profile({navigation}: ProfileProps) {
+  function details(index: number) {
+    switch (index) {
+      case 0:
+        return navigation.navigate('ProfileDetails', {title: ''});
+      default:
+        break;
+    }
+  }
   return (
     <Box style={styles.container}>
       <Box style={styles.profilehead}>
@@ -47,6 +56,7 @@ export default function Profile() {
         {Button.map((el, index) => {
           return (
             <Pressable
+              onPress={() => details(index)}
               key={index.toString()}
               style={[
                 styles.button,
@@ -56,7 +66,7 @@ export default function Profile() {
                 },
               ]}>
               <Icon name="person-outline" size={20} color="#49454F" />
-              <Box ph={'5%'}>
+              <Box ph={'6%'}>
                 <CustomText
                   color="#1C1B1F"
                   fontFamily="Roboto-Regular"

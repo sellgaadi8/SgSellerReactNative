@@ -1,13 +1,16 @@
-import {NavigationContainer} from '@react-navigation/native';
+/* eslint-disable react/no-unstable-nested-components */
+import {NavigationContainer, RouteProp} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
+import Header from './src/components/Header';
 import GlobalContext from './src/contexts/GlobalContext';
 import BottomNavigation from './src/navigation/BottomNavigation';
 import colors from './src/utils/colors';
 import CreatePassword from './src/views/Auth/CreatePassword';
 import ForgotPassword from './src/views/Auth/ForgotPassword';
 import Login from './src/views/Auth/Login';
+import ProfileDetails from './src/views/Profile/ProfileDetails';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
@@ -39,11 +42,30 @@ export default function App() {
                 />
               </>
             ) : (
-              <RootStack.Screen
-                options={{headerShown: false}}
-                component={BottomNavigation}
-                name="BottomNavigation"
-              />
+              <>
+                <RootStack.Screen
+                  options={{headerShown: false}}
+                  component={BottomNavigation}
+                  name="BottomNavigation"
+                />
+                <RootStack.Screen
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title={param.route.params?.title}
+                        />
+                      ),
+                    };
+                  }}
+                  component={ProfileDetails}
+                  name="ProfileDetails"
+                />
+              </>
             )}
           </RootStack.Navigator>
         </NavigationContainer>
