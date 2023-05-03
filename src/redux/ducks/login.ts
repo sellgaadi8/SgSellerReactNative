@@ -9,6 +9,8 @@ const initialState: LoginState = {
   message: '',
   error: false,
   called: false,
+  name: null,
+  token: null,
 };
 
 export default (state = initialState, action: LoginAction): LoginState => {
@@ -25,7 +27,7 @@ const loginAction = (res: LoginState): LoginAction => {
 };
 
 export const onLogin =
-  (phone: string, isOtp: string, otp: string) => (dispatch: AppDispatch) => {
+  (phone: string, isOtp: boolean, otp: string) => (dispatch: AppDispatch) => {
     const url = LOGIN_SUBMIT;
 
     const body = new FormData();
@@ -60,6 +62,8 @@ export const onLogin =
               called: true,
               success: false,
               message: err.message,
+              name: null,
+              token: null,
             }),
           );
         }

@@ -169,3 +169,7 @@ type ProfileDetailsProps = {
   navigation: StackNavigationProp<RootStackParamList, 'ProfileDetails'>;
   route: RouteProp<RootStackParamList, 'ProfileDetails'>;
 };
+
+type LoaderProps = {
+  status?: string;
+};

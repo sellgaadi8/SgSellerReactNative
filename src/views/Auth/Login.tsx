@@ -1,11 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  ActivityIndicator,
-  Image,
-  Keyboard,
-  KeyboardAvoidingView,
-  ScrollView,
-} from 'react-native';
+import {Image, Keyboard, KeyboardAvoidingView, ScrollView} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {
   heightPercentageToDP as hp,
@@ -26,7 +20,7 @@ import Snackbar from 'react-native-snackbar';
 import {useAppSelector} from '../../utils/hooks';
 import {onLogin} from '../../redux/ducks/login';
 import GlobalContext from '../../contexts/GlobalContext';
-import {View} from 'react-native';
+import Loader from '../../components/Loader';
 
 export default function Login({navigation}: LoginProps) {
   const [mobile, setMobile] = useState('9004041284');
@@ -38,7 +32,7 @@ export default function Login({navigation}: LoginProps) {
 
   const selectOtp = useAppSelector(state => state.sendOtp);
   const selectLogin = useAppSelector(state => state.login);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const {setAuthenticated, setName} = useContext(GlobalContext);
 
   function onSubmit() {
@@ -106,11 +100,7 @@ export default function Login({navigation}: LoginProps) {
 
   return (
     <Box style={styles.container}>
-      {loading && (
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <ActivityIndicator size="small" color="#FFFFFF" />
-        </View>
-      )}
+      {loading && <Loader />}
       <KeyboardAvoidingView>
         <ScrollView keyboardShouldPersistTaps="handled">
           <Box>
