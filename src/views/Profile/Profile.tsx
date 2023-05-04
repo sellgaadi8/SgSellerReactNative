@@ -25,6 +25,8 @@ export default function Profile({navigation}: ProfileProps) {
     switch (index) {
       case 0:
         return navigation.navigate('ProfileDetails', {title: ''});
+      case 1:
+        return navigation.navigate('CreatePassword');
       default:
         break;
     }

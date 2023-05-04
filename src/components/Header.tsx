@@ -4,18 +4,42 @@ import CustomText from './CustomText';
 import {HeaderProps} from '../types/propsTypes';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import colors from '../utils/colors';
-import {contentCenter} from '../utils/styles';
+import {Image, Pressable} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Dimensions} from 'react-native';
+import {pixelSizeHorizontal, pixelSizeVertical} from '../utils/responsive';
+const {height} = Dimensions.get('window');
 
-export default function Header({title}: HeaderProps) {
+export default function Header({
+  title,
+  back,
+  showIcon,
+  headerProps: {navigation},
+}: HeaderProps) {
   return (
     <Box style={styles.container}>
-      <CustomText
-        color="White"
-        fontSize={22}
-        lineHeight={28}
-        fontFamily="Roboto-Bold">
-        {title}
-      </CustomText>
+      {/* {back && (
+        <Pressable onPress={() => navigation.goBack()}>
+          <Icon
+            name="arrow-left"
+            size={25}
+            color="#ffffff"
+            style={{left: 10}}
+          />
+        </Pressable>
+      )} */}
+      {showIcon ? (
+        <Image source={require('../assets/HomeLogo.png')} style={styles.logo} />
+      ) : (
+        <CustomText
+          color="White"
+          fontSize={22}
+          lineHeight={28}
+          fontFamily="Roboto-Bold"
+          style={styles.title}>
+          {title}
+        </CustomText>
+      )}
     </Box>
   );
 }
@@ -23,7 +47,22 @@ export default function Header({title}: HeaderProps) {
 const styles = EStyleSheet.create({
   container: {
     backgroundColor: colors.primary,
-    padding: '2rem',
-    ...contentCenter,
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'relative',
+    paddingHorizontal: '1rem',
+    paddingVertical: '0.8rem',
+    elevation: 8,
+    minHeight: height * 0.1,
+    shadowRadius: 2,
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.8,
+    justifyContent: 'center',
+  },
+  title: {},
+  logo: {
+    height: pixelSizeVertical(60),
+    width: pixelSizeHorizontal(58),
   },
 });

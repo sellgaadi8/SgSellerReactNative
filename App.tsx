@@ -11,6 +11,7 @@ import CreatePassword from './src/views/Auth/CreatePassword';
 import ForgotPassword from './src/views/Auth/ForgotPassword';
 import Login from './src/views/Auth/Login';
 import ProfileDetails from './src/views/Profile/ProfileDetails';
+import ValuatorForm from './src/views/Valuators/ValuatorForm';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
@@ -30,11 +31,7 @@ export default function App() {
                   component={Login}
                   name="Login"
                 />
-                <RootStack.Screen
-                  options={{headerShown: false}}
-                  component={CreatePassword}
-                  name="CreatePassword"
-                />
+
                 <RootStack.Screen
                   options={{headerShown: false}}
                   component={ForgotPassword}
@@ -58,12 +55,36 @@ export default function App() {
                         <Header
                           headerProps={props}
                           title={param.route.params?.title}
+                          back
                         />
                       ),
                     };
                   }}
                   component={ProfileDetails}
                   name="ProfileDetails"
+                />
+                <RootStack.Screen
+                  options={{headerShown: false}}
+                  component={CreatePassword}
+                  name="CreatePassword"
+                />
+                <RootStack.Screen
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title={param.route.params?.title}
+                          back
+                        />
+                      ),
+                    };
+                  }}
+                  component={ValuatorForm}
+                  name="ValuatorForm"
                 />
               </>
             )}

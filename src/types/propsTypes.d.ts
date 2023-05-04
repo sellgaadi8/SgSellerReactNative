@@ -1,5 +1,7 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {ViewStyle} from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 type LoginProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Login'>;
@@ -95,7 +97,8 @@ type AppColors =
   | '#201A1B'
   | '#1C1B1F'
   | '#49454F'
-  | '#FF0000';
+  | '#FF0000'
+  | '#111111';
 
 type InputProps = {
   disableCopyPaste?: boolean;
@@ -142,6 +145,9 @@ type TextButtonProps = {
 type PrimaryButtonProps = {
   onPress: () => void;
   label: string;
+  buttonStyle?: ViewStyle;
+  labelStyle?: EStyleSheet.AnyObject;
+  varient?: 'Primary' | 'Secondary';
 };
 
 type TabLabelProps = {
@@ -152,6 +158,8 @@ type TabLabelProps = {
 type HeaderProps = {
   headerProps: HeaderOptions;
   title?: string;
+  back?: boolean;
+  showIcon?: boolean;
 };
 
 type ProfileProps = {
@@ -172,4 +180,13 @@ type ProfileDetailsProps = {
 
 type LoaderProps = {
   status?: string;
+};
+
+type ValuatorFormProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'ValuatorForm'>;
+  route: RouteProp<RootStackParamList, 'ValuatorForm'>;
+};
+
+type ValuatorProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'ValuatorStack'>;
 };

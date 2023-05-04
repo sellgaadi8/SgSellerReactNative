@@ -6,6 +6,8 @@ type RootStackParamList = {
   HomeStack: undefined;
   Profile: undefined;
   ProfileDetails: {title: string};
+  ValuatorForm: {title: string};
+  ValuatorStack: undefined;
 };
 
 type BottomStackParamList = {

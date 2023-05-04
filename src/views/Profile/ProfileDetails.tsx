@@ -34,7 +34,7 @@ export default function ProfileDetails({navigation}: ProfileDetailsProps) {
 
   return (
     <Box style={styles.container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Box>
           <ProfileInput
             label="Dealership name"

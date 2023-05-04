@@ -5,16 +5,29 @@ import colors from '../utils/colors';
 import {contentCenter} from '../utils/styles';
 import CustomText from './CustomText';
 import {PrimaryButtonProps} from '../types/propsTypes';
+import {pixelSizeHorizontal, pixelSizeVertical} from '../utils/responsive';
 
-export default function PrimaryButton({label, onPress}: PrimaryButtonProps) {
+export default function PrimaryButton({
+  label,
+  onPress,
+  buttonStyle,
+  labelStyle,
+  varient = 'Primary',
+}: PrimaryButtonProps) {
   return (
-    <Pressable style={styles.buttonContainer} onPress={onPress}>
+    <Pressable
+      style={[
+        styles.buttonContainer,
+        varient === 'Secondary' && styles.buttonSecondary,
+        buttonStyle,
+      ]}
+      onPress={onPress}>
       <CustomText
         fontSize={14}
         color="Black"
         fontFamily="Roboto-Bold"
         lineHeight={20}
-        style={styles.label}>
+        style={[styles.label, labelStyle]}>
         {label}
       </CustomText>
     </Pressable>
@@ -23,14 +36,17 @@ export default function PrimaryButton({label, onPress}: PrimaryButtonProps) {
 
 const styles = EStyleSheet.create({
   buttonContainer: {
-    borderWidth: 1,
     backgroundColor: colors.secondary,
-    width: '100%',
-    padding: '1rem',
-    borderRadius: '2rem',
+    paddingHorizontal: pixelSizeHorizontal(15),
+    paddingVertical: pixelSizeVertical(13),
+    borderRadius: '3rem',
     ...contentCenter,
   },
   label: {
     textTransform: 'uppercase',
+  },
+  buttonSecondary: {
+    backgroundColor: colors.White,
+    borderWidth: 1,
   },
 });
