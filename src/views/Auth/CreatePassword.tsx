@@ -12,18 +12,22 @@ import Input from '../../components/Input';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import PrimaryButton from '../../components/PrimaryButton';
 import {CreatePasswordProps} from '../../types/propsTypes';
+import {useDispatch} from 'react-redux';
+import {onChangePassword} from '../../redux/ducks/changePassword';
 // import {useEffect} from 'react';
 
 export default function CreatePassword({navigation}: CreatePasswordProps) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState<PasswordErrors>();
+  const dispatch = useDispatch<any>();
 
   function onSubmit() {
     Keyboard.dismiss();
     const isValid = validateInputs();
+    dispatch(onChangePassword('9004041284', password, confirmPassword));
     // if (isValid) {
-    navigation.navigate('Login');
+    // navigation.navigate('Login');
     // }
   }
 

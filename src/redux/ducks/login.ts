@@ -1,12 +1,13 @@
 import axiosInstance from '../../axios';
 import {LOGIN_SUBMIT} from '../../utils/api';
+import {postAuth} from '../../utils/helper';
 import {AppDispatch} from '../store';
 
 const LOGIN: LOGIN = 'sgSeller/login';
 
 const initialState: LoginState = {
   success: false,
-  message: '',
+  message: null,
   error: false,
   called: false,
   name: null,
@@ -46,6 +47,9 @@ export const onLogin =
       .post(url, body, config)
       .then(res => {
         dispatch(loginAction({...res.data, error: false}));
+        if (res.data.token) {
+          postAuth(res.data.token);
+        }
       })
       .catch(err => {
         if (err?.request?._repsonse) {

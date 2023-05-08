@@ -11,7 +11,7 @@ export default function Loader({status}: LoaderProps) {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <ActivityIndicator size="small" color={colors.White} />
+        <ActivityIndicator size="small" color={colors.secondary} />
         {status && <Text style={styles.status}>{status}</Text>}
       </View>
     </View>

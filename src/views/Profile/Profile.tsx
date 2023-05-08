@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Pressable, View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Box from '../../components/Box';
@@ -12,6 +12,9 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import {ProfileProps} from '../../types/propsTypes';
+import {useDispatch} from 'react-redux';
+import {onGetProfile} from '../../redux/ducks/getProfile';
+import {useAppSelector} from '../../utils/hooks';
 
 const Button = [
   {name: 'Personal details', detail: 'Edit & review personal details'},
@@ -21,16 +24,38 @@ const Button = [
 ];
 
 export default function Profile({navigation}: ProfileProps) {
+  const dispatch = useDispatch<any>();
+  const selectGetProfile = useAppSelector(state => state.getProfile);
+  const [profileDetail, setProfleDetail] = useState<Profile>();
+
   function details(index: number) {
-    switch (index) {
-      case 0:
-        return navigation.navigate('ProfileDetails', {title: ''});
-      case 1:
-        return navigation.navigate('CreatePassword');
-      default:
-        break;
+    if (profileDetail?.dealership_name) {
+      switch (index) {
+        case 0:
+          return navigation.navigate('ProfileDetails', {
+            title: profileDetail?.dealership_name,
+          });
+        case 1:
+          return navigation.navigate('CreatePassword');
+        default:
+          break;
+      }
     }
   }
+  useEffect(() => {
+    dispatch(onGetProfile());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (selectGetProfile.called) {
+      const {data, success} = selectGetProfile;
+      if (success && data) {
+        setProfleDetail(data);
+      }
+    }
+  }, [selectGetProfile]);
+
   return (
     <Box style={styles.container}>
       <Box style={styles.profilehead}>
@@ -43,14 +68,14 @@ export default function Profile({navigation}: ProfileProps) {
             fontSize={24}
             lineHeight={32}
             fontFamily="Roboto-Regular">
-            Rishabh Jain
+            {profileDetail?.dealership_name}
           </CustomText>
           <CustomText
             color="#201A1B"
             fontSize={14}
             lineHeight={20}
             fontFamily="Roboto-Regular">
-            98000-xxxxx
+            {profileDetail?.mobile}
           </CustomText>
         </Box>
       </Box>

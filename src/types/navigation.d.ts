@@ -1,4 +1,5 @@
 type RootStackParamList = {
+  Splash: undefined;
   Login: undefined;
   CreatePassword: undefined;
   ForgotPassword: undefined;

@@ -11,6 +11,7 @@ import CreatePassword from './src/views/Auth/CreatePassword';
 import ForgotPassword from './src/views/Auth/ForgotPassword';
 import Login from './src/views/Auth/Login';
 import ProfileDetails from './src/views/Profile/ProfileDetails';
+import Splash from './src/views/Splash/Splash';
 import ValuatorForm from './src/views/Valuators/ValuatorForm';
 
 export default function App() {
@@ -24,8 +25,13 @@ export default function App() {
         <StatusBar backgroundColor={colors.primary} />
         <NavigationContainer>
           <RootStack.Navigator>
-            {authenticated ? (
+            {!authenticated ? (
               <>
+                <RootStack.Screen
+                  options={{headerShown: false}}
+                  component={Splash}
+                  name="Splash"
+                />
                 <RootStack.Screen
                   options={{headerShown: false}}
                   component={Login}

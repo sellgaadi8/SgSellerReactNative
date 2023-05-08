@@ -74,8 +74,6 @@ export default function Login({navigation}: LoginProps) {
         });
         setShowOtp(true);
       } else {
-        console.log('mss', message);
-
         Snackbar.show({
           text: message,
           backgroundColor: 'red',
@@ -85,8 +83,8 @@ export default function Login({navigation}: LoginProps) {
     }
     if (selectLogin.called) {
       setLoading(false);
-      const {message, success, token, name} = selectLogin;
-      if (success && token && name) {
+      const {message, success, name} = selectLogin;
+      if (success && name && message) {
         setAuthenticated(true);
         setName(name);
         Snackbar.show({
