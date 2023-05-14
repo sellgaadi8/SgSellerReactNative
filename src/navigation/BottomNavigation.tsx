@@ -12,10 +12,12 @@ import {View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import colors from '../utils/colors';
 import {contentCenter} from '../utils/styles';
+import {useAppSelector} from '../utils/hooks';
 
 const Tab = createBottomTabNavigator<BottomStackParamList>();
 
 export default function BottomNavigation() {
+  const selectGlobalState = useAppSelector(state => state.global);
   return (
     <Tab.Navigator
       screenOptions={{
@@ -30,6 +32,7 @@ export default function BottomNavigation() {
           shadowOpacity: 0.8,
           borderWidth: 0.5,
           borderColor: '#CCCCCC',
+          display: selectGlobalState.showBottomTabs ? 'flex' : 'none',
           position: 'absolute',
           height: 70,
         },
@@ -54,6 +57,15 @@ export default function BottomNavigation() {
         component={HomeStack}
       />
       <Tab.Screen
+        listeners={{
+          tabPress: selectGlobalState.isFormEdited
+            ? e => {
+                if (selectGlobalState.isFormEdited) {
+                  e.preventDefault();
+                }
+              }
+            : undefined,
+        }}
         options={{
           tabBarLabel: ({focused}) => (
             <TabLabel focused={focused} value="Vehicles" />

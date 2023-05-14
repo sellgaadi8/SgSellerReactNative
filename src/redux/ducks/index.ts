@@ -4,6 +4,7 @@ import sendOtp from './sendOtp';
 import getProfile from './getProfile';
 import updateProfile from './updateProfile';
 import changePassword from './changePassword';
+import global from './global';
 
 export default combineReducers({
   login,
@@ -11,4 +12,5 @@ export default combineReducers({
   getProfile,
   updateProfile,
   changePassword,
+  global,
 });

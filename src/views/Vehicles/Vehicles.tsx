@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Dimensions, Pressable} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -8,19 +8,38 @@ import VehicleType from '../../components/VehicleType';
 import colors from '../../utils/colors';
 import {container} from '../../utils/styles';
 import Modal from 'react-native-modalbox';
+import {useDispatch} from 'react-redux';
+import {onGlobalChange} from '../../redux/ducks/global';
+import {VehiclesProps} from '../../types/propsTypes';
 const {height} = Dimensions.get('window');
 
-export default function Vehicles() {
+export default function Vehicles({navigation}: VehiclesProps) {
   const [show, setShow] = useState(false);
+  const dispatch = useDispatch<any>();
+
+  useEffect(() => {
+    dispatch(onGlobalChange({showBottomTabs: true}));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function closModal() {
     setShow(false);
+    dispatch(onGlobalChange({showBottomTabs: true}));
+  }
+
+  function addCar() {
+    dispatch(onGlobalChange({showBottomTabs: false}));
+    setShow(true);
+  }
+
+  function selectVehicleType(id: number) {
+    navigation.navigate('AddVehicle', {id: id});
   }
   return (
     <>
       <Box style={styles.container}>
         <CustomText>Vehicles</CustomText>
-        <Pressable style={styles.addCar} onPress={() => setShow(!show)}>
+        <Pressable style={styles.addCar} onPress={addCar}>
           <Icon name="pencil-outline" size={25} color="#000000" />
         </Pressable>
       </Box>
@@ -29,7 +48,7 @@ export default function Vehicles() {
         onClosed={closModal}
         style={styles.modal}
         backButtonClose>
-        <VehicleType />
+        <VehicleType onPressClose={closModal} onPressType={selectVehicleType} />
       </Modal>
     </>
   );
@@ -49,5 +68,6 @@ const styles = EStyleSheet.create({
   },
   modal: {
     height: height * 2,
+    backgroundColor: '#FFFFFF',
   },
 });

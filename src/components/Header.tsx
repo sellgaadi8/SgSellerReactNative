@@ -18,16 +18,13 @@ export default function Header({
 }: HeaderProps) {
   return (
     <Box style={styles.container}>
-      {/* {back && (
-        <Pressable onPress={() => navigation.goBack()}>
-          <Icon
-            name="arrow-left"
-            size={25}
-            color="#ffffff"
-            style={{left: 10}}
-          />
+      {back && (
+        <Pressable
+          onPress={() => navigation.goBack()}
+          style={styles.backbutton}>
+          <Icon name="arrow-left" size={25} color="#ffffff" />
         </Pressable>
-      )} */}
+      )}
       {showIcon ? (
         <Image source={require('../assets/HomeLogo.png')} style={styles.logo} />
       ) : (
@@ -64,5 +61,10 @@ const styles = EStyleSheet.create({
   logo: {
     height: pixelSizeVertical(60),
     width: pixelSizeHorizontal(58),
+  },
+  backbutton: {
+    position: 'absolute',
+    left: 10,
+    top: 28,
   },
 });

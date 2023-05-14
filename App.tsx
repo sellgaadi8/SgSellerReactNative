@@ -13,6 +13,7 @@ import Login from './src/views/Auth/Login';
 import ProfileDetails from './src/views/Profile/ProfileDetails';
 import Splash from './src/views/Splash/Splash';
 import ValuatorForm from './src/views/Valuators/ValuatorForm';
+import AddVehicle from './src/views/Vehicles/AddVehicle';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
@@ -91,6 +92,21 @@ export default function App() {
                   }}
                   component={ValuatorForm}
                   name="ValuatorForm"
+                />
+                <RootStack.Screen
+                  options={() => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title="Add new vehicle"
+                          back
+                        />
+                      ),
+                    };
+                  }}
+                  component={AddVehicle}
+                  name="AddVehicle"
                 />
               </>
             )}

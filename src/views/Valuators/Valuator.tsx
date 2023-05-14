@@ -31,8 +31,7 @@ export default function Valuator({navigation}: ValuatorProps) {
 
   return (
     <Box style={styles.container}>
-      <CustomText>Valuator</CustomText>
-      {/* {list.map((el, index) => {
+      {list.map((el, index) => {
         return (
           <Box key={index.toString()} style={styles.detail}>
             <Box flexDirection="row" alignItems="center">
@@ -104,7 +103,7 @@ export default function Valuator({navigation}: ValuatorProps) {
             )}
           </Box>
         );
-      })} */}
+      })}
     </Box>
   );
 }

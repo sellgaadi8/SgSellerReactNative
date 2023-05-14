@@ -2,8 +2,9 @@ import {View, Text} from 'react-native';
 import React, {useContext, useEffect} from 'react';
 import {getUserToken} from '../../utils/localStorage';
 import GlobalContext from '../../contexts/GlobalContext';
+import {SplashProps} from '../../types/propsTypes';
 
-export default function Splash() {
+export default function Splash({navigation}: SplashProps) {
   const {setAuthenticated} = useContext(GlobalContext);
 
   useEffect(() => {
@@ -15,6 +16,8 @@ export default function Splash() {
     const token = await getUserToken();
     if (token) {
       setAuthenticated(true);
+    } else {
+      setAuthenticated(false);
     }
   }
   return (

@@ -98,7 +98,8 @@ type AppColors =
   | '#1C1B1F'
   | '#49454F'
   | '#FF0000'
-  | '#111111';
+  | '#111111'
+  | '#EFC24F';
 
 type InputProps = {
   disableCopyPaste?: boolean;
@@ -189,4 +190,21 @@ type ValuatorFormProps = {
 
 type ValuatorProps = {
   navigation: StackNavigationProp<RootStackParamList, 'ValuatorStack'>;
+};
+
+type SplashProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'Splash'>;
+};
+
+type VehiclesProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'Vehicles'>;
+};
+
+type VehicleTypeProps = {
+  onPressClose: () => void;
+  onPressType: (id: number) => void;
+};
+
+type CustomProgressBarProps = {
+  progress: number;
 };
