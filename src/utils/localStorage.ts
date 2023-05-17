@@ -1,5 +1,5 @@
 import SInfo from 'react-native-sensitive-info';
-import {TOKEN} from './constant';
+import {TOKEN, TOKEN_VALIDITY} from './constant';
 
 export function saveUserToken(token: string): Promise<null> {
   return SInfo.setItem(TOKEN, token, {
@@ -13,4 +13,20 @@ export function getUserToken(): Promise<string> {
     sharedPreferencesName: 'my_shared_prefs',
     keychainService: 'my_keychain',
   });
+}
+
+export function deleteUserToken(): Promise<null> {
+  return SInfo.deleteItem(TOKEN, {
+    sharedPreferencesName: 'my_shared_prefs',
+    keychainService: 'my_keychain',
+  });
+}
+
+export function saveTokenValidity(time: number): Promise<null> {
+  return SInfo.setItem(TOKEN_VALIDITY, time.toString(), {});
+}
+
+export async function getTokenValidity(): Promise<number> {
+  const data = await SInfo.getItem(TOKEN_VALIDITY, {});
+  return +data;
 }

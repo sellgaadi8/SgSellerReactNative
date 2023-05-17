@@ -12,12 +12,19 @@ export default function Splash({navigation}: SplashProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     navigation.navigate('Login');
+  //   }, 1000);
+  // }, []);
+
   async function getToken() {
     const token = await getUserToken();
+    console.log('====>', token);
     if (token) {
       setAuthenticated(true);
     } else {
-      setAuthenticated(false);
+      navigation.navigate('Login');
     }
   }
   return (

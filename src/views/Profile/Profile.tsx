@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Pressable, View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Box from '../../components/Box';
@@ -15,6 +15,13 @@ import {ProfileProps} from '../../types/propsTypes';
 import {useDispatch} from 'react-redux';
 import {onGetProfile} from '../../redux/ducks/getProfile';
 import {useAppSelector} from '../../utils/hooks';
+import {showAlert} from '../../utils/helper';
+import {onLogout} from '../../redux/ducks/logout';
+import Loader from '../../components/Loader';
+import Snackbar from 'react-native-snackbar';
+import GlobalContext from '../../contexts/GlobalContext';
+import {deleteUserToken, saveTokenValidity} from '../../utils/localStorage';
+import Globals from '../../utils/globals';
 
 const Button = [
   {name: 'Personal details', detail: 'Edit & review personal details'},
@@ -27,6 +34,9 @@ export default function Profile({navigation}: ProfileProps) {
   const dispatch = useDispatch<any>();
   const selectGetProfile = useAppSelector(state => state.getProfile);
   const [profileDetail, setProfleDetail] = useState<Profile>();
+  const [loading, setLoading] = useState(false);
+  const selectLogout = useAppSelector(state => state.logout);
+  const {setAuthenticated} = useContext(GlobalContext);
 
   function details(index: number) {
     if (profileDetail?.dealership_name) {
@@ -54,10 +64,38 @@ export default function Profile({navigation}: ProfileProps) {
         setProfleDetail(data);
       }
     }
-  }, [selectGetProfile]);
+    if (selectLogout.called) {
+      setLoading(false);
+      const {success, message} = selectLogout;
+      if (success) {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'green',
+          duration: Snackbar.LENGTH_SHORT,
+        });
+        setAuthenticated(false);
+        deleteUserToken();
+        Globals.instance().setTokenValidity(-1);
+        saveTokenValidity(-1);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectGetProfile, selectLogout]);
+
+  function onLogoutClick() {
+    showAlert(
+      'Are you sure you want to logout?',
+      () => {
+        setLoading(true);
+        dispatch(onLogout());
+      },
+      undefined,
+    );
+  }
 
   return (
     <Box style={styles.container}>
+      {loading && <Loader />}
       <Box style={styles.profilehead}>
         <View style={styles.profile}>
           <Icon name="person" size={30} color="#EFC24F" />
@@ -115,7 +153,7 @@ export default function Profile({navigation}: ProfileProps) {
           );
         })}
       </Box>
-      <Box style={styles.logout}>
+      <Pressable style={styles.logout} onPress={onLogoutClick}>
         <CustomText
           color="#FF0000"
           fontSize={14}
@@ -123,7 +161,7 @@ export default function Profile({navigation}: ProfileProps) {
           fontFamily="Roboto-Regular">
           Log out
         </CustomText>
-      </Box>
+      </Pressable>
       <Box alignSelf="center">
         <CustomText
           fontSize={12}

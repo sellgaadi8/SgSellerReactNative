@@ -1,4 +1,6 @@
-import axios from 'axios';
+import axios, {AxiosRequestConfig} from 'axios';
+import Globals from '../utils/globals';
+import {deleteUserToken} from '../utils/localStorage';
 
 const BASE_URL = 'http://3.110.1.47/api';
 
@@ -10,17 +12,25 @@ const Log = (tag: string, ...msg: any) => {
   console.log(tag, ...msg);
 };
 
+export async function checkTokenValidity(config: AxiosRequestConfig) {
+  const urlParts = config.url!.split('/');
+  // Don't run this for following endpoints
+  // include Verify user API
+  // Because token is not required on below endpoints so it will be infinite loop
+  const endpoint = urlParts.includes('getOtp') || urlParts.includes('login');
+
+  const validity =
+    +Globals.instance().getTokenValidity() - new Date().getTime();
+  if (!endpoint && validity <= 0) {
+    // Token is expired
+    deleteUserToken();
+  }
+}
+
 axiosInstance.interceptors.request.use(
   // On Success
   async config => {
-    // Using mutex to avoid calling refresh token multiple times
-    // It will release the lock after token is refresh when expired
-
-    // NetInfo.fetch().then((state: any) => {
-    //   if (!state.isConnected && !state.isWifiEnabled) {
-    //     cancelRequest('Not Connected');
-    //   }
-    // });
+    await checkTokenValidity(config);
 
     // Attach token to header
     if (config.headers?.common) {
