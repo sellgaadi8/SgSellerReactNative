@@ -7,10 +7,13 @@ type RootStackParamList = {
   HomeStack: undefined;
   Profile: undefined;
   ProfileDetails: {title: string};
-  ValuatorForm: {title: string};
+  ValuatorForm: {title: string; list: Valuators};
   ValuatorStack: undefined;
   Vehicles: undefined;
   AddVehicle: {id: number};
+  DisplayInfo: undefined;
+  CarDocuments: undefined;
+  Exterior: undefined;
 };
 
 type BottomStackParamList = {

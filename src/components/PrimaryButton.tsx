@@ -37,8 +37,8 @@ export default function PrimaryButton({
 const styles = EStyleSheet.create({
   buttonContainer: {
     backgroundColor: colors.secondary,
-    paddingHorizontal: pixelSizeHorizontal(15),
-    paddingVertical: pixelSizeVertical(13),
+    paddingHorizontal: pixelSizeHorizontal(22),
+    paddingVertical: pixelSizeVertical(7),
     borderRadius: '3rem',
     ...contentCenter,
   },

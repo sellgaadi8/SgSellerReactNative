@@ -8,58 +8,77 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import CustomProgressBar from '../../components/CustomProgressBar';
-import {Pressable, Text} from 'react-native';
-import {AnimatedCircularProgress} from 'react-native-circular-progress';
+import {ScrollView} from 'react-native';
+import AddVehicleCard from '../../components/AddVehicleCard';
+import {AddVehicleProps} from '../../types/propsTypes';
+import PrimaryButton from '../../components/PrimaryButton';
 
-export default function AddVehicle() {
-  const [fill, setFill] = useState(75);
+export default function AddVehicle({navigation}: AddVehicleProps) {
+  const [fill, setFill] = useState(20);
   return (
     <Box style={styles.container}>
-      <CustomText
-        fontFamily="Roboto-Bold"
-        fontSize={22}
-        lineHeight={28}
-        color="#201A1B">
-        Form progress:
-      </CustomText>
-      <Box pv={'5%'}>
-        <CustomProgressBar progress={fill} />
-      </Box>
-      <Box style={styles.card}>
-        <Box>
+      <ScrollView>
+        <Box pv={'5%'} ph={'5%'}>
           <CustomText
             fontFamily="Roboto-Bold"
-            fontSize={16}
-            lineHeight={24}
-            color="#1C1B1F">
-            Display info
+            fontSize={22}
+            lineHeight={28}
+            color="#201A1B">
+            Form progress:
           </CustomText>
-          <CustomText
-            fontFamily="Roboto-Regular"
-            fontSize={14}
-            lineHeight={20}
-            color="#49454F">
-            Basic information
-          </CustomText>
-          <Pressable style={styles.textButton}>
-            <CustomText
-              fontFamily="Roboto-Medium"
-              fontSize={14}
-              lineHeight={20}
-              color="#EFC24F">
-              Complete now
-            </CustomText>
-          </Pressable>
         </Box>
-        <AnimatedCircularProgress
-          size={45}
-          width={7}
-          fill={fill}
-          tintColor="#EFC24F"
-          onAnimationComplete={() => console.log('onAnimationComplete')}>
-          {fill => <Text style={styles.fillText}>{fill}%</Text>}
-        </AnimatedCircularProgress>
-      </Box>
+
+        <Box width="90%" alignSelf="center">
+          <CustomProgressBar progress={fill} />
+        </Box>
+        <Box style={styles.onScroll}>
+          <AddVehicleCard
+            fill={fill}
+            title="Display info"
+            desc="Basic information"
+            onComplete={() => navigation.navigate('DisplayInfo')}
+          />
+          <AddVehicleCard
+            fill={fill}
+            title="Car documents"
+            desc="upload documents for verification"
+            onComplete={() => navigation.navigate('CarDocuments')}
+          />
+          <AddVehicleCard
+            fill={fill}
+            title="EXTERIOR (single image each, comment on image(choose from option(OK,scratched/rusted/repainted)"
+            desc=""
+            onComplete={() => navigation.navigate('Exterior')}
+          />
+          <AddVehicleCard
+            fill={fill}
+            title="EXTERNAL PANEL (Images with comment as option Ok, scratched, dented, rusted)"
+            desc=""
+          />
+          <AddVehicleCard
+            fill={fill}
+            title="Tyres (images with comments with % and damaged)"
+            desc=""
+          />
+          <AddVehicleCard fill={fill} title="ENGINE" desc="Basic information" />
+          <AddVehicleCard
+            fill={fill}
+            title="ELECTRICALS  images with comments (working/ not working)"
+            desc="Basic information"
+          />
+          <AddVehicleCard
+            fill={fill}
+            title="STEERING"
+            desc="Basic information"
+          />
+        </Box>
+        <Box width={'50%'} alignSelf="center" pv={'5%'}>
+          <PrimaryButton
+            label="Submit form"
+            onPress={() => console.log('test')}
+          />
+        </Box>
+      </ScrollView>
     </Box>
   );
 }
@@ -67,6 +86,8 @@ export default function AddVehicle() {
 const styles = EStyleSheet.create({
   container: {
     ...container,
+  },
+  onScroll: {
     paddingHorizontal: wp('5%'),
     paddingVertical: hp('2%'),
   },

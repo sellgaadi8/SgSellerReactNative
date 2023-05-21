@@ -208,3 +208,18 @@ type VehicleTypeProps = {
 type CustomProgressBarProps = {
   progress: number;
 };
+
+type AddVehicleCardProps = {
+  fill: number;
+  title: string;
+  desc: string;
+  onComplete?: () => void;
+};
+
+type AddVehicleProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'AddVehicle'>;
+};
+
+type DisplayInfoProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'DisplayInfo'>;
+};

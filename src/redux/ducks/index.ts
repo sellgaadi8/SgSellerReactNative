@@ -6,6 +6,9 @@ import updateProfile from './updateProfile';
 import changePassword from './changePassword';
 import global from './global';
 import logout from './logout';
+import getAllValuators from './getAllValuators';
+import updateValuator from './updateValuator';
+import deleteValuator from './deleteValuator';
 
 export default combineReducers({
   login,
@@ -15,4 +18,7 @@ export default combineReducers({
   changePassword,
   global,
   logout,
+  getAllValuators,
+  updateValuator,
+  deleteValuator,
 });

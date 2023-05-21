@@ -4,7 +4,9 @@ const GET_PROFILE = '/getProfileDetails';
 const UPDATE_PROFILE = '/updateProfileDetails';
 const RESET_PASSWORD = '/changePassword';
 const LOGOUT_URL = '/logout';
-const GET_ALL_VALUATORS = '/valuator/getAllValuatorDetails';
+const GET_ALL_VALUATORS_LIST = '/valuator/getAllValuatorDetails';
+const UPDATE_VALUATOR = '/valuator/update';
+const DELETE_VALUATOR = '/valuator/delete';
 
 export {
   LOGIN_SEND_OTP,
@@ -13,5 +15,7 @@ export {
   UPDATE_PROFILE,
   RESET_PASSWORD,
   LOGOUT_URL,
-  GET_ALL_VALUATORS,
+  GET_ALL_VALUATORS_LIST,
+  UPDATE_VALUATOR,
+  DELETE_VALUATOR,
 };

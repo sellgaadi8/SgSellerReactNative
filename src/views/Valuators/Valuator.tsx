@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import {Image, Pressable, View} from 'react-native';
-import React, {useState} from 'react';
+import {Image, Linking, Pressable, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -13,97 +14,154 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import {ValuatorProps} from '../../types/propsTypes';
+import {useDispatch} from 'react-redux';
+import {onGetAllValuator} from '../../redux/ducks/getAllValuators';
+import {useAppSelector} from '../../utils/hooks';
+import Loader from '../../components/Loader';
+import {onDeleteValuator} from '../../redux/ducks/deleteValuator';
+import Snackbar from 'react-native-snackbar';
 
 export default function Valuator({navigation}: ValuatorProps) {
-  const [list, setList] = useState([
-    {id: 1, name: 'John Doe', dId: 'Dealership ID', show: false},
-    {id: 2, name: 'Rishabh Jain', dId: 'Dealership ID', show: false},
-    {id: 3, name: 'Aditya Gogavekar', dId: 'Dealership ID', show: false},
-  ]);
+  const dispatch = useDispatch<any>();
+  const selectValuator = useAppSelector(state => state.getAllValuators);
+  const selectDeleteValuator = useAppSelector(state => state.deleteValuator);
+  const [list, setList] = useState<Valuators[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  function showModal(id: number) {
-    const temp = list.map(item => ({
-      ...item,
-      show: item.id === id ? !item.show : false,
-    }));
-    setList(temp);
+  function showModal(id: string) {
+    const updatedList = list.map(item => {
+      if (item.valuator_uuid === id) {
+        return {...item, show: true};
+      } else {
+        return {...item, show: false};
+      }
+    });
+
+    setList(updatedList);
+  }
+
+  useEffect(() => {
+    navigation.addListener('focus', onFocus);
+  }, []);
+
+  function onFocus() {
+    setLoading(true);
+    dispatch(onGetAllValuator());
+  }
+
+  useEffect(() => {
+    if (selectValuator.called) {
+      setLoading(false);
+      const {data} = selectValuator;
+      if (data) {
+        setList(data);
+      }
+    }
+    if (selectDeleteValuator.called) {
+      setLoading(false);
+      const {message, error} = selectDeleteValuator;
+      if (!error && message) {
+        onFocus();
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'red',
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      }
+    }
+  }, [selectValuator, selectDeleteValuator]);
+
+  function deleteVal(id: string) {
+    setLoading(true);
+    dispatch(onDeleteValuator(id));
   }
 
   return (
     <Box style={styles.container}>
-      {list.map((el, index) => {
-        return (
-          <Box key={index.toString()} style={styles.detail}>
-            <Box flexDirection="row" alignItems="center">
-              <Image
-                source={require('../../assets/profile.png')}
-                style={styles.profile}
-                resizeMode="contain"
-              />
-              <Box ph={'10%'}>
-                <CustomText
-                  fontSize={16}
-                  lineHeight={24}
-                  color="#111111"
-                  fontFamily="Roboto-Regular">
-                  {el.name}
-                </CustomText>
-                <CustomText
-                  fontSize={14}
-                  lineHeight={20}
-                  color="#111111"
-                  fontFamily="Roboto-Regular">
-                  {el.dId}
-                </CustomText>
+      {loading && <Loader />}
+      {list &&
+        list.map((el, index) => {
+          return (
+            <Box key={index.toString()} style={styles.detail}>
+              <Box flexDirection="row" alignItems="center">
+                <Image
+                  source={require('../../assets/profile.png')}
+                  style={styles.profile}
+                  resizeMode="contain"
+                />
+                <Box ph={'10%'}>
+                  <CustomText
+                    fontSize={16}
+                    lineHeight={24}
+                    color="#111111"
+                    fontFamily="Roboto-Regular">
+                    {el.valuator_name}
+                  </CustomText>
+                  <CustomText
+                    fontSize={14}
+                    lineHeight={20}
+                    color="#111111"
+                    fontFamily="Roboto-Regular">
+                    {el.valuator_dealership_id}
+                  </CustomText>
+                </Box>
               </Box>
-            </Box>
-            <Box flexDirection="row" alignItems="center">
-              <Pressable style={styles.phone}>
-                <Icon name="phone-outline" color="#111111" size={20} />
-              </Pressable>
-              <Pressable onPress={() => showModal(el.id)}>
-                <Icon name="dots-vertical" color="#111111" size={20} />
-              </Pressable>
-            </Box>
-            {el.show && (
-              <View style={styles.modal}>
+              <Box flexDirection="row" alignItems="center">
                 <Pressable
-                  style={styles.update}
+                  style={styles.phone}
                   onPress={() =>
-                    navigation.navigate('ValuatorForm', {title: el.name})
+                    Linking.openURL(`tel:${el.valuator_phone_no}`)
                   }>
-                  <View style={styles.line} />
-                  <Feather
-                    name="refresh-ccw"
-                    size={15}
-                    color="#000000"
-                    style={{right: 20}}
-                  />
-                  <CustomText
-                    color="#1C1B1F"
-                    fontSize={16}
-                    lineHeight={24}
-                    fontFamily="Roboto-Regular"
-                    style={[styles.marginLeft, {right: 20}]}>
-                    Update
-                  </CustomText>
+                  <Icon name="phone-outline" color="#111111" size={20} />
                 </Pressable>
-                <Pressable style={styles.delete}>
-                  <Icon name="delete-outline" size={18} color="#000000" />
-                  <CustomText
-                    color="#1C1B1F"
-                    fontSize={16}
-                    lineHeight={24}
-                    fontFamily="Roboto-Regular"
-                    style={styles.marginLeft}>
-                    Delete
-                  </CustomText>
+                <Pressable onPress={() => showModal(el.valuator_uuid)}>
+                  <Icon name="dots-vertical" color="#111111" size={20} />
                 </Pressable>
-              </View>
-            )}
-          </Box>
-        );
-      })}
+              </Box>
+              {el.show && (
+                <View style={styles.modal}>
+                  <Pressable
+                    style={styles.update}
+                    onPress={() =>
+                      navigation.navigate('ValuatorForm', {
+                        title: el.valuator_name,
+                        list: el,
+                      })
+                    }>
+                    <View style={styles.line} />
+                    <Feather
+                      name="refresh-ccw"
+                      size={15}
+                      color="#000000"
+                      style={{right: 20}}
+                    />
+                    <CustomText
+                      color="#1C1B1F"
+                      fontSize={16}
+                      lineHeight={24}
+                      fontFamily="Roboto-Regular"
+                      style={[styles.marginLeft, {right: 20}]}>
+                      Update
+                    </CustomText>
+                  </Pressable>
+                  <Pressable
+                    style={styles.delete}
+                    onPress={() => deleteVal(el.valuator_uuid)}>
+                    <Icon name="delete-outline" size={18} color="#000000" />
+                    <CustomText
+                      color="#1C1B1F"
+                      fontSize={16}
+                      lineHeight={24}
+                      fontFamily="Roboto-Regular"
+                      style={styles.marginLeft}>
+                      Delete
+                    </CustomText>
+                  </Pressable>
+                </View>
+              )}
+            </Box>
+          );
+        })}
     </Box>
   );
 }

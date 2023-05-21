@@ -41,7 +41,7 @@ export default function VehicleType({
           fontSize={24}
           lineHeight={32}
           color="#201A1B"
-          fontFamily="Roboto-Medium">
+          fontFamily="Roboto-Regular">
           Select vehicle type:
         </CustomText>
         <Box pv={10}>
@@ -57,14 +57,14 @@ export default function VehicleType({
                     fontSize={22}
                     lineHeight={32}
                     color="#201A1B"
-                    fontFamily="Roboto-Medium">
+                    fontFamily="Roboto-Regular">
                     {el.name}
                   </CustomText>
                   <CustomText
                     fontSize={14}
                     lineHeight={20}
                     color="#201A1B"
-                    fontFamily="Roboto-Medium">
+                    fontFamily="Roboto-Regular">
                     {el.desc}
                   </CustomText>
                 </Box>

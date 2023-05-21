@@ -14,12 +14,18 @@ export default function CustomProgressBar({progress}: CustomProgressBarProps) {
         style={[
           styles.percentage,
           {
-            width: `${progress}%`,
+            width: `${progress < 6 ? 5 : progress}%`,
           },
         ]}>
         <Image source={require('../assets/Shape.png')} style={styles.shape} />
 
-        <Text style={styles.percentageCount}>{progress}%</Text>
+        <Text
+          style={[
+            styles.percentageCount,
+            {left: progress < 6 ? 2 : progress === 100 ? 8 : 5},
+          ]}>
+          {progress}%
+        </Text>
         <View style={styles.outerCircle}>
           <View style={styles.innerCircle} />
         </View>
@@ -31,7 +37,12 @@ export default function CustomProgressBar({progress}: CustomProgressBarProps) {
             <View
               style={[
                 styles.dot,
-                {backgroundColor: progress !== 0 ? '#111111' : '#49454F'},
+                {
+                  backgroundColor:
+                    progress !== 0 && progress !== 100
+                      ? '#111111'
+                      : 'transparent',
+                },
               ]}
             />,
           )}
@@ -67,7 +78,7 @@ const styles = EStyleSheet.create({
   percentage: {
     // position: 'absolute',
     bottom: 20,
-    left: 10,
+    left: 0,
   },
   shape: {
     alignSelf: 'flex-end',
@@ -82,7 +93,7 @@ const styles = EStyleSheet.create({
     lineHeight: 16,
     color: '#111111',
     fontFamily: 'Roboto-Medium',
-    left: 5,
+    // left: 5,
   },
   outerCircle: {
     height: 25,
