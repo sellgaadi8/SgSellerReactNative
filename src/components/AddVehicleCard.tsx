@@ -46,8 +46,7 @@ export default function AddVehicleCard({
         size={45}
         width={7}
         fill={fill}
-        tintColor="#EFC24F"
-        onAnimationComplete={() => console.log('onAnimationComplete')}>
+        tintColor="#EFC24F">
         {fills => <Text style={styles.fillText}>{fills}%</Text>}
       </AnimatedCircularProgress>
     </Box>

@@ -17,6 +17,7 @@ import AddVehicle from './src/views/Vehicles/AddVehicle';
 import CarDocuments from './src/views/Vehicles/CarDocuments';
 import DisplayInfo from './src/views/Vehicles/DisplayInfo';
 import Exterior from './src/views/Vehicles/Exterior';
+import ExternelPanel from './src/views/Vehicles/ExternelPanel';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
@@ -155,6 +156,21 @@ export default function App() {
                   }}
                   component={Exterior}
                   name="Exterior"
+                />
+                <RootStack.Screen
+                  options={() => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title="Add new vehicle"
+                          back
+                        />
+                      ),
+                    };
+                  }}
+                  component={ExternelPanel}
+                  name="ExternelPanel"
                 />
               </>
             )}

@@ -9,6 +9,9 @@ import logout from './logout';
 import getAllValuators from './getAllValuators';
 import updateValuator from './updateValuator';
 import deleteValuator from './deleteValuator';
+import addVehicleForm from './addVehicleForm';
+import createDisplayInfo from './createDisplayInfo';
+import editDisplayInfo from './editDisplayInfo';
 
 export default combineReducers({
   login,
@@ -21,4 +24,7 @@ export default combineReducers({
   getAllValuators,
   updateValuator,
   deleteValuator,
+  addVehicleForm,
+  createDisplayInfo,
+  editDisplayInfo,
 });

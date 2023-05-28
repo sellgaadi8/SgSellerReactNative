@@ -11,46 +11,23 @@ import Modal from 'react-native-modalbox';
 import {useDispatch} from 'react-redux';
 import {onGlobalChange} from '../../redux/ducks/global';
 import {VehiclesProps} from '../../types/propsTypes';
+import VehicleCard from '../../components/VehicleCard';
 const {height} = Dimensions.get('window');
 
 export default function Vehicles({navigation}: VehiclesProps) {
   const [show, setShow] = useState(false);
   const dispatch = useDispatch<any>();
 
-  useEffect(() => {
-    dispatch(onGlobalChange({showBottomTabs: true}));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function closModal() {
-    setShow(false);
-    dispatch(onGlobalChange({showBottomTabs: true}));
-  }
-
-  function addCar() {
-    dispatch(onGlobalChange({showBottomTabs: false}));
-    setShow(true);
-  }
-
-  function selectVehicleType(id: number) {
-    navigation.navigate('AddVehicle', {id: id});
+  function selectVehicleType() {
+    navigation.navigate('AddVehicle');
   }
   return (
-    <>
-      <Box style={styles.container}>
-        <CustomText>Vehicles</CustomText>
-        <Pressable style={styles.addCar} onPress={addCar}>
-          <Icon name="pencil-outline" size={25} color="#000000" />
-        </Pressable>
-      </Box>
-      <Modal
-        isOpen={show}
-        onClosed={closModal}
-        style={styles.modal}
-        backButtonClose>
-        <VehicleType onPressClose={closModal} onPressType={selectVehicleType} />
-      </Modal>
-    </>
+    <Box style={styles.container}>
+      <VehicleCard />
+      <Pressable style={styles.addCar} onPress={selectVehicleType}>
+        <Icon name="pencil-outline" size={25} color="#000000" />
+      </Pressable>
+    </Box>
   );
 }
 

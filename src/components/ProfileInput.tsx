@@ -20,6 +20,7 @@ import colors from '../utils/colors';
 import {fontPixel} from '../utils/responsive';
 import TextButton from './TextButton';
 import {ProfileInputProps} from '../types/propsTypes';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function ProfileInput(
   props: TextInputProps & ProfileInputProps,
@@ -35,11 +36,11 @@ export default function ProfileInput(
     error,
     noMargin,
     renderEndIcon,
-    // endIcon,
-    // endIconPress,
+    endIcon,
+    endIconPress,
     editable = true,
     label,
-    // propsStyle,
+    propsStyle,
     labelStyle,
     input,
   } = props;
@@ -147,16 +148,11 @@ export default function ProfileInput(
       {/* Render custom end icon */}
       {renderEndIcon && renderEndIcon()}
       {/* Pass the name of the icon */}
-      {/* {endIcon !== undefined ? (
+      {endIcon !== undefined ? (
         <Box style={[styles.icon, noMargin && styles.noMarginIcon, propsStyle]}>
-          <IconButton
-            size={18}
-            onPress={endIconPress}
-            icon={endIcon}
-            color={colors.primary}
-          />
+          <Icon size={18} color={colors.primary} name={endIcon} />
         </Box>
-      ) : null} */}
+      ) : null}
     </Box>
   );
 }
@@ -207,7 +203,7 @@ const styles = EStyleSheet.create({
   },
   icon: {
     position: 'absolute',
-    top: 10,
+    top: 15,
     right: -5,
     height: '60%',
     width: '20%',
