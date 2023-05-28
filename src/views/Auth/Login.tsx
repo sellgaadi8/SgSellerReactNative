@@ -23,7 +23,7 @@ import GlobalContext from '../../contexts/GlobalContext';
 import Loader from '../../components/Loader';
 
 export default function Login({navigation}: LoginProps) {
-  const [mobile, setMobile] = useState('7021483690');
+  const [mobile, setMobile] = useState('9004041284');
   const [password, setPassword] = useState('123456');
   const [loading, setLoading] = useState(false);
 

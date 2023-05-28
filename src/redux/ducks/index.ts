@@ -12,6 +12,9 @@ import deleteValuator from './deleteValuator';
 import addVehicleForm from './addVehicleForm';
 import createDisplayInfo from './createDisplayInfo';
 import editDisplayInfo from './editDisplayInfo';
+import vehicleList from './vehicleList';
+import uploadImage from './uploadImage';
+import uploadCarImages from './uploadCarImages';
 
 export default combineReducers({
   login,
@@ -27,4 +30,7 @@ export default combineReducers({
   addVehicleForm,
   createDisplayInfo,
   editDisplayInfo,
+  vehicleList,
+  uploadImage,
+  uploadCarImages,
 });

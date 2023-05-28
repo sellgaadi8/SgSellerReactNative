@@ -6,6 +6,11 @@ type VehicleForm = {
     percentage: number;
     sub_heading: string;
   };
+  car_images: {
+    heading: string;
+    percentage: number;
+    sub_heading: string;
+  };
   engine: {
     heading: string;
     percentage: number;

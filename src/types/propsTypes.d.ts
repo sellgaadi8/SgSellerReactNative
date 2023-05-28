@@ -218,8 +218,32 @@ type AddVehicleCardProps = {
 
 type AddVehicleProps = {
   navigation: StackNavigationProp<RootStackParamList, 'AddVehicle'>;
+  route: RouteProp<RootStackParamList, 'AddVehicle'>;
 };
 
 type DisplayInfoProps = {
   navigation: StackNavigationProp<RootStackParamList, 'DisplayInfo'>;
+};
+
+type VehicleCardProps = {
+  data: Vehicle;
+  onPressEdit: () => void;
+};
+
+type ImagePickerProps = {
+  title: string;
+  isOpen: boolean;
+  multiple: boolean;
+  fileTypes?: DocumentPickerOptions<'android' | 'ios' | 'windows'>;
+  onSaveImage: (images: [] | null) => void;
+  onClose: () => void;
+  size?: number;
+  position?: string;
+};
+
+type ImageType = {
+  name: string;
+  size: number;
+  type: string;
+  uri: string;
 };

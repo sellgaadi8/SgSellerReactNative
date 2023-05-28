@@ -1,29 +1,77 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
-import {Dimensions, Pressable} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  ListRenderItemInfo,
+  Pressable,
+} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Box from '../../components/Box';
-import CustomText from '../../components/CustomText';
-import VehicleType from '../../components/VehicleType';
+
 import colors from '../../utils/colors';
-import {container} from '../../utils/styles';
-import Modal from 'react-native-modalbox';
+import {container, contentCenter} from '../../utils/styles';
 import {useDispatch} from 'react-redux';
-import {onGlobalChange} from '../../redux/ducks/global';
 import {VehiclesProps} from '../../types/propsTypes';
 import VehicleCard from '../../components/VehicleCard';
+import {onGetVehicleList} from '../../redux/ducks/vehicleList';
+import {useAppSelector} from '../../utils/hooks';
+import CustomText from '../../components/CustomText';
 const {height} = Dimensions.get('window');
 
 export default function Vehicles({navigation}: VehiclesProps) {
-  const [show, setShow] = useState(false);
   const dispatch = useDispatch<any>();
+  const selectVehicleList = useAppSelector(state => state.vehicleList);
+  const [vehicleData, setVehicleData] = useState<Vehicle[]>();
+
+  useEffect(() => {
+    dispatch(onGetVehicleList());
+  }, []);
+
+  useEffect(() => {
+    if (selectVehicleList.called) {
+      const {data, error} = selectVehicleList;
+      if (!error && data) {
+        setVehicleData(data);
+      }
+    }
+  }, [selectVehicleList]);
+
+  function renderItem({item}: ListRenderItemInfo<Vehicle>) {
+    return (
+      <VehicleCard
+        data={item}
+        onPressEdit={() => navigation.navigate('AddVehicle', {from: 'edit'})}
+      />
+    );
+  }
 
   function selectVehicleType() {
-    navigation.navigate('AddVehicle');
+    navigation.navigate('AddVehicle', {from: 'add'});
   }
   return (
     <Box style={styles.container}>
-      <VehicleCard />
+      <Box style={styles.filter}>
+        <CustomText
+          fontFamily="Roboto-Medium"
+          color="#201A1B"
+          fontSize={14}
+          lineHeight={16}>
+          Filters
+        </CustomText>
+        <Icon
+          name="filter-variant"
+          size={20}
+          color="#201A1B"
+          style={{marginLeft: 5}}
+        />
+      </Box>
+      <FlatList
+        data={vehicleData}
+        renderItem={renderItem}
+        contentContainerStyle={styles.flatList}
+      />
       <Pressable style={styles.addCar} onPress={selectVehicleType}>
         <Icon name="pencil-outline" size={25} color="#000000" />
       </Pressable>
@@ -46,5 +94,15 @@ const styles = EStyleSheet.create({
   modal: {
     height: height * 2,
     backgroundColor: '#FFFFFF',
+  },
+  flatList: {
+    padding: '2rem',
+  },
+  filter: {
+    marginLeft: 'auto',
+    marginRight: 25,
+    marginTop: 10,
+    flexDirection: 'row',
+    ...contentCenter,
   },
 });

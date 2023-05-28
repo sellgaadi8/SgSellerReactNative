@@ -4,6 +4,8 @@ const GlobalContext = React.createContext<AppContext>({
   setAuthenticated: () => {},
   setName: () => {},
   name: '',
+  vehicleId: '',
+  setVehicleId: () => {},
 });
 
 export default GlobalContext;

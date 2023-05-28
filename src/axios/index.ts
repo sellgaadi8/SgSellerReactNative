@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
   baseURL: BASE_URL,
 });
 
-const Log = (tag: string, ...msg: any) => {
+export const Log = (tag: string, ...msg: any) => {
   console.log(tag, ...msg);
 };
 

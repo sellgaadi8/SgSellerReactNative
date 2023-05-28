@@ -17,7 +17,7 @@ import {getVehicleForm} from '../../redux/ducks/addVehicleForm';
 import {useAppSelector} from '../../utils/hooks';
 import Loader from '../../components/Loader';
 
-export default function AddVehicle({navigation}: AddVehicleProps) {
+export default function AddVehicle({navigation, route}: AddVehicleProps) {
   const dispatch = useDispatch<any>();
   const selectVehicleForm = useAppSelector(state => state.addVehicleForm);
   const [form, setForm] = useState<VehicleForm>();
@@ -25,7 +25,11 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
 
   useEffect(() => {
     setLoading(true);
-    dispatch(getVehicleForm());
+    if (route.params.from === 'add') {
+      dispatch(getVehicleForm());
+    } else {
+      dispatch(getVehicleForm('bb88f17d-05dc-48a1-b3f5-e3d991191935'));
+    }
   }, []);
 
   useEffect(() => {
@@ -63,6 +67,12 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
                 title={form?.display_info.heading}
                 desc={form.display_info.sub_heading}
                 onComplete={() => navigation.navigate('DisplayInfo')}
+              />
+              <AddVehicleCard
+                fill={form.car_images.percentage}
+                title={form.car_images.heading}
+                desc={form.car_images.sub_heading}
+                onComplete={() => navigation.navigate('CarImages')}
               />
               <AddVehicleCard
                 fill={form.car_docs.percentage}

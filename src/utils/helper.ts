@@ -1,6 +1,8 @@
-import {Alert} from 'react-native';
+import {Alert, Permission} from 'react-native';
 import Globals from './globals';
 import {saveTokenValidity, saveUserToken} from './localStorage';
+import {requestMultiple} from 'react-native-permissions';
+import {Log} from '../axios';
 
 export const postAuth = async (token: string) => {
   await saveUserToken(token);
@@ -34,3 +36,14 @@ export function showAlert(
     {cancelable},
   );
 }
+
+export const askMultipleAndroidPermissions = async (
+  permissions: Permission[],
+) => {
+  try {
+    const accepted = await requestMultiple([...permissions]);
+    permissions.map(el => Log(el, accepted[el]));
+  } catch (error: any) {
+    Log('Permissions', error, 'ERROR');
+  }
+};

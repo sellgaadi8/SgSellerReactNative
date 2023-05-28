@@ -9,10 +9,13 @@ const UPDATE_VALUATOR = '/valuator/update';
 const DELETE_VALUATOR = '/valuator/delete';
 const ADD_DISPLAY_INFO = '/vehicle/display-info/create';
 const VEHICLE = '/vehicle/list';
+const UPLOAD_IMAGE = '/uploadImage';
 
 const addVehicleFormurl = (id?: string) =>
   id ? `/vehicle/createForm/${id}` : '/vehicle/createForm';
 const updateDisplayInfo = (id: string) => `vehicle/display-info/edit/${id}`;
+const uploadCardImageUrl = (id: string) =>
+  `http://3.110.1.47/api/vehicle/car-images/create/${id}`;
 
 export {
   LOGIN_SEND_OTP,
@@ -26,6 +29,8 @@ export {
   DELETE_VALUATOR,
   ADD_DISPLAY_INFO,
   VEHICLE,
+  UPLOAD_IMAGE,
   addVehicleFormurl,
   updateDisplayInfo,
+  uploadCardImageUrl,
 };

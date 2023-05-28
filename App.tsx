@@ -18,14 +18,17 @@ import CarDocuments from './src/views/Vehicles/CarDocuments';
 import DisplayInfo from './src/views/Vehicles/DisplayInfo';
 import Exterior from './src/views/Vehicles/Exterior';
 import ExternelPanel from './src/views/Vehicles/ExternelPanel';
+import CarImages from './src/views/Vehicles/CarImages';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
   const [authenticated, setAuthenticated] = useState(false);
+  const [vehicleId, setVehicleId] = useState('');
   const [name, setName] = useState('');
 
   return (
-    <GlobalContext.Provider value={{setAuthenticated, name, setName}}>
+    <GlobalContext.Provider
+      value={{setAuthenticated, name, setName, vehicleId, setVehicleId}}>
       <SafeAreaView style={styles.container}>
         <StatusBar backgroundColor={colors.primary} />
         <NavigationContainer>
@@ -126,6 +129,21 @@ export default function App() {
                   }}
                   component={DisplayInfo}
                   name="DisplayInfo"
+                />
+                <RootStack.Screen
+                  options={() => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title="Add new vehicle"
+                          back
+                        />
+                      ),
+                    };
+                  }}
+                  component={CarImages}
+                  name="CarImages"
                 />
                 <RootStack.Screen
                   options={() => {
