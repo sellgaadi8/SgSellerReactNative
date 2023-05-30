@@ -1,11 +1,11 @@
 import axiosInstance from '../../axios';
-import {ADD_DISPLAY_INFO} from '../../utils/api';
+import {updateDisplayInfoUrl} from '../../utils/api';
 import {getUserToken} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
 
-const CREATE_DISPLAY_INFO: CREATE_DISPLAY_INFO = 'sgSeller/addDisplay';
+const UPDATE_DISPLAY_INFO: UPDATE_DISPLAY_INFO = 'sgSeller/updateDisplay';
 
-const initialState: CreateDisplayInfoState = {
+const initialState: UpdateDisplayInfoState = {
   error: false,
   called: false,
   success: false,
@@ -15,24 +15,25 @@ const initialState: CreateDisplayInfoState = {
 
 export default (
   state = initialState,
-  action: CreateDisplayInfoAction,
-): CreateDisplayInfoState => {
+  action: UpdateDisplayInfoAction,
+): UpdateDisplayInfoState => {
   switch (action.type) {
-    case CREATE_DISPLAY_INFO:
+    case UPDATE_DISPLAY_INFO:
       return {...state, ...action.payload};
     default:
       return {...state, called: false};
   }
 };
 
-const createDisplayInfoAction = (
-  res: CreateDisplayInfoState,
-): CreateDisplayInfoAction => {
-  return {type: CREATE_DISPLAY_INFO, payload: {...res, called: true}};
+const updateDisplayInfoAction = (
+  res: UpdateDisplayInfoState,
+): UpdateDisplayInfoAction => {
+  return {type: UPDATE_DISPLAY_INFO, payload: {...res, called: true}};
 };
 
-export const createDisplayForm =
+export const updateDisplayForm =
   (
+    id: string,
     make: string,
     model: string,
     variant: string,
@@ -45,7 +46,7 @@ export const createDisplayForm =
     no_of_owners: string,
   ) =>
   async (dispatch: AppDispatch) => {
-    const url = ADD_DISPLAY_INFO;
+    const url = updateDisplayInfoUrl(id);
 
     const token = await getUserToken();
 
@@ -72,12 +73,12 @@ export const createDisplayForm =
     axiosInstance
       .post(url, body, config)
       .then(res => {
-        dispatch(createDisplayInfoAction({...res.data, error: false}));
+        dispatch(updateDisplayInfoAction({...res.data, error: false}));
       })
       .catch(err => {
         if (err?.request?._repsonse) {
           dispatch(
-            createDisplayInfoAction({
+            updateDisplayInfoAction({
               ...JSON.parse(err.request._repsonse),
               error: true,
             }),

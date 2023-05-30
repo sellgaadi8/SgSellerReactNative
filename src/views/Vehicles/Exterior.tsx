@@ -26,7 +26,7 @@ export default function Exterior() {
           lineHeight={28}
           fontFamily="Roboto-Medium"
           color="#201A1B">
-          Step 3: Exterior
+          Step 4: Exterior
         </CustomText>
         <Box pv={'7%'}>
           {ExteriorType.map((el, index) => {
@@ -77,12 +77,12 @@ export default function Exterior() {
           <Box width={'45%'}>
             <PrimaryButton
               label="Close"
-              //   onPress={() => navigation.goBack()}
+              onPress={() => console.log('')}
               varient="Secondary"
             />
           </Box>
           <Box width={'45%'}>
-            <PrimaryButton label="Save Edits" />
+            <PrimaryButton label="Save Edits" onPress={() => console.log('')} />
           </Box>
         </Box>
       </ScrollView>

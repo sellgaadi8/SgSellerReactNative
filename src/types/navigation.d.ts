@@ -11,11 +11,16 @@ type RootStackParamList = {
   ValuatorStack: undefined;
   Vehicles: undefined;
   AddVehicle: {from: 'edit' | 'add'};
-  DisplayInfo: undefined;
+  DisplayInfo: {from: 'edit' | 'add'};
+  CarImages: {from: 'edit' | 'add'};
   CarDocuments: undefined;
   Exterior: undefined;
   ExternelPanel: undefined;
-  CarImages: undefined;
+  Tyres: undefined;
+  Engine: undefined;
+  Electricals: undefined;
+  Steering: undefined;
+  Ac: undefined;
 };
 
 type BottomStackParamList = {

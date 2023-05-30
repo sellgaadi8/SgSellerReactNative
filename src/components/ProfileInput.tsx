@@ -211,8 +211,8 @@ const styles = EStyleSheet.create({
     ...contentCenter,
   },
   disabled: {
-    borderColor: '#FFF',
-    borderBottomWidth: 2,
+    borderColor: '#79747E',
+    borderBottomWidth: 1,
     borderRadius: '0.6rem',
   },
   label: {

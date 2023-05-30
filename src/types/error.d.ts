@@ -10,7 +10,7 @@ type PasswordErrors = {
 
 type DisplayErrors = {
   make?: string;
-  modal?: string;
+  model?: string;
   varaint?: string;
   year?: string;
   registration?: string;

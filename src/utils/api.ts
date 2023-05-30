@@ -10,12 +10,19 @@ const DELETE_VALUATOR = '/valuator/delete';
 const ADD_DISPLAY_INFO = '/vehicle/display-info/create';
 const VEHICLE = '/vehicle/list';
 const UPLOAD_IMAGE = '/uploadImage';
+const MAKE_LIST = '/vehicle/make';
+const MODEL_LIST = '/vehicle/model';
+const VARIANT_LIST = '/vehicle/variant';
 
 const addVehicleFormurl = (id?: string) =>
   id ? `/vehicle/createForm/${id}` : '/vehicle/createForm';
-const updateDisplayInfo = (id: string) => `vehicle/display-info/edit/${id}`;
-const uploadCardImageUrl = (id: string) =>
-  `http://3.110.1.47/api/vehicle/car-images/create/${id}`;
+const getDisplayInfoUrl = (id: string) => `/vehicle/display-info/edit/${id}`;
+const updateDisplayInfoUrl = (id: string) =>
+  `/vehicle/display-info/update/${id}`;
+
+const uploadCardImageUrl = (id: string) => `/vehicle/car-images/create/${id}`;
+const getCarImageUrl = (id: string) => `/vehicle/car-images/edit/${id}`;
+const updateCarImageUrl = (id: string) => `/vehicle/car-images/update/${id}`;
 
 export {
   LOGIN_SEND_OTP,
@@ -30,7 +37,13 @@ export {
   ADD_DISPLAY_INFO,
   VEHICLE,
   UPLOAD_IMAGE,
+  MAKE_LIST,
+  MODEL_LIST,
   addVehicleFormurl,
-  updateDisplayInfo,
+  getDisplayInfoUrl,
   uploadCardImageUrl,
+  updateDisplayInfoUrl,
+  getCarImageUrl,
+  updateCarImageUrl,
+  VARIANT_LIST,
 };

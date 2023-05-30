@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useContext, useEffect, useState} from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {container} from '../../utils/styles';
 import Box from '../../components/Box';
@@ -16,19 +17,22 @@ import {useDispatch} from 'react-redux';
 import {getVehicleForm} from '../../redux/ducks/addVehicleForm';
 import {useAppSelector} from '../../utils/hooks';
 import Loader from '../../components/Loader';
+import GlobalContext from '../../contexts/GlobalContext';
 
 export default function AddVehicle({navigation, route}: AddVehicleProps) {
   const dispatch = useDispatch<any>();
   const selectVehicleForm = useAppSelector(state => state.addVehicleForm);
   const [form, setForm] = useState<VehicleForm>();
   const [loading, setLoading] = useState(false);
+  // const [isStep1Completed, setIsStep1Completed] = useState(false);
+  const {vehicleId} = useContext(GlobalContext);
 
   useEffect(() => {
     setLoading(true);
     if (route.params.from === 'add') {
       dispatch(getVehicleForm());
     } else {
-      dispatch(getVehicleForm('bb88f17d-05dc-48a1-b3f5-e3d991191935'));
+      dispatch(getVehicleForm(vehicleId));
     }
   }, []);
 
@@ -66,13 +70,21 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                 fill={form.display_info.percentage}
                 title={form?.display_info.heading}
                 desc={form.display_info.sub_heading}
-                onComplete={() => navigation.navigate('DisplayInfo')}
+                onComplete={() =>
+                  navigation.navigate('DisplayInfo', {
+                    from: route.params.from === 'add' ? 'add' : 'edit',
+                  })
+                }
               />
               <AddVehicleCard
                 fill={form.car_images.percentage}
                 title={form.car_images.heading}
                 desc={form.car_images.sub_heading}
-                onComplete={() => navigation.navigate('CarImages')}
+                onComplete={() =>
+                  navigation.navigate('CarImages', {
+                    from: route.params.from === 'add' ? 'add' : 'edit',
+                  })
+                }
               />
               <AddVehicleCard
                 fill={form.car_docs.percentage}
@@ -96,26 +108,31 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                 fill={form.tyres.percentage}
                 title={form.tyres.heading}
                 desc={form.tyres.sub_heading}
+                onComplete={() => navigation.navigate('Tyres')}
               />
               <AddVehicleCard
                 fill={form.engine.percentage}
                 title={form.engine.heading}
                 desc={form.engine.sub_heading}
+                onComplete={() => navigation.navigate('Engine')}
               />
               <AddVehicleCard
                 fill={form.electricals.percentage}
                 title={form.electricals.heading}
                 desc={form.electricals.sub_heading}
+                onComplete={() => navigation.navigate('Electricals')}
               />
               <AddVehicleCard
                 fill={form.steering.percentage}
                 title={form.steering.heading}
                 desc={form.steering.sub_heading}
+                onComplete={() => navigation.navigate('Steering')}
               />
               <AddVehicleCard
                 fill={form.ac_info.percentage}
                 title={form.ac_info.heading}
                 desc={form.ac_info.sub_heading}
+                onComplete={() => navigation.navigate('Ac')}
               />
             </Box>
             <Box width={'50%'} alignSelf="center" pv={'5%'}>

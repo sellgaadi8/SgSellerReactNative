@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -18,12 +18,14 @@ import VehicleCard from '../../components/VehicleCard';
 import {onGetVehicleList} from '../../redux/ducks/vehicleList';
 import {useAppSelector} from '../../utils/hooks';
 import CustomText from '../../components/CustomText';
+import GlobalContext from '../../contexts/GlobalContext';
 const {height} = Dimensions.get('window');
 
 export default function Vehicles({navigation}: VehiclesProps) {
   const dispatch = useDispatch<any>();
   const selectVehicleList = useAppSelector(state => state.vehicleList);
   const [vehicleData, setVehicleData] = useState<Vehicle[]>();
+  const {setVehicleId} = useContext(GlobalContext);
 
   useEffect(() => {
     dispatch(onGetVehicleList());
@@ -38,12 +40,14 @@ export default function Vehicles({navigation}: VehiclesProps) {
     }
   }, [selectVehicleList]);
 
+  function onClickEdit(id: string) {
+    setVehicleId(id);
+    navigation.navigate('AddVehicle', {from: 'edit'});
+  }
+
   function renderItem({item}: ListRenderItemInfo<Vehicle>) {
     return (
-      <VehicleCard
-        data={item}
-        onPressEdit={() => navigation.navigate('AddVehicle', {from: 'edit'})}
-      />
+      <VehicleCard data={item} onPressEdit={() => onClickEdit(item.uuid)} />
     );
   }
 
@@ -64,14 +68,18 @@ export default function Vehicles({navigation}: VehiclesProps) {
           name="filter-variant"
           size={20}
           color="#201A1B"
+          // eslint-disable-next-line react-native/no-inline-styles
           style={{marginLeft: 5}}
         />
       </Box>
-      <FlatList
-        data={vehicleData}
-        renderItem={renderItem}
-        contentContainerStyle={styles.flatList}
-      />
+      <Box style={styles.flat}>
+        <FlatList
+          data={vehicleData}
+          renderItem={renderItem}
+          contentContainerStyle={styles.flatList}
+        />
+      </Box>
+
       <Pressable style={styles.addCar} onPress={selectVehicleType}>
         <Icon name="pencil-outline" size={25} color="#000000" />
       </Pressable>
@@ -104,5 +112,8 @@ const styles = EStyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
     ...contentCenter,
+  },
+  flat: {
+    marginBottom: '7.5rem',
   },
 });

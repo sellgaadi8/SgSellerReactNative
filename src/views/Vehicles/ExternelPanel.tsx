@@ -18,7 +18,7 @@ export default function ExternelPanel() {
           lineHeight={28}
           fontFamily="Roboto-Medium"
           color="#201A1B">
-          Step 4: External Panel
+          Step 5: External Panel
         </CustomText>
       </ScrollView>
     </Box>

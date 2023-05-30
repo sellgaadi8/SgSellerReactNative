@@ -5,6 +5,7 @@ type CreateDisplayInfoState = {
   message: string;
   success: boolean;
   error: boolean;
+  uuid: string;
 };
 
 type CreateDisplayInfoAction = {

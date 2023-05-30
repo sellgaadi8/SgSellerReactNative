@@ -25,7 +25,7 @@ export default function CreatePassword({navigation}: CreatePasswordProps) {
   function onSubmit() {
     Keyboard.dismiss();
     const isValid = validateInputs();
-    dispatch(onChangePassword('9004041284', password, confirmPassword));
+    dispatch(onChangePassword('7021483690', password, confirmPassword));
     // if (isValid) {
     // navigation.navigate('Login');
     // }

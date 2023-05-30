@@ -19,6 +19,11 @@ import DisplayInfo from './src/views/Vehicles/DisplayInfo';
 import Exterior from './src/views/Vehicles/Exterior';
 import ExternelPanel from './src/views/Vehicles/ExternelPanel';
 import CarImages from './src/views/Vehicles/CarImages';
+import Tyres from './src/views/Vehicles/Tyres';
+import Engine from './src/views/Vehicles/Engine';
+import Electricals from './src/views/Vehicles/Electricals';
+import Steering from './src/views/Vehicles/Steering';
+import Ac from './src/views/Vehicles/Ac';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
@@ -189,6 +194,81 @@ export default function App() {
                   }}
                   component={ExternelPanel}
                   name="ExternelPanel"
+                />
+                <RootStack.Screen
+                  options={() => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title="Add new vehicle"
+                          back
+                        />
+                      ),
+                    };
+                  }}
+                  component={Tyres}
+                  name="Tyres"
+                />
+                <RootStack.Screen
+                  options={() => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title="Add new vehicle"
+                          back
+                        />
+                      ),
+                    };
+                  }}
+                  component={Engine}
+                  name="Engine"
+                />
+                <RootStack.Screen
+                  options={() => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title="Add new vehicle"
+                          back
+                        />
+                      ),
+                    };
+                  }}
+                  component={Electricals}
+                  name="Electricals"
+                />
+                <RootStack.Screen
+                  options={() => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title="Add new vehicle"
+                          back
+                        />
+                      ),
+                    };
+                  }}
+                  component={Steering}
+                  name="Steering"
+                />
+                <RootStack.Screen
+                  options={() => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title="Add new vehicle"
+                          back
+                        />
+                      ),
+                    };
+                  }}
+                  component={Ac}
+                  name="Ac"
                 />
               </>
             )}

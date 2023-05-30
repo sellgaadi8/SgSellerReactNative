@@ -1,38 +1,34 @@
 import axiosInstance from '../../axios';
-import {getDisplayInfoUrl} from '../../utils/api';
+import {getCarImageUrl} from '../../utils/api';
 import {getUserToken} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
 
-const EDIT_DISPLAY_INFO: EDIT_DISPLAY_INFO = 'sgSeller/editDisplay';
+const GET_CAR_IAMGES: GET_CAR_IAMGES = 'sgSeller/getCarImages';
 
-const initialState: EditDisplayInfoState = {
-  error: false,
+const initialState: GetCarImageState = {
   called: false,
   success: false,
-  data: null,
+  error: false,
 };
 
 export default (
   state = initialState,
-  action: EditDisplayInfoAction,
-): EditDisplayInfoState => {
+  action: GetCarImageAction,
+): GetCarImageState => {
   switch (action.type) {
-    case EDIT_DISPLAY_INFO:
+    case GET_CAR_IAMGES:
       return {...state, ...action.payload};
     default:
       return {...state, called: false};
   }
 };
 
-const editDisplayInfoAction = (
-  res: EditDisplayInfoState,
-): EditDisplayInfoAction => {
-  return {type: EDIT_DISPLAY_INFO, payload: {...res, called: true}};
+const getCarImageAction = (res: GetCarImageState): GetCarImageAction => {
+  return {type: GET_CAR_IAMGES, payload: {...res, called: true}};
 };
 
-export const getDisplayInfo = (id: string) => async (dispatch: AppDispatch) => {
-  const url = getDisplayInfoUrl(id);
-
+export const onGetCarImages = (id: string) => async (dispatch: AppDispatch) => {
+  const url = getCarImageUrl(id);
   const token = await getUserToken();
 
   const config = {
@@ -44,12 +40,12 @@ export const getDisplayInfo = (id: string) => async (dispatch: AppDispatch) => {
   axiosInstance
     .get(url, config)
     .then(res => {
-      dispatch(editDisplayInfoAction({...res.data, error: false}));
+      dispatch(getCarImageAction({...res.data, error: false}));
     })
     .catch(err => {
       if (err?.request?._repsonse) {
         dispatch(
-          editDisplayInfoAction({
+          getCarImageAction({
             ...JSON.parse(err.request._repsonse),
             error: true,
           }),

@@ -223,6 +223,7 @@ type AddVehicleProps = {
 
 type DisplayInfoProps = {
   navigation: StackNavigationProp<RootStackParamList, 'DisplayInfo'>;
+  route: RouteProp<RootStackParamList, 'DisplayInfo'>;
 };
 
 type VehicleCardProps = {
@@ -246,4 +247,21 @@ type ImageType = {
   size: number;
   type: string;
   uri: string;
+};
+
+type SearchModalProps = {
+  placeholder: string;
+  data: string[];
+  onPressSelecteItem: (selected: string, modalType: ModalType) => void;
+  dataType: ModalType;
+  query: string;
+  onChangeText: (value: string) => void;
+  onPressDone: () => void;
+};
+
+type ModalType = 'Make' | 'Model' | 'Variant';
+
+type CarImagesProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'CarImages'>;
+  route: RouteProp<RootStackParamList, 'CarImages'>;
 };

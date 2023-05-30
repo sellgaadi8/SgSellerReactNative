@@ -15,6 +15,12 @@ import editDisplayInfo from './editDisplayInfo';
 import vehicleList from './vehicleList';
 import uploadImage from './uploadImage';
 import uploadCarImages from './uploadCarImages';
+import getModel from './getModel';
+import getMake from './getMake';
+import getVariant from './getVariant';
+import updateDisplayInfo from './updateDisplayInfo';
+import getCarImage from './getCarImage';
+import updateCarImages from './updateCarImages';
 
 export default combineReducers({
   login,
@@ -33,4 +39,10 @@ export default combineReducers({
   vehicleList,
   uploadImage,
   uploadCarImages,
+  getModel,
+  getVariant,
+  getMake,
+  updateDisplayInfo,
+  getCarImage,
+  updateCarImages,
 });

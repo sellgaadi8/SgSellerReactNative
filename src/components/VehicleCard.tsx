@@ -163,6 +163,7 @@ const styles = EStyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    marginBottom: '3rem',
   },
   line: {
     backgroundColor: colors.primary,

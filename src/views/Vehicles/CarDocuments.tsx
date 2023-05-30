@@ -18,7 +18,7 @@ export default function CarDocuments() {
           lineHeight={28}
           fontFamily="Roboto-Medium"
           color="#201A1B">
-          Step 2: Car Documents
+          Step 3: Car Documents
         </CustomText>
       </ScrollView>
     </Box>
