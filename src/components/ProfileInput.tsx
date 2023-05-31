@@ -37,7 +37,6 @@ export default function ProfileInput(
     noMargin,
     renderEndIcon,
     endIcon,
-    endIconPress,
     editable = true,
     label,
     propsStyle,

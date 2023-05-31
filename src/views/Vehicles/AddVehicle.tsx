@@ -128,12 +128,12 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                 desc={form.steering.sub_heading}
                 onComplete={() => navigation.navigate('Steering')}
               />
-              <AddVehicleCard
+              {/* <AddVehicleCard
                 fill={form.ac_info.percentage}
                 title={form.ac_info.heading}
                 desc={form.ac_info.sub_heading}
                 onComplete={() => navigation.navigate('Ac')}
-              />
+              /> */}
             </Box>
             <Box width={'50%'} alignSelf="center" pv={'5%'}>
               <PrimaryButton

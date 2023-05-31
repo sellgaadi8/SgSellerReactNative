@@ -265,3 +265,7 @@ type CarImagesProps = {
   navigation: StackNavigationProp<RootStackParamList, 'CarImages'>;
   route: RouteProp<RootStackParamList, 'CarImages'>;
 };
+
+type RadioProps = {
+  title: string;
+};
