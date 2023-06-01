@@ -20,9 +20,11 @@ import {onUploadCarImages} from '../../redux/ducks/uploadCarImages';
 import GlobalContext from '../../contexts/GlobalContext';
 import {onGetCarImages} from '../../redux/ducks/getCarImage';
 import {CarImagesProps} from '../../types/propsTypes';
+import Snackbar from 'react-native-snackbar';
+import {onUpdateCarImages} from '../../redux/ducks/updateCarImages';
 
-export default function CarImages({route}: CarImagesProps) {
-  const [exteriorType, setExteriorType] = useState([
+export default function CarImages({route, navigation}: CarImagesProps) {
+  const [carImageType, setCarImageType] = useState([
     {id: 'left_wheel_corner_front', name: 'LEFT WHEEL CORNER -FRONT', url: ''},
     {id: 'centre_front', name: 'CENTRE FRONT', url: ''},
     {id: 'right_corner_back', name: 'RIGHT CORNER -BACK', url: ''},
@@ -41,6 +43,7 @@ export default function CarImages({route}: CarImagesProps) {
   const selectUploadImage = useAppSelector(state => state.uploadImage);
   const selectUploadCarImage = useAppSelector(state => state.uploadCarImages);
   const selectGetCarImages = useAppSelector(state => state.getCarImage);
+  const selectUpdateCarImages = useAppSelector(state => state.updateCarImages);
   const [imageType, setImageType] = useState('');
   const [image1, setImage1] = useState('');
   const [image2, setImage2] = useState('');
@@ -51,7 +54,7 @@ export default function CarImages({route}: CarImagesProps) {
   const [image7, setImage7] = useState('');
   const [video, setVideo] = useState('');
 
-  const {vehicleId} = useContext(GlobalContext);
+  const {vehicleId, setVehicleId} = useContext(GlobalContext);
 
   useEffect(() => {
     if (route.params.from === 'edit') {
@@ -71,7 +74,7 @@ export default function CarImages({route}: CarImagesProps) {
   useEffect(() => {
     if (selectUploadImage.called) {
       const {error, image} = selectUploadImage;
-      let temp = [...exteriorType];
+      let temp = [...carImageType];
 
       if (!error && image) {
         switch (imageType) {
@@ -112,24 +115,82 @@ export default function CarImages({route}: CarImagesProps) {
         }
       }
 
-      setExteriorType([...temp]);
+      setCarImageType([...temp]);
     }
-  }, [selectUploadImage]);
+    if (selectUploadCarImage.called) {
+      const {error, success, message, uuid} = selectUploadCarImage;
+      if (!error && success) {
+        navigation.navigate('AddVehicle', {from: 'edit'});
+        setVehicleId(uuid);
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'green',
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      }
+    }
+    if (selectGetCarImages.called) {
+      const {data, error} = selectGetCarImages;
+      if (!error && data) {
+        setImage1(data.left_wheel_corner_front);
+        setImage2(data.centre_front);
+        setImage3(data.right_corner_back);
+        setImage4(data.centre_back);
+        setImage5(data.engine_hood_open);
+        setImage6(data.interior_dashboard);
+        setImage7(data.meter_console);
+        setVideo(data.video);
+      }
+    }
+    if (selectUpdateCarImages.called) {
+      const {error, success, message, uuid} = selectUpdateCarImages;
+      if (!error && success) {
+        navigation.navigate('AddVehicle', {from: 'edit'});
+        setVehicleId(uuid);
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'green',
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      }
+    }
+  }, [
+    selectUploadImage,
+    selectUploadCarImage,
+    selectGetCarImages,
+    selectUpdateCarImages,
+  ]);
 
   function onSubmit() {
-    dispatch(
-      onUploadCarImages(
-        vehicleId,
-        image1,
-        image2,
-        image3,
-        image4,
-        image5,
-        image6,
-        image7,
-        video,
-      ),
-    );
+    if (route.params.from === 'add') {
+      dispatch(
+        onUploadCarImages(
+          vehicleId,
+          image1,
+          image2,
+          image3,
+          image4,
+          image5,
+          image6,
+          image7,
+          video,
+        ),
+      );
+    } else {
+      dispatch(
+        onUpdateCarImages(
+          vehicleId,
+          image1,
+          image2,
+          image3,
+          image4,
+          image5,
+          image6,
+          image7,
+          video,
+        ),
+      );
+    }
   }
 
   return (
@@ -143,7 +204,7 @@ export default function CarImages({route}: CarImagesProps) {
           Step 2: Car Images
         </CustomText>
         <Box pv={'7%'}>
-          {exteriorType.map((el, index) => {
+          {carImageType.map((el, index) => {
             return (
               <View style={styles.card} key={index.toString()}>
                 <View style={styles.title}>
@@ -201,7 +262,12 @@ export default function CarImages({route}: CarImagesProps) {
             />
           </Box>
           <Box width={'45%'}>
-            <PrimaryButton label="Save Edits" onPress={onSubmit} />
+            <PrimaryButton
+              label={
+                route.params.from === 'add' ? 'Save Edits' : 'Update Edits'
+              }
+              onPress={onSubmit}
+            />
           </Box>
         </Box>
       </ScrollView>

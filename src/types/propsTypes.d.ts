@@ -294,3 +294,8 @@ type ExternelPanelProps = {
   navigation: StackNavigationProp<RootStackParamList, 'ExternelPanel'>;
   route: RouteProp<RootStackParamList, 'ExternelPanel'>;
 };
+
+type ExteriorProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'Exterior'>;
+  route: RouteProp<RootStackParamList, 'Exterior'>;
+};

@@ -10,6 +10,7 @@ const initialState: AddExteriorState = {
   called: false,
   success: false,
   message: '',
+  uuid: '',
 };
 
 export default (
@@ -34,12 +35,12 @@ export const onAddExterior =
     left_pillarA: string,
     left_pillarB: string,
     left_pillarC: string,
+    right_pillarA: string,
     right_pillarB: string,
+    right_pillarC: string,
     left_apron: string,
     left_apron_leg: string,
     right_apron_leg: string,
-    right_pillarA: string,
-    right_pillarC: string,
     right_apron: string,
     boot_floor: string,
   ) =>
@@ -60,12 +61,12 @@ export const onAddExterior =
     body.append('left_pillarA', left_pillarA);
     body.append('left_pillarB', left_pillarB);
     body.append('left_pillarC', left_pillarC);
+    body.append('right_pillarA', right_pillarA);
     body.append('right_pillarB', right_pillarB);
+    body.append('right_pillarC', right_pillarC);
     body.append('left_apron', left_apron);
     body.append('left_apron_leg', left_apron_leg);
     body.append('right_apron_leg', right_apron_leg);
-    body.append('right_pillarA', right_pillarA);
-    body.append('right_pillarC', right_pillarC);
     body.append('right_apron', right_apron);
     body.append('boot_floor', boot_floor);
 

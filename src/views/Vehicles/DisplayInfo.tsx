@@ -192,6 +192,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
       const {message, success, uuid} = selectCreateDisplay;
       if (success && message && uuid) {
         setVehicleId(uuid);
+        // navigation.navigate('AddVehicle', {from: 'edit'});
         navigation.goBack();
         Snackbar.show({
           text: message,
@@ -249,6 +250,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
     if (selectUpdateDisplay.called) {
       const {error, message} = selectUpdateDisplay;
       if (!error) {
+        // navigation.navigate('AddVehicle', {from: 'edit'});
         navigation.goBack();
         Snackbar.show({
           text: message,

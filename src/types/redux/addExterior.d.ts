@@ -5,6 +5,7 @@ type AddExteriorState = {
   called: boolean;
   success: boolean;
   message: string;
+  uuid: string;
 };
 
 type AddExteriorAction = {

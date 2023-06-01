@@ -29,7 +29,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
 
   useEffect(() => {
     navigation.addListener('focus', onFocus);
-  }, []);
+  }, [navigation]);
 
   function onFocus() {
     setLoading(true);

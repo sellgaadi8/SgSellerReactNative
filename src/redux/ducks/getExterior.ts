@@ -28,29 +28,30 @@ const getExteriorAction = (res: GetExteriorState): GetExteriorAction => {
   return {type: GET_EXTERIOR, payload: {...res, called: true}};
 };
 
-export const onGetCarImages = (id: string) => async (dispatch: AppDispatch) => {
-  const url = getExteriorUrl(id);
-  const token = await getUserToken();
+export const onGetExteriorData =
+  (id: string) => async (dispatch: AppDispatch) => {
+    const url = getExteriorUrl(id);
+    const token = await getUserToken();
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    axiosInstance
+      .get(url, config)
+      .then(res => {
+        dispatch(getExteriorAction({...res.data, error: false}));
+      })
+      .catch(err => {
+        if (err?.request?._repsonse) {
+          dispatch(
+            getExteriorAction({
+              ...JSON.parse(err.request._repsonse),
+              error: true,
+            }),
+          );
+        }
+      });
   };
-
-  axiosInstance
-    .get(url, config)
-    .then(res => {
-      dispatch(getExteriorAction({...res.data, error: false}));
-    })
-    .catch(err => {
-      if (err?.request?._repsonse) {
-        dispatch(
-          getExteriorAction({
-            ...JSON.parse(err.request._repsonse),
-            error: true,
-          }),
-        );
-      }
-    });
-};
