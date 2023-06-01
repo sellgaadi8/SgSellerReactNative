@@ -13,13 +13,13 @@ type RootStackParamList = {
   AddVehicle: {from: 'edit' | 'add'};
   DisplayInfo: {from: 'edit' | 'add'};
   CarImages: {from: 'edit' | 'add'};
-  CarDocuments: undefined;
-  Exterior: undefined;
-  ExternelPanel: undefined;
-  Tyres: undefined;
-  Engine: undefined;
-  Electricals: undefined;
-  Steering: undefined;
+  CarDocuments: {from: 'edit' | 'add'};
+  Exterior: {from: 'edit' | 'add'};
+  ExternelPanel: {from: 'edit' | 'add'};
+  Tyres: {from: 'edit' | 'add'};
+  Engine: {from: 'edit' | 'add'};
+  Electricals: {from: 'edit' | 'add'};
+  Steering: {from: 'edit' | 'add'};
   Ac: undefined;
 };
 

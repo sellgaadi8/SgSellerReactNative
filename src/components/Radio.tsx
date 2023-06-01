@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import {Pressable} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import colors from '../utils/colors';
 import CustomText from './CustomText';
@@ -8,14 +8,11 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {RadioProps} from '../types/propsTypes';
 import Box from './Box';
 
-export default function Radio({title}: RadioProps) {
-  const [selectedOption, setSelectedOption] = useState('');
-
-  const handleOptionSelect = (option: string) => {
-    if (option) {
-      setSelectedOption(option);
-    }
-  };
+export default function Radio({
+  title,
+  handleOptionSelect,
+  selectedOption,
+}: RadioProps) {
   const renderRadioButton = (option: string) => (
     <Pressable
       style={styles.optionButton}

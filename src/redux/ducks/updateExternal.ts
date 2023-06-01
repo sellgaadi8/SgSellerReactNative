@@ -33,17 +33,17 @@ const updateExternalAction = (
 export const onUpdateExternal =
   (
     id: string,
-    left_pillarA: string,
-    left_pillarB: string,
-    left_pillarC: string,
-    right_pillarB: string,
-    left_apron: string,
-    left_apron_leg: string,
-    right_apron_leg: string,
-    right_pillarA: string,
-    right_pillarC: string,
-    right_apron: string,
-    boot_floor: string,
+    bonnet_head: string,
+    roof: string,
+    dickey_door: string,
+    left_door_front: string,
+    left_door_back: string,
+    right_door_front: string,
+    right_door_back: string,
+    left_fender: string,
+    right_fender: string,
+    left_quater_panel: string,
+    right_quater_panel: string,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = updateExternelUrl(id);
@@ -59,17 +59,17 @@ export const onUpdateExternal =
 
     const body = new FormData();
 
-    body.append('left_pillarA', left_pillarA);
-    body.append('left_pillarB', left_pillarB);
-    body.append('left_pillarC', left_pillarC);
-    body.append('right_pillarB', right_pillarB);
-    body.append('left_apron', left_apron);
-    body.append('left_apron_leg', left_apron_leg);
-    body.append('right_apron_leg', right_apron_leg);
-    body.append('right_pillarA', right_pillarA);
-    body.append('right_pillarC', right_pillarC);
-    body.append('right_apron', right_apron);
-    body.append('boot_floor', boot_floor);
+    body.append('bonnet_head', bonnet_head);
+    body.append('roof', roof);
+    body.append('dickey_door', dickey_door);
+    body.append('left_door_front', left_door_front);
+    body.append('left_door_back', left_door_back);
+    body.append('right_door_front', right_door_front);
+    body.append('right_door_back', right_door_back);
+    body.append('left_fender', left_fender);
+    body.append('right_fender', right_fender);
+    body.append('left_quater_panel', left_quater_panel);
+    body.append('right_quater_panel', right_quater_panel);
 
     axiosInstance
       .post(url, body, config)

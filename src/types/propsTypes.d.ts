@@ -268,4 +268,29 @@ type CarImagesProps = {
 
 type RadioProps = {
   title: string;
+  selectedOption: string;
+  handleOptionSelect: (option: string) => void;
+};
+
+type CarDocsType =
+  | 'rc'
+  | 'noc'
+  | 'mismatch'
+  | 'insurance'
+  | 'underHypo'
+  | 'roadTax'
+  | 'partipeshi'
+  | 'key'
+  | 'chesis'
+  | 'cng/lpg'
+  | 'endorsed';
+
+type CarDocumentsProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'CarDocuments'>;
+  route: RouteProp<RootStackParamList, 'CarDocuments'>;
+};
+
+type ExternelPanelProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'ExternelPanel'>;
+  route: RouteProp<RootStackParamList, 'ExternelPanel'>;
 };

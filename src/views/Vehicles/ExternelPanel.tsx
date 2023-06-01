@@ -1,5 +1,11 @@
 import {Pressable, ScrollView} from 'react-native';
-import React, {Dispatch, SetStateAction, useState} from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
 import {
@@ -11,8 +17,17 @@ import {container} from '../../utils/styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../../utils/colors';
 import PrimaryButton from '../../components/PrimaryButton';
+import {useDispatch} from 'react-redux';
+import {onAddExternal} from '../../redux/ducks/addExternal';
+import GlobalContext from '../../contexts/GlobalContext';
+import {useAppSelector} from '../../utils/hooks';
+import Snackbar from 'react-native-snackbar';
+import {ExternelPanelProps} from '../../types/propsTypes';
+import {onUpdateExternal} from '../../redux/ducks/updateExternal';
+import {onGetExternelDetails} from '../../redux/ducks/getExternal';
+import Loader from '../../components/Loader';
 
-export default function ExternelPanel() {
+export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
   const [form, setForm] = useState([
     {
       id: 1,
@@ -119,6 +134,21 @@ export default function ExternelPanel() {
   const [rfender, setRfender] = useState('');
   const [lQPanel, setLqPanel] = useState('');
   const [rQPanel, setRqPanel] = useState('');
+  const [loading, setLoading] = useState(false);
+  const {vehicleId} = useContext(GlobalContext);
+  const selectAdd = useAppSelector(state => state.addExternal);
+  const selectUpdate = useAppSelector(state => state.updateExternal);
+  const setGet = useAppSelector(state => state.getExternal);
+
+  const dispatch = useDispatch<any>();
+
+  useEffect(() => {
+    if (route.params.from === 'edit') {
+      setLoading(true);
+      dispatch(onGetExternelDetails(vehicleId));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function onSelectOption(
     elementId: number,
@@ -160,8 +190,89 @@ export default function ExternelPanel() {
     }
   }
 
+  function onSave() {
+    if (route.params.from === 'add') {
+      dispatch(
+        onAddExternal(
+          vehicleId,
+          hood,
+          roof,
+          dicky,
+          ldoorf,
+          ldoorb,
+          rdoorf,
+          rdoorb,
+          lfender,
+          rfender,
+          lQPanel,
+          rQPanel,
+        ),
+      );
+    } else {
+      dispatch(
+        onUpdateExternal(
+          vehicleId,
+          hood,
+          roof,
+          dicky,
+          ldoorf,
+          ldoorb,
+          rdoorf,
+          rdoorb,
+          lfender,
+          rfender,
+          lQPanel,
+          rQPanel,
+        ),
+      );
+    }
+  }
+
+  useEffect(() => {
+    if (selectAdd.called) {
+      const {error, message, success} = selectAdd;
+      if (!error && success) {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'green',
+          duration: Snackbar.LENGTH_SHORT,
+        });
+        navigation.goBack();
+      }
+    }
+    if (selectUpdate.called) {
+      const {error, message, success} = selectUpdate;
+      if (!error && success) {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'green',
+          duration: Snackbar.LENGTH_SHORT,
+        });
+        navigation.goBack();
+      }
+    }
+    if (setGet.called) {
+      const {data, error, success} = setGet;
+      if (!error && success && data) {
+        setHood(data.bonnet_head);
+        setRoof(data.roof);
+        setDickey(data.dickey_door);
+        setLdoorb(data.left_door_back);
+        setRdoorb(data.right_door_back);
+        setLdoorf(data.left_door_front);
+        setRdoorf(data.right_door_front);
+        setLfender(data.left_fender);
+        setRfender(data.right_fender);
+        setLqPanel(data.left_quater_panel);
+        setRqPanel(data.right_quater_panel);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectAdd, selectUpdate]);
+
   return (
     <Box style={styles.container}>
+      {loading && <Loader />}
       <ScrollView style={styles.onScroll}>
         <CustomText
           fontSize={16}
@@ -221,7 +332,7 @@ export default function ExternelPanel() {
             />
           </Box>
           <Box width={'45%'}>
-            <PrimaryButton label={'Save'} onPress={() => console.log('test')} />
+            <PrimaryButton label={'Save'} onPress={onSave} />
           </Box>
         </Box>
       </ScrollView>

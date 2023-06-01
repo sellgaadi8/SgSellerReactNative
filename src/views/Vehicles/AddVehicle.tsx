@@ -28,13 +28,17 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
   const {vehicleId} = useContext(GlobalContext);
 
   useEffect(() => {
+    navigation.addListener('focus', onFocus);
+  }, []);
+
+  function onFocus() {
     setLoading(true);
     if (route.params.from === 'add') {
       dispatch(getVehicleForm());
     } else {
       dispatch(getVehicleForm(vehicleId));
     }
-  }, []);
+  }
 
   useEffect(() => {
     if (selectVehicleForm.called) {
@@ -90,43 +94,71 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                 fill={form.car_docs.percentage}
                 title={form.car_docs.heading}
                 desc={form.car_docs.sub_heading}
-                onComplete={() => navigation.navigate('CarDocuments')}
+                onComplete={() =>
+                  navigation.navigate('CarDocuments', {
+                    from: route.params.from === 'add' ? 'add' : 'edit',
+                  })
+                }
               />
               <AddVehicleCard
                 fill={form.exterior_img.percentage}
                 title={form.exterior_img.heading}
                 desc={form.exterior_img.sub_heading}
-                onComplete={() => navigation.navigate('Exterior')}
+                onComplete={() =>
+                  navigation.navigate('Exterior', {
+                    from: route.params.from === 'add' ? 'add' : 'edit',
+                  })
+                }
               />
               <AddVehicleCard
                 fill={form.external_panel.percentage}
                 title={form.external_panel.heading}
                 desc={form.external_panel.sub_heading}
-                onComplete={() => navigation.navigate('ExternelPanel')}
+                onComplete={() =>
+                  navigation.navigate('ExternelPanel', {
+                    from: route.params.from === 'add' ? 'add' : 'edit',
+                  })
+                }
               />
               <AddVehicleCard
                 fill={form.tyres.percentage}
                 title={form.tyres.heading}
                 desc={form.tyres.sub_heading}
-                onComplete={() => navigation.navigate('Tyres')}
+                onComplete={() =>
+                  navigation.navigate('Tyres', {
+                    from: route.params.from === 'add' ? 'add' : 'edit',
+                  })
+                }
               />
               <AddVehicleCard
                 fill={form.engine.percentage}
                 title={form.engine.heading}
                 desc={form.engine.sub_heading}
-                onComplete={() => navigation.navigate('Engine')}
+                onComplete={() =>
+                  navigation.navigate('Engine', {
+                    from: route.params.from === 'add' ? 'add' : 'edit',
+                  })
+                }
               />
               <AddVehicleCard
                 fill={form.electricals.percentage}
                 title={form.electricals.heading}
                 desc={form.electricals.sub_heading}
-                onComplete={() => navigation.navigate('Electricals')}
+                onComplete={() =>
+                  navigation.navigate('Electricals', {
+                    from: route.params.from === 'add' ? 'add' : 'edit',
+                  })
+                }
               />
               <AddVehicleCard
                 fill={form.steering.percentage}
                 title={form.steering.heading}
                 desc={form.steering.sub_heading}
-                onComplete={() => navigation.navigate('Steering')}
+                onComplete={() =>
+                  navigation.navigate('Steering', {
+                    from: route.params.from === 'add' ? 'add' : 'edit',
+                  })
+                }
               />
               {/* <AddVehicleCard
                 fill={form.ac_info.percentage}

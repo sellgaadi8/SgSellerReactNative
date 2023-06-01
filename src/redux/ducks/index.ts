@@ -40,6 +40,8 @@ import addElectrical from './addElectrical';
 import updateElectrical from './updateElectrical';
 import getElectrical from './getElectrical';
 import addSteering from './addSteering';
+import updateSteering from './updateSteering';
+import getSteering from './getSteering';
 
 export default combineReducers({
   login,
@@ -83,4 +85,6 @@ export default combineReducers({
   updateElectrical,
   getElectrical,
   addSteering,
+  updateSteering,
+  getSteering,
 });

@@ -1,11 +1,11 @@
 import axiosInstance from '../../axios';
-import {getExternelUrl} from '../../utils/api';
+import {getSteeringUrl} from '../../utils/api';
 import {getUserToken} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
 
-const GET_EXTERNAL: GET_EXTERNAL = 'sgSeller/getExternal';
+const GET_STEERING: GET_STEERING = 'sgSeller/getSteering';
 
-const initialState: GetExternalState = {
+const initialState: GetSteeringState = {
   called: false,
   success: false,
   error: false,
@@ -14,23 +14,23 @@ const initialState: GetExternalState = {
 
 export default (
   state = initialState,
-  action: GetExternalAction,
-): GetExternalState => {
+  action: GetSteeringAction,
+): GetSteeringState => {
   switch (action.type) {
-    case GET_EXTERNAL:
+    case GET_STEERING:
       return {...state, ...action.payload};
     default:
       return {...state, called: false};
   }
 };
 
-const getExternalAction = (res: GetExternalState): GetExternalAction => {
-  return {type: GET_EXTERNAL, payload: {...res, called: true}};
+const getSteeringAction = (res: GetSteeringState): GetSteeringAction => {
+  return {type: GET_STEERING, payload: {...res, called: true}};
 };
 
-export const onGetExternelDetails =
+export const onGetSteeringDetails =
   (id: string) => async (dispatch: AppDispatch) => {
-    const url = getExternelUrl(id);
+    const url = getSteeringUrl(id);
     const token = await getUserToken();
 
     const config = {
@@ -42,12 +42,12 @@ export const onGetExternelDetails =
     axiosInstance
       .get(url, config)
       .then(res => {
-        dispatch(getExternalAction({...res.data, error: false}));
+        dispatch(getSteeringAction({...res.data, error: false}));
       })
       .catch(err => {
         if (err?.request?._repsonse) {
           dispatch(
-            getExternalAction({
+            getSteeringAction({
               ...JSON.parse(err.request._repsonse),
               error: true,
             }),

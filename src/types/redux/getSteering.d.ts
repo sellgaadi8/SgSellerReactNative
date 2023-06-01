@@ -1,6 +1,6 @@
-type GET_TYRES = 'sgSeller/getTyres';
+type GET_STEERING = 'sgSeller/getSteering';
 
-type Tyres = {
+type Steering = {
   boot_floor: string;
   left_apron: string;
   right_apron: string;
@@ -14,14 +14,14 @@ type Tyres = {
   right_apron_leg: string;
 };
 
-type GetTyresState = {
+type GetSteeringState = {
   called: boolean;
   error: boolean;
   success: boolean;
-  data: Tyres | null;
+  data: Steering | null;
 };
 
-type GetTyresAction = {
-  type: GET_TYRES;
-  payload: GetTyresState;
+type GetSteeringAction = {
+  type: GET_STEERING;
+  payload: GetSteeringState;
 };
