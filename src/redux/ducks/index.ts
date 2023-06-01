@@ -21,6 +21,25 @@ import getVariant from './getVariant';
 import updateDisplayInfo from './updateDisplayInfo';
 import getCarImage from './getCarImage';
 import updateCarImages from './updateCarImages';
+import addCarDocument from './addCarDocument';
+import updateCarDocument from './updateCarDocument';
+import getCarDocuments from './getCarDocuments';
+import addExterior from './addExterior';
+import updateExterior from './updateExterior';
+import getExterior from './getExterior';
+import updateExternal from './updateExternal';
+import addExternal from './addExternal';
+import getExternal from './getExternal';
+import addTyres from './addTyres';
+import updateTyres from './updateTyres';
+import getTyres from './getTyres';
+import addEngine from './addEngine';
+import updateEngine from './updateEngine';
+import getEngine from './getEngine';
+import addElectrical from './addElectrical';
+import updateElectrical from './updateElectrical';
+import getElectrical from './getElectrical';
+import addSteering from './addSteering';
 
 export default combineReducers({
   login,
@@ -45,4 +64,23 @@ export default combineReducers({
   updateDisplayInfo,
   getCarImage,
   updateCarImages,
+  addCarDocument,
+  updateCarDocument,
+  getCarDocuments,
+  addExterior,
+  updateExterior,
+  getExterior,
+  updateExternal,
+  addExternal,
+  getExternal,
+  addTyres,
+  updateTyres,
+  getTyres,
+  addEngine,
+  updateEngine,
+  getEngine,
+  addElectrical,
+  updateElectrical,
+  getElectrical,
+  addSteering,
 });

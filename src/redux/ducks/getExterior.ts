@@ -1,11 +1,11 @@
 import axiosInstance from '../../axios';
-import {getCarImageUrl} from '../../utils/api';
+import {getExteriorUrl} from '../../utils/api';
 import {getUserToken} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
 
-const GET_CAR_IAMGES: GET_CAR_IAMGES = 'sgSeller/getCarImages';
+const GET_EXTERIOR: GET_EXTERIOR = 'sgSeller/getExterior';
 
-const initialState: GetCarImageState = {
+const initialState: GetExteriorState = {
   called: false,
   success: false,
   error: false,
@@ -14,22 +14,22 @@ const initialState: GetCarImageState = {
 
 export default (
   state = initialState,
-  action: GetCarImageAction,
-): GetCarImageState => {
+  action: GetExteriorAction,
+): GetExteriorState => {
   switch (action.type) {
-    case GET_CAR_IAMGES:
+    case GET_EXTERIOR:
       return {...state, ...action.payload};
     default:
       return {...state, called: false};
   }
 };
 
-const getCarImageAction = (res: GetCarImageState): GetCarImageAction => {
-  return {type: GET_CAR_IAMGES, payload: {...res, called: true}};
+const getExteriorAction = (res: GetExteriorState): GetExteriorAction => {
+  return {type: GET_EXTERIOR, payload: {...res, called: true}};
 };
 
 export const onGetCarImages = (id: string) => async (dispatch: AppDispatch) => {
-  const url = getCarImageUrl(id);
+  const url = getExteriorUrl(id);
   const token = await getUserToken();
 
   const config = {
@@ -41,12 +41,12 @@ export const onGetCarImages = (id: string) => async (dispatch: AppDispatch) => {
   axiosInstance
     .get(url, config)
     .then(res => {
-      dispatch(getCarImageAction({...res.data, error: false}));
+      dispatch(getExteriorAction({...res.data, error: false}));
     })
     .catch(err => {
       if (err?.request?._repsonse) {
         dispatch(
-          getCarImageAction({
+          getExteriorAction({
             ...JSON.parse(err.request._repsonse),
             error: true,
           }),

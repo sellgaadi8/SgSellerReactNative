@@ -1,6 +1,6 @@
-type GET_CAR_IAMGES = 'sgSeller/getCarImages';
+type GET_ELECTRICAL_DETAILS = 'sgSeller/getElectricalDetails';
 
-type CarImages = {
+type ELECTRICAL = {
   video: string;
   centre_back: string;
   centre_front: string;
@@ -11,14 +11,14 @@ type CarImages = {
   left_wheel_corner_front: string;
 };
 
-type GetCarImageState = {
+type GetElectricalState = {
   called: boolean;
   error: boolean;
   success: boolean;
-  data: CarImages | null;
+  data: ELECTRICAL | null;
 };
 
-type GetCarImageAction = {
-  type: GET_CAR_IAMGES;
-  payload: GetCarImageState;
+type GetElectricalDetailsAction = {
+  type: GET_ELECTRICAL_DETAILS;
+  payload: GetElectricalState;
 };

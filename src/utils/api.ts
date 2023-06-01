@@ -24,6 +24,36 @@ const uploadCardImageUrl = (id: string) => `/vehicle/car-images/create/${id}`;
 const getCarImageUrl = (id: string) => `/vehicle/car-images/edit/${id}`;
 const updateCarImageUrl = (id: string) => `/vehicle/car-images/update/${id}`;
 
+const addCarDocumentsUrl = (id: string) =>
+  `/vehicle/car-documents/create/${id}`;
+const getCarDocumentsUrl = (id: string) => `/vehicle/car-documents/edit/${id}`;
+const updateCarDocumentsUrl = (id: string) =>
+  `/vehicle/car-documents/update/${id}`;
+
+const addExteriorUrl = (id: string) => `/vehicle/exterior-img/create/${id}`;
+const getExteriorUrl = (id: string) => `/vehicle/exterior-img/edit/${id}`;
+const updateExteriorUrl = (id: string) => `/vehicle/exterior-img/update/${id}`;
+
+const addExternelUrl = (id: string) => `vehicle/external-panel/create/${id}`;
+const getExternelUrl = (id: string) => `/vehicle/exterior-img/edit/${id}`;
+const updateExternelUrl = (id: string) => `/vehicle/exterior-img/update/${id}`;
+
+const addTyresUrl = (id: string) => `/vehicle/tyres/create/${id}`;
+const getTyresUrl = (id: string) => `/vehicle/tyres/edit/${id}`;
+const updateTyresUrl = (id: string) => `/vehicle/tyres/update/${id}`;
+
+const addEngineUrl = (id: string) => `/vehicle/engine/create/${id}`;
+const getEngineUrl = (id: string) => `/vehicle/engine/edit/${id}`;
+const updateEngineUrl = (id: string) => `/vehicle/engine/update/${id}`;
+
+const addElectricalsUrl = (id: string) => `/vehicle/electricals/create/${id}`;
+const getElectricalUrl = (id: string) => `/vehicle/electricals/edit/${id}`;
+const updateElectricalUrl = (id: string) => `/vehicle/electricals/update/${id}`;
+
+const addSteeringUrl = (id: string) => `/vehicle/steering/create/${id}`;
+const getSteeringUrl = (id: string) => `/vehicle/steering/edit/${id}`;
+const updateSteeringUrl = (id: string) => `/vehicle/steering/update/${id}`;
+
 export {
   LOGIN_SEND_OTP,
   LOGIN_SUBMIT,
@@ -39,11 +69,32 @@ export {
   UPLOAD_IMAGE,
   MAKE_LIST,
   MODEL_LIST,
+  VARIANT_LIST,
   addVehicleFormurl,
   getDisplayInfoUrl,
   uploadCardImageUrl,
   updateDisplayInfoUrl,
   getCarImageUrl,
   updateCarImageUrl,
-  VARIANT_LIST,
+  addCarDocumentsUrl,
+  getCarDocumentsUrl,
+  updateCarDocumentsUrl,
+  addExteriorUrl,
+  updateExteriorUrl,
+  getExteriorUrl,
+  addExternelUrl,
+  getExternelUrl,
+  updateExternelUrl,
+  addTyresUrl,
+  getTyresUrl,
+  updateTyresUrl,
+  addEngineUrl,
+  getEngineUrl,
+  updateEngineUrl,
+  addElectricalsUrl,
+  getElectricalUrl,
+  updateElectricalUrl,
+  addSteeringUrl,
+  getSteeringUrl,
+  updateSteeringUrl,
 };
