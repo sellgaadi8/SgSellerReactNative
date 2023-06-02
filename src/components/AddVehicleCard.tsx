@@ -12,6 +12,7 @@ export default function AddVehicleCard({
   title,
   desc,
   onComplete,
+  isStep1Complete,
 }: AddVehicleCardProps) {
   return (
     <Box style={styles.card}>
@@ -32,7 +33,10 @@ export default function AddVehicleCard({
             {desc}
           </CustomText>
         )}
-        <Pressable style={styles.textButton} onPress={onComplete}>
+        <Pressable
+          style={styles.textButton}
+          onPress={onComplete}
+          disabled={isStep1Complete}>
           <CustomText
             fontFamily="Roboto-Medium"
             fontSize={14}

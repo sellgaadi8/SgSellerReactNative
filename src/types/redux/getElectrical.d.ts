@@ -1,14 +1,13 @@
 type GET_ELECTRICAL_DETAILS = 'sgSeller/getElectricalDetails';
 
 type ELECTRICAL = {
-  video: string;
-  centre_back: string;
-  centre_front: string;
-  meter_console: string;
-  engine_hood_open: string;
-  right_corner_back: string;
-  interior_dashboard: string;
-  left_wheel_corner_front: string;
+  power_windows: string;
+  music_system: string;
+  electrical_odomoter: string;
+  parking_sensor: string;
+  overall: string;
+  jack_tool_box: string;
+  lights_crack_broken: string;
 };
 
 type GetElectricalState = {

@@ -31,17 +31,10 @@ const addSteeringAction = (res: AddSteeringState): AddSteeringAction => {
 export const onAddSteering =
   (
     id: string,
-    left_pillarA: string,
-    left_pillarB: string,
-    left_pillarC: string,
-    right_pillarB: string,
-    left_apron: string,
-    left_apron_leg: string,
-    right_apron_leg: string,
-    right_pillarA: string,
-    right_pillarC: string,
-    right_apron: string,
-    boot_floor: string,
+    suspension: string,
+    steering: string,
+    brake: string,
+    wheel_bearing_noise: string,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = addSteeringUrl(id);
@@ -57,17 +50,10 @@ export const onAddSteering =
 
     const body = new FormData();
 
-    body.append('left_pillarA', left_pillarA);
-    body.append('left_pillarB', left_pillarB);
-    body.append('left_pillarC', left_pillarC);
-    body.append('right_pillarB', right_pillarB);
-    body.append('left_apron', left_apron);
-    body.append('left_apron_leg', left_apron_leg);
-    body.append('right_apron_leg', right_apron_leg);
-    body.append('right_pillarA', right_pillarA);
-    body.append('right_pillarC', right_pillarC);
-    body.append('right_apron', right_apron);
-    body.append('boot_floor', boot_floor);
+    body.append('suspension', suspension);
+    body.append('steering', steering);
+    body.append('brake', brake);
+    body.append('wheel_bearing_noise', wheel_bearing_noise);
 
     axiosInstance
       .post(url, body, config)

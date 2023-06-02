@@ -53,6 +53,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
 
   function selectVehicleType() {
     navigation.navigate('AddVehicle', {from: 'add'});
+    setVehicleId('');
   }
   return (
     <Box style={styles.container}>

@@ -1,14 +1,16 @@
 type GET_ENGINE_DETAILS = 'sgSeller/getEngineDetails';
 
 type ENGINE = {
-  video: string;
-  centre_back: string;
-  centre_front: string;
-  meter_console: string;
-  engine_hood_open: string;
-  right_corner_back: string;
-  interior_dashboard: string;
-  left_wheel_corner_front: string;
+  gear_oil_leakage: string;
+  exhaust_smoke: string;
+  engine_perm_blow_back: string;
+  engine_mounting: string;
+  engine_sound: string;
+  clutch_bearing_sound: string;
+  ac: string;
+  cooling: string;
+  heater: string;
+  condensor: string;
 };
 
 type GetEngineDetailsState = {

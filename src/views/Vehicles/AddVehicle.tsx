@@ -24,16 +24,17 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
   const selectVehicleForm = useAppSelector(state => state.addVehicleForm);
   const [form, setForm] = useState<VehicleForm>();
   const [loading, setLoading] = useState(false);
-  // const [isStep1Completed, setIsStep1Completed] = useState(false);
+  const [isStep1Completed, setIsStep1Completed] = useState(false);
   const {vehicleId} = useContext(GlobalContext);
 
   useEffect(() => {
-    navigation.addListener('focus', onFocus);
-  }, [navigation]);
+    // navigation.addListener('focus', onFocus);
+    onFocus();
+  }, []);
 
   function onFocus() {
     setLoading(true);
-    if (route.params.from === 'add') {
+    if (vehicleId.length === 0) {
       dispatch(getVehicleForm());
     } else {
       dispatch(getVehicleForm(vehicleId));
@@ -46,6 +47,11 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
       const {data, error} = selectVehicleForm;
       if (!error && data) {
         setForm(data);
+        if (data.total_percentage === 0) {
+          setIsStep1Completed(false);
+        } else {
+          setIsStep1Completed(true);
+        }
       }
     }
   }, [selectVehicleForm]);
@@ -89,6 +95,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                     from: route.params.from === 'add' ? 'add' : 'edit',
                   })
                 }
+                isStep1Complete={!isStep1Completed}
               />
               <AddVehicleCard
                 fill={form.car_docs.percentage}
@@ -99,6 +106,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                     from: route.params.from === 'add' ? 'add' : 'edit',
                   })
                 }
+                isStep1Complete={!isStep1Completed}
               />
               <AddVehicleCard
                 fill={form.exterior_img.percentage}
@@ -109,6 +117,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                     from: route.params.from === 'add' ? 'add' : 'edit',
                   })
                 }
+                isStep1Complete={!isStep1Completed}
               />
               <AddVehicleCard
                 fill={form.external_panel.percentage}
@@ -129,6 +138,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                     from: route.params.from === 'add' ? 'add' : 'edit',
                   })
                 }
+                isStep1Complete={!isStep1Completed}
               />
               <AddVehicleCard
                 fill={form.engine.percentage}
@@ -139,6 +149,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                     from: route.params.from === 'add' ? 'add' : 'edit',
                   })
                 }
+                isStep1Complete={!isStep1Completed}
               />
               <AddVehicleCard
                 fill={form.electricals.percentage}
@@ -149,6 +160,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                     from: route.params.from === 'add' ? 'add' : 'edit',
                   })
                 }
+                isStep1Complete={!isStep1Completed}
               />
               <AddVehicleCard
                 fill={form.steering.percentage}
@@ -159,6 +171,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                     from: route.params.from === 'add' ? 'add' : 'edit',
                   })
                 }
+                isStep1Complete={!isStep1Completed}
               />
               {/* <AddVehicleCard
                 fill={form.ac_info.percentage}

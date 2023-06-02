@@ -31,17 +31,13 @@ const addElectricalAction = (res: AddElectricalState): AddElectricalAction => {
 export const onAddElectrical =
   (
     id: string,
-    left_pillarA: string,
-    left_pillarB: string,
-    left_pillarC: string,
-    right_pillarB: string,
-    left_apron: string,
-    left_apron_leg: string,
-    right_apron_leg: string,
-    right_pillarA: string,
-    right_pillarC: string,
-    right_apron: string,
-    boot_floor: string,
+    power_windows: string,
+    music_system: string,
+    electrical_odomoter: string,
+    parking_sensor: string,
+    overall: string,
+    jack_tool_box: string,
+    lights_crack_broken: string,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = addElectricalsUrl(id);
@@ -57,17 +53,13 @@ export const onAddElectrical =
 
     const body = new FormData();
 
-    body.append('left_pillarA', left_pillarA);
-    body.append('left_pillarB', left_pillarB);
-    body.append('left_pillarC', left_pillarC);
-    body.append('right_pillarB', right_pillarB);
-    body.append('left_apron', left_apron);
-    body.append('left_apron_leg', left_apron_leg);
-    body.append('right_apron_leg', right_apron_leg);
-    body.append('right_pillarA', right_pillarA);
-    body.append('right_pillarC', right_pillarC);
-    body.append('right_apron', right_apron);
-    body.append('boot_floor', boot_floor);
+    body.append('power_windows', power_windows);
+    body.append('music_system', music_system);
+    body.append('electrical_odomoter', electrical_odomoter);
+    body.append('parking_sensor', parking_sensor);
+    body.append('overall', overall);
+    body.append('jack_tool_box', jack_tool_box);
+    body.append('lights_crack_broken', lights_crack_broken);
 
     axiosInstance
       .post(url, body, config)

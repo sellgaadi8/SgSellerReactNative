@@ -214,6 +214,7 @@ type AddVehicleCardProps = {
   title: string;
   desc: string;
   onComplete?: () => void;
+  isStep1Complete?: boolean;
 };
 
 type AddVehicleProps = {
@@ -298,4 +299,30 @@ type ExternelPanelProps = {
 type ExteriorProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Exterior'>;
   route: RouteProp<RootStackParamList, 'Exterior'>;
+};
+
+type TyresProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'Tyres'>;
+  route: RouteProp<RootStackParamList, 'Tyres'>;
+};
+
+type RadioButtonsProps = {
+  data: {label: string; value: string}[];
+  onSelect: (label: string, value: string) => void;
+  label: string;
+};
+
+type EngineProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'Engine'>;
+  route: RouteProp<RootStackParamList, 'Engine'>;
+};
+
+type ElectricalsProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'Electricals'>;
+  route: RouteProp<RootStackParamList, 'Electricals'>;
+};
+
+type SteeringProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'Steering'>;
+  route: RouteProp<RootStackParamList, 'Steering'>;
 };

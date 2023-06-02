@@ -1,17 +1,11 @@
 type GET_TYRES = 'sgSeller/getTyres';
 
 type Tyres = {
-  boot_floor: string;
-  left_apron: string;
-  right_apron: string;
-  left_pillarA: string;
-  left_pillarB: string;
-  left_pillarC: string;
-  right_pillarA: string;
-  right_pillarB: string;
-  right_pillarC: string;
-  left_apron_leg: string;
-  right_apron_leg: string;
+  lhs_front_type: string;
+  rhs_front_type: string;
+  lhs_back_type: string;
+  rhs_back_type: string;
+  spare_type: string;
 };
 
 type GetTyresState = {

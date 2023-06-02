@@ -31,17 +31,11 @@ const updateTyresAction = (res: UpdateTyresState): UpdateTyresAction => {
 export const onUpdateTyres =
   (
     id: string,
-    left_pillarA: string,
-    left_pillarB: string,
-    left_pillarC: string,
-    right_pillarB: string,
-    left_apron: string,
-    left_apron_leg: string,
-    right_apron_leg: string,
-    right_pillarA: string,
-    right_pillarC: string,
-    right_apron: string,
-    boot_floor: string,
+    lhs_front_type: string,
+    rhs_front_type: string,
+    lhs_back_type: string,
+    rhs_back_type: string,
+    spare_type: string,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = updateTyresUrl(id);
@@ -57,17 +51,11 @@ export const onUpdateTyres =
 
     const body = new FormData();
 
-    body.append('left_pillarA', left_pillarA);
-    body.append('left_pillarB', left_pillarB);
-    body.append('left_pillarC', left_pillarC);
-    body.append('right_pillarB', right_pillarB);
-    body.append('left_apron', left_apron);
-    body.append('left_apron_leg', left_apron_leg);
-    body.append('right_apron_leg', right_apron_leg);
-    body.append('right_pillarA', right_pillarA);
-    body.append('right_pillarC', right_pillarC);
-    body.append('right_apron', right_apron);
-    body.append('boot_floor', boot_floor);
+    body.append('lhs_front_type', lhs_front_type);
+    body.append('rhs_front_type', rhs_front_type);
+    body.append('lhs_back_type', lhs_back_type);
+    body.append('rhs_back_type', rhs_back_type);
+    body.append('spare_type', spare_type);
 
     axiosInstance
       .post(url, body, config)
