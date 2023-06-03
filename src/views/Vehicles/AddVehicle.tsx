@@ -19,25 +19,25 @@ import {useAppSelector} from '../../utils/hooks';
 import Loader from '../../components/Loader';
 import GlobalContext from '../../contexts/GlobalContext';
 
-export default function AddVehicle({navigation, route}: AddVehicleProps) {
+export default function AddVehicle({navigation}: AddVehicleProps) {
   const dispatch = useDispatch<any>();
-  const selectVehicleForm = useAppSelector(state => state.addVehicleForm);
   const [form, setForm] = useState<VehicleForm>();
   const [loading, setLoading] = useState(false);
   const [isStep1Completed, setIsStep1Completed] = useState(false);
   const {vehicleId} = useContext(GlobalContext);
+  const selectVehicleForm = useAppSelector(state => state.addVehicleForm);
 
   useEffect(() => {
-    // navigation.addListener('focus', onFocus);
     onFocus();
   }, []);
 
-  function onFocus() {
-    setLoading(true);
+  async function onFocus() {
     if (vehicleId.length === 0) {
-      dispatch(getVehicleForm());
+      setLoading(true);
+      await dispatch(getVehicleForm());
     } else {
-      dispatch(getVehicleForm(vehicleId));
+      setLoading(true);
+      await dispatch(getVehicleForm(vehicleId));
     }
   }
 
@@ -82,7 +82,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                 desc={form.display_info.sub_heading}
                 onComplete={() =>
                   navigation.navigate('DisplayInfo', {
-                    from: route.params.from === 'add' ? 'add' : 'edit',
+                    from: form.display_info.percentage === 0 ? 'add' : 'edit',
                   })
                 }
               />
@@ -92,7 +92,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                 desc={form.car_images.sub_heading}
                 onComplete={() =>
                   navigation.navigate('CarImages', {
-                    from: route.params.from === 'add' ? 'add' : 'edit',
+                    from: form.car_images.percentage === 0 ? 'add' : 'edit',
                   })
                 }
                 isStep1Complete={!isStep1Completed}
@@ -103,7 +103,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                 desc={form.car_docs.sub_heading}
                 onComplete={() =>
                   navigation.navigate('CarDocuments', {
-                    from: route.params.from === 'add' ? 'add' : 'edit',
+                    from: form.car_docs.percentage === 0 ? 'add' : 'edit',
                   })
                 }
                 isStep1Complete={!isStep1Completed}
@@ -114,7 +114,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                 desc={form.exterior_img.sub_heading}
                 onComplete={() =>
                   navigation.navigate('Exterior', {
-                    from: route.params.from === 'add' ? 'add' : 'edit',
+                    from: form.exterior_img.percentage === 0 ? 'add' : 'edit',
                   })
                 }
                 isStep1Complete={!isStep1Completed}
@@ -125,7 +125,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                 desc={form.external_panel.sub_heading}
                 onComplete={() =>
                   navigation.navigate('ExternelPanel', {
-                    from: route.params.from === 'add' ? 'add' : 'edit',
+                    from: form.external_panel.percentage === 0 ? 'add' : 'edit',
                   })
                 }
               />
@@ -135,7 +135,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                 desc={form.tyres.sub_heading}
                 onComplete={() =>
                   navigation.navigate('Tyres', {
-                    from: route.params.from === 'add' ? 'add' : 'edit',
+                    from: form.tyres.percentage === 0 ? 'add' : 'edit',
                   })
                 }
                 isStep1Complete={!isStep1Completed}
@@ -146,7 +146,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                 desc={form.engine.sub_heading}
                 onComplete={() =>
                   navigation.navigate('Engine', {
-                    from: route.params.from === 'add' ? 'add' : 'edit',
+                    from: form.engine.percentage === 0 ? 'add' : 'edit',
                   })
                 }
                 isStep1Complete={!isStep1Completed}
@@ -157,7 +157,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                 desc={form.electricals.sub_heading}
                 onComplete={() =>
                   navigation.navigate('Electricals', {
-                    from: route.params.from === 'add' ? 'add' : 'edit',
+                    from: form.electricals.percentage === 0 ? 'add' : 'edit',
                   })
                 }
                 isStep1Complete={!isStep1Completed}
@@ -168,7 +168,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
                 desc={form.steering.sub_heading}
                 onComplete={() =>
                   navigation.navigate('Steering', {
-                    from: route.params.from === 'add' ? 'add' : 'edit',
+                    from: form.steering.percentage === 0 ? 'add' : 'edit',
                   })
                 }
                 isStep1Complete={!isStep1Completed}
@@ -183,7 +183,7 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
             <Box width={'50%'} alignSelf="center" pv={'5%'}>
               <PrimaryButton
                 label="Submit form"
-                onPress={() => console.log('test')}
+                onPress={() => navigation.navigate('Vehicles')}
               />
             </Box>
           </>

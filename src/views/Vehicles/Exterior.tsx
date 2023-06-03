@@ -21,6 +21,7 @@ import Snackbar from 'react-native-snackbar';
 import {ExteriorProps} from '../../types/propsTypes';
 import {onGetExteriorData} from '../../redux/ducks/getExterior';
 import {onUpdateExterior} from '../../redux/ducks/updateExterior';
+import Loader from '../../components/Loader';
 
 export default function Exterior({navigation, route}: ExteriorProps) {
   const [exteriorType, setExteriorType] = useState([
@@ -49,6 +50,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
   const [image9, setImage9] = useState('');
   const [image10, setImage10] = useState('');
   const [image11, setImage11] = useState('');
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<any>();
   const selectUploadImage = useAppSelector(state => state.uploadImage);
   const selectUploadExteriorImage = useAppSelector(state => state.addExterior);
@@ -60,6 +62,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
 
   useEffect(() => {
     if (route.params.from === 'edit') {
+      setLoading(true);
       dispatch(onGetExteriorData(vehicleId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,11 +74,13 @@ export default function Exterior({navigation, route}: ExteriorProps) {
   }
 
   function onSaveImage(image: any) {
+    setLoading(true);
     dispatch(onUploadImage(image[0], 'exterior-images'));
   }
 
   useEffect(() => {
     if (selectUploadImage.called) {
+      setLoading(false);
       const {error, image} = selectUploadImage;
       let temp = [...exteriorType];
 
@@ -133,6 +138,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
       setExteriorType([...temp]);
     }
     if (selectUploadExteriorImage.called) {
+      setLoading(false);
       const {error, success, message, uuid} = selectUploadExteriorImage;
       if (!error && success) {
         navigation.navigate('AddVehicle', {from: 'edit'});
@@ -145,6 +151,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
       }
     }
     if (selectGetExteriorData.called) {
+      setLoading(false);
       const {error, data} = selectGetExteriorData;
       if (!error && data) {
         setImage1(data.left_pillarA);
@@ -161,6 +168,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
       }
     }
     if (selectUpdateExteriorData.called) {
+      setLoading(false);
       const {error, success, message} = selectUpdateExteriorData;
       if (!error && success) {
         navigation.navigate('AddVehicle', {from: 'edit'});
@@ -180,6 +188,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
   ]);
 
   function onSubmit() {
+    setLoading(true);
     if (route.params.from === 'add') {
       dispatch(
         onAddExterior(
@@ -219,6 +228,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
 
   return (
     <Box style={styles.container}>
+      {loading && <Loader />}
       <ScrollView style={styles.onScroll}>
         <CustomText
           fontSize={16}

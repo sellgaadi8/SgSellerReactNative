@@ -47,7 +47,16 @@ export default function Vehicles({navigation}: VehiclesProps) {
 
   function renderItem({item}: ListRenderItemInfo<Vehicle>) {
     return (
-      <VehicleCard data={item} onPressEdit={() => onClickEdit(item.uuid)} />
+      <VehicleCard
+        data={item}
+        onPressEdit={() => onClickEdit(item.uuid)}
+        onPressView={() =>
+          navigation.navigate('VehicleDetail', {
+            title: item.model + '(' + item.mfg_year + ')',
+            vehicleId: item.uuid,
+          })
+        }
+      />
     );
   }
 

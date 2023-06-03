@@ -35,8 +35,9 @@ const getExteriorUrl = (id: string) => `/vehicle/exterior-img/edit/${id}`;
 const updateExteriorUrl = (id: string) => `/vehicle/exterior-img/update/${id}`;
 
 const addExternelUrl = (id: string) => `vehicle/external-panel/create/${id}`;
-const getExternelUrl = (id: string) => `/vehicle/exterior-img/edit/${id}`;
-const updateExternelUrl = (id: string) => `/vehicle/exterior-img/update/${id}`;
+const getExternelUrl = (id: string) => `/vehicle/external-panel/edit/${id}`;
+const updateExternelUrl = (id: string) =>
+  `/vehicle/external-panel/update/${id}`;
 
 const addTyresUrl = (id: string) => `/vehicle/tyres/create/${id}`;
 const getTyresUrl = (id: string) => `/vehicle/tyres/edit/${id}`;
@@ -53,6 +54,8 @@ const updateElectricalUrl = (id: string) => `/vehicle/electricals/update/${id}`;
 const addSteeringUrl = (id: string) => `/vehicle/steering/create/${id}`;
 const getSteeringUrl = (id: string) => `/vehicle/steering/edit/${id}`;
 const updateSteeringUrl = (id: string) => `/vehicle/steering/update/${id}`;
+
+const getVehicleDetailsUrl = (id: string) => `vehicle/getVehicleDetails/${id}`;
 
 export {
   LOGIN_SEND_OTP,
@@ -97,4 +100,5 @@ export {
   addSteeringUrl,
   getSteeringUrl,
   updateSteeringUrl,
+  getVehicleDetailsUrl,
 };

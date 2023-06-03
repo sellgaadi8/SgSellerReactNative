@@ -21,6 +21,7 @@ type RootStackParamList = {
   Electricals: {from: 'edit' | 'add'};
   Steering: {from: 'edit' | 'add'};
   Ac: undefined;
+  VehicleDetail: {title: string; vehicleId: string};
 };
 
 type BottomStackParamList = {

@@ -17,6 +17,7 @@ import {onAddSteering} from '../../redux/ducks/addSteering';
 import {onUpdateSteering} from '../../redux/ducks/updateSteering';
 import {useAppSelector} from '../../utils/hooks';
 import Snackbar from 'react-native-snackbar';
+import {onGetSteeringDetails} from '../../redux/ducks/getSteering';
 
 export default function Steering({navigation, route}: SteeringProps) {
   const [suspension, setSuspension] = useState('');
@@ -28,6 +29,13 @@ export default function Steering({navigation, route}: SteeringProps) {
   const selectAddSteering = useAppSelector(state => state.addSteering);
   const selectUpdateSteering = useAppSelector(state => state.updateSteering);
   const selectGetSteering = useAppSelector(state => state.getSteering);
+
+  useEffect(() => {
+    if (route.params.from === 'edit') {
+      dispatch(onGetSteeringDetails(vehicleId));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function submit() {
     if (route.params.from === 'add') {

@@ -230,6 +230,7 @@ type DisplayInfoProps = {
 type VehicleCardProps = {
   data: Vehicle;
   onPressEdit: () => void;
+  onPressView: () => void;
 };
 
 type ImagePickerProps = {
@@ -325,4 +326,9 @@ type ElectricalsProps = {
 type SteeringProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Steering'>;
   route: RouteProp<RootStackParamList, 'Steering'>;
+};
+
+type VehicleDetailProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'VehicleDetail'>;
+  route: RouteProp<RootStackParamList, 'VehicleDetail'>;
 };

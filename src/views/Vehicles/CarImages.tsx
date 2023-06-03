@@ -22,6 +22,7 @@ import {onGetCarImages} from '../../redux/ducks/getCarImage';
 import {CarImagesProps} from '../../types/propsTypes';
 import Snackbar from 'react-native-snackbar';
 import {onUpdateCarImages} from '../../redux/ducks/updateCarImages';
+import Loader from '../../components/Loader';
 
 export default function CarImages({route, navigation}: CarImagesProps) {
   const [carImageType, setCarImageType] = useState([
@@ -53,11 +54,13 @@ export default function CarImages({route, navigation}: CarImagesProps) {
   const [image6, setImage6] = useState('');
   const [image7, setImage7] = useState('');
   const [video, setVideo] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const {vehicleId, setVehicleId} = useContext(GlobalContext);
 
   useEffect(() => {
     if (route.params.from === 'edit') {
+      setLoading(true);
       dispatch(onGetCarImages(vehicleId));
     }
   }, []);
@@ -68,11 +71,13 @@ export default function CarImages({route, navigation}: CarImagesProps) {
   }
 
   function onSaveImage(image: any) {
+    setLoading(true);
     dispatch(onUploadImage(image[0], 'car-images'));
   }
 
   useEffect(() => {
     if (selectUploadImage.called) {
+      setLoading(false);
       const {error, image} = selectUploadImage;
       let temp = [...carImageType];
 
@@ -118,6 +123,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
       setCarImageType([...temp]);
     }
     if (selectUploadCarImage.called) {
+      setLoading(false);
       const {error, success, message, uuid} = selectUploadCarImage;
       if (!error && success) {
         navigation.navigate('AddVehicle', {from: 'edit'});
@@ -130,6 +136,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
       }
     }
     if (selectGetCarImages.called) {
+      setLoading(false);
       const {data, error} = selectGetCarImages;
       if (!error && data) {
         setImage1(data.left_wheel_corner_front);
@@ -143,6 +150,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
       }
     }
     if (selectUpdateCarImages.called) {
+      setLoading(false);
       const {error, success, message, uuid} = selectUpdateCarImages;
       if (!error && success) {
         navigation.navigate('AddVehicle', {from: 'edit'});
@@ -162,6 +170,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
   ]);
 
   function onSubmit() {
+    setLoading(true);
     if (route.params.from === 'add') {
       dispatch(
         onUploadCarImages(
@@ -195,6 +204,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
 
   return (
     <Box style={styles.container}>
+      {loading && <Loader />}
       <ScrollView style={styles.onScroll}>
         <CustomText
           fontSize={16}

@@ -7,25 +7,41 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import colors from '../utils/colors';
 import {VehicleCardProps} from '../types/propsTypes';
 import {contentCenter} from '../utils/styles';
+import {Dimensions} from 'react-native';
+const {height} = Dimensions.get('window');
 
-export default function VehicleCard({data, onPressEdit}: VehicleCardProps) {
+export default function VehicleCard({
+  data,
+  onPressEdit,
+  onPressView,
+}: VehicleCardProps) {
   return (
     <Box style={styles.container}>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        {data.images &&
+      <ScrollView
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.imageContainer}>
+        {data.images ? (
           data.images.map((el, index) => {
             return (
               <Box key={index.toString()} style={styles.imageContainer}>
                 <Image
                   source={{
-                    uri: 'https://sellgaadi.s3.ap-south-1.amazonaws.com/car-images/1685197839profile-pic.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAWDZS7NNQ755OGW5Z%2F20230528%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20230528T131919Z&X-Amz-SignedHeaders=host&X-Amz-Expires=1800&X-Amz-Signature=075ba4cc75cf4647c3e2c752b842f5d16ff4323e4e5b70f2764c9ebc9c4c6b18',
+                    uri: el,
                   }}
                   style={styles.image}
-                  resizeMode="center"
+                  resizeMode="cover"
                 />
               </Box>
             );
-          })}
+          })
+        ) : (
+          <Image
+            source={require('../assets/NoImage.png')}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        )}
       </ScrollView>
 
       <Box style={styles.body}>
@@ -144,7 +160,7 @@ export default function VehicleCard({data, onPressEdit}: VehicleCardProps) {
               Edit
             </CustomText>
           </Pressable>
-          <Box style={styles.view}>
+          <Pressable style={styles.view} onPress={onPressView}>
             <CustomText
               fontSize={11}
               lineHeight={16}
@@ -152,7 +168,7 @@ export default function VehicleCard({data, onPressEdit}: VehicleCardProps) {
               fontFamily="Roboto-Medium">
               View Details
             </CustomText>
-          </Box>
+          </Pressable>
         </Box>
       </Box>
     </Box>
@@ -182,10 +198,12 @@ const styles = EStyleSheet.create({
   imageContainer: {
     borderTopRightRadius: '1.2rem',
     borderTopLeftRadius: '1.2rem',
+    height: height * 0.2,
+    width: '100%',
   },
   image: {
-    height: 150,
-    width: 350,
+    height: '100%',
+    width: '100%',
     borderTopRightRadius: 12,
     borderTopLeftRadius: 12,
     marginRight: 5,

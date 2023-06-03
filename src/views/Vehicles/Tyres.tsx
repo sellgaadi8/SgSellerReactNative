@@ -18,6 +18,7 @@ import {useAppSelector} from '../../utils/hooks';
 import Snackbar from 'react-native-snackbar';
 import {onUpdateTyres} from '../../redux/ducks/updateTyres';
 import {onGetTyresDetails} from '../../redux/ducks/getTyres';
+import Loader from '../../components/Loader';
 
 export default function Tyres({navigation, route}: TyresProps) {
   const [lhsfront, setLhsFront] = useState('');
@@ -25,6 +26,7 @@ export default function Tyres({navigation, route}: TyresProps) {
   const [lhsback, setLhsBack] = useState('');
   const [rhsback, setRhsBack] = useState('');
   const [spare, setSpare] = useState('');
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<any>();
   const {vehicleId} = useContext(GlobalContext);
   const selectAddTyres = useAppSelector(state => state.addTyres);
@@ -33,13 +35,14 @@ export default function Tyres({navigation, route}: TyresProps) {
 
   useEffect(() => {
     if (route.params.from === 'edit') {
-      console.log('called', route.params.from);
+      setLoading(true);
       dispatch(onGetTyresDetails(vehicleId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function submit() {
+    setLoading(true);
     if (route.params.from === 'add') {
       dispatch(
         onAddTyres(vehicleId, lhsfront, rhsfront, lhsback, rhsback, spare),
@@ -53,6 +56,7 @@ export default function Tyres({navigation, route}: TyresProps) {
 
   useEffect(() => {
     if (selectAddTyres.called) {
+      setLoading(false);
       const {error, message, success} = selectAddTyres;
       if (!error && success) {
         Snackbar.show({
@@ -64,6 +68,7 @@ export default function Tyres({navigation, route}: TyresProps) {
       }
     }
     if (selectUpdateTyres.called) {
+      setLoading(false);
       const {error, message, success} = selectUpdateTyres;
       if (!error && success) {
         Snackbar.show({
@@ -75,6 +80,7 @@ export default function Tyres({navigation, route}: TyresProps) {
       }
     }
     if (selectGetTyres.called) {
+      setLoading(false);
       const {error, data, success} = selectGetTyres;
       if (!error && success && data) {
         setLhsFront(data.lhs_front_type);
@@ -84,10 +90,12 @@ export default function Tyres({navigation, route}: TyresProps) {
         setSpare(data.spare_type);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectAddTyres, selectUpdateTyres, selectGetTyres]);
 
   return (
     <Box style={styles.container}>
+      {loading && <Loader />}
       <ScrollView style={styles.onScroll}>
         <CustomText
           fontSize={16}

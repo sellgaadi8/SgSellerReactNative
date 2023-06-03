@@ -191,6 +191,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
   }
 
   function onSave() {
+    setLoading(true);
     if (route.params.from === 'add') {
       dispatch(
         onAddExternal(
@@ -230,6 +231,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
 
   useEffect(() => {
     if (selectAdd.called) {
+      setLoading(false);
       const {error, message, success} = selectAdd;
       if (!error && success) {
         Snackbar.show({
@@ -241,6 +243,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
       }
     }
     if (selectUpdate.called) {
+      setLoading(false);
       const {error, message, success} = selectUpdate;
       if (!error && success) {
         Snackbar.show({
@@ -252,6 +255,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
       }
     }
     if (setGet.called) {
+      setLoading(false);
       const {data, error, success} = setGet;
       if (!error && success && data) {
         setHood(data.bonnet_head);

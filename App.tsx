@@ -24,6 +24,7 @@ import Engine from './src/views/Vehicles/Engine';
 import Electricals from './src/views/Vehicles/Electricals';
 import Steering from './src/views/Vehicles/Steering';
 import Ac from './src/views/Vehicles/Ac';
+import VehicleDetail from './src/views/Vehicles/VehicleDetail';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
@@ -63,6 +64,21 @@ export default function App() {
                   options={{headerShown: false}}
                   component={BottomNavigation}
                   name="BottomNavigation"
+                />
+                <RootStack.Screen
+                  options={(param: {route: RouteProp<any, any>}) => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title={param.route.params?.title}
+                          back
+                        />
+                      ),
+                    };
+                  }}
+                  component={VehicleDetail}
+                  name="VehicleDetail"
                 />
                 <RootStack.Screen
                   options={(param: {
