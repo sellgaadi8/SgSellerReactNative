@@ -14,7 +14,7 @@ const MAKE_LIST = '/vehicle/make';
 const MODEL_LIST = '/vehicle/model';
 const VARIANT_LIST = '/vehicle/variant';
 
-const addVehicleFormurl = (id?: string) =>
+const addVehicleFormurl = (id: string) =>
   id ? `/vehicle/createForm/${id}` : '/vehicle/createForm';
 const getDisplayInfoUrl = (id: string) => `/vehicle/display-info/edit/${id}`;
 const updateDisplayInfoUrl = (id: string) =>

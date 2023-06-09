@@ -1,5 +1,6 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import {Image, ScrollView, View} from 'react-native';
+import {Image, ScrollView, Text, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
@@ -19,7 +20,7 @@ import {useAppSelector} from '../../utils/hooks';
 import {onUploadCarImages} from '../../redux/ducks/uploadCarImages';
 import GlobalContext from '../../contexts/GlobalContext';
 import {onGetCarImages} from '../../redux/ducks/getCarImage';
-import {CarImagesProps} from '../../types/propsTypes';
+import {CarImagesProps, ImageType} from '../../types/propsTypes';
 import Snackbar from 'react-native-snackbar';
 import {onUpdateCarImages} from '../../redux/ducks/updateCarImages';
 import Loader from '../../components/Loader';
@@ -70,8 +71,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
     setOpenImagePicker(true);
   }
 
-  function onSaveImage(image: any) {
-    setLoading(true);
+  function onSaveImage(image: ImageType[]) {
     dispatch(onUploadImage(image[0], 'car-images'));
   }
 
@@ -79,6 +79,8 @@ export default function CarImages({route, navigation}: CarImagesProps) {
     if (selectUploadImage.called) {
       setLoading(false);
       const {error, image} = selectUploadImage;
+      console.log('error', error);
+
       let temp = [...carImageType];
 
       if (!error && image) {
@@ -118,10 +120,19 @@ export default function CarImages({route, navigation}: CarImagesProps) {
           default:
             break;
         }
+      } else if (error) {
+        console.log('calleddd');
+        Snackbar.show({
+          text: 'Something went wrong please try again',
+          backgroundColor: 'green',
+          duration: Snackbar.LENGTH_SHORT,
+        });
       }
 
       setCarImageType([...temp]);
     }
+    console.log('selectUploadCarImage', selectUploadCarImage);
+
     if (selectUploadCarImage.called) {
       setLoading(false);
       const {error, success, message, uuid} = selectUploadCarImage;
@@ -225,10 +236,15 @@ export default function CarImages({route, navigation}: CarImagesProps) {
                     color="#1C1B1F"
                     style={styles.text}>
                     {el.name}
+                    {el.id !== 'video' && <Text style={{color: 'red'}}>*</Text>}
                   </CustomText>
                 </View>
-                {el.url ? (
-                  <Image source={{uri: el.url}} style={styles.image} />
+                {el.url.length !== 0 ? (
+                  <Image
+                    source={{uri: el.url}}
+                    style={styles.image}
+                    resizeMode="cover"
+                  />
                 ) : (
                   <Image
                     source={require('../../assets/media.png')}

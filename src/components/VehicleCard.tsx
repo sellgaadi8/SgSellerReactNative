@@ -8,6 +8,7 @@ import colors from '../utils/colors';
 import {VehicleCardProps} from '../types/propsTypes';
 import {contentCenter} from '../utils/styles';
 import {Dimensions} from 'react-native';
+import FastImage from 'react-native-fast-image';
 const {height} = Dimensions.get('window');
 
 export default function VehicleCard({
@@ -25,7 +26,7 @@ export default function VehicleCard({
           data.images.map((el, index) => {
             return (
               <Box key={index.toString()} style={styles.imageContainer}>
-                <Image
+                <FastImage
                   source={{
                     uri: el,
                   }}

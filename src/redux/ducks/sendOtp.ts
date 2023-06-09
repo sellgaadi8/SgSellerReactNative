@@ -29,7 +29,7 @@ export const onSendOtp = (phone: string) => (dispatch: AppDispatch) => {
 
   const config = {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      'content-type': 'multipart/form-data',
     },
   };
 

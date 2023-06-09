@@ -109,26 +109,31 @@ export default function Tyres({navigation, route}: TyresProps) {
             label="LHS front tyre ( % / damaged )"
             value={lhsfront}
             onChangeText={setLhsFront}
+            isMandatory
           />
           <ProfileInput
             label="RHS front tyre ( % / damaged )"
             value={rhsfront}
             onChangeText={setRhsFront}
+            isMandatory
           />
           <ProfileInput
             label="LHS Back tyre ( % / damaged )"
             value={lhsback}
             onChangeText={setLhsBack}
+            isMandatory
           />
           <ProfileInput
             label="RHS Back tyre ( % / damaged )"
             value={rhsback}
             onChangeText={setRhsBack}
+            isMandatory
           />
           <ProfileInput
             label="Spare tyre (%, damaged )"
             value={spare}
             onChangeText={setSpare}
+            isMandatory
           />
         </Box>
         <Box style={styles.buttonContainer}>

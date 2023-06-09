@@ -36,7 +36,7 @@ export const onChangePassword =
 
     const config = {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'content-type': 'multipart/form-data',
       },
     };
 

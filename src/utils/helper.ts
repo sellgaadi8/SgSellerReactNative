@@ -15,7 +15,7 @@ export const getTokenExpiry = () => {
   // Setting the token expiry
   const now = new Date();
   // Add 1 day 1440 mins
-  now.setMinutes(now.getMinutes() + 1440);
+  now.setMinutes(now.getHours() + 24);
   return new Date(now).getTime();
 };
 

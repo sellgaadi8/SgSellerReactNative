@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Pressable, ScrollView} from 'react-native';
+import {Pressable, ScrollView, Text} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
@@ -226,22 +226,30 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
           Step 3: Car Documents
         </CustomText>
         <Box pv={'3%'}>
-          <ProfileInput label="RTO*" value={rto} onChangeText={setRto} />
           <ProfileInput
-            label="Fitness Upto*"
-            value={fitness}
-            onChangeText={setFitness}
+            label="RTO"
+            value={rto}
+            onChangeText={setRto}
+            isMandatory
           />
           <ProfileInput
-            label="Permit Upto*"
+            label="Fitness Upto"
+            value={fitness}
+            onChangeText={setFitness}
+            isMandatory
+          />
+          <ProfileInput
+            label="Permit Upto"
             value={permit}
             onChangeText={setPermit}
+            isMandatory
           />
           <Box style={{marginTop: -10}}>
             <Radio
-              title="RC availability*"
+              title="RC availability"
               selectedOption={rcAvail}
               handleOptionSelect={handleRc}
+              isMandatory
             />
             <Radio
               title="RTO noc issued"
@@ -261,7 +269,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
               lineHeight={28}
               fontFamily="Roboto-Medium"
               color="#111111">
-              Insurance - type*
+              Insurance - type<Text style={{color: 'red'}}>*</Text>
             </CustomText>
             <Box style={[styles.checkboxWrap]}>
               {insuranceType.map((el, index) => {
@@ -314,14 +322,16 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
             selectedOption={chessis}
           />
           <Radio
-            title="CNG/LPG fitment*"
+            title="CNG/LPG fitment"
             handleOptionSelect={handleFitment}
             selectedOption={fitment}
+            isMandatory
           />
           <Radio
-            title="CNG/LPG fitment endorsed on RC*"
+            title="CNG/LPG fitment endorsed on RC"
             handleOptionSelect={handleEndorsed}
             selectedOption={fitmentEndorsed}
+            isMandatory
           />
         </Box>
         <Box style={styles.buttonContainer}>

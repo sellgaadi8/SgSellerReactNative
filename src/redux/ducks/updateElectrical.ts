@@ -48,7 +48,7 @@ export const onUpdateElectrical =
 
     const config = {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'content-type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
     };

@@ -74,7 +74,7 @@ const styles = EStyleSheet.create({
     margin: 10,
   },
   fillText: {
-    fontSize: 12,
+    fontSize: 10,
     lineHeight: 20,
     color: '#49454F',
     fontFamily: 'Roboto-Regular',

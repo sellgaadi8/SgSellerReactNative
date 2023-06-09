@@ -43,6 +43,7 @@ import addSteering from './addSteering';
 import updateSteering from './updateSteering';
 import getSteering from './getSteering';
 import getVehicleDetails from './getVehicleDetails';
+import updateVehicleForm from './updateVehicleForm';
 
 export default combineReducers({
   login,
@@ -89,4 +90,5 @@ export default combineReducers({
   updateSteering,
   getSteering,
   getVehicleDetails,
+  updateVehicleForm,
 });

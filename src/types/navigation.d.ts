@@ -10,8 +10,8 @@ type RootStackParamList = {
   ValuatorForm: {title: string; list: Valuators};
   ValuatorStack: undefined;
   Vehicles: undefined;
-  AddVehicle: {from: 'edit' | 'add'};
-  DisplayInfo: {from: 'edit' | 'add'};
+  AddVehicle: {from?: 'edit' | 'add'};
+  DisplayInfo: {from?: 'edit' | 'add'};
   CarImages: {from: 'edit' | 'add'};
   CarDocuments: {from: 'edit' | 'add'};
   Exterior: {from: 'edit' | 'add'};

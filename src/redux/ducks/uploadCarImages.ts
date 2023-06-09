@@ -1,3 +1,4 @@
+import {AxiosError} from 'axios';
 import axiosInstance from '../../axios';
 import {uploadCardImageUrl} from '../../utils/api';
 import {getUserToken} from '../../utils/localStorage';
@@ -50,7 +51,7 @@ export const onUploadCarImages =
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
+        'content-type': 'multipart/form-data',
       },
     };
 
@@ -69,7 +70,7 @@ export const onUploadCarImages =
       .then(res => {
         dispatch(uploadCarImageAction({...res.data, error: false}));
       })
-      .catch(err => {
+      .catch((err: AxiosError) => {
         if (err?.request?._repsonse) {
           dispatch(
             uploadCarImageAction({

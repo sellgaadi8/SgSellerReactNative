@@ -91,6 +91,7 @@ type FontSize =
   | 34;
 
 type AppColors =
+  | undefined
   | 'Primary'
   | 'White'
   | 'Black'
@@ -99,7 +100,8 @@ type AppColors =
   | '#49454F'
   | '#FF0000'
   | '#111111'
-  | '#EFC24F';
+  | '#EFC24F'
+  | '#5D5D5D';
 
 type InputProps = {
   disableCopyPaste?: boolean;
@@ -131,6 +133,7 @@ type ProfileInputProps = {
   propsStyle?: ViewStyle;
   labelStyle?: ViewStyle;
   input?: ViewStyle;
+  isMandatory?: boolean;
 };
 
 type TextButtonProps = {
@@ -238,7 +241,7 @@ type ImagePickerProps = {
   isOpen: boolean;
   multiple: boolean;
   fileTypes?: DocumentPickerOptions<'android' | 'ios' | 'windows'>;
-  onSaveImage: (images: [] | null) => void;
+  onSaveImage: (ImageType) => void;
   onClose: () => void;
   size?: number;
   position?: string;
@@ -249,7 +252,7 @@ type ImageType = {
   size: number;
   type: string;
   uri: string;
-};
+}[];
 
 type SearchModalProps = {
   placeholder: string;
@@ -272,6 +275,7 @@ type RadioProps = {
   title: string;
   selectedOption: string;
   handleOptionSelect: (option: string) => void;
+  isMandatory?: boolean;
 };
 
 type CarDocsType =
@@ -311,6 +315,7 @@ type RadioButtonsProps = {
   data: {label: string; value: string}[];
   onSelect: (label: string, value: string) => void;
   label: string;
+  isMandatory?: boolean;
 };
 
 type EngineProps = {

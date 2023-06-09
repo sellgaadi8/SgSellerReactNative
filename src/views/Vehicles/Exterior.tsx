@@ -22,6 +22,13 @@ import {ExteriorProps} from '../../types/propsTypes';
 import {onGetExteriorData} from '../../redux/ducks/getExterior';
 import {onUpdateExterior} from '../../redux/ducks/updateExterior';
 import Loader from '../../components/Loader';
+import BasePicker from '../../components/BasePicker';
+const list = [
+  {label: 'Ok', value: 'Ok'},
+  {label: 'Scratched', value: 'Scratched'},
+  {label: 'Dented', value: 'Dented'},
+  {label: 'Repainted', value: 'Repainted'},
+];
 
 export default function Exterior({navigation, route}: ExteriorProps) {
   const [exteriorType, setExteriorType] = useState([
@@ -74,7 +81,6 @@ export default function Exterior({navigation, route}: ExteriorProps) {
   }
 
   function onSaveImage(image: any) {
-    setLoading(true);
     dispatch(onUploadImage(image[0], 'exterior-images'));
   }
 
@@ -237,8 +243,8 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           color="#201A1B">
           Step 4: Exterior
         </CustomText>
-        <Box pv={'7%'}>
-          {exteriorType.map((el, index) => {
+        <Box pv={'2%'}>
+          {/* {exteriorType.map((el, index) => {
             return (
               <View style={styles.card} key={index.toString()}>
                 <View style={styles.title}>
@@ -284,7 +290,73 @@ export default function Exterior({navigation, route}: ExteriorProps) {
                 </View>
               </View>
             );
-          })}
+          })} */}
+          <BasePicker
+            data={list}
+            title="Left Pillar A"
+            onValueChange={setImage1}
+            selectedValue={image1}
+          />
+          <BasePicker
+            data={list}
+            title="Left Pillar B"
+            onValueChange={setImage2}
+            selectedValue={image2}
+          />
+          <BasePicker
+            data={list}
+            title="Left Pillar C"
+            onValueChange={setImage3}
+            selectedValue={image3}
+          />
+          <BasePicker
+            data={list}
+            title="Right Pillar A"
+            onValueChange={setImage4}
+            selectedValue={image4}
+          />
+          <BasePicker
+            data={list}
+            title="Right Pillar B"
+            onValueChange={setImage5}
+            selectedValue={image5}
+          />
+          <BasePicker
+            data={list}
+            title="Right Pillar C"
+            onValueChange={setImage6}
+            selectedValue={image6}
+          />
+          <BasePicker
+            data={list}
+            title="Left Apron"
+            onValueChange={setImage7}
+            selectedValue={image7}
+          />
+          <BasePicker
+            data={list}
+            title="Left Apron Leg"
+            onValueChange={setImage8}
+            selectedValue={image8}
+          />
+          <BasePicker
+            data={list}
+            title="Right Apron Leg"
+            onValueChange={setImage9}
+            selectedValue={image9}
+          />
+          <BasePicker
+            data={list}
+            title="Right Apron Leg"
+            onValueChange={setImage10}
+            selectedValue={image10}
+          />
+          <BasePicker
+            data={list}
+            title="Boot Floor"
+            onValueChange={setImage11}
+            selectedValue={image11}
+          />
         </Box>
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>
@@ -352,7 +424,7 @@ const styles = EStyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: -20,
+    marginTop: '1rem',
     marginBottom: '3rem',
   },
 });

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Pressable} from 'react-native';
+import {Pressable, Text} from 'react-native';
 import React from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import colors from '../utils/colors';
@@ -12,6 +12,7 @@ export default function Radio({
   title,
   handleOptionSelect,
   selectedOption,
+  isMandatory,
 }: RadioProps) {
   const renderRadioButton = (option: string) => (
     <Pressable
@@ -34,6 +35,7 @@ export default function Radio({
         fontFamily="Roboto-Medium"
         color="#111111">
         {title}
+        {isMandatory && <Text style={{color: 'red'}}>*</Text>}
       </CustomText>
       <Box flexDirection="row">
         {renderRadioButton('Yes')}

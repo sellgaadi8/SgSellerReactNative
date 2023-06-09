@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {Pressable} from 'react-native';
+import {Pressable, Text} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {RadioButtonsProps} from '../types/propsTypes';
 import Box from './Box';
@@ -13,6 +13,7 @@ export default function RadioButtons({
   data,
   onSelect,
   label,
+  isMandatory,
 }: RadioButtonsProps) {
   const [userOption, setUserOption] = useState('');
 
@@ -30,7 +31,7 @@ export default function RadioButtons({
         lineHeight={18}
         color="#111111"
         fontFamily="Roboto-Medium">
-        {label}
+        {label} {isMandatory && <Text style={{color: 'red'}}>*</Text>}
       </CustomText>
       <Box flexDirection="row">
         {data.map(item => {

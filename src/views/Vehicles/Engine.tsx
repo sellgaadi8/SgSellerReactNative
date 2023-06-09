@@ -198,6 +198,7 @@ export default function Engine({navigation, route}: EngineProps) {
               {label: 'NOT OK', value: 'not_ok'},
             ]}
             onSelect={(label, value) => setCooling(value)}
+            isMandatory
           />
           <RadioButtons
             label="Heater"
@@ -206,6 +207,7 @@ export default function Engine({navigation, route}: EngineProps) {
               {label: 'NOT OK', value: 'not_ok'},
             ]}
             onSelect={(label, value) => setHeater(value)}
+            isMandatory
           />
           <RadioButtons
             label="Condensor"
@@ -214,6 +216,7 @@ export default function Engine({navigation, route}: EngineProps) {
               {label: 'NOT OK', value: 'not_ok'},
             ]}
             onSelect={(label, value) => setCondensor(value)}
+            isMandatory
           />
         </Box>
         <Box style={styles.buttonContainer}>

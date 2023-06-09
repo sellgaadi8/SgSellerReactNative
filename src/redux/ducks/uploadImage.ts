@@ -1,4 +1,5 @@
 import axiosInstance from '../../axios';
+import {ImageType} from '../../types/propsTypes';
 import {UPLOAD_IMAGE} from '../../utils/api';
 import {getUserToken} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
@@ -29,14 +30,14 @@ const uploadImageAction = (res: UploadImageState): UploadImageAction => {
 };
 
 export const onUploadImage =
-  (image: string, path: string) => async (dispatch: AppDispatch) => {
+  (image: ImageType, path: string) => async (dispatch: AppDispatch) => {
     const url = UPLOAD_IMAGE;
     const token = await getUserToken();
 
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
+        'content-type': 'multipart/form-data',
       },
     };
 

@@ -30,31 +30,30 @@ const addVehicleFormAction = (
   return {type: ADD_VEHICLE_FORM, payload: {...res, called: true}};
 };
 
-export const getVehicleForm =
-  (id?: string) => async (dispatch: AppDispatch) => {
-    const url = addVehicleFormurl(id);
+export const getVehicleForm = (id: string) => async (dispatch: AppDispatch) => {
+  const url = addVehicleFormurl(id);
 
-    const token = await getUserToken();
+  const token = await getUserToken();
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    axiosInstance
-      .get(url, config)
-      .then(res => {
-        dispatch(addVehicleFormAction({...res.data, error: false}));
-      })
-      .catch(err => {
-        if (err?.request?._repsonse) {
-          dispatch(
-            addVehicleFormAction({
-              ...JSON.parse(err.request._repsonse),
-              error: true,
-            }),
-          );
-        }
-      });
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   };
+
+  axiosInstance
+    .get(url, config)
+    .then(res => {
+      dispatch(addVehicleFormAction({...res.data, error: false}));
+    })
+    .catch(err => {
+      if (err?.request?._repsonse) {
+        dispatch(
+          addVehicleFormAction({
+            ...JSON.parse(err.request._repsonse),
+            error: true,
+          }),
+        );
+      }
+    });
+};

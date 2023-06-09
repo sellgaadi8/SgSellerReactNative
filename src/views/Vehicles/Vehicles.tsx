@@ -19,20 +19,28 @@ import {onGetVehicleList} from '../../redux/ducks/vehicleList';
 import {useAppSelector} from '../../utils/hooks';
 import CustomText from '../../components/CustomText';
 import GlobalContext from '../../contexts/GlobalContext';
+import Loader from '../../components/Loader';
 const {height} = Dimensions.get('window');
 
 export default function Vehicles({navigation}: VehiclesProps) {
   const dispatch = useDispatch<any>();
   const selectVehicleList = useAppSelector(state => state.vehicleList);
   const [vehicleData, setVehicleData] = useState<Vehicle[]>();
+  const [loading, setLoading] = useState(false);
   const {setVehicleId} = useContext(GlobalContext);
 
   useEffect(() => {
-    dispatch(onGetVehicleList());
+    navigation.addListener('focus', onFocus);
   }, []);
+
+  function onFocus() {
+    setLoading(true);
+    dispatch(onGetVehicleList());
+  }
 
   useEffect(() => {
     if (selectVehicleList.called) {
+      setLoading(false);
       const {data, error} = selectVehicleList;
       if (!error && data) {
         setVehicleData(data);
@@ -66,6 +74,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
   }
   return (
     <Box style={styles.container}>
+      {loading && <Loader />}
       <Box style={styles.filter}>
         <CustomText
           fontFamily="Roboto-Medium"

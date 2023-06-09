@@ -13,7 +13,7 @@ import {
 import ProfileInput from '../../components/ProfileInput';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../../utils/colors';
-import {Dimensions, Pressable} from 'react-native';
+import {Dimensions, Pressable, Text} from 'react-native';
 import {pixelSizeHorizontal, pixelSizeVertical} from '../../utils/responsive';
 import PrimaryButton from '../../components/PrimaryButton';
 import {DisplayInfoProps, ModalType} from '../../types/propsTypes';
@@ -128,9 +128,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
     if (registration.length === 0) {
       tempErrors.registration = 'The registration field is required.';
     }
-    if (transmission.length === 0) {
-      tempErrors.transmission = 'The transmission field is required.';
-    }
+
     if (color.length === 0) {
       tempErrors.color = 'The color field is required.';
     }
@@ -141,6 +139,15 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
         backgroundColor: 'red',
         duration: Snackbar.LENGTH_SHORT,
       });
+      return false;
+    }
+    if (transmission.length === 0) {
+      Snackbar.show({
+        text: 'Select Transmission type',
+        backgroundColor: 'red',
+        duration: Snackbar.LENGTH_SHORT,
+      });
+      return false;
     }
 
     setErrors(tempErrors);
@@ -192,8 +199,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
       const {message, success, uuid} = selectCreateDisplay;
       if (success && message && uuid) {
         setVehicleId(uuid);
-        // navigation.navigate('AddVehicle', {from: 'edit'});
-        navigation.goBack();
+        navigation.navigate('AddVehicle', {from: 'add'});
         Snackbar.show({
           text: message,
           backgroundColor: 'green',
@@ -248,10 +254,10 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
       }
     }
     if (selectUpdateDisplay.called) {
-      const {error, message} = selectUpdateDisplay;
+      const {error, message, uuid} = selectUpdateDisplay;
       if (!error) {
-        // navigation.navigate('AddVehicle', {from: 'edit'});
-        navigation.goBack();
+        setVehicleId(uuid);
+        navigation.navigate('AddVehicle', {from: 'edit'});
         Snackbar.show({
           text: message,
           backgroundColor: 'green',
@@ -362,7 +368,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
-      <ScrollView style={styles.onScroll}>
+      <ScrollView style={styles.onScroll} keyboardShouldPersistTaps="handled">
         <CustomText
           fontSize={16}
           lineHeight={28}
@@ -379,6 +385,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
               error={errors?.make}
               noMargin
               editable={false}
+              isMandatory
             />
           </Pressable>
           <Pressable onPress={() => onOpenModal('Model')}>
@@ -389,6 +396,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
               error={errors?.model}
               noMargin
               editable={false}
+              isMandatory
             />
           </Pressable>
           <Pressable onPress={() => onOpenModal('Variant')}>
@@ -399,6 +407,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
               error={errors?.varaint}
               noMargin
               editable={false}
+              isMandatory
             />
           </Pressable>
           <ProfileInput
@@ -407,6 +416,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
             onChangeText={setYear}
             error={errors?.year}
             noMargin
+            isMandatory
             // endIcon="calendar-month"F
           />
           <ProfileInput
@@ -415,6 +425,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
             onChangeText={setRegistration}
             error={errors?.registration}
             noMargin
+            isMandatory
             // endIcon="calendar-month"
           />
           <Box style={styles.checkbox}>
@@ -423,7 +434,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
               lineHeight={28}
               color="#111111"
               fontFamily="Roboto-Regular">
-              Transmission
+              Transmission<Text style={{color: 'red'}}>*</Text>
             </CustomText>
             <Box style={[styles.checkboxWrap]}>
               {transmissionType.map((el, index) => {
@@ -460,6 +471,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
             onChangeText={setColor}
             error={errors?.color}
             noMargin
+            isMandatory
           />
           <Box style={styles.checkbox}>
             <CustomText
@@ -467,7 +479,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
               lineHeight={28}
               color="#111111"
               fontFamily="Roboto-Regular">
-              Fuel Type
+              Fuel Type<Text style={{color: 'red'}}>*</Text>
             </CustomText>
             <Box style={[styles.checkboxWrap]}>
               {fuelType.map((el, index) => {
@@ -505,6 +517,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
             onChangeText={setRun}
             error={errors?.run}
             noMargin
+            isMandatory
           />
           <ProfileInput
             label="No. of owners"
@@ -512,6 +525,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
             onChangeText={setOwners}
             error={errors?.owners}
             noMargin
+            isMandatory
           />
         </Box>
         <Box style={styles.buttonContainer}>

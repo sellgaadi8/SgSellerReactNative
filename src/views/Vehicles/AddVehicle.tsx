@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useContext, useEffect, useState} from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {container} from '../../utils/styles';
@@ -18,6 +17,7 @@ import {getVehicleForm} from '../../redux/ducks/addVehicleForm';
 import {useAppSelector} from '../../utils/hooks';
 import Loader from '../../components/Loader';
 import GlobalContext from '../../contexts/GlobalContext';
+import {onUpdateVehicleForm} from '../../redux/ducks/updateVehicleForm';
 
 export default function AddVehicle({navigation}: AddVehicleProps) {
   const dispatch = useDispatch<any>();
@@ -26,19 +26,23 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
   const [isStep1Completed, setIsStep1Completed] = useState(false);
   const {vehicleId} = useContext(GlobalContext);
   const selectVehicleForm = useAppSelector(state => state.addVehicleForm);
+  const selectUpdateVehicleForm = useAppSelector(
+    state => state.updateVehicleForm,
+  );
 
   useEffect(() => {
-    onFocus();
+    navigation.addListener('focus', onFocus);
   }, []);
 
-  async function onFocus() {
-    if (vehicleId.length === 0) {
-      setLoading(true);
-      await dispatch(getVehicleForm());
-    } else {
-      setLoading(true);
-      await dispatch(getVehicleForm(vehicleId));
-    }
+  console.log('vehicleId', vehicleId);
+
+  function onFocus() {
+    setLoading(true);
+    // if (vehicleId) {
+    //   dispatch(onUpdateVehicleForm(vehicleId));
+    // } else {
+    dispatch(getVehicleForm(vehicleId));
+    // }
   }
 
   useEffect(() => {
@@ -54,12 +58,24 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
         }
       }
     }
-  }, [selectVehicleForm]);
+    if (selectUpdateVehicleForm.called) {
+      setLoading(false);
+      const {data, error} = selectUpdateVehicleForm;
+      if (!error && data) {
+        setForm(data);
+        if (data.total_percentage === 0) {
+          setIsStep1Completed(false);
+        } else {
+          setIsStep1Completed(true);
+        }
+      }
+    }
+  }, [selectVehicleForm, selectUpdateVehicleForm]);
 
   return (
     <Box style={styles.container}>
+      {loading && <Loader />}
       <ScrollView>
-        {loading && <Loader />}
         <Box pv={'5%'} ph={'5%'}>
           <CustomText
             fontFamily="Roboto-Bold"

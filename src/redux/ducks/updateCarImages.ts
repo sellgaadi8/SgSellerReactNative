@@ -50,7 +50,7 @@ export const onUpdateCarImages =
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
+        'content-type': 'multipart/form-data',
       },
     };
 

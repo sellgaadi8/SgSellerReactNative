@@ -1,11 +1,5 @@
-import {Pressable, ScrollView} from 'react-native';
-import React, {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import {ScrollView} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
 import {
@@ -14,8 +8,6 @@ import {
 } from 'react-native-responsive-screen';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {container} from '../../utils/styles';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import colors from '../../utils/colors';
 import PrimaryButton from '../../components/PrimaryButton';
 import {useDispatch} from 'react-redux';
 import {onAddExternal} from '../../redux/ducks/addExternal';
@@ -26,103 +18,113 @@ import {ExternelPanelProps} from '../../types/propsTypes';
 import {onUpdateExternal} from '../../redux/ducks/updateExternal';
 import {onGetExternelDetails} from '../../redux/ducks/getExternal';
 import Loader from '../../components/Loader';
+import BasePicker from '../../components/BasePicker';
+import ImagePicker from '../../components/ImagePicker';
+import DocumentPicker from 'react-native-document-picker';
+const list = [
+  {label: 'Ok', value: 'Ok'},
+  {label: 'Scratched', value: 'Scratched'},
+  {label: 'Dented', value: 'Dented'},
+  {label: 'Repainted', value: 'Repainted'},
+];
 
 export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
-  const [form, setForm] = useState([
-    {
-      id: 1,
-      ques: 'Bonnet / Hood',
-      option: [
-        {id: 1, label: 'Ok', selected: false},
-        {id: 2, label: 'Scratched', selected: false},
-        {id: 3, label: 'Dented', selected: false},
-      ],
-    },
-    {
-      id: 2,
-      ques: 'Roof',
-      option: [
-        {id: 1, label: 'Scratched', selected: false},
-        {id: 2, label: 'Dented', selected: false},
-      ],
-    },
-    {
-      id: 3,
-      ques: 'Dicky door/Boot Door',
-      option: [
-        {id: 1, label: 'Scratched', selected: false},
-        {id: 2, label: 'Dented', selected: false},
-      ],
-    },
-    {
-      id: 4,
-      ques: 'Left door front',
-      option: [
-        {id: 1, label: 'Scratched', selected: false},
-        {id: 2, label: 'Dented', selected: false},
-        {id: 3, label: 'Rusted', selected: false},
-      ],
-    },
-    {
-      id: 5,
-      ques: 'Left door back',
-      option: [
-        {id: 1, label: 'Scratched', selected: false},
-        {id: 2, label: 'Dented', selected: false},
-        {id: 3, label: 'Rusted', selected: false},
-      ],
-    },
-    {
-      id: 6,
-      ques: 'Right door front',
-      option: [
-        {id: 1, label: 'Dented', selected: false},
-        {id: 2, label: 'Dented', selected: false},
-        {id: 3, label: 'Rusted', selected: false},
-      ],
-    },
-    {
-      id: 7,
-      ques: 'Right door back',
-      option: [
-        {id: 1, label: 'Rusted', selected: false},
-        {id: 2, label: 'Dented', selected: false},
-        {id: 3, label: 'Rusted', selected: false},
-      ],
-    },
-    {
-      id: 8,
-      ques: 'Left fender',
-      option: [
-        {id: 1, label: 'Scratched', selected: false},
-        {id: 2, label: 'Dented', selected: false},
-      ],
-    },
-    {
-      id: 9,
-      ques: 'Right fender',
-      option: [
-        {id: 1, label: 'Scratched', selected: false},
-        {id: 2, label: 'Dented', selected: false},
-      ],
-    },
-    {
-      id: 10,
-      ques: 'Left Quater Panel',
-      option: [
-        {id: 1, label: 'Scratched', selected: false},
-        {id: 2, label: 'Dented', selected: false},
-      ],
-    },
-    {
-      id: 11,
-      ques: 'Right Quater Panel',
-      option: [
-        {id: 1, label: 'Scratched', selected: false},
-        {id: 2, label: 'Dented', selected: false},
-      ],
-    },
-  ]);
+  // const [form, setForm] = useState([
+  //   {
+  //     id: 1,
+  //     ques: 'Bonnet / Hood',
+  //     option: [
+  //       {id: 1, label: 'Ok', selected: false},
+  //       {id: 2, label: 'Scratched', selected: false},
+  //       {id: 3, label: 'Dented', selected: false},
+  //     ],
+  //   },
+  //   {
+  //     id: 2,
+  //     ques: 'Roof',
+  //     option: [
+  //       {id: 1, label: 'Scratched', selected: false},
+  //       {id: 2, label: 'Dented', selected: false},
+  //     ],
+  //   },
+  //   {
+  //     id: 3,
+  //     ques: 'Dicky door/Boot Door',
+  //     option: [
+  //       {id: 1, label: 'Scratched', selected: false},
+  //       {id: 2, label: 'Dented', selected: false},
+  //     ],
+  //   },
+  //   {
+  //     id: 4,
+  //     ques: 'Left door front',
+  //     option: [
+  //       {id: 1, label: 'Scratched', selected: false},
+  //       {id: 2, label: 'Dented', selected: false},
+  //       {id: 3, label: 'Rusted', selected: false},
+  //     ],
+  //   },
+  //   {
+  //     id: 5,
+  //     ques: 'Left door back',
+  //     option: [
+  //       {id: 1, label: 'Scratched', selected: false},
+  //       {id: 2, label: 'Dented', selected: false},
+  //       {id: 3, label: 'Rusted', selected: false},
+  //     ],
+  //   },
+  //   {
+  //     id: 6,
+  //     ques: 'Right door front',
+  //     option: [
+  //       {id: 1, label: 'Dented', selected: false},
+  //       {id: 2, label: 'Dented', selected: false},
+  //       {id: 3, label: 'Rusted', selected: false},
+  //     ],
+  //   },
+  //   {
+  //     id: 7,
+  //     ques: 'Right door back',
+  //     option: [
+  //       {id: 1, label: 'Rusted', selected: false},
+  //       {id: 2, label: 'Dented', selected: false},
+  //       {id: 3, label: 'Rusted', selected: false},
+  //     ],
+  //   },
+  //   {
+  //     id: 8,
+  //     ques: 'Left fender',
+  //     option: [
+  //       {id: 1, label: 'Scratched', selected: false},
+  //       {id: 2, label: 'Dented', selected: false},
+  //     ],
+  //   },
+  //   {
+  //     id: 9,
+  //     ques: 'Right fender',
+  //     option: [
+  //       {id: 1, label: 'Scratched', selected: false},
+  //       {id: 2, label: 'Dented', selected: false},
+  //     ],
+  //   },
+  //   {
+  //     id: 10,
+  //     ques: 'Left Quater Panel',
+  //     option: [
+  //       {id: 1, label: 'Scratched', selected: false},
+  //       {id: 2, label: 'Dented', selected: false},
+  //     ],
+  //   },
+  //   {
+  //     id: 11,
+  //     ques: 'Right Quater Panel',
+  //     option: [
+  //       {id: 1, label: 'Scratched', selected: false},
+  //       {id: 2, label: 'Dented', selected: false},
+  //     ],
+  //   },
+  // ]);
+  const [openImagePicker, setOpenImagePicker] = useState(false);
   const [hood, setHood] = useState('');
   const [roof, setRoof] = useState('');
   const [dicky, setDickey] = useState('');
@@ -140,6 +142,8 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
   const selectUpdate = useAppSelector(state => state.updateExternal);
   const setGet = useAppSelector(state => state.getExternal);
 
+  const [photo, setPhoto] = useState('');
+
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
@@ -150,45 +154,45 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function onSelectOption(
-    elementId: number,
-    optionId: number,
-    label: string,
-    ques: string,
-  ) {
-    let temp = [...form];
-    for (let i = 0; i < temp.length; i++) {
-      for (let j = 0; j < temp[i].option.length; j++) {
-        if (optionId === temp[i].id && elementId === temp[i].option[j].id) {
-          temp[i].option[j].selected = true;
-        } else if (
-          optionId === temp[i].id &&
-          elementId !== temp[i].option[j].id
-        ) {
-          temp[i].option[j].selected = false;
-        }
-      }
-    }
-    setForm([...temp]);
-    const updateFunctions: {[key: string]: Dispatch<SetStateAction<string>>} = {
-      'Bonnet / Hood': setHood,
-      Roof: setRoof,
-      'Dicky door/Boot Door': setDickey,
-      'Left door front': setLdoorf,
-      'Left door back': setLdoorb,
-      'Right door front': setRdoorf,
-      'Right door back': setRdoorb,
-      'Left fender': setLfender,
-      'Right fender': setRfender,
-      'Left Quater Panel': setLqPanel,
-      'Right Quater Panel': setRqPanel,
-    };
+  // function onSelectOption(
+  //   elementId: number,
+  //   optionId: number,
+  //   label: string,
+  //   ques: string,
+  // ) {
+  //   let temp = [...form];
+  //   for (let i = 0; i < temp.length; i++) {
+  //     for (let j = 0; j < temp[i].option.length; j++) {
+  //       if (optionId === temp[i].id && elementId === temp[i].option[j].id) {
+  //         temp[i].option[j].selected = true;
+  //       } else if (
+  //         optionId === temp[i].id &&
+  //         elementId !== temp[i].option[j].id
+  //       ) {
+  //         temp[i].option[j].selected = false;
+  //       }
+  //     }
+  //   }
+  //   setForm([...temp]);
+  //   const updateFunctions: {[key: string]: Dispatch<SetStateAction<string>>} = {
+  //     'Bonnet / Hood': setHood,
+  //     Roof: setRoof,
+  //     'Dicky door/Boot Door': setDickey,
+  //     'Left door front': setLdoorf,
+  //     'Left door back': setLdoorb,
+  //     'Right door front': setRdoorf,
+  //     'Right door back': setRdoorb,
+  //     'Left fender': setLfender,
+  //     'Right fender': setRfender,
+  //     'Left Quater Panel': setLqPanel,
+  //     'Right Quater Panel': setRqPanel,
+  //   };
 
-    const updateFunction = updateFunctions[ques];
-    if (updateFunction) {
-      updateFunction(label);
-    }
-  }
+  //   const updateFunction = updateFunctions[ques];
+  //   if (updateFunction) {
+  //     updateFunction(label);
+  //   }
+  // }
 
   function onSave() {
     setLoading(true);
@@ -274,6 +278,11 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectAdd, selectUpdate]);
 
+  function onSaveImage(image: any) {
+    console.log('image', image);
+    setPhoto(image[0].uri);
+  }
+
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
@@ -285,7 +294,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
           color="#201A1B">
           Step 5: External Panel
         </CustomText>
-        {form.map((el, index) => {
+        {/* {form.map((el, index) => {
           return (
             <Box key={index.toString()} style={styles.body}>
               <CustomText
@@ -326,20 +335,110 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
               </Box>
             </Box>
           );
-        })}
+        })} */}
+        <Box>
+          <BasePicker
+            data={list}
+            title="Bonnet / Hood"
+            onValueChange={setHood}
+            selectedValue={hood}
+            onPressCamera={() => setOpenImagePicker(true)}
+            selectPhoto={photo}
+          />
+          <BasePicker
+            data={list}
+            title="Roof"
+            onValueChange={setRoof}
+            selectedValue={roof}
+          />
+          <BasePicker
+            data={list}
+            title="Dicky door/Boot Door"
+            onValueChange={setDickey}
+            selectedValue={dicky}
+          />
+          <BasePicker
+            data={list}
+            title="Bonnet / Hood"
+            onValueChange={setHood}
+            selectedValue={hood}
+          />
+          <BasePicker
+            data={list}
+            title="Left door front"
+            onValueChange={setLdoorf}
+            selectedValue={ldoorf}
+          />
+          <BasePicker
+            data={list}
+            title="Left door back"
+            onValueChange={setLdoorb}
+            selectedValue={ldoorb}
+          />
+          <BasePicker
+            data={list}
+            title="Right door front"
+            onValueChange={setRdoorf}
+            selectedValue={rdoorf}
+          />
+          <BasePicker
+            data={list}
+            title="Right door back"
+            onValueChange={setRdoorb}
+            selectedValue={rdoorb}
+          />
+          <BasePicker
+            data={list}
+            title="Left fender"
+            onValueChange={setLfender}
+            selectedValue={lfender}
+          />
+          <BasePicker
+            data={list}
+            title="Right fender"
+            onValueChange={setRfender}
+            selectedValue={rfender}
+          />
+          <BasePicker
+            data={list}
+            title="Left Quater Panel"
+            onValueChange={setLqPanel}
+            selectedValue={lQPanel}
+          />
+          <BasePicker
+            data={list}
+            title="Right Quater Panel"
+            onValueChange={setRqPanel}
+            selectedValue={rQPanel}
+          />
+        </Box>
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>
             <PrimaryButton
               label="Discard"
-              onPress={() => console.log('test')}
+              onPress={() => navigation.goBack()}
               varient="Secondary"
             />
           </Box>
           <Box width={'45%'}>
-            <PrimaryButton label={'Save'} onPress={onSave} />
+            <PrimaryButton
+              label={route.params.from === 'add' ? 'Save' : 'Update'}
+              onPress={onSave}
+            />
           </Box>
         </Box>
       </ScrollView>
+      <ImagePicker
+        isOpen={openImagePicker}
+        onClose={() => setOpenImagePicker(false)}
+        multiple={false}
+        onSaveImage={onSaveImage}
+        title="Select Image"
+        fileTypes={{
+          allowMultiSelection: false,
+          type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
+        }}
+      />
     </Box>
   );
 }

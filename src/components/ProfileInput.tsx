@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import {TextInput, TextInputProps} from 'react-native';
+import {Text, TextInput, TextInputProps} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 
 import {
@@ -42,6 +42,7 @@ export default function ProfileInput(
     propsStyle,
     labelStyle,
     input,
+    isMandatory,
   } = props;
 
   const [bottomOffset] = useState(13.5);
@@ -93,6 +94,7 @@ export default function ProfileInput(
               {zIndex: isLabelFloating ? 1 : 0},
             ]}>
             {label}
+            {isMandatory && <Text style={{color: 'red'}}>*</Text>}
           </Animated.Text>
         )}
         <TextInput

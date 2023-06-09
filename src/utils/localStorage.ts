@@ -26,7 +26,6 @@ export function saveTokenValidity(time: number): Promise<null> {
   return SInfo.setItem(TOKEN_VALIDITY, time.toString(), {});
 }
 
-export async function getTokenValidity(): Promise<number> {
-  const data = await SInfo.getItem(TOKEN_VALIDITY, {});
-  return +data;
+export function getTokenValidity(): Promise<string> {
+  return SInfo.getItem(TOKEN_VALIDITY, {});
 }

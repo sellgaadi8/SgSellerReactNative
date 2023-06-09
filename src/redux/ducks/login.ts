@@ -39,7 +39,7 @@ export const onLogin =
 
     const config = {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'content-type': 'multipart/form-data',
       },
     };
 
