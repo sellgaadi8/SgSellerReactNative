@@ -44,6 +44,17 @@ export const onUpdateExternal =
     right_fender: string,
     left_quater_panel: string,
     right_quater_panel: string,
+    bonnet_head_image: string,
+    roof_image: string,
+    dickey_door_image: string,
+    left_door_front_image: string,
+    left_door_back_image: string,
+    right_door_front_image: string,
+    right_door_back_image: string,
+    left_fender_image: string,
+    right_fender_image: string,
+    left_quater_panel_image: string,
+    right_quater_panel_image: string,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = updateExternelUrl(id);
@@ -70,6 +81,17 @@ export const onUpdateExternal =
     body.append('right_fender', right_fender);
     body.append('left_quater_panel', left_quater_panel);
     body.append('right_quater_panel', right_quater_panel);
+    body.append('bonnet_head_image', bonnet_head_image);
+    body.append('roof_image', roof_image);
+    body.append('dickey_door_image', dickey_door_image);
+    body.append('left_door_front_image', left_door_front_image);
+    body.append('left_door_back_image', left_door_back_image);
+    body.append('right_door_front_image', right_door_front_image);
+    body.append('right_door_back_image', right_door_back_image);
+    body.append('left_fender_image', left_fender_image);
+    body.append('right_fender_image', right_fender_image);
+    body.append('left_quater_panel_image', left_quater_panel_image);
+    body.append('right_quater_panel_image', right_quater_panel_image);
 
     axiosInstance
       .post(url, body, config)

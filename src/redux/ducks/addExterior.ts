@@ -43,6 +43,17 @@ export const onAddExterior =
     right_apron_leg: string,
     right_apron: string,
     boot_floor: string,
+    left_pillarA_image: string,
+    left_pillarB_image: string,
+    left_pillarC_image: string,
+    right_pillarA_image: string,
+    right_pillarB_image: string,
+    right_pillarC_image: string,
+    left_apron_image: string,
+    left_apron_leg_image: string,
+    right_apron_leg_image: string,
+    right_apron_image: string,
+    boot_floor_image: string,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = addExteriorUrl(id);
@@ -69,6 +80,17 @@ export const onAddExterior =
     body.append('right_apron_leg', right_apron_leg);
     body.append('right_apron', right_apron);
     body.append('boot_floor', boot_floor);
+    body.append('left_pillarA_image', left_pillarA_image);
+    body.append('left_pillarB_image', left_pillarB_image);
+    body.append('left_pillarC_image', left_pillarC_image);
+    body.append('right_pillarA_image', right_pillarA_image);
+    body.append('right_pillarB_image', right_pillarB_image);
+    body.append('right_pillarC_image', right_pillarC_image);
+    body.append('left_apron_image', left_apron_image);
+    body.append('left_apron_leg_image', left_apron_leg_image);
+    body.append('right_apron_leg_image', right_apron_leg_image);
+    body.append('right_apron_image', right_apron_image);
+    body.append('boot_floor_image', boot_floor_image);
 
     axiosInstance
       .post(url, body, config)

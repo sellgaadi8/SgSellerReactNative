@@ -14,14 +14,14 @@ import {onAddExternal} from '../../redux/ducks/addExternal';
 import GlobalContext from '../../contexts/GlobalContext';
 import {useAppSelector} from '../../utils/hooks';
 import Snackbar from 'react-native-snackbar';
-import {ExternelPanelProps, ImageType} from '../../types/propsTypes';
+import {ExternelPanelProps} from '../../types/propsTypes';
 import {onUpdateExternal} from '../../redux/ducks/updateExternal';
 import {onGetExternelDetails} from '../../redux/ducks/getExternal';
 import Loader from '../../components/Loader';
 import BasePicker from '../../components/BasePicker';
 import ImagePicker from '../../components/ImagePicker';
 import DocumentPicker from 'react-native-document-picker';
-import {ConsentFile} from '../../types/consent';
+import {onUploadImage} from '../../redux/ducks/uploadImage';
 const list = [
   {label: 'Ok', value: 'Ok'},
   {label: 'Scratched', value: 'Scratched'},
@@ -30,129 +30,48 @@ const list = [
 ];
 
 export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
-  // const [form, setForm] = useState([
-  //   {
-  //     id: 1,
-  //     ques: 'Bonnet / Hood',
-  //     option: [
-  //       {id: 1, label: 'Ok', selected: false},
-  //       {id: 2, label: 'Scratched', selected: false},
-  //       {id: 3, label: 'Dented', selected: false},
-  //     ],
-  //   },
-  //   {
-  //     id: 2,
-  //     ques: 'Roof',
-  //     option: [
-  //       {id: 1, label: 'Scratched', selected: false},
-  //       {id: 2, label: 'Dented', selected: false},
-  //     ],
-  //   },
-  //   {
-  //     id: 3,
-  //     ques: 'Dicky door/Boot Door',
-  //     option: [
-  //       {id: 1, label: 'Scratched', selected: false},
-  //       {id: 2, label: 'Dented', selected: false},
-  //     ],
-  //   },
-  //   {
-  //     id: 4,
-  //     ques: 'Left door front',
-  //     option: [
-  //       {id: 1, label: 'Scratched', selected: false},
-  //       {id: 2, label: 'Dented', selected: false},
-  //       {id: 3, label: 'Rusted', selected: false},
-  //     ],
-  //   },
-  //   {
-  //     id: 5,
-  //     ques: 'Left door back',
-  //     option: [
-  //       {id: 1, label: 'Scratched', selected: false},
-  //       {id: 2, label: 'Dented', selected: false},
-  //       {id: 3, label: 'Rusted', selected: false},
-  //     ],
-  //   },
-  //   {
-  //     id: 6,
-  //     ques: 'Right door front',
-  //     option: [
-  //       {id: 1, label: 'Dented', selected: false},
-  //       {id: 2, label: 'Dented', selected: false},
-  //       {id: 3, label: 'Rusted', selected: false},
-  //     ],
-  //   },
-  //   {
-  //     id: 7,
-  //     ques: 'Right door back',
-  //     option: [
-  //       {id: 1, label: 'Rusted', selected: false},
-  //       {id: 2, label: 'Dented', selected: false},
-  //       {id: 3, label: 'Rusted', selected: false},
-  //     ],
-  //   },
-  //   {
-  //     id: 8,
-  //     ques: 'Left fender',
-  //     option: [
-  //       {id: 1, label: 'Scratched', selected: false},
-  //       {id: 2, label: 'Dented', selected: false},
-  //     ],
-  //   },
-  //   {
-  //     id: 9,
-  //     ques: 'Right fender',
-  //     option: [
-  //       {id: 1, label: 'Scratched', selected: false},
-  //       {id: 2, label: 'Dented', selected: false},
-  //     ],
-  //   },
-  //   {
-  //     id: 10,
-  //     ques: 'Left Quater Panel',
-  //     option: [
-  //       {id: 1, label: 'Scratched', selected: false},
-  //       {id: 2, label: 'Dented', selected: false},
-  //     ],
-  //   },
-  //   {
-  //     id: 11,
-  //     ques: 'Right Quater Panel',
-  //     option: [
-  //       {id: 1, label: 'Scratched', selected: false},
-  //       {id: 2, label: 'Dented', selected: false},
-  //     ],
-  //   },
-  // ]);
+  const [externelType, setExternelType] = useState([
+    {id: 'bonnet_head', label: 'Bonnet Head', url: ''},
+    {id: 'roof', label: 'Roof', url: ''},
+    {id: 'dickey_door', label: 'Dickey Door', url: ''},
+    {id: 'left_door_front', label: 'Left Door Front', url: ''},
+    {id: 'left_door_back', label: 'Left Door Back', url: ''},
+    {id: 'right_door_front', label: 'Right Door Front', url: ''},
+    {id: 'right_door_back', label: 'Right Door Back', url: ''},
+    {id: 'left_fender', label: 'Left Fender', url: ''},
+    {id: 'right_fender', label: 'Right Fender', url: ''},
+    {id: 'left_quater_panel', label: 'Left Quarter Panel', url: ''},
+    {id: 'right_quater_panel', label: 'Right Quarter Panel', url: ''},
+  ]);
   const [openImagePicker, setOpenImagePicker] = useState(false);
   const [hood, setHood] = useState('');
-  const [hoodImage, setHoodImage] = useState<ConsentFile[]>([]);
+  const [hoodImage, setHoodImage] = useState('');
   const [roof, setRoof] = useState('');
-  const [roofImage, setRoofImage] = useState<ConsentFile[]>([]);
+  const [roofImage, setRoofImage] = useState('');
   const [dicky, setDickey] = useState('');
-  const [dickyImage, setDickeyImage] = useState<ConsentFile[]>([]);
+  const [dickyImage, setDickeyImage] = useState('');
   const [ldoorf, setLdoorf] = useState('');
-  const [ldoorfImage, setLdoorfImage] = useState<ConsentFile[]>([]);
+  const [ldoorfImage, setLdoorfImage] = useState('');
   const [ldoorb, setLdoorb] = useState('');
-  const [ldoorbImage, setLdoorbImage] = useState<ConsentFile[]>([]);
+  const [ldoorbImage, setLdoorbImage] = useState('');
   const [rdoorf, setRdoorf] = useState('');
-  const [rdoorfImage, setRdoorfImage] = useState<ConsentFile[]>([]);
+  const [rdoorfImage, setRdoorfImage] = useState('');
   const [rdoorb, setRdoorb] = useState('');
-  const [rdoorbImage, setRdoorbImage] = useState<ConsentFile[]>([]);
+  const [rdoorbImage, setRdoorbImage] = useState('');
   const [lfender, setLfender] = useState('');
-  const [lfenderImage, setLfenderImage] = useState<ConsentFile[]>([]);
+  const [lfenderImage, setLfenderImage] = useState('');
   const [rfender, setRfender] = useState('');
-  const [rfenderImage, setRfenderImage] = useState<ConsentFile[]>([]);
+  const [rfenderImage, setRfenderImage] = useState('');
   const [lQPanel, setLqPanel] = useState('');
-  const [lQPanelImage, setLqPanelImage] = useState<ConsentFile[]>([]);
+  const [lQPanelImage, setLqPanelImage] = useState('');
   const [rQPanel, setRqPanel] = useState('');
-  const [rQPanelImage, setRqPanelImage] = useState<ConsentFile[]>([]);
+  const [rQPanelImage, setRqPanelImage] = useState('');
   const [loading, setLoading] = useState(false);
   const {vehicleId} = useContext(GlobalContext);
   const selectAdd = useAppSelector(state => state.addExternal);
   const selectUpdate = useAppSelector(state => state.updateExternal);
   const setGet = useAppSelector(state => state.getExternal);
+  const selectUploadImage = useAppSelector(state => state.uploadImage);
   const [uploadType, setUploadType] =
     useState<ExternelDocumentType>('bonnet_head');
 
@@ -165,46 +84,6 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // function onSelectOption(
-  //   elementId: number,
-  //   optionId: number,
-  //   label: string,
-  //   ques: string,
-  // ) {
-  //   let temp = [...form];
-  //   for (let i = 0; i < temp.length; i++) {
-  //     for (let j = 0; j < temp[i].option.length; j++) {
-  //       if (optionId === temp[i].id && elementId === temp[i].option[j].id) {
-  //         temp[i].option[j].selected = true;
-  //       } else if (
-  //         optionId === temp[i].id &&
-  //         elementId !== temp[i].option[j].id
-  //       ) {
-  //         temp[i].option[j].selected = false;
-  //       }
-  //     }
-  //   }
-  //   setForm([...temp]);
-  //   const updateFunctions: {[key: string]: Dispatch<SetStateAction<string>>} = {
-  //     'Bonnet / Hood': setHood,
-  //     Roof: setRoof,
-  //     'Dicky door/Boot Door': setDickey,
-  //     'Left door front': setLdoorf,
-  //     'Left door back': setLdoorb,
-  //     'Right door front': setRdoorf,
-  //     'Right door back': setRdoorb,
-  //     'Left fender': setLfender,
-  //     'Right fender': setRfender,
-  //     'Left Quater Panel': setLqPanel,
-  //     'Right Quater Panel': setRqPanel,
-  //   };
-
-  //   const updateFunction = updateFunctions[ques];
-  //   if (updateFunction) {
-  //     updateFunction(label);
-  //   }
-  // }
 
   function onSave() {
     setLoading(true);
@@ -223,6 +102,17 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
           rfender,
           lQPanel,
           rQPanel,
+          hoodImage,
+          roofImage,
+          dickyImage,
+          ldoorfImage,
+          ldoorbImage,
+          rdoorfImage,
+          rdoorbImage,
+          lfenderImage,
+          rfenderImage,
+          lQPanelImage,
+          rQPanelImage,
         ),
       );
     } else {
@@ -240,12 +130,81 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
           rfender,
           lQPanel,
           rQPanel,
+          hoodImage,
+          roofImage,
+          dickyImage,
+          ldoorfImage,
+          ldoorbImage,
+          rdoorfImage,
+          rdoorbImage,
+          lfenderImage,
+          rfenderImage,
+          lQPanelImage,
+          rQPanelImage,
         ),
       );
     }
   }
 
   useEffect(() => {
+    if (selectUploadImage.called) {
+      setLoading(false);
+      const {error, image} = selectUploadImage;
+      let temp = [...externelType];
+
+      if (!error && image) {
+        switch (uploadType) {
+          case 'bonnet_head':
+            setHoodImage(image.file);
+            temp[0].url = image.url;
+            break;
+          case 'roof':
+            setRoofImage(image.file);
+            temp[1].url = image.url;
+            break;
+          case 'dickey_door':
+            setDickeyImage(image.file);
+            temp[2].url = image.url;
+            break;
+          case 'left_door_front':
+            setLdoorfImage(image.file);
+            temp[3].url = image.url;
+            break;
+          case 'left_door_back':
+            setLdoorbImage(image.file);
+            temp[4].url = image.url;
+            break;
+          case 'right_door_front':
+            setRdoorfImage(image.file);
+            temp[5].url = image.url;
+            break;
+          case 'right_door_back':
+            setRdoorbImage(image.file);
+            temp[6].url = image.url;
+            break;
+          case 'left_fender':
+            setLfenderImage(image.file);
+            temp[7].url = image.url;
+            break;
+          case 'right_fender':
+            setRfenderImage(image.file);
+            temp[8].url = image.url;
+            break;
+          case 'left_quater_panel':
+            setLqPanelImage(image.file);
+            temp[9].url = image.url;
+            break;
+          case 'right_quater_panel':
+            setRqPanelImage(image.file);
+            temp[10].url = image.url;
+            break;
+          default:
+            break;
+        }
+      }
+
+      setExternelType([...temp]);
+    }
     if (selectAdd.called) {
       setLoading(false);
       const {error, message, success} = selectAdd;
@@ -290,12 +249,8 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectAdd, selectUpdate]);
 
-  function onSaveImage(image: ImageType[] | null) {
-    if (image) {
-      // let prevFiles = getDocs(uploadType);
-      // prevFiles.push(...image);
-      saveDocs(uploadType, image);
-    }
+  function onSaveImage(image: any) {
+    dispatch(onUploadImage(image[0], 'externel-panel-images'));
   }
 
   function onChangeHood() {
@@ -374,43 +329,43 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
   //   }
   // }
 
-  function saveDocs(type: ExternelDocumentType, files: ConsentFile[]) {
-    switch (type) {
-      case 'bonnet_head':
-        setHoodImage(files);
-        break;
-      case 'roof':
-        setRoofImage(files);
-        break;
-      case 'dickey_door':
-        setDickeyImage(files);
-        break;
-      case 'left_door_front':
-        setLdoorfImage(files);
-        break;
-      case 'left_door_back':
-        setLdoorbImage(files);
-        break;
-      case 'right_door_front':
-        setRdoorfImage(files);
-        break;
-      case 'right_door_back':
-        setRdoorbImage(files);
-        break;
-      case 'left_fender':
-        setLfenderImage(files);
-        break;
-      case 'right_fender':
-        setRfenderImage(files);
-        break;
-      case 'left_quater_panel':
-        setLqPanelImage(files);
-        break;
-      case 'right_quater_panel':
-        setRqPanelImage(files);
-        break;
-    }
-  }
+  // function saveDocs(type: ExternelDocumentType, files: ConsentFile[]) {
+  //   switch (type) {
+  //     case 'bonnet_head':
+  //       setHoodImage(files);
+  //       break;
+  //     case 'roof':
+  //       setRoofImage(files);
+  //       break;
+  //     case 'dickey_door':
+  //       setDickeyImage(files);
+  //       break;
+  //     case 'left_door_front':
+  //       setLdoorfImage(files);
+  //       break;
+  //     case 'left_door_back':
+  //       setLdoorbImage(files);
+  //       break;
+  //     case 'right_door_front':
+  //       setRdoorfImage(files);
+  //       break;
+  //     case 'right_door_back':
+  //       setRdoorbImage(files);
+  //       break;
+  //     case 'left_fender':
+  //       setLfenderImage(files);
+  //       break;
+  //     case 'right_fender':
+  //       setRfenderImage(files);
+  //       break;
+  //     case 'left_quater_panel':
+  //       setLqPanelImage(files);
+  //       break;
+  //     case 'right_quater_panel':
+  //       setRqPanelImage(files);
+  //       break;
+  //   }
+  // }
 
   return (
     <Box style={styles.container}>
@@ -423,48 +378,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
           color="#201A1B">
           Step 5: External Panel
         </CustomText>
-        {/* {form.map((el, index) => {
-          return (
-            <Box key={index.toString()} style={styles.body}>
-              <CustomText
-                fontSize={14}
-                lineHeight={28}
-                fontFamily="Roboto-Medium"
-                color="#111111">
-                {el.ques}
-              </CustomText>
-              <Box style={styles.option}>
-                {el.option.map((tl, _index) => {
-                  return (
-                    <Pressable
-                      style={styles.optionButton}
-                      onPress={() =>
-                        onSelectOption(tl.id, el.id, tl.label, el.ques)
-                      }>
-                      <Icon
-                        name={
-                          tl.selected ? 'radiobox-marked' : 'radiobox-blank'
-                        }
-                        size={20}
-                        color={tl.selected ? colors.secondary : '#7F747C'}
-                        // eslint-disable-next-line react-native/no-inline-styles
-                        style={{marginRight: 5}}
-                      />
-                      <CustomText
-                        fontSize={16}
-                        lineHeight={24}
-                        fontFamily="Roboto-Regular"
-                        color="#1C1B1F"
-                        key={_index.toString()}>
-                        {tl.label}
-                      </CustomText>
-                    </Pressable>
-                  );
-                })}
-              </Box>
-            </Box>
-          );
-        })} */}
+
         <Box>
           <BasePicker
             data={list}
@@ -472,7 +386,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
             onValueChange={setHood}
             selectedValue={hood}
             onPressCamera={onChangeHood}
-            selectPhoto={hoodImage.length !== 0 ? hoodImage[0].uri : ''}
+            selectPhoto={externelType[0].url}
           />
           <BasePicker
             data={list}
@@ -480,7 +394,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
             onValueChange={setRoof}
             selectedValue={roof}
             onPressCamera={onChangeRoof}
-            selectPhoto={roofImage.length !== 0 ? roofImage[0].uri : ''}
+            selectPhoto={externelType[1].url}
           />
           <BasePicker
             data={list}
@@ -488,7 +402,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
             onValueChange={setDickey}
             selectedValue={dicky}
             onPressCamera={onChangeDickey}
-            selectPhoto={dickyImage.length !== 0 ? dickyImage[0].uri : ''}
+            selectPhoto={externelType[2].url}
           />
           <BasePicker
             data={list}
@@ -496,7 +410,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
             onValueChange={setLdoorf}
             selectedValue={ldoorf}
             onPressCamera={onChangeLdoorF}
-            selectPhoto={ldoorfImage.length !== 0 ? ldoorfImage[0].uri : ''}
+            selectPhoto={externelType[3].url}
           />
           <BasePicker
             data={list}
@@ -504,7 +418,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
             onValueChange={setLdoorb}
             selectedValue={ldoorb}
             onPressCamera={onChangeLdoorB}
-            selectPhoto={ldoorbImage.length !== 0 ? ldoorbImage[0].uri : ''}
+            selectPhoto={externelType[4].url}
           />
           <BasePicker
             data={list}
@@ -512,7 +426,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
             onValueChange={setRdoorf}
             selectedValue={rdoorf}
             onPressCamera={onChangeRdoorF}
-            selectPhoto={rdoorfImage.length !== 0 ? rdoorfImage[0].uri : ''}
+            selectPhoto={externelType[5].url}
           />
           <BasePicker
             data={list}
@@ -520,7 +434,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
             onValueChange={setRdoorb}
             selectedValue={rdoorb}
             onPressCamera={onChangeRdoorB}
-            selectPhoto={rdoorbImage.length !== 0 ? rdoorbImage[0].uri : ''}
+            selectPhoto={externelType[6].url}
           />
           <BasePicker
             data={list}
@@ -528,7 +442,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
             onValueChange={setLfender}
             selectedValue={lfender}
             onPressCamera={onChangeLeftFender}
-            selectPhoto={lfenderImage.length !== 0 ? lfenderImage[0].uri : ''}
+            selectPhoto={externelType[7].url}
           />
           <BasePicker
             data={list}
@@ -536,7 +450,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
             onValueChange={setRfender}
             selectedValue={rfender}
             onPressCamera={onChangeRightFender}
-            selectPhoto={rfenderImage.length !== 0 ? rfenderImage[0].uri : ''}
+            selectPhoto={externelType[8].url}
           />
           <BasePicker
             data={list}
@@ -544,7 +458,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
             onValueChange={setLqPanel}
             selectedValue={lQPanel}
             onPressCamera={onChangeLPanel}
-            selectPhoto={lQPanelImage.length !== 0 ? lQPanelImage[0].uri : ''}
+            selectPhoto={externelType[9].url}
           />
           <BasePicker
             data={list}
@@ -552,7 +466,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
             onValueChange={setRqPanel}
             selectedValue={rQPanel}
             onPressCamera={onChangeRPanel}
-            selectPhoto={rQPanelImage.length !== 0 ? rQPanelImage[0].uri : ''}
+            selectPhoto={externelType[10].url}
           />
         </Box>
         <Box style={styles.buttonContainer}>

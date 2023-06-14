@@ -12,6 +12,17 @@ type External = {
   right_fender: string;
   left_quater_panel: string;
   right_quater_panel: string;
+  bonnet_head_image: string;
+  roof_image: string;
+  dickey_door_image: string;
+  left_door_front_image: string;
+  left_door_back_image: string;
+  right_door_front_image: string;
+  right_door_back_image: string;
+  left_fender_image: string;
+  right_fender_image: string;
+  left_quater_panel_image: string;
+  right_quater_panel_image: string;
 };
 
 type GetExternalState = {

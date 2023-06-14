@@ -12,6 +12,17 @@ type Exterior = {
   right_pillarC: string;
   left_apron_leg: string;
   right_apron_leg: string;
+  left_pillarA_image: string;
+  left_pillarB_image: string;
+  left_pillarC_image: string;
+  right_pillarA_image: string;
+  right_pillarB_image: string;
+  right_pillarC_image: string;
+  left_apron_image: string;
+  left_apron_leg_image: string;
+  right_apron_leg_image: string;
+  right_apron_image: string;
+  boot_floor_image: string;
 };
 
 type GetExteriorState = {

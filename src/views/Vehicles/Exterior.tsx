@@ -12,7 +12,6 @@ import {container, contentCenter} from '../../utils/styles';
 import PrimaryButton from '../../components/PrimaryButton';
 import {pixelSizeHorizontal, pixelSizeVertical} from '../../utils/responsive';
 import {useDispatch} from 'react-redux';
-import {onUploadImage} from '../../redux/ducks/uploadImage';
 import {useAppSelector} from '../../utils/hooks';
 import ImagePicker from '../../components/ImagePicker';
 import {onAddExterior} from '../../redux/ducks/addExterior';
@@ -23,7 +22,7 @@ import {onGetExteriorData} from '../../redux/ducks/getExterior';
 import {onUpdateExterior} from '../../redux/ducks/updateExterior';
 import Loader from '../../components/Loader';
 import BasePicker from '../../components/BasePicker';
-import {ConsentFile} from '../../types/consent';
+import {onUploadImage} from '../../redux/ducks/uploadImage';
 const list = [
   {label: 'Ok', value: 'Ok'},
   {label: 'Scratched', value: 'Scratched'},
@@ -46,18 +45,28 @@ export default function Exterior({navigation, route}: ExteriorProps) {
     {id: 'boot_floor', name: 'Boot Floor', url: ''},
   ]);
   const [openImagePicker, setOpenImagePicker] = useState(false);
-  const [imageType, setImageType] = useState('');
-  const [image1, setImage1] = useState<ConsentFile[]>([]);
-  const [image2, setImage2] = useState<ConsentFile[]>([]);
-  const [image3, setImage3] = useState<ConsentFile[]>([]);
-  const [image4, setImage4] = useState<ConsentFile[]>([]);
-  const [image5, setImage5] = useState<ConsentFile[]>([]);
-  const [image6, setImage6] = useState<ConsentFile[]>([]);
-  const [image7, setImage7] = useState<ConsentFile[]>([]);
-  const [image8, setImage8] = useState<ConsentFile[]>([]);
-  const [image9, setImage9] = useState<ConsentFile[]>([]);
-  const [image10, setImage10] = useState<ConsentFile[]>([]);
-  const [image11, setImage11] = useState<ConsentFile[]>([]);
+  const [image1, setImage1] = useState('');
+  const [image2, setImage2] = useState('');
+  const [image3, setImage3] = useState('');
+  const [image4, setImage4] = useState('');
+  const [image5, setImage5] = useState('');
+  const [image6, setImage6] = useState('');
+  const [image7, setImage7] = useState('');
+  const [image8, setImage8] = useState('');
+  const [image9, setImage9] = useState('');
+  const [image10, setImage10] = useState('');
+  const [image11, setImage11] = useState('');
+  const [leftPA, setLeftPA] = useState('');
+  const [leftPB, setLeftPB] = useState('');
+  const [leftPC, setLeftPC] = useState('');
+  const [rightPA, setRightPA] = useState('');
+  const [rightPB, setRightPB] = useState('');
+  const [rightPC, setRightPC] = useState('');
+  const [leftApron, setLeftApron] = useState('');
+  const [leftApronLeg, setLeftApronLeg] = useState('');
+  const [rightApron, setRightApron] = useState('');
+  const [rightApronLeg, setRightApronLeg] = useState('');
+  const [boot, setBoot] = useState('');
   const [loading, setLoading] = useState(false);
   const [uploadType, setUploadType] =
     useState<ExteriorDocumentType>('left_pillarA');
@@ -78,53 +87,48 @@ export default function Exterior({navigation, route}: ExteriorProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function onPressPicker(id: string) {
-    setImageType(id);
-    setOpenImagePicker(true);
-  }
-
   function onSaveImage(image: any) {
-    saveDocs(uploadType, image);
+    // saveDocs(uploadType, image);
     dispatch(onUploadImage(image[0], 'exterior-images'));
   }
 
-  function saveDocs(type: ExteriorDocumentType, files: ConsentFile[]) {
-    switch (type) {
-      case 'left_pillarA':
-        setImage1(files);
-        break;
-      case 'left_pillarB':
-        setImage2(files);
-        break;
-      case 'left_pillarC':
-        setImage3(files);
-        break;
-      case 'right_pillarA':
-        setImage4(files);
-        break;
-      case 'right_pillarB':
-        setImage5(files);
-        break;
-      case 'right_pillarC':
-        setImage6(files);
-        break;
-      case 'left_apron':
-        setImage7(files);
-        break;
-      case 'left_apron_leg':
-        setImage8(files);
-        break;
-      case 'right_apron':
-        setImage9(files);
-        break;
-      case 'right_apron_leg':
-        setImage10(files);
-        break;
-      case 'boot_floor':
-        setImage11(files);
-        break;
-    }
-  }
+  // function saveDocs(type: ExteriorDocumentType, files: ImageType) {
+  //   switch (type) {
+  //     case 'left_pillarA':
+  //       setImage1(files[0]);
+  //       break;
+  //     case 'left_pillarB':
+  //       setImage2(files);
+  //       break;
+  //     case 'left_pillarC':
+  //       setImage3(files);
+  //       break;
+  //     case 'right_pillarA':
+  //       setImage4(files);
+  //       break;
+  //     case 'right_pillarB':
+  //       setImage5(files);
+  //       break;
+  //     case 'right_pillarC':
+  //       setImage6(files);
+  //       break;
+  //     case 'left_apron':
+  //       setImage7(files);
+  //       break;
+  //     case 'left_apron_leg':
+  //       setImage8(files);
+  //       break;
+  //     case 'right_apron':
+  //       setImage9(files);
+  //       break;
+  //     case 'right_apron_leg':
+  //       setImage10(files);
+  //       break;
+  //     case 'boot_floor':
+  //       setImage11(files);
+  //       break;
+  //   }
+  // }
 
   useEffect(() => {
     if (selectUploadImage.called) {
@@ -133,49 +137,49 @@ export default function Exterior({navigation, route}: ExteriorProps) {
       let temp = [...exteriorType];
 
       if (!error && image) {
-        switch (imageType) {
+        switch (uploadType) {
           case 'left_pillarA':
-            // setImage1(image.file);
+            setImage1(image.file);
             temp[0].url = image.url;
             break;
           case 'left_pillarB':
-            // setImage2(image.file);
+            setImage2(image.file);
             temp[1].url = image.url;
             break;
           case 'left_pillarC':
-            // setImage3(image.file);
+            setImage3(image.file);
             temp[2].url = image.url;
             break;
           case 'right_pillarA':
-            // setImage4(image.file);
+            setImage4(image.file);
             temp[3].url = image.url;
             break;
           case 'right_pillarB':
-            // setImage5(image.file);
+            setImage5(image.file);
             temp[4].url = image.url;
             break;
           case 'right_pillarC':
-            // setImage6(image.file);
+            setImage6(image.file);
             temp[5].url = image.url;
             break;
           case 'left_apron':
-            // setImage7(image.file);
+            setImage7(image.file);
             temp[6].url = image.url;
             break;
           case 'left_apron_leg':
-            // setImage8(image.file);
+            setImage8(image.file);
             temp[7].url = image.url;
             break;
           case 'right_apron_leg':
-            // setImage9(image.file);
+            setImage9(image.file);
             temp[8].url = image.url;
             break;
           case 'right_apron':
-            // setImage10(image.file);
+            setImage10(image.file);
             temp[9].url = image.url;
             break;
           case 'boot_floor':
-            // setImage11(image.file);
+            setImage11(image.file);
             temp[10].url = image.url;
             break;
           default:
@@ -202,17 +206,17 @@ export default function Exterior({navigation, route}: ExteriorProps) {
       setLoading(false);
       const {error, data} = selectGetExteriorData;
       if (!error && data) {
-        setImage1(data.left_pillarA);
-        setImage2(data.left_pillarB);
-        setImage3(data.left_pillarC);
-        setImage4(data.right_pillarA);
-        setImage5(data.right_pillarB);
-        setImage6(data.right_pillarC);
-        setImage7(data.left_apron);
-        setImage8(data.left_apron_leg);
-        setImage9(data.right_apron_leg);
-        setImage10(data.right_apron);
-        setImage11(data.boot_floor);
+        setLeftPA(data.left_pillarA);
+        setLeftPB(data.left_pillarB);
+        setLeftPC(data.left_pillarC);
+        setRightPA(data.right_pillarA);
+        setRightPB(data.right_pillarB);
+        setRightPC(data.right_pillarC);
+        setLeftApron(data.left_apron);
+        setLeftApronLeg(data.left_apron_leg);
+        setRightApronLeg(data.right_apron_leg);
+        setRightApron(data.right_apron);
+        setBoot(data.boot_floor);
       }
     }
     if (selectUpdateExteriorData.called) {
@@ -252,6 +256,17 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           image9,
           image10,
           image11,
+          leftPA,
+          leftPB,
+          leftPC,
+          rightPA,
+          rightPB,
+          rightPC,
+          leftApron,
+          leftApronLeg,
+          rightApron,
+          rightApronLeg,
+          boot,
         ),
       );
     } else {
@@ -269,12 +284,60 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           image9,
           image10,
           image11,
+          leftPA,
+          leftPB,
+          leftPC,
+          rightPA,
+          rightPB,
+          rightPC,
+          leftApron,
+          leftApronLeg,
+          rightApron,
+          rightApronLeg,
+          boot,
         ),
       );
     }
   }
 
-  console.log('exteriorType[0].url', exteriorType[0].url);
+  function onPressLeftPillarA(type: ExteriorDocumentType) {
+    setOpenImagePicker(true);
+    switch (type) {
+      case 'left_pillarA':
+        setUploadType('left_pillarA');
+        break;
+      case 'left_pillarB':
+        setUploadType('left_pillarB');
+        break;
+      case 'left_pillarC':
+        setUploadType('left_pillarC');
+        break;
+      case 'right_pillarA':
+        setUploadType('right_pillarA');
+        break;
+      case 'right_pillarB':
+        setUploadType('right_pillarB');
+        break;
+      case 'right_pillarC':
+        setUploadType('right_pillarC');
+        break;
+      case 'left_apron':
+        setUploadType('left_apron');
+        break;
+      case 'left_apron_leg':
+        setUploadType('left_apron_leg');
+        break;
+      case 'right_apron':
+        setUploadType('right_apron');
+        break;
+      case 'right_apron_leg':
+        setUploadType('right_apron_leg');
+        break;
+      case 'boot_floor':
+        setUploadType('boot_floor');
+        break;
+    }
+  }
 
   return (
     <Box style={styles.container}>
@@ -338,79 +401,90 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           <BasePicker
             data={list}
             title="Left Pillar A"
-            onValueChange={setImage1}
-            selectedValue={image1}
-            onPressCamera={() => setOpenImagePicker(true)}
+            onValueChange={setLeftPA}
+            selectedValue={leftPA}
+            onPressCamera={() => onPressLeftPillarA('left_pillarA')}
+            selectPhoto={exteriorType[0].url}
           />
           <BasePicker
             data={list}
             title="Left Pillar B"
-            onValueChange={setImage2}
-            selectedValue={image2}
-            onPressCamera={() => setOpenImagePicker(true)}
+            onValueChange={setLeftPB}
+            selectedValue={leftPB}
+            onPressCamera={() => onPressLeftPillarA('left_pillarB')}
+            selectPhoto={exteriorType[1].url}
           />
           <BasePicker
             data={list}
             title="Left Pillar C"
-            onValueChange={setImage3}
-            selectedValue={image3}
-            onPressCamera={() => setOpenImagePicker(true)}
+            onValueChange={setLeftPC}
+            selectedValue={leftPC}
+            onPressCamera={() => onPressLeftPillarA('left_pillarC')}
+            selectPhoto={exteriorType[2].url}
           />
           <BasePicker
             data={list}
             title="Right Pillar A"
-            onValueChange={setImage4}
-            selectedValue={image4}
-            onPressCamera={() => setOpenImagePicker(true)}
+            onValueChange={setRightPA}
+            selectedValue={rightPA}
+            onPressCamera={() => onPressLeftPillarA('right_pillarA')}
+            selectPhoto={exteriorType[3].url}
           />
           <BasePicker
             data={list}
             title="Right Pillar B"
-            onValueChange={setImage5}
-            selectedValue={image5}
-            onPressCamera={() => setOpenImagePicker(true)}
+            onValueChange={setRightPB}
+            selectedValue={rightPB}
+            onPressCamera={() => onPressLeftPillarA('right_pillarB')}
+            selectPhoto={exteriorType[4].url}
           />
           <BasePicker
             data={list}
             title="Right Pillar C"
-            onValueChange={setImage6}
-            selectedValue={image6}
-            onPressCamera={() => setOpenImagePicker(true)}
+            onValueChange={setRightPC}
+            selectedValue={rightPC}
+            onPressCamera={() => onPressLeftPillarA('right_pillarC')}
+            selectPhoto={exteriorType[5].url}
           />
           <BasePicker
             data={list}
             title="Left Apron"
-            onValueChange={setImage7}
-            selectedValue={image7}
-            onPressCamera={() => setOpenImagePicker(true)}
+            onValueChange={setLeftApron}
+            selectedValue={leftApron}
+            onPressCamera={() => onPressLeftPillarA('left_apron')}
+            selectPhoto={exteriorType[6].url}
           />
           <BasePicker
             data={list}
             title="Left Apron Leg"
-            onValueChange={setImage8}
-            selectedValue={image8}
-            onPressCamera={() => setOpenImagePicker(true)}
+            onValueChange={setLeftApronLeg}
+            selectedValue={leftApronLeg}
+            onPressCamera={() => onPressLeftPillarA('left_apron_leg')}
+            selectPhoto={exteriorType[7].url}
           />
           <BasePicker
             data={list}
             title="Right Apron Leg"
-            onValueChange={setImage9}
-            selectedValue={image9}
-            onPressCamera={() => setOpenImagePicker(true)}
+            onValueChange={setRightApronLeg}
+            selectedValue={rightApronLeg}
+            onPressCamera={() => onPressLeftPillarA('right_apron_leg')}
+            selectPhoto={exteriorType[8].url}
           />
           <BasePicker
             data={list}
             title="Right Apron Leg"
-            onValueChange={setImage10}
-            selectedValue={image10}
-            onPressCamera={() => setOpenImagePicker(true)}
+            onValueChange={setRightApron}
+            selectedValue={rightApron}
+            onPressCamera={() => onPressLeftPillarA('right_apron')}
+            selectPhoto={exteriorType[9].url}
           />
           <BasePicker
             data={list}
             title="Boot Floor"
-            onValueChange={setImage11}
-            selectedValue={image11}
-            onPressCamera={() => setOpenImagePicker(true)}
+            onValueChange={setBoot}
+            selectedValue={boot}
+            onPressCamera={() => onPressLeftPillarA('boot_floor')}
+            selectPhoto={exteriorType[10].url}
           />
         </Box>
         <Box style={styles.buttonContainer}>

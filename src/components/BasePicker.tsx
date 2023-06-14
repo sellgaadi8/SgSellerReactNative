@@ -91,7 +91,7 @@ export default function BasePicker({
               style={styles.picker}
               onValueChange={onValueChange}
               selectedValue={selectedValue}>
-              <Picker.Item value="" label="Select" />
+              {/* <Picker.Item value="" label="Select" /> */}
               {data.map((el, index) => {
                 return (
                   <Picker.Item
