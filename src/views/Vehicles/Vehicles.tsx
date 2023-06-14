@@ -60,7 +60,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
         onPressEdit={() => onClickEdit(item.uuid)}
         onPressView={() =>
           navigation.navigate('VehicleDetail', {
-            title: item.model + '(' + item.mfg_year + ')',
+            title: item.model,
             vehicleId: item.uuid,
           })
         }

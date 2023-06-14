@@ -131,7 +131,6 @@ export default function CarImages({route, navigation}: CarImagesProps) {
 
       setCarImageType([...temp]);
     }
-    console.log('selectUploadCarImage', selectUploadCarImage);
 
     if (selectUploadCarImage.called) {
       setLoading(false);

@@ -30,15 +30,18 @@ import SearchModal from '../../components/SearchModal';
 import {getModelList} from '../../redux/ducks/getModel';
 import {getVariantList} from '../../redux/ducks/getVariant';
 import {updateDisplayForm} from '../../redux/ducks/updateDisplayInfo';
+import MonthYearPicker from '../../components/MonthYearPicker';
+import {ColorList, Months, Years} from '../../utils/constant';
+import CustomDropdown from '../../components/CustomDropDown';
 const {height, width} = Dimensions.get('window');
 
 export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
   const [varaint, setVariant] = useState('');
-  const [year, setYear] = useState('');
   const [run, setRun] = useState('');
   const [owners, setOwners] = useState('');
+  const [manufacture, setManufacture] = useState('');
   const [registration, setRegistration] = useState('');
   const [transmission, setTransmission] = useState('');
   const [color, setColor] = useState('');
@@ -60,6 +63,10 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
   const [variantData, setVariantData] = useState<string[]>([]);
   const [dataType, setDataType] = useState<ModalType>('Make');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showManufacture, setShowManufacture] = useState(false);
+  const [month, setMonth] = useState('01');
+  const [year, setYear] = useState('1997');
 
   const dispatch = useDispatch<any>();
 
@@ -116,11 +123,13 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
     if (varaint.length === 0) {
       tempErrors.varaint = 'The variant field is required.';
     }
-    if (year.length === 0) {
-      tempErrors.year = 'The year field is required.';
+    if (manufacture.length === 0) {
+      tempErrors.manufacture = 'The manufacture field is required.';
     }
     if (run.length === 0) {
       tempErrors.run = 'The run field is required.';
+    } else if (+run > 400000) {
+      tempErrors.run = 'Run in Km should less then 4 lakh';
     }
     if (owners.length === 0) {
       tempErrors.owners = 'The owners field is required.';
@@ -129,7 +138,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
       tempErrors.registration = 'The registration field is required.';
     }
 
-    if (color.length === 0) {
+    if (color === '-1') {
       tempErrors.color = 'The color field is required.';
     }
 
@@ -164,7 +173,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
             make,
             model,
             varaint,
-            year,
+            manufacture,
             registration,
             transmission,
             color,
@@ -180,7 +189,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
             make,
             model,
             varaint,
-            year,
+            manufacture,
             registration,
             transmission,
             color,
@@ -214,7 +223,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
         setMake(data.make);
         setModel(data.model);
         setVariant(data.variant);
-        setYear(data.mfg_year);
+        setManufacture(data.mfg_year);
         setRegistration(data.reg_date);
         setTransmission(data.transmission);
         const updatedTransmissionType = transmissionType.map(type => ({
@@ -322,7 +331,6 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
   function onPressDone() {
     switch (dataType) {
       case 'Make':
-        setMake(searchQuery);
         setSearchQuery('');
         break;
       case 'Model':
@@ -363,6 +371,36 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
 
     setModalData(filteredModalData);
     setSearchQuery(value);
+  }
+
+  function onCloseCalendar() {
+    setShowCalendar(false);
+  }
+
+  function onManufactureCalendar() {
+    setShowManufacture(false);
+  }
+
+  function onMonthChange(value: string) {
+    setMonth(value);
+  }
+
+  function onYearChange(value: string) {
+    setYear(value);
+  }
+
+  function onSubmitMonthYear() {
+    setShowCalendar(false);
+    setRegistration(month + '/' + year);
+  }
+
+  function onSubmitYear() {
+    setShowManufacture(false);
+    setManufacture(year);
+  }
+
+  function onColorChange(value: string) {
+    setColor(value);
   }
 
   return (
@@ -410,24 +448,31 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
               isMandatory
             />
           </Pressable>
-          <ProfileInput
-            label="Year of manufacture"
-            value={year}
-            onChangeText={setYear}
-            error={errors?.year}
-            noMargin
-            isMandatory
-            // endIcon="calendar-month"F
-          />
-          <ProfileInput
-            label="Registration date"
-            value={registration}
-            onChangeText={setRegistration}
-            error={errors?.registration}
-            noMargin
-            isMandatory
-            // endIcon="calendar-month"
-          />
+          <Pressable onPress={() => setShowManufacture(true)}>
+            <ProfileInput
+              label="Year of manufacture"
+              value={manufacture}
+              onChangeText={setManufacture}
+              error={errors?.manufacture}
+              noMargin
+              isMandatory
+              endIcon="calendar-month"
+              editable={false}
+              onPressEndIcon={() => setShowManufacture(true)}
+            />
+          </Pressable>
+          <Pressable onPress={() => setShowCalendar(true)}>
+            <ProfileInput
+              label="Registration date"
+              value={registration.toString()}
+              error={errors?.registration}
+              noMargin
+              isMandatory
+              endIcon="calendar-month"
+              editable={false}
+              onPressEndIcon={() => setShowCalendar(true)}
+            />
+          </Pressable>
           <Box style={styles.checkbox}>
             <CustomText
               fontSize={14}
@@ -465,14 +510,19 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
               })}
             </Box>
           </Box>
-          <ProfileInput
-            label="Color"
-            value={color}
-            onChangeText={setColor}
-            error={errors?.color}
-            noMargin
-            isMandatory
-          />
+          <Box>
+            <CustomDropdown
+              values={ColorList}
+              onValueChange={onColorChange}
+              selectedValue={color}
+              title="Color"
+              error={errors?.color}
+            />
+          </Box>
+          {/* {color === 'other' && (
+            <ProfileInput value={color} onChangeText={setColor} />
+          )} */}
+
           <Box style={styles.checkbox}>
             <CustomText
               fontSize={14}
@@ -544,6 +594,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
           </Box>
         </Box>
       </ScrollView>
+
       <Modal
         isOpen={showModal}
         onClosed={onCloseMakeModal}
@@ -558,6 +609,37 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
           query={searchQuery}
           onChangeText={onChangeQuery}
           onPressDone={onPressDone}
+        />
+      </Modal>
+      <Modal
+        isOpen={showCalendar}
+        onClosed={onCloseCalendar}
+        backButtonClose={true}
+        backdrop={true}
+        style={styles.monthModal}>
+        <MonthYearPicker
+          months={Months}
+          years={Years}
+          onMonthChange={onMonthChange}
+          onYearChange={onYearChange}
+          selectedMonth={month}
+          selectedYear={year}
+          onSubmitMonthYear={onSubmitMonthYear}
+        />
+      </Modal>
+      <Modal
+        isOpen={showManufacture}
+        onClosed={onManufactureCalendar}
+        backButtonClose={true}
+        backdrop={true}
+        style={styles.monthModal}>
+        <MonthYearPicker
+          months={Months}
+          years={Years}
+          onYearChange={onYearChange}
+          selectedYear={year}
+          onSubmitMonthYear={onSubmitYear}
+          showYear={true}
         />
       </Modal>
     </Box>
@@ -609,5 +691,22 @@ const styles = EStyleSheet.create({
     paddingHorizontal: 0.3,
     borderRadius: '0.3rem',
     zIndex: 10,
+  },
+  monthModal: {
+    height: 'auto',
+    width: width / 1.25,
+    borderRadius: '1rem',
+  },
+  picker: {
+    borderWidth: 1,
+    borderColor: '#79747E',
+    borderRadius: '0.5rem',
+    height: 50,
+  },
+  pickerItemStyle: {
+    fontSize: '1.6rem',
+    padding: 0,
+    fontFamily: 'Roboto-Medium',
+    color: '#1C1B1F',
   },
 });

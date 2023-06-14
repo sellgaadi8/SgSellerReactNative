@@ -12,7 +12,7 @@ type DisplayErrors = {
   make?: string;
   model?: string;
   varaint?: string;
-  year?: string;
+  manufacture?: string;
   registration?: string;
   transmission?: string;
   color?: string;

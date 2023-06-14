@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Pressable, Text} from 'react-native';
+import {Image, Pressable, Text} from 'react-native';
 import React from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import colors from '../utils/colors';
@@ -7,12 +7,16 @@ import CustomText from './CustomText';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {RadioProps} from '../types/propsTypes';
 import Box from './Box';
+import {contentCenter} from '../utils/styles';
 
 export default function Radio({
   title,
   handleOptionSelect,
   selectedOption,
   isMandatory,
+  selectPhoto,
+  onPressCamera,
+  isImage = false,
 }: RadioProps) {
   const renderRadioButton = (option: string) => (
     <Pressable
@@ -40,6 +44,34 @@ export default function Radio({
       <Box flexDirection="row">
         {renderRadioButton('Yes')}
         {renderRadioButton('No')}
+        {isImage && selectedOption === 'Yes' && (
+          <Pressable style={[styles.upload]} onPress={onPressCamera}>
+            {selectPhoto && selectPhoto.length !== 0 ? (
+              <Image
+                source={{uri: selectPhoto}}
+                style={{height: 50, width: 105, borderRadius: 8}}
+                resizeMode="cover"
+              />
+            ) : (
+              <>
+                <Box flexDirection="row">
+                  <Icon name="camera" size={20} color="#111111" />
+                  {isMandatory && (
+                    <Text
+                      style={{
+                        color: 'red',
+                        position: 'absolute',
+                        right: -12,
+                        top: -10,
+                      }}>
+                      *
+                    </Text>
+                  )}
+                </Box>
+              </>
+            )}
+          </Pressable>
+        )}
       </Box>
     </Box>
   );
@@ -50,5 +82,13 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: '2rem',
+  },
+  upload: {
+    borderRadius: 4,
+    top: 2,
+    ...contentCenter,
+    padding: 3,
+    backgroundColor: colors.secondary,
+    marginLeft: 5,
   },
 });

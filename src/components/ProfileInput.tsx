@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import {Text, TextInput, TextInputProps} from 'react-native';
+import {Pressable, Text, TextInput, TextInputProps} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 
 import {
@@ -43,6 +43,7 @@ export default function ProfileInput(
     labelStyle,
     input,
     isMandatory,
+    onPressEndIcon,
   } = props;
 
   const [bottomOffset] = useState(13.5);
@@ -150,9 +151,11 @@ export default function ProfileInput(
       {renderEndIcon && renderEndIcon()}
       {/* Pass the name of the icon */}
       {endIcon !== undefined ? (
-        <Box style={[styles.icon, noMargin && styles.noMarginIcon, propsStyle]}>
+        <Pressable
+          style={[styles.icon, noMargin && styles.noMarginIcon, propsStyle]}
+          onPress={onPressEndIcon}>
           <Icon size={18} color={colors.primary} name={endIcon} />
-        </Box>
+        </Pressable>
       ) : null}
     </Box>
   );

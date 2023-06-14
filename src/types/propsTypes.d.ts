@@ -134,6 +134,7 @@ type ProfileInputProps = {
   labelStyle?: ViewStyle;
   input?: ViewStyle;
   isMandatory?: boolean;
+  onPressEndIcon?: () => void;
 };
 
 type TextButtonProps = {
@@ -276,6 +277,9 @@ type RadioProps = {
   selectedOption: string;
   handleOptionSelect: (option: string) => void;
   isMandatory?: boolean;
+  selectPhoto?: string;
+  onPressCamera?: () => void;
+  isImage?: boolean;
 };
 
 type CarDocsType =
@@ -316,6 +320,9 @@ type RadioButtonsProps = {
   onSelect: (label: string, value: string) => void;
   label: string;
   isMandatory?: boolean;
+  isImage?: boolean;
+  selectPhoto?: string;
+  onPressCamera?: () => boolean;
 };
 
 type EngineProps = {
@@ -336,4 +343,24 @@ type SteeringProps = {
 type VehicleDetailProps = {
   navigation: StackNavigationProp<RootStackParamList, 'VehicleDetail'>;
   route: RouteProp<RootStackParamList, 'VehicleDetail'>;
+};
+
+type MonthYearPickerProps = {
+  onMonthChange?: (value: any, index: number) => void;
+  selectedMonth?: string;
+  months: {label: string; value: string}[];
+  years: string[];
+  selectedYear: string;
+  onYearChange: (value: string) => void;
+  onSubmitMonthYear: () => void;
+  showYear?: boolean;
+};
+
+type CustomDropdownProps = {
+  title?: string;
+  selectedValue: any;
+  onValueChange: (value: any, index: number) => void;
+  values: {label: string; value: any}[];
+  mode?: 'dialog' | 'dropdown';
+  error?: string;
 };

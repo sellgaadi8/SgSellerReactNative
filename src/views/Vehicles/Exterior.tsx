@@ -1,4 +1,4 @@
-import {Image, ScrollView, View} from 'react-native';
+import {ScrollView} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
@@ -23,6 +23,7 @@ import {onGetExteriorData} from '../../redux/ducks/getExterior';
 import {onUpdateExterior} from '../../redux/ducks/updateExterior';
 import Loader from '../../components/Loader';
 import BasePicker from '../../components/BasePicker';
+import {ConsentFile} from '../../types/consent';
 const list = [
   {label: 'Ok', value: 'Ok'},
   {label: 'Scratched', value: 'Scratched'},
@@ -46,18 +47,20 @@ export default function Exterior({navigation, route}: ExteriorProps) {
   ]);
   const [openImagePicker, setOpenImagePicker] = useState(false);
   const [imageType, setImageType] = useState('');
-  const [image1, setImage1] = useState('');
-  const [image2, setImage2] = useState('');
-  const [image3, setImage3] = useState('');
-  const [image4, setImage4] = useState('');
-  const [image5, setImage5] = useState('');
-  const [image6, setImage6] = useState('');
-  const [image7, setImage7] = useState('');
-  const [image8, setImage8] = useState('');
-  const [image9, setImage9] = useState('');
-  const [image10, setImage10] = useState('');
-  const [image11, setImage11] = useState('');
+  const [image1, setImage1] = useState<ConsentFile[]>([]);
+  const [image2, setImage2] = useState<ConsentFile[]>([]);
+  const [image3, setImage3] = useState<ConsentFile[]>([]);
+  const [image4, setImage4] = useState<ConsentFile[]>([]);
+  const [image5, setImage5] = useState<ConsentFile[]>([]);
+  const [image6, setImage6] = useState<ConsentFile[]>([]);
+  const [image7, setImage7] = useState<ConsentFile[]>([]);
+  const [image8, setImage8] = useState<ConsentFile[]>([]);
+  const [image9, setImage9] = useState<ConsentFile[]>([]);
+  const [image10, setImage10] = useState<ConsentFile[]>([]);
+  const [image11, setImage11] = useState<ConsentFile[]>([]);
   const [loading, setLoading] = useState(false);
+  const [uploadType, setUploadType] =
+    useState<ExteriorDocumentType>('left_pillarA');
   const dispatch = useDispatch<any>();
   const selectUploadImage = useAppSelector(state => state.uploadImage);
   const selectUploadExteriorImage = useAppSelector(state => state.addExterior);
@@ -81,7 +84,46 @@ export default function Exterior({navigation, route}: ExteriorProps) {
   }
 
   function onSaveImage(image: any) {
+    saveDocs(uploadType, image);
     dispatch(onUploadImage(image[0], 'exterior-images'));
+  }
+
+  function saveDocs(type: ExteriorDocumentType, files: ConsentFile[]) {
+    switch (type) {
+      case 'left_pillarA':
+        setImage1(files);
+        break;
+      case 'left_pillarB':
+        setImage2(files);
+        break;
+      case 'left_pillarC':
+        setImage3(files);
+        break;
+      case 'right_pillarA':
+        setImage4(files);
+        break;
+      case 'right_pillarB':
+        setImage5(files);
+        break;
+      case 'right_pillarC':
+        setImage6(files);
+        break;
+      case 'left_apron':
+        setImage7(files);
+        break;
+      case 'left_apron_leg':
+        setImage8(files);
+        break;
+      case 'right_apron':
+        setImage9(files);
+        break;
+      case 'right_apron_leg':
+        setImage10(files);
+        break;
+      case 'boot_floor':
+        setImage11(files);
+        break;
+    }
   }
 
   useEffect(() => {
@@ -93,47 +135,47 @@ export default function Exterior({navigation, route}: ExteriorProps) {
       if (!error && image) {
         switch (imageType) {
           case 'left_pillarA':
-            setImage1(image.file);
+            // setImage1(image.file);
             temp[0].url = image.url;
             break;
           case 'left_pillarB':
-            setImage2(image.file);
+            // setImage2(image.file);
             temp[1].url = image.url;
             break;
           case 'left_pillarC':
-            setImage3(image.file);
+            // setImage3(image.file);
             temp[2].url = image.url;
             break;
           case 'right_pillarA':
-            setImage4(image.file);
+            // setImage4(image.file);
             temp[3].url = image.url;
             break;
           case 'right_pillarB':
-            setImage5(image.file);
+            // setImage5(image.file);
             temp[4].url = image.url;
             break;
           case 'right_pillarC':
-            setImage6(image.file);
+            // setImage6(image.file);
             temp[5].url = image.url;
             break;
           case 'left_apron':
-            setImage7(image.file);
+            // setImage7(image.file);
             temp[6].url = image.url;
             break;
           case 'left_apron_leg':
-            setImage8(image.file);
+            // setImage8(image.file);
             temp[7].url = image.url;
             break;
           case 'right_apron_leg':
-            setImage9(image.file);
+            // setImage9(image.file);
             temp[8].url = image.url;
             break;
           case 'right_apron':
-            setImage10(image.file);
+            // setImage10(image.file);
             temp[9].url = image.url;
             break;
           case 'boot_floor':
-            setImage11(image.file);
+            // setImage11(image.file);
             temp[10].url = image.url;
             break;
           default:
@@ -232,6 +274,8 @@ export default function Exterior({navigation, route}: ExteriorProps) {
     }
   }
 
+  console.log('exteriorType[0].url', exteriorType[0].url);
+
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
@@ -296,66 +340,77 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             title="Left Pillar A"
             onValueChange={setImage1}
             selectedValue={image1}
+            onPressCamera={() => setOpenImagePicker(true)}
           />
           <BasePicker
             data={list}
             title="Left Pillar B"
             onValueChange={setImage2}
             selectedValue={image2}
+            onPressCamera={() => setOpenImagePicker(true)}
           />
           <BasePicker
             data={list}
             title="Left Pillar C"
             onValueChange={setImage3}
             selectedValue={image3}
+            onPressCamera={() => setOpenImagePicker(true)}
           />
           <BasePicker
             data={list}
             title="Right Pillar A"
             onValueChange={setImage4}
             selectedValue={image4}
+            onPressCamera={() => setOpenImagePicker(true)}
           />
           <BasePicker
             data={list}
             title="Right Pillar B"
             onValueChange={setImage5}
             selectedValue={image5}
+            onPressCamera={() => setOpenImagePicker(true)}
           />
           <BasePicker
             data={list}
             title="Right Pillar C"
             onValueChange={setImage6}
             selectedValue={image6}
+            onPressCamera={() => setOpenImagePicker(true)}
           />
           <BasePicker
             data={list}
             title="Left Apron"
             onValueChange={setImage7}
             selectedValue={image7}
+            onPressCamera={() => setOpenImagePicker(true)}
           />
           <BasePicker
             data={list}
             title="Left Apron Leg"
             onValueChange={setImage8}
             selectedValue={image8}
+            onPressCamera={() => setOpenImagePicker(true)}
           />
           <BasePicker
             data={list}
             title="Right Apron Leg"
             onValueChange={setImage9}
             selectedValue={image9}
+            onPressCamera={() => setOpenImagePicker(true)}
           />
           <BasePicker
             data={list}
             title="Right Apron Leg"
             onValueChange={setImage10}
             selectedValue={image10}
+            onPressCamera={() => setOpenImagePicker(true)}
           />
           <BasePicker
             data={list}
             title="Boot Floor"
             onValueChange={setImage11}
             selectedValue={image11}
+            onPressCamera={() => setOpenImagePicker(true)}
           />
         </Box>
         <Box style={styles.buttonContainer}>

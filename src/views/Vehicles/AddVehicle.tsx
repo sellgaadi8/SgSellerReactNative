@@ -17,7 +17,6 @@ import {getVehicleForm} from '../../redux/ducks/addVehicleForm';
 import {useAppSelector} from '../../utils/hooks';
 import Loader from '../../components/Loader';
 import GlobalContext from '../../contexts/GlobalContext';
-import {onUpdateVehicleForm} from '../../redux/ducks/updateVehicleForm';
 
 export default function AddVehicle({navigation}: AddVehicleProps) {
   const dispatch = useDispatch<any>();
@@ -31,19 +30,12 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
   );
 
   useEffect(() => {
-    navigation.addListener('focus', onFocus);
+    setLoading(true);
+    dispatch(getVehicleForm(vehicleId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   console.log('vehicleId', vehicleId);
-
-  function onFocus() {
-    setLoading(true);
-    // if (vehicleId) {
-    //   dispatch(onUpdateVehicleForm(vehicleId));
-    // } else {
-    dispatch(getVehicleForm(vehicleId));
-    // }
-  }
 
   useEffect(() => {
     if (selectVehicleForm.called) {

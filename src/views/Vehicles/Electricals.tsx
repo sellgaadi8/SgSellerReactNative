@@ -18,6 +18,9 @@ import {useAppSelector} from '../../utils/hooks';
 import Snackbar from 'react-native-snackbar';
 import {onUpdateElectrical} from '../../redux/ducks/updateElectrical';
 import {onGetElectricalDetails} from '../../redux/ducks/getElectrical';
+import ImagePicker from '../../components/ImagePicker';
+import DocumentPicker from 'react-native-document-picker';
+import {onUploadImage} from '../../redux/ducks/uploadImage';
 
 export default function Electricals({navigation, route}: ElectricalsProps) {
   const [powerWindows, setPowerWindows] = useState('');
@@ -27,6 +30,8 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
   const [overall, setOverall] = useState('');
   const [jackTool, setJackTool] = useState('');
   const [lightsCrack, setLightsCrack] = useState('');
+  const [lightsCrackImage, setLightsCrackImage] = useState('');
+  const [openImagePicker, setOpenImagePicker] = useState(false);
   const dispatch = useDispatch<any>();
   const {vehicleId} = useContext(GlobalContext);
   const selectAddElectrical = useAppSelector(state => state.addElectrical);
@@ -41,6 +46,11 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function onSaveImage(image: any) {
+    setLightsCrackImage(image[0].uri);
+    dispatch(onUploadImage(image[0], 'electricals-images'));
+  }
 
   function submit() {
     if (route.params.from === 'add') {
@@ -176,6 +186,9 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
               {label: 'NO', value: 'no'},
             ]}
             onSelect={(label, value) => setLightsCrack(value)}
+            isImage
+            onPressCamera={() => setOpenImagePicker(true)}
+            selectPhoto={lightsCrackImage}
           />
         </Box>
         <Box style={styles.buttonContainer}>
@@ -194,6 +207,17 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
           </Box>
         </Box>
       </ScrollView>
+      <ImagePicker
+        isOpen={openImagePicker}
+        onClose={() => setOpenImagePicker(false)}
+        multiple={false}
+        onSaveImage={onSaveImage}
+        title="Select Image"
+        fileTypes={{
+          allowMultiSelection: false,
+          type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
+        }}
+      />
     </Box>
   );
 }

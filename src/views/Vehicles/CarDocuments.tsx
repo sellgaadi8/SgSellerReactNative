@@ -23,6 +23,9 @@ import {CarDocumentsProps} from '../../types/propsTypes';
 import {onGetCarDocuments} from '../../redux/ducks/getCarDocuments';
 import {onUpdateCarDocuments} from '../../redux/ducks/updateCarDocument';
 import Loader from '../../components/Loader';
+import ImagePicker from '../../components/ImagePicker';
+import DocumentPicker from 'react-native-document-picker';
+import {onUploadImage} from '../../redux/ducks/uploadImage';
 
 export default function CarDocuments({navigation, route}: CarDocumentsProps) {
   const [insuranceType, setInsuranceType] = useState([
@@ -34,14 +37,25 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
   const [fitness, setFitness] = useState('');
   const [permit, setPermit] = useState('');
   const [rcAvail, setRcAvail] = useState('');
+  const [rcAvailImage, setRcAvailImage] = useState('');
   const [noc, setNoc] = useState('');
   const [mismatch, setMismatch] = useState('');
   const [insurance, setInsurance] = useState('');
   const [hypo, setHypo] = useState('');
   const [roadTax, setRoadTax] = useState('');
+  const [roadTaxImage, setRoadTaxImage] = useState('');
+  const [roadTaxUri, setRoadTaxUri] = useState('');
   const [partipeshi, setPartipeshi] = useState('');
+  const [partipeshiImage, setPartipeshiImage] = useState('');
+  const [partipeshiUri, setPartipeshiUri] = useState('');
+
   const [key, setKey] = useState('');
+  const [keyImage, setKeyImage] = useState('');
+  const [keyUri, setKeyUri] = useState('');
+
   const [chessis, setChessis] = useState('');
+  const [chessisImage, setChessisImage] = useState('');
+  const [chessisUri, setChessisUri] = useState('');
   const [fitment, setFitment] = useState('');
   const [fitmentEndorsed, setFitmentEndorsed] = useState('');
   const dispatch = useDispatch<any>();
@@ -49,7 +63,9 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
   const selectAddCarDocs = useAppSelector(state => state.addCarDocument);
   const selectUpdateCarDocs = useAppSelector(state => state.updateCarDocument);
   const selectGetCarDocs = useAppSelector(state => state.getCarDocuments);
+  const selectUploadImage = useAppSelector(state => state.uploadImage);
   const [loading, setLoading] = useState(false);
+  const [openImagePicker, setOpenImagePicker] = useState(false);
 
   useEffect(() => {
     if (route.params.from === 'edit') {
@@ -211,8 +227,33 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
         // setPermit(data.oer)
       }
     }
+    if (selectUploadImage.called) {
+      setLoading(false);
+      const {error, image} = selectUploadImage;
+      console.log('error', error);
+
+      if (!error && image) {
+      } else if (error) {
+        console.log('calleddd');
+        Snackbar.show({
+          text: 'Something went wrong please try again',
+          backgroundColor: 'green',
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectAddCarDocs, selectUpdateCarDocs, selectGetCarDocs]);
+
+  function onSaveImage(image: any) {
+    // dispatch(onUploadImage(image[0], 'car-documents'));
+    if (rcAvail === 'Yes') {
+      setRcAvailImage(image[0].uri);
+    }
+    if (roadTax === 'Yes') {
+      setRoadTaxImage(image[0].uri);
+    }
+  }
 
   return (
     <Box style={styles.container}>
@@ -250,6 +291,9 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
               selectedOption={rcAvail}
               handleOptionSelect={handleRc}
               isMandatory
+              isImage
+              onPressCamera={() => setOpenImagePicker(true)}
+              selectPhoto={rcAvailImage}
             />
             <Radio
               title="RTO noc issued"
@@ -305,21 +349,30 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
             title="Road tax paid"
             handleOptionSelect={handleRoadTax}
             selectedOption={roadTax}
+            isImage
+            selectPhoto={roadTaxImage}
+            onPressCamera={() => setOpenImagePicker(true)}
           />
           <Radio
             title="Partipeshi Request"
             handleOptionSelect={handlePartiPeshi}
             selectedOption={partipeshi}
+            isImage
+            selectPhoto={partipeshiImage}
           />
           <Radio
             title="Duplicate Key"
             handleOptionSelect={handleKey}
             selectedOption={key}
+            isImage
+            selectPhoto={keyImage}
           />
           <Radio
             title="Chessis Number embossing ( Tracable/Nor tracable)"
             handleOptionSelect={handleChessis}
             selectedOption={chessis}
+            isImage
+            selectPhoto={chessisImage}
           />
           <Radio
             title="CNG/LPG fitment"
@@ -347,6 +400,17 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
           </Box>
         </Box>
       </ScrollView>
+      <ImagePicker
+        isOpen={openImagePicker}
+        onClose={() => setOpenImagePicker(false)}
+        multiple={false}
+        onSaveImage={onSaveImage}
+        title="Select Image"
+        fileTypes={{
+          allowMultiSelection: false,
+          type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
+        }}
+      />
     </Box>
   );
 }

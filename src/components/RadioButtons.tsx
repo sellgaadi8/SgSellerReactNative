@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {Pressable, Text} from 'react-native';
+import {Image, Pressable, Text} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {RadioButtonsProps} from '../types/propsTypes';
 import Box from './Box';
@@ -14,13 +14,14 @@ export default function RadioButtons({
   onSelect,
   label,
   isMandatory,
+  isImage = false,
+  selectPhoto,
+  onPressCamera,
 }: RadioButtonsProps) {
   const [userOption, setUserOption] = useState('');
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const selectHandler = (label: string, value: string) => {
-    console.log('label', label);
-
     onSelect(label, value);
     setUserOption(value);
   };
@@ -59,6 +60,34 @@ export default function RadioButtons({
             </Pressable>
           );
         })}
+        {isImage && userOption === 'yes' && (
+          <Pressable style={[styles.upload]} onPress={onPressCamera}>
+            {selectPhoto && selectPhoto.length !== 0 ? (
+              <Image
+                source={{uri: selectPhoto}}
+                style={{height: 50, width: 105, borderRadius: 8}}
+                resizeMode="cover"
+              />
+            ) : (
+              <>
+                <Box flexDirection="row">
+                  <Icon name="camera" size={20} color="#111111" />
+                  {isMandatory && (
+                    <Text
+                      style={{
+                        color: 'red',
+                        position: 'absolute',
+                        right: -12,
+                        top: -10,
+                      }}>
+                      *
+                    </Text>
+                  )}
+                </Box>
+              </>
+            )}
+          </Pressable>
+        )}
       </Box>
     </Box>
   );
@@ -71,6 +100,12 @@ const styles = EStyleSheet.create({
     marginRight: 10,
     ...contentCenter,
   },
-  selected: {},
-  unselected: {},
+  upload: {
+    borderRadius: 4,
+    top: 5,
+    ...contentCenter,
+    padding: 3,
+    backgroundColor: colors.secondary,
+    marginLeft: 10,
+  },
 });
