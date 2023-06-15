@@ -56,6 +56,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
   const [image7, setImage7] = useState('');
   const [video, setVideo] = useState('');
   const [loading, setLoading] = useState(false);
+  const [mediaType, setMediaType] = useState<'photo' | 'video'>('photo');
 
   const {vehicleId, setVehicleId} = useContext(GlobalContext);
 
@@ -69,9 +70,16 @@ export default function CarImages({route, navigation}: CarImagesProps) {
   function onPressPicker(id: string) {
     setImageType(id);
     setOpenImagePicker(true);
+    if (id === 'video') {
+      setMediaType('video');
+    } else {
+      setMediaType('photo');
+    }
   }
 
   function onSaveImage(image: ImageType[]) {
+    console.log(image[0]);
+
     dispatch(onUploadImage(image[0], 'car-images'));
   }
 
@@ -136,7 +144,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
       setLoading(false);
       const {error, success, message, uuid} = selectUploadCarImage;
       if (!error && success) {
-        navigation.navigate('AddVehicle', {from: 'edit'});
+        navigation.navigate('AddVehicle', {from: 'add'});
         setVehicleId(uuid);
         Snackbar.show({
           text: message,
@@ -306,6 +314,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
           allowMultiSelection: false,
           type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
         }}
+        type={mediaType === 'photo' ? 'photo' : 'video'}
       />
     </Box>
   );

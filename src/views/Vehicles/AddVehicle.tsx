@@ -30,12 +30,9 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
   );
 
   useEffect(() => {
-    // setLoading(true);
-    if (route.params.from === 'edit') {
-      navigation.addListener('focus', onFocus);
-    } else {
-      onFocus();
-    }
+    setLoading(true);
+    navigation.addListener('focus', onFocus);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vehicleId, navigation]);
 

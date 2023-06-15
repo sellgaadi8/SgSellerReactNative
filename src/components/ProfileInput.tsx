@@ -44,6 +44,7 @@ export default function ProfileInput(
     input,
     isMandatory,
     onPressEndIcon,
+    isPlaceholder,
   } = props;
 
   const [bottomOffset] = useState(13.5);
@@ -56,6 +57,9 @@ export default function ProfileInput(
   const [selection, setSelection] = useState({start: 0, end: 0});
 
   useEffect(() => {
+    if (isPlaceholder) {
+      onFocus();
+    }
     if (value && value?.length !== 0) {
       onFocus();
     }

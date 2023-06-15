@@ -135,6 +135,7 @@ type ProfileInputProps = {
   input?: ViewStyle;
   isMandatory?: boolean;
   onPressEndIcon?: () => void;
+  isPlaceholder?: boolean;
 };
 
 type TextButtonProps = {
@@ -246,6 +247,7 @@ type ImagePickerProps = {
   onClose: () => void;
   size?: number;
   position?: string;
+  type?: string;
 };
 
 type ImageType = {
@@ -385,3 +387,12 @@ type TyresType =
   | 'lhs_back_type'
   | 'rhs_back_type'
   | 'spare_type';
+
+type CalenderProps = {
+  isOpen: boolean;
+  onClosed: () => void;
+  onChange: (event: Event | DateTimePickerEvent, date?: Date) => void;
+  value: Date;
+  maximumDate?: Date;
+  minimumDate?: Date;
+};

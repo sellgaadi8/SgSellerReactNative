@@ -15,6 +15,7 @@ export const openPicker = async (
   includeBase64 = true,
   multiple = false,
   cropping = true,
+  type = 'photo',
 ) => {
   await askMultipleAndroidPermissions([
     PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
@@ -26,7 +27,7 @@ export const openPicker = async (
     height: 400,
     cropping,
     includeBase64,
-    mediaType: 'photo',
+    mediaType: type === 'video' ? 'video' : 'photo',
     freeStyleCropEnabled: true,
     compressImageMaxHeight: 400,
     compressImageMaxWidth: 400,

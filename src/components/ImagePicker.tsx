@@ -31,6 +31,7 @@ export default function ImagePicker(props: ImagePickerProps) {
     },
     size = 10000000,
     position = 'bottom',
+    type,
   } = props;
 
   const options = [
@@ -69,7 +70,7 @@ export default function ImagePicker(props: ImagePickerProps) {
       let res: any = null;
       let fileError: string | undefined;
       if (camera) {
-        res = await openPicker(camera, false, multiple, false);
+        res = await openPicker(camera, false, multiple, false, type);
 
         if (res) {
           if (

@@ -300,7 +300,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
     }
   }
 
-  function onPressLeftPillarA(type: ExteriorDocumentType) {
+  function onOpenPicker(type: ExteriorDocumentType) {
     setOpenImagePicker(true);
     switch (type) {
       case 'left_pillarA':
@@ -403,7 +403,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             title="Left Pillar A"
             onValueChange={setLeftPA}
             selectedValue={leftPA}
-            onPressCamera={() => onPressLeftPillarA('left_pillarA')}
+            onPressCamera={() => onOpenPicker('left_pillarA')}
             selectPhoto={exteriorType[0].url}
           />
           <BasePicker
@@ -411,7 +411,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             title="Left Pillar B"
             onValueChange={setLeftPB}
             selectedValue={leftPB}
-            onPressCamera={() => onPressLeftPillarA('left_pillarB')}
+            onPressCamera={() => onOpenPicker('left_pillarB')}
             selectPhoto={exteriorType[1].url}
           />
           <BasePicker
@@ -419,7 +419,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             title="Left Pillar C"
             onValueChange={setLeftPC}
             selectedValue={leftPC}
-            onPressCamera={() => onPressLeftPillarA('left_pillarC')}
+            onPressCamera={() => onOpenPicker('left_pillarC')}
             selectPhoto={exteriorType[2].url}
           />
           <BasePicker
@@ -427,7 +427,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             title="Right Pillar A"
             onValueChange={setRightPA}
             selectedValue={rightPA}
-            onPressCamera={() => onPressLeftPillarA('right_pillarA')}
+            onPressCamera={() => onOpenPicker('right_pillarA')}
             selectPhoto={exteriorType[3].url}
           />
           <BasePicker
@@ -435,7 +435,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             title="Right Pillar B"
             onValueChange={setRightPB}
             selectedValue={rightPB}
-            onPressCamera={() => onPressLeftPillarA('right_pillarB')}
+            onPressCamera={() => onOpenPicker('right_pillarB')}
             selectPhoto={exteriorType[4].url}
           />
           <BasePicker
@@ -443,7 +443,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             title="Right Pillar C"
             onValueChange={setRightPC}
             selectedValue={rightPC}
-            onPressCamera={() => onPressLeftPillarA('right_pillarC')}
+            onPressCamera={() => onOpenPicker('right_pillarC')}
             selectPhoto={exteriorType[5].url}
           />
           <BasePicker
@@ -451,7 +451,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             title="Left Apron"
             onValueChange={setLeftApron}
             selectedValue={leftApron}
-            onPressCamera={() => onPressLeftPillarA('left_apron')}
+            onPressCamera={() => onOpenPicker('left_apron')}
             selectPhoto={exteriorType[6].url}
           />
           <BasePicker
@@ -459,7 +459,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             title="Left Apron Leg"
             onValueChange={setLeftApronLeg}
             selectedValue={leftApronLeg}
-            onPressCamera={() => onPressLeftPillarA('left_apron_leg')}
+            onPressCamera={() => onOpenPicker('left_apron_leg')}
             selectPhoto={exteriorType[7].url}
           />
           <BasePicker
@@ -467,7 +467,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             title="Right Apron Leg"
             onValueChange={setRightApronLeg}
             selectedValue={rightApronLeg}
-            onPressCamera={() => onPressLeftPillarA('right_apron_leg')}
+            onPressCamera={() => onOpenPicker('right_apron_leg')}
             selectPhoto={exteriorType[8].url}
           />
           <BasePicker
@@ -475,7 +475,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             title="Right Apron Leg"
             onValueChange={setRightApron}
             selectedValue={rightApron}
-            onPressCamera={() => onPressLeftPillarA('right_apron')}
+            onPressCamera={() => onOpenPicker('right_apron')}
             selectPhoto={exteriorType[9].url}
           />
           <BasePicker
@@ -483,7 +483,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             title="Boot Floor"
             onValueChange={setBoot}
             selectedValue={boot}
-            onPressCamera={() => onPressLeftPillarA('boot_floor')}
+            onPressCamera={() => onOpenPicker('boot_floor')}
             selectPhoto={exteriorType[10].url}
           />
         </Box>

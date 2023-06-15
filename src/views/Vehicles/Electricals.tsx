@@ -134,8 +134,8 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
           <RadioButtons
             label="4 power windows"
             data={[
-              {label: 'WORKING', value: 'working'},
-              {label: 'REMARKS', value: 'remarks'},
+              {label: 'OK', value: 'ok'},
+              {label: 'NOT OK', value: 'not_ok'},
             ]}
             onSelect={(label, value) => setPowerWindows(value)}
           />
