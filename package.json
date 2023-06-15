@@ -10,12 +10,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@react-native-community/datetimepicker": "^7.1.0",
     "@react-native-picker/picker": "^2.4.10",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/material-top-tabs": "^6.6.2",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
+    "@types/react-native-snap-carousel": "^3.8.5",
     "axios": "^1.4.0",
     "lottie-ios": "^3.4.0",
     "lottie-react-native": "^5.1.5",
@@ -37,6 +39,7 @@
     "react-native-sensitive-info": "^6.0.0-alpha.9",
     "react-native-size-matters": "^0.4.0",
     "react-native-snackbar": "^2.4.0",
+    "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "^13.9.0",
     "react-native-tab-view": "^3.5.1",
     "react-native-vector-icons": "^9.2.0",

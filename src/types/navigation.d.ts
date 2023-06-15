@@ -23,6 +23,12 @@ type RootStackParamList = {
   Ac: undefined;
   VehicleDetail: {title: string; vehicleId: string};
   DetailsViewPage: undefined;
+  ImageViewerCarousel: {
+    onRemoveImage?: (index: number) => void;
+    updateImages?: (data: FundraiserMedia[]) => void;
+    data: FundraiserMedia[];
+    index: number;
+  };
 };
 
 type BottomStackParamList = {

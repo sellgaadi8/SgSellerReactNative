@@ -134,18 +134,17 @@ export default function Engine({navigation, route}: EngineProps) {
             label="Gear Oil leakage"
             data={[
               {label: 'OK', value: 'ok'},
-              {label: 'Leakage', value: 'leakage'},
-              {label: 'Image', value: 'image'},
+              {label: 'Leakage', value: 'leakage'}, ///image
             ]}
             onSelect={(label, value) => setOilLeak(value)}
+            isImage
           />
           <RadioButtons
             label="Exhaust smoke"
             data={[
               {label: 'OK', value: 'ok'},
               {label: 'BLACK SMOKE', value: 'black_smoke'},
-              {label: 'WHITE SMOKE', value: 'white_smoke'},
-              {label: 'IMAGE', value: 'image'},
+              {label: 'WHITE SMOKE', value: 'white_smoke'}, ///image
             ]}
             onSelect={(label, value) => setSmoke(value)}
           />
@@ -169,8 +168,7 @@ export default function Engine({navigation, route}: EngineProps) {
             label="Engine sound"
             data={[
               {label: 'MAJOR SOUND', value: 'major_sound'},
-              {label: 'NO BLOW BY', value: 'no_blow_by'},
-              {label: 'VIDEO', value: 'video'},
+              {label: 'NO BLOW BY', value: 'no_blow_by'}, //video
             ]}
             onSelect={(label, value) => setSound(value)}
           />
@@ -186,8 +184,7 @@ export default function Engine({navigation, route}: EngineProps) {
             label="AC"
             data={[
               {label: 'OK', value: 'ok'},
-              {label: 'Leakage', value: 'leakage'},
-              {label: 'Image', value: 'image'},
+              {label: 'Leakage', value: 'leakage'}, //image
             ]}
             onSelect={(label, value) => setAc(value)}
           />

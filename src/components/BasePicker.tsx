@@ -106,11 +106,13 @@ export default function BasePicker({
             </Picker>
           )}
         </Box>
-        {selectedValue !== 'Ok' && (
+        {selectedValue !== 'Ok' && selectedValue !== '' && (
           <Pressable
             style={[
               styles.upload,
-              {borderWidth: selectPhoto && selectPhoto.length !== 0 ? 0 : 0.5},
+              {
+                borderWidth: selectPhoto && selectPhoto.length !== 0 ? 0 : 0.5,
+              },
             ]}
             onPress={onPressCamera}>
             {selectPhoto && selectPhoto.length !== 0 ? (
@@ -127,7 +129,7 @@ export default function BasePicker({
                   fontFamily="Roboto-Regular"
                   color="#111111"
                   style={{textAlign: 'center'}}>
-                  Upload {selectedValue} Image
+                  Upload {selectedValue} {'\n'} Image
                 </CustomText>
               </>
             )}

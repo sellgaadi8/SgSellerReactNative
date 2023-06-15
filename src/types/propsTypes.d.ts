@@ -364,3 +364,24 @@ type CustomDropdownProps = {
   mode?: 'dialog' | 'dropdown';
   error?: string;
 };
+
+type ImageViewerCarouselProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'ImageViewerCarousel'>;
+  route: RouteProp<RootStackParamList, 'ImageViewerCarousel'>;
+};
+
+type IconButtonProps = {
+  onPress?: (() => void) | ((value: any) => void);
+  icon: IconDefinition;
+  size: number;
+  color?: string;
+  style?: ViewStyle;
+  count?: boolean;
+};
+
+type TyresType =
+  | 'lhs_front_type'
+  | 'rhs_front_type'
+  | 'lhs_back_type'
+  | 'rhs_back_type'
+  | 'spare_type';

@@ -6,6 +6,11 @@ type Tyres = {
   lhs_back_type: string;
   rhs_back_type: string;
   spare_type: string;
+  lhs_front_image: string;
+  rhs_front_image: string;
+  lhs_back_image: string;
+  rhs_back_image: string;
+  spare_image: string;
 };
 
 type GetTyresState = {

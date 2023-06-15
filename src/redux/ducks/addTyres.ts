@@ -36,6 +36,11 @@ export const onAddTyres =
     lhs_back_type: string,
     rhs_back_type: string,
     spare_type: string,
+    lhs_front_image: string,
+    rhs_front_image: string,
+    lhs_back_image: string,
+    rhs_back_image: string,
+    spare_image: string,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = addTyresUrl(id);
@@ -56,6 +61,11 @@ export const onAddTyres =
     body.append('lhs_back_type', lhs_back_type);
     body.append('rhs_back_type', rhs_back_type);
     body.append('spare_type', spare_type);
+    body.append('lhs_front_image', lhs_front_image);
+    body.append('rhs_front_image', rhs_front_image);
+    body.append('lhs_back_image', lhs_back_image);
+    body.append('rhs_back_image', rhs_back_image);
+    body.append('spare_image', spare_image);
 
     axiosInstance
       .post(url, body, config)

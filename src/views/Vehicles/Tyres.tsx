@@ -8,9 +8,8 @@ import {
 } from 'react-native-responsive-screen';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {container} from '../../utils/styles';
-import ProfileInput from '../../components/ProfileInput';
 import PrimaryButton from '../../components/PrimaryButton';
-import {TyresProps} from '../../types/propsTypes';
+import {TyresProps, TyresType} from '../../types/propsTypes';
 import {useDispatch} from 'react-redux';
 import {onAddTyres} from '../../redux/ducks/addTyres';
 import GlobalContext from '../../contexts/GlobalContext';
@@ -19,19 +18,47 @@ import Snackbar from 'react-native-snackbar';
 import {onUpdateTyres} from '../../redux/ducks/updateTyres';
 import {onGetTyresDetails} from '../../redux/ducks/getTyres';
 import Loader from '../../components/Loader';
+import BasePicker from '../../components/BasePicker';
+import ImagePicker from '../../components/ImagePicker';
+import DocumentPicker from 'react-native-document-picker';
+import {onUploadImage} from '../../redux/ducks/uploadImage';
+
+const list = [
+  {label: 'Select', value: ''},
+  {label: '0-20%', value: '0-20'},
+  {label: '21-40%', value: '21-40'},
+  {label: '41-60%', value: '41-60'},
+  {label: '61-80%', value: '61-80'},
+  {label: '81-100%', value: '81-100'},
+];
 
 export default function Tyres({navigation, route}: TyresProps) {
+  const [tyresImage, setTyresImage] = useState([
+    {id: 'lhs_front_type', url: ''},
+    {id: 'rhs_front_type', url: ''},
+    {id: 'lhs_back_type', url: ''},
+    {id: 'rhs_back_type', url: ''},
+    {id: 'spare_type', url: ''},
+  ]);
   const [lhsfront, setLhsFront] = useState('');
   const [rhsfront, setRhsFront] = useState('');
   const [lhsback, setLhsBack] = useState('');
   const [rhsback, setRhsBack] = useState('');
   const [spare, setSpare] = useState('');
+  const [lhsfrontImage, setLhsFrontImage] = useState('');
+  const [rhsfrontImage, setRhsFrontImage] = useState('');
+  const [lhsbackImage, setLhsBackImage] = useState('');
+  const [rhsbackImage, setRhsBackImage] = useState('');
+  const [spareImage, setSpareImage] = useState('');
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<any>();
   const {vehicleId} = useContext(GlobalContext);
   const selectAddTyres = useAppSelector(state => state.addTyres);
   const selectUpdateTyres = useAppSelector(state => state.updateTyres);
   const selectGetTyres = useAppSelector(state => state.getTyres);
+  const [tyreType, setTyreType] = useState<TyresType>('lhs_front_type');
+  const [openImagePicker, setOpenImagePicker] = useState(false);
+  const selectUploadImage = useAppSelector(state => state.uploadImage);
 
   useEffect(() => {
     if (route.params.from === 'edit') {
@@ -41,20 +68,83 @@ export default function Tyres({navigation, route}: TyresProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function onSaveImage(image: any) {
+    // saveDocs(uploadType, image);
+    dispatch(onUploadImage(image[0], 'exterior-images'));
+  }
+
   function submit() {
     setLoading(true);
     if (route.params.from === 'add') {
       dispatch(
-        onAddTyres(vehicleId, lhsfront, rhsfront, lhsback, rhsback, spare),
+        onAddTyres(
+          vehicleId,
+          lhsfront,
+          rhsfront,
+          lhsback,
+          rhsback,
+          spare,
+          lhsfrontImage,
+          rhsfrontImage,
+          lhsbackImage,
+          rhsbackImage,
+          spareImage,
+        ),
       );
     } else {
       dispatch(
-        onUpdateTyres(vehicleId, lhsfront, rhsfront, lhsback, rhsback, spare),
+        onUpdateTyres(
+          vehicleId,
+          lhsfront,
+          rhsfront,
+          lhsback,
+          rhsback,
+          spare,
+          lhsfrontImage,
+          rhsfrontImage,
+          lhsbackImage,
+          rhsbackImage,
+          spareImage,
+        ),
       );
     }
   }
 
   useEffect(() => {
+    if (selectUploadImage.called) {
+      setLoading(false);
+      const {error, image} = selectUploadImage;
+      let temp = [...tyresImage];
+
+      if (!error && image) {
+        switch (tyreType) {
+          case 'lhs_front_type':
+            setLhsFrontImage(image.file);
+            temp[0].url = image.url;
+            break;
+          case 'rhs_front_type':
+            setRhsFrontImage(image.file);
+            temp[1].url = image.url;
+            break;
+          case 'lhs_back_type':
+            setLhsBackImage(image.file);
+            temp[2].url = image.url;
+            break;
+          case 'rhs_back_type':
+            setRhsBackImage(image.file);
+            temp[3].url = image.url;
+            break;
+          case 'spare_type':
+            setSpareImage(image.file);
+            temp[4].url = image.url;
+            break;
+          default:
+            break;
+        }
+      }
+
+      setTyresImage([...temp]);
+    }
     if (selectAddTyres.called) {
       setLoading(false);
       const {error, message, success} = selectAddTyres;
@@ -93,6 +183,27 @@ export default function Tyres({navigation, route}: TyresProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectAddTyres, selectUpdateTyres, selectGetTyres]);
 
+  function onCameraAction(type: TyresType) {
+    setOpenImagePicker(true);
+    switch (type) {
+      case 'lhs_front_type':
+        setTyreType('lhs_front_type');
+        break;
+      case 'rhs_back_type':
+        setTyreType('rhs_back_type');
+        break;
+      case 'lhs_back_type':
+        setTyreType('lhs_back_type');
+        break;
+      case 'rhs_front_type':
+        setTyreType('rhs_front_type');
+        break;
+      case 'spare_type':
+        setTyreType('spare_type');
+        break;
+    }
+  }
+
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
@@ -105,35 +216,45 @@ export default function Tyres({navigation, route}: TyresProps) {
           Step 6: Tyres
         </CustomText>
         <Box pv={'5%'}>
-          <ProfileInput
-            label="LHS front tyre ( % / damaged )"
-            value={lhsfront}
-            onChangeText={setLhsFront}
-            isMandatory
+          <BasePicker
+            data={list}
+            title="LHS front tyre ( % / damaged )"
+            onValueChange={setLhsFront}
+            selectedValue={lhsfront}
+            onPressCamera={() => onCameraAction('lhs_front_type')}
+            selectPhoto={tyresImage[0].url}
           />
-          <ProfileInput
-            label="RHS front tyre ( % / damaged )"
-            value={rhsfront}
-            onChangeText={setRhsFront}
-            isMandatory
+          <BasePicker
+            data={list}
+            title="RHS front tyre ( % / damaged )"
+            onValueChange={setRhsFront}
+            selectedValue={rhsfront}
+            onPressCamera={() => onCameraAction('rhs_front_type')}
+            selectPhoto={tyresImage[1].url}
           />
-          <ProfileInput
-            label="LHS Back tyre ( % / damaged )"
-            value={lhsback}
-            onChangeText={setLhsBack}
-            isMandatory
+          <BasePicker
+            data={list}
+            title="LHS Back tyre ( % / damaged )"
+            onValueChange={setLhsBack}
+            selectedValue={lhsback}
+            onPressCamera={() => onCameraAction('lhs_back_type')}
+            selectPhoto={tyresImage[2].url}
           />
-          <ProfileInput
-            label="RHS Back tyre ( % / damaged )"
-            value={rhsback}
-            onChangeText={setRhsBack}
-            isMandatory
+          <BasePicker
+            data={list}
+            title="RHS Back tyre ( % / damaged )"
+            onValueChange={setRhsBack}
+            selectedValue={rhsback}
+            onPressCamera={() => onCameraAction('rhs_back_type')}
+            selectPhoto={tyresImage[3].url}
           />
-          <ProfileInput
-            label="Spare tyre (%, damaged )"
-            value={spare}
-            onChangeText={setSpare}
-            isMandatory
+          <BasePicker
+            data={list}
+            title="Spare tyre (%, damaged )"
+            onValueChange={setSpare}
+            selectedValue={spare}
+            onPressCamera={() => onCameraAction('spare_type')}
+            selectPhoto={tyresImage[4].url}
           />
         </Box>
         <Box style={styles.buttonContainer}>
@@ -152,6 +273,17 @@ export default function Tyres({navigation, route}: TyresProps) {
           </Box>
         </Box>
       </ScrollView>
+      <ImagePicker
+        isOpen={openImagePicker}
+        onClose={() => setOpenImagePicker(false)}
+        multiple={false}
+        onSaveImage={onSaveImage}
+        title="Select Image"
+        fileTypes={{
+          allowMultiSelection: false,
+          type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
+        }}
+      />
     </Box>
   );
 }

@@ -18,7 +18,7 @@ import {useAppSelector} from '../../utils/hooks';
 import Loader from '../../components/Loader';
 import GlobalContext from '../../contexts/GlobalContext';
 
-export default function AddVehicle({navigation}: AddVehicleProps) {
+export default function AddVehicle({navigation, route}: AddVehicleProps) {
   const dispatch = useDispatch<any>();
   const [form, setForm] = useState<VehicleForm>();
   const [loading, setLoading] = useState(false);
@@ -30,12 +30,22 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
   );
 
   useEffect(() => {
-    setLoading(true);
-    dispatch(getVehicleForm(vehicleId));
+    // setLoading(true);
+    if (route.params.from === 'edit') {
+      navigation.addListener('focus', onFocus);
+    } else {
+      onFocus();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [vehicleId, navigation]);
 
-  console.log('vehicleId', vehicleId);
+  function onFocus() {
+    if (vehicleId) {
+      dispatch(getVehicleForm(vehicleId));
+    } else {
+      dispatch(getVehicleForm(''));
+    }
+  }
 
   useEffect(() => {
     if (selectVehicleForm.called) {
