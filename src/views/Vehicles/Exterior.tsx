@@ -56,17 +56,17 @@ export default function Exterior({navigation, route}: ExteriorProps) {
   const [image9, setImage9] = useState('');
   const [image10, setImage10] = useState('');
   const [image11, setImage11] = useState('');
-  const [leftPA, setLeftPA] = useState('');
-  const [leftPB, setLeftPB] = useState('');
-  const [leftPC, setLeftPC] = useState('');
-  const [rightPA, setRightPA] = useState('');
-  const [rightPB, setRightPB] = useState('');
-  const [rightPC, setRightPC] = useState('');
-  const [leftApron, setLeftApron] = useState('');
-  const [leftApronLeg, setLeftApronLeg] = useState('');
-  const [rightApron, setRightApron] = useState('');
-  const [rightApronLeg, setRightApronLeg] = useState('');
-  const [boot, setBoot] = useState('');
+  const [leftPA, setLeftPA] = useState('Ok');
+  const [leftPB, setLeftPB] = useState('Ok');
+  const [leftPC, setLeftPC] = useState('Ok');
+  const [rightPA, setRightPA] = useState('Ok');
+  const [rightPB, setRightPB] = useState('Ok');
+  const [rightPC, setRightPC] = useState('Ok');
+  const [leftApron, setLeftApron] = useState('Ok');
+  const [leftApronLeg, setLeftApronLeg] = useState('Ok');
+  const [rightApron, setRightApron] = useState('Ok');
+  const [rightApronLeg, setRightApronLeg] = useState('Ok');
+  const [boot, setBoot] = useState('Ok');
   const [loading, setLoading] = useState(false);
   const [uploadType, setUploadType] =
     useState<ExteriorDocumentType>('left_pillarA');
@@ -91,44 +91,6 @@ export default function Exterior({navigation, route}: ExteriorProps) {
     // saveDocs(uploadType, image);
     dispatch(onUploadImage(image[0], 'exterior-images'));
   }
-
-  // function saveDocs(type: ExteriorDocumentType, files: ImageType) {
-  //   switch (type) {
-  //     case 'left_pillarA':
-  //       setImage1(files[0]);
-  //       break;
-  //     case 'left_pillarB':
-  //       setImage2(files);
-  //       break;
-  //     case 'left_pillarC':
-  //       setImage3(files);
-  //       break;
-  //     case 'right_pillarA':
-  //       setImage4(files);
-  //       break;
-  //     case 'right_pillarB':
-  //       setImage5(files);
-  //       break;
-  //     case 'right_pillarC':
-  //       setImage6(files);
-  //       break;
-  //     case 'left_apron':
-  //       setImage7(files);
-  //       break;
-  //     case 'left_apron_leg':
-  //       setImage8(files);
-  //       break;
-  //     case 'right_apron':
-  //       setImage9(files);
-  //       break;
-  //     case 'right_apron_leg':
-  //       setImage10(files);
-  //       break;
-  //     case 'boot_floor':
-  //       setImage11(files);
-  //       break;
-  //   }
-  // }
 
   useEffect(() => {
     if (selectUploadImage.called) {
@@ -217,6 +179,41 @@ export default function Exterior({navigation, route}: ExteriorProps) {
         setRightApronLeg(data.right_apron_leg);
         setRightApron(data.right_apron);
         setBoot(data.boot_floor);
+        let temp = [...exteriorType];
+        if (data.left_pillarA_image) {
+          temp[0].url = data.left_pillarA_image;
+        }
+        if (data.left_pillarB_image) {
+          temp[1].url = data.left_pillarB_image;
+        }
+        if (data.left_pillarC_image) {
+          temp[2].url = data.left_pillarC_image;
+        }
+        if (data.right_pillarA_image) {
+          temp[3].url = data.right_pillarA_image;
+        }
+        if (data.right_pillarB_image) {
+          temp[4].url = data.right_pillarB_image;
+        }
+        if (data.right_pillarC_image) {
+          temp[5].url = data.right_pillarC_image;
+        }
+        if (data.left_apron_image) {
+          temp[6].url = data.left_apron_image;
+        }
+        if (data.left_apron_leg_image) {
+          temp[7].url = data.left_apron_leg_image;
+        }
+        if (data.right_apron_image) {
+          temp[8].url = data.right_apron_image;
+        }
+        if (data.right_apron_leg_image) {
+          temp[9].url = data.right_apron_leg_image;
+        }
+        if (data.boot_floor_image) {
+          temp[10].url = data.boot_floor_image;
+        }
+        setExteriorType([...temp]);
       }
     }
     if (selectUpdateExteriorData.called) {
@@ -245,17 +242,6 @@ export default function Exterior({navigation, route}: ExteriorProps) {
       dispatch(
         onAddExterior(
           vehicleId,
-          image1,
-          image2,
-          image3,
-          image4,
-          image5,
-          image6,
-          image7,
-          image8,
-          image9,
-          image10,
-          image11,
           leftPA,
           leftPB,
           leftPC,
@@ -267,23 +253,23 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           rightApron,
           rightApronLeg,
           boot,
+          image1,
+          image2,
+          image3,
+          image4,
+          image5,
+          image6,
+          image7,
+          image8,
+          image9,
+          image10,
+          image11,
         ),
       );
     } else {
       dispatch(
         onUpdateExterior(
           vehicleId,
-          image1,
-          image2,
-          image3,
-          image4,
-          image5,
-          image6,
-          image7,
-          image8,
-          image9,
-          image10,
-          image11,
           leftPA,
           leftPB,
           leftPC,
@@ -295,6 +281,17 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           rightApron,
           rightApronLeg,
           boot,
+          image1,
+          image2,
+          image3,
+          image4,
+          image5,
+          image6,
+          image7,
+          image8,
+          image9,
+          image10,
+          image11,
         ),
       );
     }

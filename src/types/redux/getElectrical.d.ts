@@ -8,6 +8,7 @@ type ELECTRICAL = {
   overall: string;
   jack_tool_box: string;
   lights_crack_broken: string;
+  lights_crack_broken_image: string | null;
 };
 
 type GetElectricalState = {

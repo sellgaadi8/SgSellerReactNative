@@ -157,14 +157,25 @@ export default function CarImages({route, navigation}: CarImagesProps) {
       setLoading(false);
       const {data, error} = selectGetCarImages;
       if (!error && data) {
-        setImage1(data.left_wheel_corner_front);
-        setImage2(data.centre_front);
-        setImage3(data.right_corner_back);
-        setImage4(data.centre_back);
-        setImage5(data.engine_hood_open);
-        setImage6(data.interior_dashboard);
-        setImage7(data.meter_console);
-        setVideo(data.video);
+        let temp = [...carImageType];
+        temp[0].url = data.left_wheel_corner_front;
+        temp[1].url = data.centre_front;
+        temp[2].url = data.right_corner_back;
+        temp[3].url = data.centre_back;
+        temp[4].url = data.engine_hood_open;
+        temp[5].url = data.interior_dashboard;
+        temp[6].url = data.meter_console;
+        if (data.video) {
+          temp[7].url = data.video;
+        }
+        // setImage1(data.left_wheel_corner_front);
+        // setImage2(data.centre_front);
+        // setImage3(data.right_corner_back);
+        // setImage4(data.centre_back);
+        // setImage5(data.engine_hood_open);
+        // setImage6(data.interior_dashboard);
+        // setImage7(data.meter_console);
+        // setVideo(data.video);
       }
     }
     if (selectUpdateCarImages.called) {

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, Pressable, Text} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {RadioButtonsProps} from '../types/propsTypes';
@@ -17,10 +18,14 @@ export default function RadioButtons({
   isImage = false,
   selectPhoto,
   onPressCamera,
+  selectValue,
 }: RadioButtonsProps) {
   const [userOption, setUserOption] = useState('');
 
-  // eslint-disable-next-line @typescript-eslint/no-shadow
+  useEffect(() => {
+    setUserOption(selectValue);
+  }, [selectValue]);
+
   const selectHandler = (label: string, value: string) => {
     onSelect(label, value);
     setUserOption(value);

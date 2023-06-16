@@ -173,11 +173,28 @@ export default function Tyres({navigation, route}: TyresProps) {
       setLoading(false);
       const {error, data, success} = selectGetTyres;
       if (!error && success && data) {
+        let temp = [...tyresImage];
         setLhsFront(data.lhs_front_type);
         setRhsFront(data.rhs_front_type);
         setLhsBack(data.lhs_back_type);
         setRhsBack(data.rhs_back_type);
         setSpare(data.spare_type);
+        if (data.lhs_front_image) {
+          temp[0].url = data.lhs_front_image;
+        }
+        if (data.rhs_front_image) {
+          temp[1].url = data.rhs_front_image;
+        }
+        if (data.lhs_back_image) {
+          temp[2].url = data.lhs_back_image;
+        }
+        if (data.rhs_back_image) {
+          temp[3].url = data.rhs_back_image;
+        }
+        if (data.spare_image) {
+          temp[4].url = data.spare_image;
+        }
+        setTyresImage([...temp]);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

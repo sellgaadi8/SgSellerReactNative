@@ -38,6 +38,7 @@ export const onAddElectrical =
     overall: string,
     jack_tool_box: string,
     lights_crack_broken: string,
+    lights_crack_broken_image: string,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = addElectricalsUrl(id);
@@ -60,6 +61,7 @@ export const onAddElectrical =
     body.append('overall', overall);
     body.append('jack_tool_box', jack_tool_box);
     body.append('lights_crack_broken', lights_crack_broken);
+    body.append('lights_crack_broken_image', lights_crack_broken_image);
 
     axiosInstance
       .post(url, body, config)

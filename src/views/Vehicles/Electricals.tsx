@@ -31,6 +31,7 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
   const [jackTool, setJackTool] = useState('');
   const [lightsCrack, setLightsCrack] = useState('');
   const [lightsCrackImage, setLightsCrackImage] = useState('');
+  const [lightsCrackUrl, setLightsCrackUrl] = useState('');
   const [openImagePicker, setOpenImagePicker] = useState(false);
   const dispatch = useDispatch<any>();
   const {vehicleId} = useContext(GlobalContext);
@@ -39,6 +40,7 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
     state => state.updateElectrical,
   );
   const selectGetElectrical = useAppSelector(state => state.getElectrical);
+  const selectUploadImage = useAppSelector(state => state.uploadImage);
 
   useEffect(() => {
     if (route.params.from === 'edit') {
@@ -48,7 +50,6 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
   }, []);
 
   function onSaveImage(image: any) {
-    setLightsCrackImage(image[0].uri);
     dispatch(onUploadImage(image[0], 'electricals-images'));
   }
 
@@ -64,6 +65,7 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
           overall,
           jackTool,
           lightsCrack,
+          lightsCrackImage,
         ),
       );
     } else {
@@ -77,6 +79,7 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
           overall,
           jackTool,
           lightsCrack,
+          lightsCrackImage,
         ),
       );
     }
@@ -115,10 +118,25 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
         setOverall(data.overall);
         setJackTool(data.jack_tool_box);
         setLightsCrack(data.lights_crack_broken);
+        if (data.lights_crack_broken_image) {
+          setLightsCrackUrl(data.lights_crack_broken_image);
+        }
+      }
+    }
+    if (selectUploadImage.called) {
+      const {error, image, success} = selectUploadImage;
+      if (!error && success && image) {
+        setLightsCrackUrl(image.url);
+        setLightsCrackImage(image.file);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectAddElectrical, selectUpdateElectrical, selectGetElectrical]);
+  }, [
+    selectAddElectrical,
+    selectUpdateElectrical,
+    selectGetElectrical,
+    selectUploadImage,
+  ]);
 
   return (
     <Box style={styles.container}>
@@ -138,6 +156,7 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
               {label: 'NOT OK', value: 'not_ok'},
             ]}
             onSelect={(label, value) => setPowerWindows(value)}
+            selectValue={powerWindows}
           />
           <RadioButtons
             label="Music system"
@@ -146,6 +165,7 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
               {label: 'NOT OK', value: 'not_ok'},
             ]}
             onSelect={(label, value) => setMusic(value)}
+            selectValue={music}
           />
           <RadioButtons
             label="Eletrical odomoter"
@@ -154,6 +174,7 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
               {label: 'NOT OK', value: 'not_ok'},
             ]}
             onSelect={(label, value) => setElectrical(value)}
+            selectValue={electrical}
           />
           <RadioButtons
             label="Parking sensor"
@@ -162,6 +183,7 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
               {label: 'NOT OK', value: 'not_ok'},
             ]}
             onSelect={(label, value) => setParking(value)}
+            selectValue={parking}
           />
           <RadioButtons
             label="Overall"
@@ -170,6 +192,7 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
               {label: 'NOT OK', value: 'not_ok'},
             ]}
             onSelect={(label, value) => setOverall(value)}
+            selectValue={overall}
           />
           <RadioButtons
             label="Jack and Tool box"
@@ -178,6 +201,7 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
               {label: 'NOT OK', value: 'not_ok'},
             ]}
             onSelect={(label, value) => setJackTool(value)}
+            selectValue={jackTool}
           />
           <RadioButtons
             label="Lights crack broken"
@@ -188,7 +212,8 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
             onSelect={(label, value) => setLightsCrack(value)}
             isImage
             onPressCamera={() => setOpenImagePicker(true)}
-            selectPhoto={lightsCrackImage}
+            selectPhoto={lightsCrackUrl}
+            selectValue={lightsCrack}
           />
         </Box>
         <Box style={styles.buttonContainer}>

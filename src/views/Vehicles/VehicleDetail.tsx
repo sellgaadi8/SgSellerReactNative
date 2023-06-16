@@ -40,7 +40,7 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
       const {data, success, error} = selectVehicleDetails;
       if (success && !error && data) {
         setVehicleDetails(data);
-        if (data.car_images !== null) {
+        if (data.car_images) {
           setVehicleImage(Object.values(data.car_images));
         }
       }

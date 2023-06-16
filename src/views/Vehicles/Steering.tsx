@@ -98,6 +98,7 @@ export default function Steering({navigation, route}: SteeringProps) {
               {label: 'ABNORMAL NOISE', value: 'abnormal_noise'},
             ]}
             onSelect={(label, value) => setSuspension(value)}
+            selectValue={suspension}
           />
           <RadioButtons
             label="Steering"
@@ -106,6 +107,7 @@ export default function Steering({navigation, route}: SteeringProps) {
               {label: 'HARD', value: 'hard'},
             ]}
             onSelect={(label, value) => setSteering(value)}
+            selectValue={steering}
           />
           <RadioButtons
             label="Brake"
@@ -114,6 +116,7 @@ export default function Steering({navigation, route}: SteeringProps) {
               {label: 'WEAK', value: 'weak'},
             ]}
             onSelect={(label, value) => setBrake(value)}
+            selectValue={brake}
           />
           <RadioButtons
             label="Wheel bearing noise"
@@ -122,6 +125,7 @@ export default function Steering({navigation, route}: SteeringProps) {
               {label: 'ABNORMAL', value: 'abnormal'},
             ]}
             onSelect={(label, value) => setWheel(value)}
+            selectValue={wheel}
           />
         </Box>
         <Box style={styles.buttonContainer}>

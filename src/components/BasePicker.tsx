@@ -106,35 +106,38 @@ export default function BasePicker({
             </Picker>
           )}
         </Box>
-        {selectedValue !== 'Ok' && selectedValue !== '' && (
-          <Pressable
-            style={[
-              styles.upload,
-              {
-                borderWidth: selectPhoto && selectPhoto.length !== 0 ? 0 : 0.5,
-              },
-            ]}
-            onPress={onPressCamera}>
-            {selectPhoto && selectPhoto.length !== 0 ? (
-              <Image
-                source={{uri: selectPhoto}}
-                style={{height: 50, width: 105, borderRadius: 8}}
-                resizeMode="cover"
-              />
-            ) : (
-              <>
-                <Icon name="camera" size={20} color="#CACACA" />
-                <CustomText
-                  fontSize={10}
-                  fontFamily="Roboto-Regular"
-                  color="#111111"
-                  style={{textAlign: 'center'}}>
-                  Upload {selectedValue} {'\n'} Image
-                </CustomText>
-              </>
-            )}
-          </Pressable>
-        )}
+        {selectedValue !== 'Ok' &&
+          selectedValue !== '' &&
+          selectedValue !== null && (
+            <Pressable
+              style={[
+                styles.upload,
+                {
+                  borderWidth:
+                    selectPhoto && selectPhoto.length !== 0 ? 0 : 0.5,
+                },
+              ]}
+              onPress={onPressCamera}>
+              {selectPhoto && selectPhoto.length !== 0 ? (
+                <Image
+                  source={{uri: selectPhoto}}
+                  style={{height: 50, width: 105, borderRadius: 8}}
+                  resizeMode="cover"
+                />
+              ) : (
+                <>
+                  <Icon name="camera" size={20} color="#CACACA" />
+                  <CustomText
+                    fontSize={10}
+                    fontFamily="Roboto-Regular"
+                    color="#111111"
+                    style={{textAlign: 'center'}}>
+                    Upload {selectedValue} {'\n'} Image
+                  </CustomText>
+                </>
+              )}
+            </Pressable>
+          )}
       </Box>
     </Box>
   );

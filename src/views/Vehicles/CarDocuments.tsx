@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Pressable, ScrollView, Text} from 'react-native';
+import {Pressable, ScrollView} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
@@ -8,10 +8,7 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {container} from '../../utils/styles';
-import Radio from '../../components/Radio';
-import colors from '../../utils/colors';
 import ProfileInput from '../../components/ProfileInput';
 import PrimaryButton from '../../components/PrimaryButton';
 import {useDispatch} from 'react-redux';
@@ -29,6 +26,7 @@ import {onUploadImage} from '../../redux/ducks/uploadImage';
 import Calendar from '../../components/Calendar';
 import {DateTimePickerEvent} from '@react-native-community/datetimepicker';
 import {formatDate} from '../../utils/helper';
+import RadioButtons from '../../components/RadioButtons';
 
 type CarDocumentUploadType = 'rc' | 'road' | 'partpeshi' | 'key' | 'chesis';
 
@@ -40,11 +38,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
     {id: 'key', url: ''},
     {id: 'chesis', url: ''},
   ]);
-  const [insuranceType, setInsuranceType] = useState([
-    {id: 'comprehensive', title: 'COMPREHENSIVE', selected: false},
-    {id: 'thirdparty', title: 'THIRDPARTY', selected: false},
-    {id: 'zero_dep', title: 'ZERO DEP', selected: false},
-  ]);
+
   const [rto, setRto] = useState('');
   const [fitness, setFitness] = useState('');
   const [permit, setPermit] = useState('');
@@ -85,69 +79,6 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const handleRc = (option: string) => {
-    if (option) {
-      setRcAvail(option);
-    }
-  };
-  const handleNoc = (option: string) => {
-    if (option) {
-      setNoc(option);
-    }
-  };
-
-  const handleMismatch = (option: string) => {
-    if (option) {
-      setMismatch(option);
-    }
-  };
-  const handeHypo = (option: string) => {
-    if (option) {
-      setHypo(option);
-    }
-  };
-  const handleRoadTax = (option: string) => {
-    if (option) {
-      setRoadTax(option);
-    }
-  };
-  const handlePartiPeshi = (option: string) => {
-    if (option) {
-      setPartipeshi(option);
-    }
-  };
-  const handleKey = (option: string) => {
-    if (option) {
-      setKey(option);
-    }
-  };
-  const handleChessis = (option: string) => {
-    if (option) {
-      setChessis(option);
-    }
-  };
-  const handleFitment = (option: string) => {
-    if (option) {
-      setFitment(option);
-    }
-  };
-
-  const handleEndorsed = (option: string) => {
-    if (option) {
-      setFitmentEndorsed(option);
-    }
-  };
-
-  function onPressCheckbox(id: string) {
-    setInsurance(id);
-    const updatedFuelType = insuranceType.map(type => ({
-      ...type,
-      selected: type.id === id,
-    }));
-
-    setInsuranceType(updatedFuelType);
-  }
 
   function onOpenPicker(type: CarDocumentUploadType) {
     setOpenImagePicker(true);
@@ -253,7 +184,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
       const {data, error} = selectGetCarDocs;
       if (!error && data) {
         setRto(data.rto);
-        setNoc(data.rc_noc_issued);
+        setNoc(data.rc_noc_issued.toLowerCase());
         setFitment(data.cng_lpg_fitment);
         setFitmentEndorsed(data.cng_lpg_fitment_endorsed_on_rc);
         setFitness(data.fitness_upto);
@@ -263,9 +194,24 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
         setKey(data.duplicate_key);
         setMismatch(data.mismatch_in_rc);
         setPartipeshi(data.partipeshi_request);
-        setRcAvail(data.rc_availability);
+        setRcAvail(data.rc_availability.toLowerCase());
         setRoadTax(data.road_tax_paid);
-
+        let temp = [...carDocsType];
+        if (data.rc_availability_image) {
+          temp[0].url = data.rc_availability_image;
+        }
+        if (data.road_tax_paid_image) {
+          temp[1].url = data.road_tax_paid_image;
+        }
+        if (data.partipeshi_request_image) {
+          temp[2].url = data.partipeshi_request_image;
+        }
+        if (data.duplicate_key_image) {
+          temp[3].url = data.duplicate_key_image;
+        }
+        if (data.chasis_no_image) {
+          temp[4].url = data.chasis_no_image;
+        }
         // setPermit(data.oer)
       }
     }
@@ -393,109 +339,127 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
           </Pressable>
 
           <Box style={{marginTop: -10}}>
-            <Radio
-              title="RC availability"
-              selectedOption={rcAvail}
-              handleOptionSelect={handleRc}
-              isMandatory
+            <RadioButtons
+              label="RC availability"
+              data={[
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+              ]}
+              onSelect={(label, value) => setRcAvail(value)}
               isImage
+              selectValue={rcAvail}
+              isMandatory
               onPressCamera={() => onOpenPicker('rc')}
               selectPhoto={carDocsType[0].url}
             />
-            <Radio
-              title="RTO noc issued"
-              selectedOption={noc}
-              handleOptionSelect={handleNoc}
+            <RadioButtons
+              label="RTO noc issued"
+              data={[
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+              ]}
+              onSelect={(label, value) => setNoc(value)}
+              selectValue={noc}
             />
-            <Radio
-              title="Mismatch in RC"
-              selectedOption={mismatch}
-              handleOptionSelect={handleMismatch}
-            />
-          </Box>
 
-          <Box pv={'2%'}>
-            <CustomText
-              fontSize={14}
-              lineHeight={28}
-              fontFamily="Roboto-Medium"
-              color="#111111">
-              Insurance - type<Text style={{color: 'red'}}>*</Text>
-            </CustomText>
-            <Box style={[styles.checkboxWrap]}>
-              {insuranceType.map((el, index) => {
-                return (
-                  <Pressable
-                    key={index.toString()}
-                    style={[styles.checkboxPress]}
-                    onPress={() => onPressCheckbox(el.id)}>
-                    <Icon
-                      name={el.selected ? 'radiobox-marked' : 'radiobox-blank'}
-                      size={20}
-                      color={el.selected ? colors.secondary : '#111111'}
-                    />
-                    <CustomText
-                      color="#1C1B1F"
-                      fontFamily="Roboto-Regular"
-                      fontSize={14}
-                      lineHeight={18}
-                      style={{left: 2}}>
-                      {el.title}
-                    </CustomText>
-                  </Pressable>
-                );
-              })}
-            </Box>
+            <RadioButtons
+              label="Mismatch in RC"
+              data={[
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+              ]}
+              onSelect={(label, value) => setMismatch(value)}
+              selectValue={mismatch}
+            />
+            <RadioButtons
+              label="Insurance - type"
+              data={[
+                {value: 'comprehensive', label: 'COMPREHENSIVE'},
+                {value: 'thirdparty', label: 'THIRDPARTY'},
+                {value: 'zero_dep', label: 'ZERO DEP'},
+              ]}
+              onSelect={(label, value) => setMismatch(value)}
+              selectValue={insurance}
+              isMandatory
+            />
+            <RadioButtons
+              label="Under Hypothication"
+              data={[
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+              ]}
+              onSelect={(label, value) => setHypo(value)}
+              selectValue={hypo}
+            />
+            <RadioButtons
+              label="Road tax paid"
+              data={[
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+              ]}
+              onSelect={(label, value) => setRoadTax(value)}
+              selectValue={roadTax}
+              isImage
+              selectPhoto={carDocsType[1].url}
+              onPressCamera={() => onOpenPicker('road')}
+            />
+            <RadioButtons
+              label="Partipeshi Request"
+              data={[
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+              ]}
+              onSelect={(label, value) => setPartipeshi(value)}
+              selectValue={partipeshi}
+              isImage
+              selectPhoto={carDocsType[2].url}
+              onPressCamera={() => onOpenPicker('partpeshi')}
+            />
+            <RadioButtons
+              label="Duplicate Key"
+              data={[
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+              ]}
+              onSelect={(label, value) => setKey(value)}
+              selectValue={key}
+              isImage
+              selectPhoto={carDocsType[3].url}
+              onPressCamera={() => onOpenPicker('key')}
+            />
+            <RadioButtons
+              label="Chessis Number embossing ( Tracable/Nor tracable)"
+              data={[
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+              ]}
+              onSelect={(label, value) => setChessis(value)}
+              selectValue={chessis}
+              isImage
+              selectPhoto={carDocsType[4].url}
+              onPressCamera={() => onOpenPicker('chesis')}
+            />
+            <RadioButtons
+              label="CNG/LPG fitment"
+              data={[
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+              ]}
+              onSelect={(label, value) => setFitment(value)}
+              selectValue={fitment}
+              isMandatory
+            />
+            <RadioButtons
+              label="CNG/LPG fitment endorsed on RC"
+              data={[
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+              ]}
+              onSelect={(label, value) => setFitmentEndorsed(value)}
+              selectValue={fitmentEndorsed}
+              isMandatory
+            />
           </Box>
-          <Radio
-            title="Under Hypothication"
-            handleOptionSelect={handeHypo}
-            selectedOption={hypo}
-          />
-          <Radio
-            title="Road tax paid"
-            handleOptionSelect={handleRoadTax}
-            selectedOption={roadTax}
-            isImage
-            selectPhoto={carDocsType[1].url}
-            onPressCamera={() => onOpenPicker('road')}
-          />
-          <Radio
-            title="Partipeshi Request"
-            handleOptionSelect={handlePartiPeshi}
-            selectedOption={partipeshi}
-            isImage
-            selectPhoto={carDocsType[2].url}
-            onPressCamera={() => onOpenPicker('partpeshi')}
-          />
-          <Radio
-            title="Duplicate Key"
-            handleOptionSelect={handleKey}
-            selectedOption={key}
-            isImage
-            selectPhoto={carDocsType[3].url}
-            onPressCamera={() => onOpenPicker('key')}
-          />
-          <Radio
-            title="Chessis Number embossing ( Tracable/Nor tracable)"
-            handleOptionSelect={handleChessis}
-            selectedOption={chessis}
-            isImage
-            selectPhoto={carDocsType[4].url}
-            onPressCamera={() => onOpenPicker('chesis')}
-          />
-          <Radio
-            title="CNG/LPG fitment"
-            handleOptionSelect={handleFitment}
-            selectedOption={fitment}
-            isMandatory
-          />
-          <Radio
-            title="CNG/LPG fitment endorsed on RC"
-            handleOptionSelect={handleEndorsed}
-            selectedOption={fitmentEndorsed}
-            isMandatory
-          />
         </Box>
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>

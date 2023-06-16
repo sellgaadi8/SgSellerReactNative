@@ -44,27 +44,27 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
     {id: 'right_quater_panel', label: 'Right Quarter Panel', url: ''},
   ]);
   const [openImagePicker, setOpenImagePicker] = useState(false);
-  const [hood, setHood] = useState('');
+  const [hood, setHood] = useState('Ok');
   const [hoodImage, setHoodImage] = useState('');
-  const [roof, setRoof] = useState('');
+  const [roof, setRoof] = useState('Ok');
   const [roofImage, setRoofImage] = useState('');
-  const [dicky, setDickey] = useState('');
+  const [dicky, setDickey] = useState('Ok');
   const [dickyImage, setDickeyImage] = useState('');
-  const [ldoorf, setLdoorf] = useState('');
+  const [ldoorf, setLdoorf] = useState('Ok');
   const [ldoorfImage, setLdoorfImage] = useState('');
-  const [ldoorb, setLdoorb] = useState('');
+  const [ldoorb, setLdoorb] = useState('Ok');
   const [ldoorbImage, setLdoorbImage] = useState('');
-  const [rdoorf, setRdoorf] = useState('');
+  const [rdoorf, setRdoorf] = useState('Ok');
   const [rdoorfImage, setRdoorfImage] = useState('');
-  const [rdoorb, setRdoorb] = useState('');
+  const [rdoorb, setRdoorb] = useState('Ok');
   const [rdoorbImage, setRdoorbImage] = useState('');
-  const [lfender, setLfender] = useState('');
+  const [lfender, setLfender] = useState('Ok');
   const [lfenderImage, setLfenderImage] = useState('');
-  const [rfender, setRfender] = useState('');
+  const [rfender, setRfender] = useState('Ok');
   const [rfenderImage, setRfenderImage] = useState('');
-  const [lQPanel, setLqPanel] = useState('');
+  const [lQPanel, setLqPanel] = useState('Ok');
   const [lQPanelImage, setLqPanelImage] = useState('');
-  const [rQPanel, setRqPanel] = useState('');
+  const [rQPanel, setRqPanel] = useState('Ok');
   const [rQPanelImage, setRqPanelImage] = useState('');
   const [loading, setLoading] = useState(false);
   const {vehicleId} = useContext(GlobalContext);
@@ -244,6 +244,41 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
         setRfender(data.right_fender);
         setLqPanel(data.left_quater_panel);
         setRqPanel(data.right_quater_panel);
+        let temp = [...externelType];
+        if (data.bonnet_head_image) {
+          temp[0].url = data.bonnet_head_image;
+        }
+        if (data.roof_image) {
+          temp[1].url = data.roof_image;
+        }
+        if (data.dickey_door_image) {
+          temp[2].url = data.dickey_door_image;
+        }
+        if (data.left_door_back_image) {
+          temp[3].url = data.left_door_back_image;
+        }
+        if (data.right_door_back_image) {
+          temp[4].url = data.right_door_back_image;
+        }
+        if (data.left_door_front_image) {
+          temp[5].url = data.left_door_front_image;
+        }
+        if (data.right_door_front_image) {
+          temp[6].url = data.right_door_front_image;
+        }
+        if (data.left_fender_image) {
+          temp[7].url = data.left_fender_image;
+        }
+        if (data.right_fender_image) {
+          temp[8].url = data.right_fender_image;
+        }
+        if (data.left_quater_panel_image) {
+          temp[9].url = data.left_quater_panel_image;
+        }
+        if (data.right_quater_panel_image) {
+          temp[10].url = data.right_quater_panel_image;
+        }
+        setExternelType([...temp]);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

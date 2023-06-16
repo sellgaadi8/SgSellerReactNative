@@ -324,7 +324,8 @@ type RadioButtonsProps = {
   isMandatory?: boolean;
   isImage?: boolean;
   selectPhoto?: string;
-  onPressCamera?: () => boolean;
+  onPressCamera?: () => void;
+  selectValue: string;
 };
 
 type EngineProps = {

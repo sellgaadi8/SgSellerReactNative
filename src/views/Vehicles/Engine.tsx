@@ -138,6 +138,7 @@ export default function Engine({navigation, route}: EngineProps) {
             ]}
             onSelect={(label, value) => setOilLeak(value)}
             isImage
+            selectValue={oilLeak}
           />
           <RadioButtons
             label="Exhaust smoke"
@@ -147,6 +148,7 @@ export default function Engine({navigation, route}: EngineProps) {
               {label: 'WHITE SMOKE', value: 'white_smoke'}, ///image
             ]}
             onSelect={(label, value) => setSmoke(value)}
+            selectValue={smoke}
           />
           <RadioButtons
             label="Engine permissible blow back"
@@ -155,6 +157,7 @@ export default function Engine({navigation, route}: EngineProps) {
               {label: 'NO BLOW BACK', value: 'no_blow_back'},
             ]}
             onSelect={(label, value) => setPermissble(value)}
+            selectValue={permissble}
           />
           <RadioButtons
             label="Engine mounting"
@@ -163,6 +166,7 @@ export default function Engine({navigation, route}: EngineProps) {
               {label: 'SOUND', value: 'sound'},
             ]}
             onSelect={(label, value) => setMounting(value)}
+            selectValue={mounting}
           />
           <RadioButtons
             label="Engine sound"
@@ -171,6 +175,7 @@ export default function Engine({navigation, route}: EngineProps) {
               {label: 'NO BLOW BY', value: 'no_blow_by'}, //video
             ]}
             onSelect={(label, value) => setSound(value)}
+            selectValue={sound}
           />
           <RadioButtons
             label="Clutch bearing Noise"
@@ -179,6 +184,7 @@ export default function Engine({navigation, route}: EngineProps) {
               {label: 'NO', value: 'no'},
             ]}
             onSelect={(label, value) => setClutch(value)}
+            selectValue={clutch}
           />
           <RadioButtons
             label="AC"
@@ -187,6 +193,7 @@ export default function Engine({navigation, route}: EngineProps) {
               {label: 'Leakage', value: 'leakage'}, //image
             ]}
             onSelect={(label, value) => setAc(value)}
+            selectValue={ac}
           />
           <RadioButtons
             label="Cooling"
@@ -196,6 +203,7 @@ export default function Engine({navigation, route}: EngineProps) {
             ]}
             onSelect={(label, value) => setCooling(value)}
             isMandatory
+            selectValue={cooling}
           />
           <RadioButtons
             label="Heater"
@@ -205,6 +213,7 @@ export default function Engine({navigation, route}: EngineProps) {
             ]}
             onSelect={(label, value) => setHeater(value)}
             isMandatory
+            selectValue={heater}
           />
           <RadioButtons
             label="Condensor"
@@ -214,6 +223,7 @@ export default function Engine({navigation, route}: EngineProps) {
             ]}
             onSelect={(label, value) => setCondensor(value)}
             isMandatory
+            selectValue={condensor}
           />
         </Box>
         <Box style={styles.buttonContainer}>
