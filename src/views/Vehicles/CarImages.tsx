@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import {Image, ScrollView, Text, View} from 'react-native';
+import {Image, ScrollView, Text, ToastAndroid, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
@@ -198,36 +198,55 @@ export default function CarImages({route, navigation}: CarImagesProps) {
     selectUpdateCarImages,
   ]);
 
+  function validateInputs() {
+    if (
+      image1.length === 0 &&
+      image2.length === 0 &&
+      image3.length === 0 &&
+      image4.length === 0 &&
+      image5.length === 0 &&
+      image6.length === 0 &&
+      image7.length === 0
+    ) {
+      ToastAndroid.show('Images are required', ToastAndroid.LONG);
+    }
+
+    return 0;
+  }
+
   function onSubmit() {
-    setLoading(true);
-    if (route.params.from === 'add') {
-      dispatch(
-        onUploadCarImages(
-          vehicleId,
-          image1,
-          image2,
-          image3,
-          image4,
-          image5,
-          image6,
-          image7,
-          video,
-        ),
-      );
-    } else {
-      dispatch(
-        onUpdateCarImages(
-          vehicleId,
-          image1,
-          image2,
-          image3,
-          image4,
-          image5,
-          image6,
-          image7,
-          video,
-        ),
-      );
+    const isValid = validateInputs();
+    if (isValid) {
+      setLoading(true);
+      if (route.params.from === 'add') {
+        dispatch(
+          onUploadCarImages(
+            vehicleId,
+            image1,
+            image2,
+            image3,
+            image4,
+            image5,
+            image6,
+            image7,
+            video,
+          ),
+        );
+      } else {
+        dispatch(
+          onUpdateCarImages(
+            vehicleId,
+            image1,
+            image2,
+            image3,
+            image4,
+            image5,
+            image6,
+            image7,
+            video,
+          ),
+        );
+      }
     }
   }
 

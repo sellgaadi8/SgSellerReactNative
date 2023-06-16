@@ -7,6 +7,7 @@ import {
   Image,
   Platform,
   Pressable,
+  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -24,6 +25,8 @@ type BasePickerProps = {
   title: string;
   onPressCamera?: () => void;
   selectPhoto?: string;
+  isMandatory?: boolean;
+  error?: string;
 };
 
 export default function BasePicker({
@@ -34,6 +37,8 @@ export default function BasePicker({
   title,
   onPressCamera,
   selectPhoto,
+  isMandatory = false,
+  error,
 }: BasePickerProps) {
   function onOpenSheet() {
     ActionSheetIOS.showActionSheetWithOptions(
@@ -61,6 +66,7 @@ export default function BasePicker({
         fontFamily="Roboto-Medium"
         color="#111111">
         {title}
+        {isMandatory && <Text style={{color: 'red'}}>*</Text>}
       </CustomText>
       <Box flexDirection="row" alignItems="center">
         <Box
@@ -139,6 +145,11 @@ export default function BasePicker({
             </Pressable>
           )}
       </Box>
+      {error && (
+        <CustomText fontSize={12} color="#FF0000">
+          {error}
+        </CustomText>
+      )}
     </Box>
   );
 }

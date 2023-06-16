@@ -208,9 +208,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
       const {message, success, uuid} = selectCreateDisplay;
       if (success && message && uuid) {
         setVehicleId(uuid);
-        setTimeout(() => {
-          navigation.navigate('AddVehicle', {from: 'add'});
-        }, 500);
+        navigation.navigate('AddVehicle', {from: 'add'});
         Snackbar.show({
           text: message,
           backgroundColor: 'green',

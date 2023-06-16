@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Pressable, ScrollView} from 'react-native';
+import {Pressable, ScrollView, ToastAndroid} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
@@ -71,6 +71,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
   const [loading, setLoading] = useState(false);
   const [openImagePicker, setOpenImagePicker] = useState(false);
   const [uploadType, setUploadType] = useState<CarDocumentUploadType>('rc');
+  const [errors, setErrors] = useState<CarDocumentsError>();
 
   useEffect(() => {
     if (route.params.from === 'edit') {
@@ -101,56 +102,94 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
     }
   }
 
+  function validateInputs() {
+    const tempErrors: CarDocumentsError = {};
+    if (rto.length === 0) {
+      tempErrors.rto = 'The Rto field is required';
+    }
+    if (fitness.length === 0) {
+      tempErrors.fitness = 'The Fitness field is required';
+    }
+    if (permit.length === 0) {
+      tempErrors.permit = 'The Permit field is required';
+    }
+    if (rcAvail.length === 0) {
+      tempErrors.rcAvail = 'The Rc availability field is required';
+    }
+    if (rcAvailImage.length === 0) {
+      tempErrors.rcAvailImage = 'The Rc availability image field is required';
+    }
+    if (insurance.length === 0) {
+      tempErrors.insurance = 'The Insurance - type field is required';
+    }
+    if (fitment.length === 0) {
+      tempErrors.fitment = 'The CNG/LPG fitment field is required';
+    }
+    if (fitmentEndorsed.length === 0) {
+      tempErrors.fitmentEndorsed = 'CNG/LPG fitment endorsed on RC';
+    }
+    if (rcAvail === 'yes') {
+      if (rcAvailImage.length === 0) {
+        ToastAndroid.show('Rc Image is require', ToastAndroid.LONG);
+      }
+    }
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  }
+
   function onSaveDocuments() {
-    setLoading(true);
-    if (route.params.from === 'add') {
-      dispatch(
-        onAddCarDocuments(
-          vehicleId,
-          rcAvail.toLowerCase(),
-          rcAvailImage,
-          noc.toLowerCase(),
-          mismatch.toLowerCase(),
-          insurance,
-          hypo.toLowerCase(),
-          rto,
-          fitness.toLowerCase(),
-          fitment.toLowerCase(),
-          fitmentEndorsed.toLowerCase(),
-          roadTax.toLowerCase(),
-          partipeshi.toLowerCase(),
-          key.toLowerCase(),
-          chessis.toLowerCase(),
-          roadTaxImage,
-          partipeshiImage,
-          keyImage,
-          chessisImage,
-        ),
-      );
-    } else {
-      dispatch(
-        onUpdateCarDocuments(
-          vehicleId,
-          rcAvail.toLowerCase(),
-          rcAvailImage,
-          noc.toLowerCase(),
-          mismatch.toLowerCase(),
-          insurance,
-          hypo.toLowerCase(),
-          rto,
-          fitness.toLowerCase(),
-          fitment.toLowerCase(),
-          fitmentEndorsed.toLowerCase(),
-          roadTax.toLowerCase(),
-          partipeshi.toLowerCase(),
-          key.toLowerCase(),
-          chessis.toLowerCase(),
-          roadTaxImage,
-          partipeshiImage,
-          keyImage,
-          chessisImage,
-        ),
-      );
+    const isValid = validateInputs();
+    if (isValid) {
+      setLoading(true);
+      if (route.params.from === 'add') {
+        dispatch(
+          onAddCarDocuments(
+            vehicleId,
+            rcAvail.toLowerCase(),
+            rcAvailImage,
+            noc.toLowerCase(),
+            mismatch.toLowerCase(),
+            insurance,
+            hypo.toLowerCase(),
+            rto,
+            fitness.toLowerCase(),
+            fitment.toLowerCase(),
+            fitmentEndorsed.toLowerCase(),
+            roadTax.toLowerCase(),
+            partipeshi.toLowerCase(),
+            key.toLowerCase(),
+            chessis.toLowerCase(),
+            roadTaxImage,
+            partipeshiImage,
+            keyImage,
+            chessisImage,
+          ),
+        );
+      } else {
+        dispatch(
+          onUpdateCarDocuments(
+            vehicleId,
+            rcAvail.toLowerCase(),
+            rcAvailImage,
+            noc.toLowerCase(),
+            mismatch.toLowerCase(),
+            insurance,
+            hypo.toLowerCase(),
+            rto,
+            fitness.toLowerCase(),
+            fitment.toLowerCase(),
+            fitmentEndorsed.toLowerCase(),
+            roadTax.toLowerCase(),
+            partipeshi.toLowerCase(),
+            key.toLowerCase(),
+            chessis.toLowerCase(),
+            roadTaxImage,
+            partipeshiImage,
+            keyImage,
+            chessisImage,
+          ),
+        );
+      }
     }
   }
 
@@ -312,6 +351,8 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
             isMandatory
             placeholder="( Ex MH02 )"
             isPlaceholder={true}
+            error={errors?.rto}
+            noMargin
           />
           <Pressable onPress={() => onPressCalend('fitness')}>
             <ProfileInput
@@ -323,6 +364,8 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
               endIcon="calendar-month"
               editable={false}
               onPressEndIcon={() => onPressCalend('fitness')}
+              error={errors?.fitness}
+              noMargin
             />
           </Pressable>
           <Pressable onPress={() => onPressCalend('permit')}>
@@ -335,6 +378,8 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
               endIcon="calendar-month"
               editable={false}
               onPressEndIcon={() => onPressCalend('permit')}
+              error={errors?.permit}
+              noMargin
             />
           </Pressable>
 
@@ -351,6 +396,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
               isMandatory
               onPressCamera={() => onOpenPicker('rc')}
               selectPhoto={carDocsType[0].url}
+              error={errors?.rcAvail}
             />
             <RadioButtons
               label="RTO noc issued"
@@ -381,6 +427,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
               onSelect={(label, value) => setMismatch(value)}
               selectValue={insurance}
               isMandatory
+              error={errors?.insurance}
             />
             <RadioButtons
               label="Under Hypothication"
@@ -448,6 +495,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
               onSelect={(label, value) => setFitment(value)}
               selectValue={fitment}
               isMandatory
+              error={errors?.fitment}
             />
             <RadioButtons
               label="CNG/LPG fitment endorsed on RC"
@@ -458,6 +506,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
               onSelect={(label, value) => setFitmentEndorsed(value)}
               selectValue={fitmentEndorsed}
               isMandatory
+              error={errors?.fitmentEndorsed}
             />
           </Box>
         </Box>

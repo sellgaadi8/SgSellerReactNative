@@ -19,6 +19,7 @@ export default function RadioButtons({
   selectPhoto,
   onPressCamera,
   selectValue,
+  error,
 }: RadioButtonsProps) {
   const [userOption, setUserOption] = useState('');
 
@@ -94,6 +95,11 @@ export default function RadioButtons({
           </Pressable>
         )}
       </Box>
+      {error && (
+        <CustomText fontSize={12} style={[styles.error]}>
+          {error}
+        </CustomText>
+      )}
     </Box>
   );
 }
@@ -112,5 +118,10 @@ const styles = EStyleSheet.create({
     padding: 3,
     backgroundColor: colors.secondary,
     marginLeft: 10,
+  },
+  error: {
+    color: 'red',
+    alignSelf: 'flex-start',
+    top: 5,
   },
 });

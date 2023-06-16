@@ -18,7 +18,7 @@ import {useAppSelector} from '../../utils/hooks';
 import Loader from '../../components/Loader';
 import GlobalContext from '../../contexts/GlobalContext';
 
-export default function AddVehicle({navigation, route}: AddVehicleProps) {
+export default function AddVehicle({navigation}: AddVehicleProps) {
   const dispatch = useDispatch<any>();
   const [form, setForm] = useState<VehicleForm>();
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,6 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
   );
 
   useEffect(() => {
-    setLoading(true);
     navigation.addListener('focus', onFocus);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,8 +37,12 @@ export default function AddVehicle({navigation, route}: AddVehicleProps) {
 
   function onFocus() {
     if (vehicleId) {
-      dispatch(getVehicleForm(vehicleId));
+      setTimeout(() => {
+        setLoading(true);
+        dispatch(getVehicleForm(vehicleId));
+      }, 500);
     } else {
+      setLoading(true);
       dispatch(getVehicleForm(''));
     }
   }

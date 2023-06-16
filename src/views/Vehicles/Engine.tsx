@@ -18,6 +18,8 @@ import {useAppSelector} from '../../utils/hooks';
 import Snackbar from 'react-native-snackbar';
 import {onUpdateEngine} from '../../redux/ducks/updateEngine';
 import {onGetEngineDetails} from '../../redux/ducks/getEngine';
+import {ToastAndroid} from 'react-native';
+import Loader from '../../components/Loader';
 
 export default function Engine({navigation, route}: EngineProps) {
   const [oilLeak, setOilLeak] = useState('');
@@ -25,6 +27,7 @@ export default function Engine({navigation, route}: EngineProps) {
   const [permissble, setPermissble] = useState('');
   const [mounting, setMounting] = useState('');
   const [sound, setSound] = useState('');
+  const [soundVideo, setSoundVideo] = useState('');
   const [clutch, setClutch] = useState('');
   const [ac, setAc] = useState('');
   const [cooling, setCooling] = useState('');
@@ -32,6 +35,8 @@ export default function Engine({navigation, route}: EngineProps) {
   const [condensor, setCondensor] = useState('');
   const dispatch = useDispatch<any>();
   const {vehicleId} = useContext(GlobalContext);
+  const [errors, setErrors] = useState<EngineError>();
+  const [loading, setLoading] = useState(false);
   const selectAddEngine = useAppSelector(state => state.addEngine);
   const selectUpdateEngine = useAppSelector(state => state.updateEngine);
   const selectGetEngine = useAppSelector(state => state.getEngine);
@@ -43,39 +48,66 @@ export default function Engine({navigation, route}: EngineProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function validateInputs() {
+    const tempErrors: EngineError = {};
+    if (sound.length === 0) {
+      tempErrors.sound = 'Engine sound is required';
+    }
+    if (cooling.length === 0) {
+      tempErrors.cooling = 'Cooling is required';
+    }
+    if (heater.length === 0) {
+      tempErrors.heater = 'Heater is required';
+    }
+    if (condensor.length === 0) {
+      tempErrors.condensor = 'Condensor is required';
+    }
+
+    if (soundVideo.length === 0) {
+      ToastAndroid.show('Engine sound video is required', ToastAndroid.LONG);
+    }
+
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  }
+
   function submit() {
-    if (route.params.from === 'add') {
-      dispatch(
-        onAddEngine(
-          vehicleId,
-          oilLeak,
-          smoke,
-          permissble,
-          mounting,
-          sound,
-          clutch,
-          ac,
-          cooling,
-          heater,
-          condensor,
-        ),
-      );
-    } else {
-      dispatch(
-        onUpdateEngine(
-          vehicleId,
-          oilLeak,
-          smoke,
-          permissble,
-          mounting,
-          sound,
-          clutch,
-          ac,
-          cooling,
-          heater,
-          condensor,
-        ),
-      );
+    const isValid = validateInputs();
+    if (isValid) {
+      setLoading(true);
+      if (route.params.from === 'add') {
+        dispatch(
+          onAddEngine(
+            vehicleId,
+            oilLeak,
+            smoke,
+            permissble,
+            mounting,
+            sound,
+            clutch,
+            ac,
+            cooling,
+            heater,
+            condensor,
+          ),
+        );
+      } else {
+        dispatch(
+          onUpdateEngine(
+            vehicleId,
+            oilLeak,
+            smoke,
+            permissble,
+            mounting,
+            sound,
+            clutch,
+            ac,
+            cooling,
+            heater,
+            condensor,
+          ),
+        );
+      }
     }
   }
 
@@ -121,6 +153,7 @@ export default function Engine({navigation, route}: EngineProps) {
 
   return (
     <Box style={styles.container}>
+      {loading && <Loader />}
       <ScrollView style={styles.onScroll}>
         <CustomText
           fontSize={16}
@@ -176,6 +209,8 @@ export default function Engine({navigation, route}: EngineProps) {
             ]}
             onSelect={(label, value) => setSound(value)}
             selectValue={sound}
+            isMandatory
+            error={errors?.sound}
           />
           <RadioButtons
             label="Clutch bearing Noise"
@@ -204,6 +239,7 @@ export default function Engine({navigation, route}: EngineProps) {
             onSelect={(label, value) => setCooling(value)}
             isMandatory
             selectValue={cooling}
+            error={errors?.cooling}
           />
           <RadioButtons
             label="Heater"
@@ -214,6 +250,7 @@ export default function Engine({navigation, route}: EngineProps) {
             onSelect={(label, value) => setHeater(value)}
             isMandatory
             selectValue={heater}
+            error={errors?.heater}
           />
           <RadioButtons
             label="Condensor"
@@ -224,6 +261,7 @@ export default function Engine({navigation, route}: EngineProps) {
             onSelect={(label, value) => setCondensor(value)}
             isMandatory
             selectValue={condensor}
+            error={errors?.condensor}
           />
         </Box>
         <Box style={styles.buttonContainer}>

@@ -326,6 +326,7 @@ type RadioButtonsProps = {
   selectPhoto?: string;
   onPressCamera?: () => void;
   selectValue: string;
+  error?: string;
 };
 
 type EngineProps = {

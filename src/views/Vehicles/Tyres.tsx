@@ -1,4 +1,4 @@
-import {ScrollView} from 'react-native';
+import {ScrollView, ToastAndroid} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
@@ -59,6 +59,7 @@ export default function Tyres({navigation, route}: TyresProps) {
   const [tyreType, setTyreType] = useState<TyresType>('lhs_front_type');
   const [openImagePicker, setOpenImagePicker] = useState(false);
   const selectUploadImage = useAppSelector(state => state.uploadImage);
+  const [errors, setErrors] = useState<TyresImageError>();
 
   useEffect(() => {
     if (route.params.from === 'edit') {
@@ -73,40 +74,74 @@ export default function Tyres({navigation, route}: TyresProps) {
     dispatch(onUploadImage(image[0], 'exterior-images'));
   }
 
+  function validateInputs() {
+    const tempErrors: TyresImageError = {};
+    if (lhsfront.length === 0) {
+      tempErrors.lhsfront = 'LHS front tyre ( % / damaged ) required';
+    }
+    if (rhsfront.length === 0) {
+      tempErrors.rhsfront = 'RHS front tyre ( % / damaged ) required';
+    }
+    if (lhsback.length === 0) {
+      tempErrors.lhsback = 'LHS Back tyre ( % / damaged ) required';
+    }
+    if (rhsback.length === 0) {
+      tempErrors.rhsback = 'RHS Back tyre ( % / damaged ) required';
+    }
+    if (spare.length === 0) {
+      tempErrors.spare = 'Spare tyre (%, damaged ) required';
+    }
+    if (
+      lhsfrontImage.length === 0 &&
+      rhsfrontImage.length === 0 &&
+      lhsbackImage.length === 0 &&
+      rhsbackImage.length === 0 &&
+      spareImage.length === 0
+    ) {
+      ToastAndroid.show('Images are required', ToastAndroid.LONG);
+    }
+
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  }
+
   function submit() {
-    setLoading(true);
-    if (route.params.from === 'add') {
-      dispatch(
-        onAddTyres(
-          vehicleId,
-          lhsfront,
-          rhsfront,
-          lhsback,
-          rhsback,
-          spare,
-          lhsfrontImage,
-          rhsfrontImage,
-          lhsbackImage,
-          rhsbackImage,
-          spareImage,
-        ),
-      );
-    } else {
-      dispatch(
-        onUpdateTyres(
-          vehicleId,
-          lhsfront,
-          rhsfront,
-          lhsback,
-          rhsback,
-          spare,
-          lhsfrontImage,
-          rhsfrontImage,
-          lhsbackImage,
-          rhsbackImage,
-          spareImage,
-        ),
-      );
+    const isValid = validateInputs();
+    if (isValid) {
+      setLoading(true);
+      if (route.params.from === 'add') {
+        dispatch(
+          onAddTyres(
+            vehicleId,
+            lhsfront,
+            rhsfront,
+            lhsback,
+            rhsback,
+            spare,
+            lhsfrontImage,
+            rhsfrontImage,
+            lhsbackImage,
+            rhsbackImage,
+            spareImage,
+          ),
+        );
+      } else {
+        dispatch(
+          onUpdateTyres(
+            vehicleId,
+            lhsfront,
+            rhsfront,
+            lhsback,
+            rhsback,
+            spare,
+            lhsfrontImage,
+            rhsfrontImage,
+            lhsbackImage,
+            rhsbackImage,
+            spareImage,
+          ),
+        );
+      }
     }
   }
 
@@ -240,6 +275,8 @@ export default function Tyres({navigation, route}: TyresProps) {
             selectedValue={lhsfront}
             onPressCamera={() => onCameraAction('lhs_front_type')}
             selectPhoto={tyresImage[0].url}
+            isMandatory
+            error={errors?.lhsfront}
           />
           <BasePicker
             data={list}
@@ -248,6 +285,8 @@ export default function Tyres({navigation, route}: TyresProps) {
             selectedValue={rhsfront}
             onPressCamera={() => onCameraAction('rhs_front_type')}
             selectPhoto={tyresImage[1].url}
+            isMandatory
+            error={errors?.rhsfront}
           />
           <BasePicker
             data={list}
@@ -256,6 +295,8 @@ export default function Tyres({navigation, route}: TyresProps) {
             selectedValue={lhsback}
             onPressCamera={() => onCameraAction('lhs_back_type')}
             selectPhoto={tyresImage[2].url}
+            isMandatory
+            error={errors?.lhsback}
           />
           <BasePicker
             data={list}
@@ -264,6 +305,8 @@ export default function Tyres({navigation, route}: TyresProps) {
             selectedValue={rhsback}
             onPressCamera={() => onCameraAction('rhs_back_type')}
             selectPhoto={tyresImage[3].url}
+            isMandatory
+            error={errors?.rhsback}
           />
           <BasePicker
             data={list}
@@ -272,6 +315,8 @@ export default function Tyres({navigation, route}: TyresProps) {
             selectedValue={spare}
             onPressCamera={() => onCameraAction('spare_type')}
             selectPhoto={tyresImage[4].url}
+            isMandatory
+            error={errors?.spare}
           />
         </Box>
         <Box style={styles.buttonContainer}>
