@@ -8,7 +8,34 @@ type ELECTRICAL = {
   overall: string;
   jack_tool_box: string;
   lights_crack_broken: string;
-  lights_crack_broken_image: string | null;
+  power_windows_image: {
+    url: string;
+    file: string;
+  };
+  music_system_image: {
+    url: string;
+    file: string;
+  };
+  electrical_odomoter_image: {
+    url: string;
+    file: string;
+  };
+  parking_sensor_image: {
+    url: string;
+    file: string;
+  };
+  overall_image: {
+    url: string;
+    file: string;
+  };
+  jack_tool_box_image: {
+    url: string;
+    file: string;
+  };
+  lights_crack_broken_image: {
+    url: string;
+    file: string;
+  };
 };
 
 type GetElectricalState = {

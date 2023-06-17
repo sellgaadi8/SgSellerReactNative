@@ -24,6 +24,7 @@ import {CarImagesProps, ImageType} from '../../types/propsTypes';
 import Snackbar from 'react-native-snackbar';
 import {onUpdateCarImages} from '../../redux/ducks/updateCarImages';
 import Loader from '../../components/Loader';
+import Video from 'react-native-video';
 
 export default function CarImages({route, navigation}: CarImagesProps) {
   const [carImageType, setCarImageType] = useState([
@@ -78,20 +79,19 @@ export default function CarImages({route, navigation}: CarImagesProps) {
   }
 
   function onSaveImage(image: ImageType[]) {
-    console.log(image[0]);
-
-    dispatch(onUploadImage(image[0], 'car-images'));
+    if (image) {
+      dispatch(onUploadImage(image[0], 'car-images'));
+    }
   }
 
   useEffect(() => {
     if (selectUploadImage.called) {
       setLoading(false);
-      const {error, image} = selectUploadImage;
-      console.log('error', error);
+      const {error, image, success} = selectUploadImage;
 
       let temp = [...carImageType];
 
-      if (!error && image) {
+      if (!error && image && success) {
         switch (imageType) {
           case 'left_wheel_corner_front':
             setImage1(image.file);
@@ -128,7 +128,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
           default:
             break;
         }
-      } else if (error) {
+      } else if (error && !success) {
         console.log('calleddd');
         Snackbar.show({
           text: 'Something went wrong please try again',
@@ -158,24 +158,24 @@ export default function CarImages({route, navigation}: CarImagesProps) {
       const {data, error} = selectGetCarImages;
       if (!error && data) {
         let temp = [...carImageType];
-        temp[0].url = data.left_wheel_corner_front;
-        temp[1].url = data.centre_front;
-        temp[2].url = data.right_corner_back;
-        temp[3].url = data.centre_back;
-        temp[4].url = data.engine_hood_open;
-        temp[5].url = data.interior_dashboard;
-        temp[6].url = data.meter_console;
+        temp[0].url = data.left_wheel_corner_front.url;
+        temp[1].url = data.centre_front.url;
+        temp[2].url = data.right_corner_back.url;
+        temp[3].url = data.centre_back.url;
+        temp[4].url = data.engine_hood_open.url;
+        temp[5].url = data.interior_dashboard.url;
+        temp[6].url = data.meter_console.url;
         if (data.video) {
-          temp[7].url = data.video;
+          temp[7].url = data.video.url;
+          setVideo(data.video.file);
         }
-        // setImage1(data.left_wheel_corner_front);
-        // setImage2(data.centre_front);
-        // setImage3(data.right_corner_back);
-        // setImage4(data.centre_back);
-        // setImage5(data.engine_hood_open);
-        // setImage6(data.interior_dashboard);
-        // setImage7(data.meter_console);
-        // setVideo(data.video);
+        setImage1(data.left_wheel_corner_front.file);
+        setImage2(data.centre_front.file);
+        setImage3(data.right_corner_back.file);
+        setImage4(data.centre_back.file);
+        setImage5(data.engine_hood_open.file);
+        setImage6(data.interior_dashboard.file);
+        setImage7(data.meter_console.file);
       }
     }
     if (selectUpdateCarImages.called) {
@@ -198,7 +198,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
     selectUpdateCarImages,
   ]);
 
-  function validateInputs() {
+  function onSubmit() {
     if (
       image1.length === 0 &&
       image2.length === 0 &&
@@ -209,14 +209,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
       image7.length === 0
     ) {
       ToastAndroid.show('Images are required', ToastAndroid.LONG);
-    }
-
-    return 0;
-  }
-
-  function onSubmit() {
-    const isValid = validateInputs();
-    if (isValid) {
+    } else {
       setLoading(true);
       if (route.params.from === 'add') {
         dispatch(
@@ -277,11 +270,24 @@ export default function CarImages({route, navigation}: CarImagesProps) {
                   </CustomText>
                 </View>
                 {el.url.length !== 0 ? (
-                  <Image
-                    source={{uri: el.url}}
-                    style={styles.image}
-                    resizeMode="cover"
-                  />
+                  el.id === 'video' ? (
+                    <Video
+                      source={{uri: el.url}}
+                      style={{
+                        height: pixelSizeVertical(170),
+                        width: pixelSizeHorizontal(320),
+                      }}
+                      resizeMode="cover"
+                      paused={false}
+                      repeat={true}
+                    />
+                  ) : (
+                    <Image
+                      source={{uri: el.url}}
+                      style={styles.image}
+                      resizeMode="cover"
+                    />
+                  )
                 ) : (
                   <Image
                     source={require('../../assets/media.png')}
@@ -320,15 +326,13 @@ export default function CarImages({route, navigation}: CarImagesProps) {
           <Box width={'45%'}>
             <PrimaryButton
               label="Close"
-              onPress={() => console.log('mc')}
+              onPress={() => navigation.goBack()}
               varient="Secondary"
             />
           </Box>
           <Box width={'45%'}>
             <PrimaryButton
-              label={
-                route.params.from === 'add' ? 'Save Edits' : 'Update Edits'
-              }
+              label={route.params.from === 'add' ? 'Save' : 'Update'}
               onPress={onSubmit}
             />
           </Box>

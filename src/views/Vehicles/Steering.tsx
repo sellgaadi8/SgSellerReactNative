@@ -18,6 +18,7 @@ import {onUpdateSteering} from '../../redux/ducks/updateSteering';
 import {useAppSelector} from '../../utils/hooks';
 import Snackbar from 'react-native-snackbar';
 import {onGetSteeringDetails} from '../../redux/ducks/getSteering';
+import Loader from '../../components/Loader';
 
 export default function Steering({navigation, route}: SteeringProps) {
   const [suspension, setSuspension] = useState('');
@@ -29,9 +30,11 @@ export default function Steering({navigation, route}: SteeringProps) {
   const selectAddSteering = useAppSelector(state => state.addSteering);
   const selectUpdateSteering = useAppSelector(state => state.updateSteering);
   const selectGetSteering = useAppSelector(state => state.getSteering);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (route.params.from === 'edit') {
+      setLoading(true);
       dispatch(onGetSteeringDetails(vehicleId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,14 +42,17 @@ export default function Steering({navigation, route}: SteeringProps) {
 
   function submit() {
     if (route.params.from === 'add') {
+      setLoading(true);
       dispatch(onAddSteering(vehicleId, suspension, steering, brake, wheel));
     } else {
+      setLoading(true);
       dispatch(onUpdateSteering(vehicleId, suspension, steering, brake, wheel));
     }
   }
 
   useEffect(() => {
     if (selectAddSteering.called) {
+      setLoading(false);
       const {error, success, message} = selectAddSteering;
       if (!error && success) {
         navigation.goBack();
@@ -58,6 +64,7 @@ export default function Steering({navigation, route}: SteeringProps) {
       }
     }
     if (selectUpdateSteering.called) {
+      setLoading(false);
       const {error, success, message} = selectUpdateSteering;
       if (!error && success) {
         navigation.goBack();
@@ -69,6 +76,7 @@ export default function Steering({navigation, route}: SteeringProps) {
       }
     }
     if (selectGetSteering.called) {
+      setLoading(false);
       const {error, data} = selectGetSteering;
       if (!error && data) {
         setSuspension(data.suspension);
@@ -81,6 +89,7 @@ export default function Steering({navigation, route}: SteeringProps) {
   }, [selectAddSteering, selectUpdateSteering, selectGetSteering]);
   return (
     <Box style={styles.container}>
+      {loading && <Loader />}
       <ScrollView style={styles.onScroll}>
         <CustomText
           fontSize={16}

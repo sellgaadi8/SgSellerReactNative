@@ -70,8 +70,9 @@ export default function Tyres({navigation, route}: TyresProps) {
   }, []);
 
   function onSaveImage(image: any) {
-    // saveDocs(uploadType, image);
-    dispatch(onUploadImage(image[0], 'exterior-images'));
+    if (image) {
+      dispatch(onUploadImage(image[0], 'exterior-images'));
+    }
   }
 
   function validateInputs() {
@@ -215,19 +216,24 @@ export default function Tyres({navigation, route}: TyresProps) {
         setRhsBack(data.rhs_back_type);
         setSpare(data.spare_type);
         if (data.lhs_front_image) {
-          temp[0].url = data.lhs_front_image;
+          temp[0].url = data.lhs_front_image.url;
+          setLhsFrontImage(data.lhs_front_image.file);
         }
         if (data.rhs_front_image) {
-          temp[1].url = data.rhs_front_image;
+          temp[1].url = data.rhs_front_image.url;
+          setRhsFrontImage(data.rhs_front_image.file);
         }
         if (data.lhs_back_image) {
-          temp[2].url = data.lhs_back_image;
+          temp[2].url = data.lhs_back_image.url;
+          setLhsBackImage(data.lhs_back_image.file);
         }
         if (data.rhs_back_image) {
-          temp[3].url = data.rhs_back_image;
+          temp[3].url = data.rhs_back_image.url;
+          setRhsBackImage(data.rhs_back_image.file);
         }
         if (data.spare_image) {
-          temp[4].url = data.spare_image;
+          temp[4].url = data.spare_image.url;
+          setSpareImage(data.spare_image.file);
         }
         setTyresImage([...temp]);
       }

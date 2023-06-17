@@ -123,35 +123,35 @@ export default function RadioButtons({
             )}
           </Pressable>
         )}
-        {isImage &&
-          (userOption === 'black_smoke' || userOption === 'white_smoke') && (
-            <Pressable style={[styles.upload]} onPress={onPressCamera}>
-              {selectPhoto && selectPhoto.length !== 0 ? (
-                <Image
-                  source={{uri: selectPhoto}}
-                  style={{height: 50, width: 105, borderRadius: 8}}
-                  resizeMode="cover"
-                />
-              ) : (
-                <>
-                  <Box flexDirection="row">
-                    <Icon name="camera" size={20} color="#111111" />
-                    {isMandatory && (
-                      <Text
-                        style={{
-                          color: 'red',
-                          position: 'absolute',
-                          right: -12,
-                          top: -10,
-                        }}>
-                        *
-                      </Text>
-                    )}
-                  </Box>
-                </>
-              )}
-            </Pressable>
-          )}
+        {isImage && userOption === 'not_ok' && (
+          <Pressable style={[styles.upload]} onPress={onPressCamera}>
+            {selectPhoto && selectPhoto.length !== 0 ? (
+              <Image
+                source={{uri: selectPhoto}}
+                style={{height: 50, width: 105, borderRadius: 8}}
+                resizeMode="cover"
+              />
+            ) : (
+              <>
+                <Box flexDirection="row">
+                  <Icon name="camera" size={20} color="#111111" />
+                  {isMandatory && (
+                    <Text
+                      style={{
+                        color: 'red',
+                        position: 'absolute',
+                        right: -12,
+                        top: -10,
+                      }}>
+                      *
+                    </Text>
+                  )}
+                </Box>
+              </>
+            )}
+          </Pressable>
+        )}
+
         {isImage && userOption === 'major_sound' && (
           <Pressable style={[styles.upload]} onPress={onPressCamera}>
             {selectPhoto && selectPhoto.length !== 0 ? (
@@ -187,6 +187,37 @@ export default function RadioButtons({
           </Pressable>
         )}
       </Box>
+      {isImage &&
+        (userOption === 'black_smoke' || userOption === 'white_smoke') && (
+          <Pressable
+            style={[styles.upload, {width: 110, right: 5, top: 10}]}
+            onPress={onPressCamera}>
+            {selectPhoto && selectPhoto.length !== 0 ? (
+              <Image
+                source={{uri: selectPhoto}}
+                style={{height: 50, width: 105, borderRadius: 8}}
+                resizeMode="cover"
+              />
+            ) : (
+              <>
+                <Box flexDirection="row">
+                  <Icon name="camera" size={20} color="#111111" />
+                  {isMandatory && (
+                    <Text
+                      style={{
+                        color: 'red',
+                        position: 'absolute',
+                        right: -12,
+                        top: -10,
+                      }}>
+                      *
+                    </Text>
+                  )}
+                </Box>
+              </>
+            )}
+          </Pressable>
+        )}
       {error && (
         <CustomText fontSize={12} style={[styles.error]}>
           {error}

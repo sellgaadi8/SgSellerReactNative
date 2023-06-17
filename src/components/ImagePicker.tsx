@@ -26,12 +26,15 @@ export default function ImagePicker(props: ImagePickerProps) {
     title,
     multiple,
     onSaveImage,
+    type,
     fileTypes = {
       type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
     },
+    videoTypes = {
+      type: [DocumentPicker.types.video],
+    },
     size = 10000000,
     position = 'bottom',
-    type,
   } = props;
 
   const options = [
@@ -99,9 +102,12 @@ export default function ImagePicker(props: ImagePickerProps) {
           }
         }
       } else {
+        console.log('andarrrr');
+        console.log(fileTypes);
+
         res = await (multiple
           ? uploadMultipleDocuments(fileTypes)
-          : uploadDocument(fileTypes));
+          : uploadDocument(type === 'video' ? videoTypes : fileTypes));
 
         if (res) {
           console.log(res);
@@ -119,18 +125,6 @@ export default function ImagePicker(props: ImagePickerProps) {
                 ) === 'svg'
               ) {
                 fileError = 'SVG is not valid file type!';
-              } else if (
-                extractExtFromName(
-                  el.name || res.filename || extractFileNameFromUri(el.path),
-                ) === 'mp4'
-              ) {
-                fileError = 'Mp4 is not valid file type!';
-              } else if (
-                extractExtFromName(
-                  el.name || res.filename || extractFileNameFromUri(el.path),
-                ) === 'mp3'
-              ) {
-                fileError = 'Mp3 is not valid file type!';
               } else if (
                 extractExtFromName(
                   el.name || res.filename || extractFileNameFromUri(el.path),

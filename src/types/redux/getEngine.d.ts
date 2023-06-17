@@ -11,9 +11,18 @@ type ENGINE = {
   cooling: string;
   heater: string;
   condensor: string;
-  gear_oil_leakage_image: string;
-  exhaust_smoke_image: string;
-  engine_sound_video: string;
+  gear_oil_leakage_image: {
+    url: string;
+    file: string;
+  };
+  exhaust_smoke_image: {
+    url: string;
+    file: string;
+  };
+  engine_sound_video: {
+    url: string;
+    file: string;
+  };
 };
 
 type GetEngineDetailsState = {

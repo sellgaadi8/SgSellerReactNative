@@ -244,6 +244,7 @@ type ImagePickerProps = {
   isOpen: boolean;
   multiple: boolean;
   fileTypes?: DocumentPickerOptions<'android' | 'ios' | 'windows'>;
+  videoTypes?: DocumentPickerOptions<'android' | 'ios' | 'windows'>;
   onSaveImage: (ImageType) => void;
   onClose: () => void;
   size?: number;

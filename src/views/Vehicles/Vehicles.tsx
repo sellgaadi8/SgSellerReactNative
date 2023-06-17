@@ -74,30 +74,44 @@ export default function Vehicles({navigation}: VehiclesProps) {
   }
   return (
     <Box style={styles.container}>
-      {loading && <Loader />}
-      <Box style={styles.filter}>
-        <CustomText
-          fontFamily="Roboto-Medium"
-          color="#201A1B"
-          fontSize={14}
-          lineHeight={16}>
-          Filters
-        </CustomText>
-        <Icon
-          name="filter-variant"
-          size={20}
-          color="#201A1B"
-          // eslint-disable-next-line react-native/no-inline-styles
-          style={{marginLeft: 5}}
-        />
-      </Box>
-      <Box style={styles.flat}>
-        <FlatList
-          data={vehicleData}
-          renderItem={renderItem}
-          contentContainerStyle={styles.flatList}
-        />
-      </Box>
+      {vehicleData?.length !== 0 ? (
+        <>
+          {loading && <Loader />}
+          <Box style={styles.filter}>
+            <CustomText
+              fontFamily="Roboto-Medium"
+              color="#201A1B"
+              fontSize={14}
+              lineHeight={16}>
+              Filters
+            </CustomText>
+            <Icon
+              name="filter-variant"
+              size={20}
+              color="#201A1B"
+              // eslint-disable-next-line react-native/no-inline-styles
+              style={{marginLeft: 5}}
+            />
+          </Box>
+          <Box style={styles.flat}>
+            <FlatList
+              data={vehicleData}
+              renderItem={renderItem}
+              contentContainerStyle={styles.flatList}
+            />
+          </Box>
+        </>
+      ) : (
+        <Box style={styles.noData}>
+          <CustomText
+            fontFamily="Roboto-Medium"
+            color="#111111"
+            fontSize={20}
+            lineHeight={28}>
+            No Vehicle Found
+          </CustomText>
+        </Box>
+      )}
 
       <Pressable style={styles.addCar} onPress={selectVehicleType}>
         <Icon name="pencil-outline" size={25} color="#000000" />
@@ -134,5 +148,10 @@ const styles = EStyleSheet.create({
   },
   flat: {
     marginBottom: '7.5rem',
+  },
+  noData: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

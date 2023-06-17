@@ -23,10 +23,10 @@ import ImagePicker from '../../components/ImagePicker';
 import DocumentPicker from 'react-native-document-picker';
 import {onUploadImage} from '../../redux/ducks/uploadImage';
 const list = [
-  {label: 'Ok', value: 'Ok'},
-  {label: 'Scratched', value: 'Scratched'},
-  {label: 'Dented', value: 'Dented'},
-  {label: 'Repainted', value: 'Repainted'},
+  {label: 'Ok', value: 'ok'},
+  {label: 'Scratched', value: 'scratched'},
+  {label: 'Dented', value: 'dented'},
+  {label: 'Repainted', value: 'repainted'},
 ];
 
 export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
@@ -233,50 +233,61 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
       setLoading(false);
       const {data, error, success} = setGet;
       if (!error && success && data) {
-        setHood(data.bonnet_head);
-        setRoof(data.roof);
-        setDickey(data.dickey_door);
-        setLdoorb(data.left_door_back);
-        setRdoorb(data.right_door_back);
-        setLdoorf(data.left_door_front);
-        setRdoorf(data.right_door_front);
-        setLfender(data.left_fender);
-        setRfender(data.right_fender);
-        setLqPanel(data.left_quater_panel);
-        setRqPanel(data.right_quater_panel);
+        setHood(data.bonnet_head.toLowerCase());
+        setRoof(data.roof.toLowerCase());
+        setDickey(data.dickey_door.toLowerCase());
+        setLdoorb(data.left_door_back.toLowerCase());
+        setRdoorb(data.right_door_back.toLowerCase());
+        setLdoorf(data.left_door_front.toLowerCase());
+        setRdoorf(data.right_door_front.toLowerCase());
+        setLfender(data.left_fender.toLowerCase());
+        setRfender(data.right_fender.toLowerCase());
+        setLqPanel(data.left_quater_panel.toLowerCase());
+        setRqPanel(data.right_quater_panel.toLowerCase());
         let temp = [...externelType];
         if (data.bonnet_head_image) {
-          temp[0].url = data.bonnet_head_image;
+          temp[0].url = data.bonnet_head_image.url;
+          setHoodImage(data.bonnet_head_image.file);
         }
         if (data.roof_image) {
-          temp[1].url = data.roof_image;
+          temp[1].url = data.roof_image.url;
+          setRoofImage(data.roof_image.file);
         }
         if (data.dickey_door_image) {
-          temp[2].url = data.dickey_door_image;
+          temp[2].url = data.dickey_door_image.url;
+          setDickeyImage(data.dickey_door_image.file);
         }
         if (data.left_door_back_image) {
-          temp[3].url = data.left_door_back_image;
+          temp[3].url = data.left_door_back_image.url;
+          setLdoorbImage(data.left_door_back_image.file);
         }
         if (data.right_door_back_image) {
-          temp[4].url = data.right_door_back_image;
+          temp[4].url = data.right_door_back_image.url;
+          setRdoorbImage(data.right_door_back_image.file);
         }
         if (data.left_door_front_image) {
-          temp[5].url = data.left_door_front_image;
+          temp[5].url = data.left_door_front_image.url;
+          setLdoorfImage(data.left_door_front_image.file);
         }
         if (data.right_door_front_image) {
-          temp[6].url = data.right_door_front_image;
+          temp[6].url = data.right_door_front_image.url;
+          setRdoorfImage(data.right_door_front_image.file);
         }
         if (data.left_fender_image) {
-          temp[7].url = data.left_fender_image;
+          temp[7].url = data.left_fender_image.url;
+          setLfenderImage(data.left_fender_image.file);
         }
         if (data.right_fender_image) {
-          temp[8].url = data.right_fender_image;
+          temp[8].url = data.right_fender_image.url;
+          setRfenderImage(data.right_fender_image.file);
         }
         if (data.left_quater_panel_image) {
-          temp[9].url = data.left_quater_panel_image;
+          temp[9].url = data.left_quater_panel_image.url;
+          setLqPanelImage(data.left_quater_panel_image.file);
         }
         if (data.right_quater_panel_image) {
-          temp[10].url = data.right_quater_panel_image;
+          temp[10].url = data.right_quater_panel_image.url;
+          setRqPanelImage(data.right_quater_panel_image.file);
         }
         setExternelType([...temp]);
       }
@@ -285,7 +296,9 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
   }, [selectAdd, selectUpdate]);
 
   function onSaveImage(image: any) {
-    dispatch(onUploadImage(image[0], 'externel-panel-images'));
+    if (image) {
+      dispatch(onUploadImage(image[0], 'externel-panel-images'));
+    }
   }
 
   function onChangeHood() {

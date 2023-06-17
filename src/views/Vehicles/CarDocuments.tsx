@@ -137,6 +137,8 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
     return Object.keys(tempErrors).length === 0;
   }
 
+  console.log('insurance.length', insurance);
+
   function onSaveDocuments() {
     const isValid = validateInputs();
     if (isValid) {
@@ -229,6 +231,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
         setFitment(data.cng_lpg_fitment);
         setFitmentEndorsed(data.cng_lpg_fitment_endorsed_on_rc);
         setFitness(data.fitness_upto);
+        setPermit(data.permit_upto);
         setChessis(data.chasis_no);
         setHypo(data.under_hypothication);
         setInsurance(data.insurance);
@@ -239,19 +242,24 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
         setRoadTax(data.road_tax_paid);
         let temp = [...carDocsType];
         if (data.rc_availability_image) {
-          temp[0].url = data.rc_availability_image;
+          temp[0].url = data.rc_availability_image.url;
+          setRcAvailImage(data.rc_availability_image.file);
         }
         if (data.road_tax_paid_image) {
-          temp[1].url = data.road_tax_paid_image;
+          temp[1].url = data.road_tax_paid_image.url;
+          setRoadTaxImage(data.road_tax_paid_image.file);
         }
         if (data.partipeshi_request_image) {
-          temp[2].url = data.partipeshi_request_image;
+          temp[2].url = data.partipeshi_request_image.url;
+          setPartipeshiImage(data.partipeshi_request_image.file);
         }
         if (data.duplicate_key_image) {
-          temp[3].url = data.duplicate_key_image;
+          temp[3].url = data.duplicate_key_image.url;
+          setKeyImage(data.duplicate_key_image.file);
         }
         if (data.chasis_no_image) {
-          temp[4].url = data.chasis_no_image;
+          temp[4].url = data.chasis_no_image.url;
+          setChessisImage(data.chasis_no_image.file);
         }
         // setPermit(data.oer)
       }
@@ -301,7 +309,9 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
   }, [selectAddCarDocs, selectUpdateCarDocs, selectGetCarDocs]);
 
   function onSaveImage(image: any) {
-    dispatch(onUploadImage(image[0], 'car-documents'));
+    if (image) {
+      dispatch(onUploadImage(image[0], 'car-documents'));
+    }
   }
 
   function onPressCalend(type: string) {
@@ -426,7 +436,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
                 {value: 'thirdparty', label: 'THIRDPARTY'},
                 {value: 'zero_dep', label: 'ZERO DEP'},
               ]}
-              onSelect={(label, value) => setMismatch(value)}
+              onSelect={(label, value) => setInsurance(value)}
               selectValue={insurance}
               isMandatory
               error={errors?.insurance}
@@ -521,7 +531,10 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
             />
           </Box>
           <Box width={'45%'}>
-            <PrimaryButton label="Save Edits" onPress={onSaveDocuments} />
+            <PrimaryButton
+              label={route.params.from === 'add' ? 'Save' : 'Update'}
+              onPress={onSaveDocuments}
+            />
           </Box>
         </Box>
       </ScrollView>

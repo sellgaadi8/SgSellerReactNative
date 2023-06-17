@@ -1,14 +1,38 @@
 type GET_CAR_IAMGES = 'sgSeller/getCarImages';
 
 type CarImages = {
-  video: string;
-  centre_back: string;
-  centre_front: string;
-  meter_console: string;
-  engine_hood_open: string;
-  right_corner_back: string;
-  interior_dashboard: string;
-  left_wheel_corner_front: string;
+  video: {
+    url: string;
+    file: string;
+  };
+  centre_back: {
+    url: string;
+    file: string;
+  };
+  centre_front: {
+    url: string;
+    file: string;
+  };
+  meter_console: {
+    url: string;
+    file: string;
+  };
+  engine_hood_open: {
+    url: string;
+    file: string;
+  };
+  right_corner_back: {
+    url: string;
+    file: string;
+  };
+  interior_dashboard: {
+    url: string;
+    file: string;
+  };
+  left_wheel_corner_front: {
+    url: string;
+    file: string;
+  };
 };
 
 type GetCarImageState = {

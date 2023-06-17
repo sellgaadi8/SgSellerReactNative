@@ -1,5 +1,5 @@
 import {Image, Pressable, ScrollView, View} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Box from './Box';
 import CustomText from './CustomText';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -9,30 +9,50 @@ import {VehicleCardProps} from '../types/propsTypes';
 import {contentCenter} from '../utils/styles';
 import {Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
-const {height} = Dimensions.get('window');
+import Video from 'react-native-video';
+const {height, width} = Dimensions.get('window');
 
 export default function VehicleCard({
   data,
   onPressEdit,
   onPressView,
 }: VehicleCardProps) {
+  const [play, setPlay] = useState(false);
+
   return (
     <Box style={styles.container}>
-      <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.imageContainer}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {data.images ? (
           data.images.map((el, index) => {
             return (
-              <Box key={index.toString()} style={styles.imageContainer}>
-                <FastImage
-                  source={{
-                    uri: el,
-                  }}
-                  style={styles.image}
-                  resizeMode="cover"
-                />
+              <Box key={index.toString()}>
+                {index === 0 ? (
+                  <Box>
+                    <Video
+                      source={{uri: el}}
+                      style={styles.image}
+                      resizeMode="cover"
+                      paused={play}
+                    />
+                    <Pressable
+                      style={styles.play}
+                      onPress={() => setPlay(!play)}>
+                      <Ionicons
+                        name={play ? 'play' : 'pause'}
+                        color="#FFFFFF"
+                        size={30}
+                      />
+                    </Pressable>
+                  </Box>
+                ) : (
+                  <FastImage
+                    source={{
+                      uri: el,
+                    }}
+                    style={styles.image}
+                    resizeMode="cover"
+                  />
+                )}
               </Box>
             );
           })
@@ -203,10 +223,10 @@ const styles = EStyleSheet.create({
     width: '100%',
   },
   image: {
-    height: '100%',
-    width: '100%',
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    height: height * 0.3,
+    width: width * 0.9,
+    borderTopRightRadius: '1.2rem',
+    borderTopLeftRadius: '1.2rem',
     marginRight: 5,
   },
   stock: {
@@ -229,5 +249,14 @@ const styles = EStyleSheet.create({
     borderRadius: 15,
     width: 80,
     ...contentCenter,
+  },
+  play: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

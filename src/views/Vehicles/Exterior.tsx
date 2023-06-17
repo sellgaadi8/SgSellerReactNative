@@ -1,4 +1,4 @@
-import {ScrollView} from 'react-native';
+import {ScrollView, ToastAndroid} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
@@ -25,9 +25,9 @@ import BasePicker from '../../components/BasePicker';
 import {onUploadImage} from '../../redux/ducks/uploadImage';
 const list = [
   {label: 'Ok', value: 'Ok'},
-  {label: 'Scratched', value: 'Scratched'},
-  {label: 'Dented', value: 'Dented'},
-  {label: 'Repainted', value: 'Repainted'},
+  {label: 'Scratched', value: 'scratched'},
+  {label: 'Dented', value: 'dented'},
+  {label: 'Repainted', value: 'repainted'},
 ];
 
 export default function Exterior({navigation, route}: ExteriorProps) {
@@ -88,8 +88,11 @@ export default function Exterior({navigation, route}: ExteriorProps) {
   }, []);
 
   function onSaveImage(image: any) {
-    // saveDocs(uploadType, image);
-    dispatch(onUploadImage(image[0], 'exterior-images'));
+    if (image) {
+      dispatch(onUploadImage(image[0], 'exterior-images'));
+    } else {
+      ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
+    }
   }
 
   useEffect(() => {
@@ -168,50 +171,61 @@ export default function Exterior({navigation, route}: ExteriorProps) {
       setLoading(false);
       const {error, data} = selectGetExteriorData;
       if (!error && data) {
-        setLeftPA(data.left_pillarA);
-        setLeftPB(data.left_pillarB);
-        setLeftPC(data.left_pillarC);
-        setRightPA(data.right_pillarA);
-        setRightPB(data.right_pillarB);
-        setRightPC(data.right_pillarC);
-        setLeftApron(data.left_apron);
-        setLeftApronLeg(data.left_apron_leg);
-        setRightApronLeg(data.right_apron_leg);
-        setRightApron(data.right_apron);
-        setBoot(data.boot_floor);
+        setLeftPA(data.left_pillarA.toLowerCase());
+        setLeftPB(data.left_pillarB.toLowerCase());
+        setLeftPC(data.left_pillarC.toLowerCase());
+        setRightPA(data.right_pillarA.toLowerCase());
+        setRightPB(data.right_pillarB.toLowerCase());
+        setRightPC(data.right_pillarC.toLowerCase());
+        setLeftApron(data.left_apron.toLowerCase());
+        setLeftApronLeg(data.left_apron_leg.toLowerCase());
+        setRightApronLeg(data.right_apron_leg.toLowerCase());
+        setRightApron(data.right_apron.toLowerCase());
+        setBoot(data.boot_floor.toLowerCase());
         let temp = [...exteriorType];
         if (data.left_pillarA_image) {
-          temp[0].url = data.left_pillarA_image;
+          temp[0].url = data.left_pillarA_image.url;
+          setImage1(data.left_pillarA_image.file);
         }
         if (data.left_pillarB_image) {
-          temp[1].url = data.left_pillarB_image;
+          temp[1].url = data.left_pillarB_image.url;
+          setImage2(data.left_pillarB_image.file);
         }
         if (data.left_pillarC_image) {
-          temp[2].url = data.left_pillarC_image;
+          temp[2].url = data.left_pillarC_image.url;
+          setImage3(data.left_pillarC_image.file);
         }
         if (data.right_pillarA_image) {
-          temp[3].url = data.right_pillarA_image;
+          temp[3].url = data.right_pillarA_image.url;
+          setImage4(data.right_pillarA_image.file);
         }
         if (data.right_pillarB_image) {
-          temp[4].url = data.right_pillarB_image;
+          temp[4].url = data.right_pillarB_image.url;
+          setImage5(data.right_pillarA_image.file);
         }
         if (data.right_pillarC_image) {
-          temp[5].url = data.right_pillarC_image;
+          temp[5].url = data.right_pillarC_image.url;
+          setImage6(data.right_pillarA_image.file);
         }
         if (data.left_apron_image) {
-          temp[6].url = data.left_apron_image;
+          temp[6].url = data.left_apron_image.url;
+          setImage7(data.left_apron_image.file);
         }
         if (data.left_apron_leg_image) {
-          temp[7].url = data.left_apron_leg_image;
+          temp[7].url = data.left_apron_leg_image.url;
+          setImage8(data.left_apron_leg_image.file);
         }
         if (data.right_apron_image) {
-          temp[8].url = data.right_apron_image;
+          temp[8].url = data.right_apron_image.url;
+          setImage9(data.right_apron_image.file);
         }
         if (data.right_apron_leg_image) {
-          temp[9].url = data.right_apron_leg_image;
+          temp[9].url = data.right_apron_leg_image.url;
+          setImage10(data.right_apron_leg_image.file);
         }
         if (data.boot_floor_image) {
-          temp[10].url = data.boot_floor_image;
+          temp[10].url = data.boot_floor_image.url;
+          setImage11(data.boot_floor_image.file);
         }
         setExteriorType([...temp]);
       }
@@ -336,6 +350,8 @@ export default function Exterior({navigation, route}: ExteriorProps) {
     }
   }
 
+  console.log('kpa', leftPA);
+
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
@@ -348,53 +364,6 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           Step 4: Exterior
         </CustomText>
         <Box pv={'2%'}>
-          {/* {exteriorType.map((el, index) => {
-            return (
-              <View style={styles.card} key={index.toString()}>
-                <View style={styles.title}>
-                  <CustomText
-                    fontFamily="Roboto-Regular"
-                    fontSize={12}
-                    lineHeight={16}
-                    color="#1C1B1F"
-                    style={styles.text}>
-                    {el.name}
-                  </CustomText>
-                </View>
-                {el.url ? (
-                  <Image source={{uri: el.url}} style={styles.image} />
-                ) : (
-                  <Image
-                    source={require('../../assets/media.png')}
-                    style={styles.image}
-                  />
-                )}
-                <View style={styles.content}>
-                  <PrimaryButton
-                    label="Choose media"
-                    onPress={() => onPressPicker(el.id)}
-                    varient="Secondary"
-                  />
-                  <CustomText
-                    fontFamily="Roboto-Bold"
-                    fontSize={14}
-                    lineHeight={20}
-                    color="#201A1B"
-                    style={styles.text}>
-                    or
-                  </CustomText>
-                  <CustomText
-                    fontFamily="Roboto-Bold"
-                    fontSize={14}
-                    lineHeight={20}
-                    color="#201A1B"
-                    style={styles.text}>
-                    Browse media
-                  </CustomText>
-                </View>
-              </View>
-            );
-          })} */}
           <BasePicker
             data={list}
             title="Left Pillar A"
@@ -493,7 +462,10 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             />
           </Box>
           <Box width={'45%'}>
-            <PrimaryButton label="Save Edits" onPress={onSubmit} />
+            <PrimaryButton
+              label={route.params.from === 'add' ? 'Save' : 'Update'}
+              onPress={onSubmit}
+            />
           </Box>
         </Box>
       </ScrollView>

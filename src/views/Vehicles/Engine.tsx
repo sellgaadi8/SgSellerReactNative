@@ -43,6 +43,7 @@ export default function Engine({navigation, route}: EngineProps) {
   const [cooling, setCooling] = useState('');
   const [heater, setHeater] = useState('');
   const [condensor, setCondensor] = useState('');
+  const [mediaType, setMediaType] = useState<'photo' | 'video'>('photo');
   const dispatch = useDispatch<any>();
   const {vehicleId} = useContext(GlobalContext);
   const [errors, setErrors] = useState<EngineError>();
@@ -181,6 +182,7 @@ export default function Engine({navigation, route}: EngineProps) {
     }
     if (selectGetEngine.called) {
       const {error, data} = selectGetEngine;
+      let temp = [...engineImageTypes];
       if (!error && data) {
         setOilLeak(data.gear_oil_leakage);
         setSmoke(data.exhaust_smoke);
@@ -191,10 +193,16 @@ export default function Engine({navigation, route}: EngineProps) {
         setAc(data.ac);
         setCooling(data.cooling);
         setCondensor(data.condensor);
-        setOilLeakImage(data.gear_oil_leakage_image);
-        setSmokeImage(data.exhaust_smoke_image);
-        setSoundVideo(data.engine_sound_video);
+        setOilLeakImage(data.gear_oil_leakage_image.file);
+        setSmokeImage(data.exhaust_smoke_image.file);
+        if (data.engine_sound_video) {
+          setSoundVideo(data.engine_sound_video.file);
+          temp[2].url = data.engine_sound_video.url;
+        }
+        temp[0].url = data.gear_oil_leakage_image.url;
+        temp[1].url = data.exhaust_smoke_image.url;
       }
+      setEngineImageTypes([...temp]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectUploadImage, selectAddEngine, selectUpdateEngine, selectGetEngine]);
@@ -215,7 +223,24 @@ export default function Engine({navigation, route}: EngineProps) {
   }
 
   function onSaveImage(image: any) {
-    dispatch(onUploadImage(image[0], 'engine-images'));
+    if (image) {
+      dispatch(onUploadImage(image[0], 'engine-images'));
+    }
+  }
+
+  function onPressEngineSound(label: string, value: string) {
+    setSound(value);
+    setMediaType('video');
+  }
+
+  function onPressOilLeak(label: string, value: string) {
+    setOilLeak(value);
+    setMediaType('photo');
+  }
+
+  function onPressSmoke(label: string, value: string) {
+    setSmoke(value);
+    setMediaType('photo');
   }
 
   return (
@@ -236,7 +261,7 @@ export default function Engine({navigation, route}: EngineProps) {
               {label: 'OK', value: 'ok'},
               {label: 'Leakage', value: 'leakage'}, ///image
             ]}
-            onSelect={(label, value) => setOilLeak(value)}
+            onSelect={(label, value) => onPressOilLeak(label, value)}
             isImage
             selectValue={oilLeak}
             onPressCamera={() => onCameraAction('gear_oil')}
@@ -249,10 +274,11 @@ export default function Engine({navigation, route}: EngineProps) {
               {label: 'BLACK SMOKE', value: 'black_smoke'},
               {label: 'WHITE SMOKE', value: 'white_smoke'}, ///image
             ]}
-            onSelect={(label, value) => setSmoke(value)}
+            onSelect={(label, value) => onPressSmoke(label, value)}
             selectValue={smoke}
             onPressCamera={() => onCameraAction('exhaust_smoke')}
             selectPhoto={engineImageTypes[1].url}
+            isImage
           />
           <RadioButtons
             label="Engine permissible blow back"
@@ -278,9 +304,10 @@ export default function Engine({navigation, route}: EngineProps) {
               {label: 'MAJOR SOUND', value: 'major_sound'},
               {label: 'NO BLOW BY', value: 'no_blow_by'}, //video
             ]}
-            onSelect={(label, value) => setSound(value)}
+            onSelect={(label, value) => onPressEngineSound(label, value)}
             selectValue={sound}
             isMandatory
+            isImage
             onPressCamera={() => onCameraAction('engine_sound')}
             error={errors?.sound}
             selectPhoto={engineImageTypes[2].url}
@@ -363,6 +390,7 @@ export default function Engine({navigation, route}: EngineProps) {
           allowMultiSelection: false,
           type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
         }}
+        type={mediaType === 'photo' ? 'photo' : 'video'}
       />
     </Box>
   );

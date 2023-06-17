@@ -40,6 +40,12 @@ export const onUpdateElectrical =
     overall: string,
     jack_tool_box: string,
     lights_crack_broken: string,
+    power_windows_image: string,
+    music_system_image: string,
+    electrical_odomoter_image: string,
+    parking_sensor_image: string,
+    overall_image: string,
+    jack_tool_box_image: string,
     lights_crack_broken_image: string,
   ) =>
   async (dispatch: AppDispatch) => {
@@ -63,6 +69,12 @@ export const onUpdateElectrical =
     body.append('overall', overall);
     body.append('jack_tool_box', jack_tool_box);
     body.append('lights_crack_broken', lights_crack_broken);
+    body.append('power_windows_image', power_windows_image);
+    body.append('music_system_image', music_system_image);
+    body.append('electrical_odomoter_image', electrical_odomoter_image);
+    body.append('parking_sensor_image', parking_sensor_image);
+    body.append('overall_image', overall_image);
+    body.append('jack_tool_box_image', jack_tool_box_image);
     body.append('lights_crack_broken_image', lights_crack_broken_image);
 
     axiosInstance
