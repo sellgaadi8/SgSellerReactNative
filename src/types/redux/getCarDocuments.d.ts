@@ -5,6 +5,7 @@ type CarDocument = {
   chasis_no: string;
   insurance: string;
   fitness_upto: string;
+  permit_upto: string;
   duplicate_key: string;
   rc_noc_issued: string;
   road_tax_paid: string;
