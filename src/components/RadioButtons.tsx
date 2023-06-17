@@ -9,6 +9,7 @@ import CustomText from './CustomText';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../utils/colors';
 import {contentCenter} from '../utils/styles';
+import Video from 'react-native-video';
 
 export default function RadioButtons({
   data,
@@ -78,6 +79,97 @@ export default function RadioButtons({
               <>
                 <Box flexDirection="row">
                   <Icon name="camera" size={20} color="#111111" />
+                  {isMandatory && (
+                    <Text
+                      style={{
+                        color: 'red',
+                        position: 'absolute',
+                        right: -12,
+                        top: -10,
+                      }}>
+                      *
+                    </Text>
+                  )}
+                </Box>
+              </>
+            )}
+          </Pressable>
+        )}
+        {isImage && userOption === 'leakage' && (
+          <Pressable style={[styles.upload]} onPress={onPressCamera}>
+            {selectPhoto && selectPhoto.length !== 0 ? (
+              <Image
+                source={{uri: selectPhoto}}
+                style={{height: 50, width: 105, borderRadius: 8}}
+                resizeMode="cover"
+              />
+            ) : (
+              <>
+                <Box flexDirection="row">
+                  <Icon name="camera" size={20} color="#111111" />
+                  {isMandatory && (
+                    <Text
+                      style={{
+                        color: 'red',
+                        position: 'absolute',
+                        right: -12,
+                        top: -10,
+                      }}>
+                      *
+                    </Text>
+                  )}
+                </Box>
+              </>
+            )}
+          </Pressable>
+        )}
+        {isImage &&
+          (userOption === 'black_smoke' || userOption === 'white_smoke') && (
+            <Pressable style={[styles.upload]} onPress={onPressCamera}>
+              {selectPhoto && selectPhoto.length !== 0 ? (
+                <Image
+                  source={{uri: selectPhoto}}
+                  style={{height: 50, width: 105, borderRadius: 8}}
+                  resizeMode="cover"
+                />
+              ) : (
+                <>
+                  <Box flexDirection="row">
+                    <Icon name="camera" size={20} color="#111111" />
+                    {isMandatory && (
+                      <Text
+                        style={{
+                          color: 'red',
+                          position: 'absolute',
+                          right: -12,
+                          top: -10,
+                        }}>
+                        *
+                      </Text>
+                    )}
+                  </Box>
+                </>
+              )}
+            </Pressable>
+          )}
+        {isImage && userOption === 'major_sound' && (
+          <Pressable style={[styles.upload]} onPress={onPressCamera}>
+            {selectPhoto && selectPhoto.length !== 0 ? (
+              // <Image
+              //   source={{uri: selectPhoto}}
+              //   style={{height: 50, width: 105, borderRadius: 8}}
+              //   resizeMode="cover"
+              // />
+              <Video
+                source={{uri: selectPhoto}}
+                paused={false}
+                style={{height: 50, width: 105, borderRadius: 8}}
+                repeat={true}
+              />
+            ) : (
+              <>
+                <Box flexDirection="row">
+                  <Icon name="video" size={20} color="#111111" />
                   {isMandatory && (
                     <Text
                       style={{

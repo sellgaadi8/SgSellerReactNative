@@ -10,7 +10,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {container} from '../../utils/styles';
 import RadioButtons from '../../components/RadioButtons';
 import PrimaryButton from '../../components/PrimaryButton';
-import {EngineProps} from '../../types/propsTypes';
+import {EngineProps, EngineType} from '../../types/propsTypes';
 import {useDispatch} from 'react-redux';
 import {onAddEngine} from '../../redux/ducks/addEngine';
 import GlobalContext from '../../contexts/GlobalContext';
@@ -20,10 +20,20 @@ import {onUpdateEngine} from '../../redux/ducks/updateEngine';
 import {onGetEngineDetails} from '../../redux/ducks/getEngine';
 import {ToastAndroid} from 'react-native';
 import Loader from '../../components/Loader';
+import ImagePicker from '../../components/ImagePicker';
+import DocumentPicker from 'react-native-document-picker';
+import {onUploadImage} from '../../redux/ducks/uploadImage';
 
 export default function Engine({navigation, route}: EngineProps) {
+  const [engineImageTypes, setEngineImageTypes] = useState([
+    {id: 'gear_oil', url: ''},
+    {id: 'exhaust_smoke', url: ''},
+    {id: 'engine_sound', url: ''},
+  ]);
   const [oilLeak, setOilLeak] = useState('');
+  const [oilLeakImage, setOilLeakImage] = useState('');
   const [smoke, setSmoke] = useState('');
+  const [smokeImage, setSmokeImage] = useState('');
   const [permissble, setPermissble] = useState('');
   const [mounting, setMounting] = useState('');
   const [sound, setSound] = useState('');
@@ -37,9 +47,12 @@ export default function Engine({navigation, route}: EngineProps) {
   const {vehicleId} = useContext(GlobalContext);
   const [errors, setErrors] = useState<EngineError>();
   const [loading, setLoading] = useState(false);
+  const [engineType, setEngineType] = useState<EngineType>();
+  const [openImagePicker, setOpenImagePicker] = useState(false);
   const selectAddEngine = useAppSelector(state => state.addEngine);
   const selectUpdateEngine = useAppSelector(state => state.updateEngine);
   const selectGetEngine = useAppSelector(state => state.getEngine);
+  const selectUploadImage = useAppSelector(state => state.uploadImage);
 
   useEffect(() => {
     if (route.params.from === 'edit') {
@@ -89,6 +102,9 @@ export default function Engine({navigation, route}: EngineProps) {
             cooling,
             heater,
             condensor,
+            oilLeakImage,
+            smokeImage,
+            soundVideo,
           ),
         );
       } else {
@@ -105,6 +121,9 @@ export default function Engine({navigation, route}: EngineProps) {
             cooling,
             heater,
             condensor,
+            oilLeakImage,
+            smokeImage,
+            soundVideo,
           ),
         );
       }
@@ -112,6 +131,32 @@ export default function Engine({navigation, route}: EngineProps) {
   }
 
   useEffect(() => {
+    if (selectUploadImage.called) {
+      setLoading(false);
+      const {error, image} = selectUploadImage;
+      let temp = [...engineImageTypes];
+
+      if (!error && image) {
+        switch (engineType) {
+          case 'gear_oil':
+            setOilLeakImage(image.file);
+            temp[0].url = image.url;
+            break;
+          case 'exhaust_smoke':
+            setSmokeImage(image.file);
+            temp[1].url = image.url;
+            break;
+          case 'engine_sound':
+            setSoundVideo(image.file);
+            temp[2].url = image.url;
+            break;
+
+          default:
+            break;
+        }
+      }
+      setEngineImageTypes([...temp]);
+    }
     if (selectAddEngine.called) {
       const {error, message, success} = selectAddEngine;
       if (!error && success) {
@@ -146,10 +191,32 @@ export default function Engine({navigation, route}: EngineProps) {
         setAc(data.ac);
         setCooling(data.cooling);
         setCondensor(data.condensor);
+        setOilLeakImage(data.gear_oil_leakage_image);
+        setSmokeImage(data.exhaust_smoke_image);
+        setSoundVideo(data.engine_sound_video);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectAddEngine, selectUpdateEngine, selectGetEngine]);
+  }, [selectUploadImage, selectAddEngine, selectUpdateEngine, selectGetEngine]);
+
+  function onCameraAction(type: EngineType) {
+    setOpenImagePicker(true);
+    switch (type) {
+      case 'gear_oil':
+        setEngineType('gear_oil');
+        break;
+      case 'exhaust_smoke':
+        setEngineType('exhaust_smoke');
+        break;
+      case 'engine_sound':
+        setEngineType('engine_sound');
+        break;
+    }
+  }
+
+  function onSaveImage(image: any) {
+    dispatch(onUploadImage(image[0], 'engine-images'));
+  }
 
   return (
     <Box style={styles.container}>
@@ -172,6 +239,8 @@ export default function Engine({navigation, route}: EngineProps) {
             onSelect={(label, value) => setOilLeak(value)}
             isImage
             selectValue={oilLeak}
+            onPressCamera={() => onCameraAction('gear_oil')}
+            selectPhoto={engineImageTypes[0].url}
           />
           <RadioButtons
             label="Exhaust smoke"
@@ -182,6 +251,8 @@ export default function Engine({navigation, route}: EngineProps) {
             ]}
             onSelect={(label, value) => setSmoke(value)}
             selectValue={smoke}
+            onPressCamera={() => onCameraAction('exhaust_smoke')}
+            selectPhoto={engineImageTypes[1].url}
           />
           <RadioButtons
             label="Engine permissible blow back"
@@ -210,7 +281,9 @@ export default function Engine({navigation, route}: EngineProps) {
             onSelect={(label, value) => setSound(value)}
             selectValue={sound}
             isMandatory
+            onPressCamera={() => onCameraAction('engine_sound')}
             error={errors?.sound}
+            selectPhoto={engineImageTypes[2].url}
           />
           <RadioButtons
             label="Clutch bearing Noise"
@@ -225,7 +298,7 @@ export default function Engine({navigation, route}: EngineProps) {
             label="AC"
             data={[
               {label: 'OK', value: 'ok'},
-              {label: 'Leakage', value: 'leakage'}, //image
+              {label: 'Leakage', value: 'leakage'},
             ]}
             onSelect={(label, value) => setAc(value)}
             selectValue={ac}
@@ -280,6 +353,17 @@ export default function Engine({navigation, route}: EngineProps) {
           </Box>
         </Box>
       </ScrollView>
+      <ImagePicker
+        isOpen={openImagePicker}
+        onClose={() => setOpenImagePicker(false)}
+        multiple={false}
+        onSaveImage={onSaveImage}
+        title="Select Image"
+        fileTypes={{
+          allowMultiSelection: false,
+          type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
+        }}
+      />
     </Box>
   );
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {useDispatch} from 'react-redux';
@@ -11,6 +12,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Dimensions, Image, Pressable, ScrollView} from 'react-native';
 import colors from '../../utils/colors';
 import {View} from 'react-native';
+import {
+  heightPercentageToDP,
+  widthPercentageToDP,
+} from 'react-native-responsive-screen';
 const {height, width} = Dimensions.get('window');
 const types = [
   'Car documents',
@@ -28,7 +33,6 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
   const selectVehicleDetails = useAppSelector(state => state.getVehicleDetails);
   const [vehicleDetails, setVehicleDetails] = useState<VehicleDetail | null>();
   const [vehicleImage, setVehicleImage] = useState<(string | null)[]>();
-  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     dispatch(onGetVehicleDetails(route.params.vehicleId));
@@ -46,12 +50,6 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
       }
     }
   }, [selectVehicleDetails]);
-
-  function onSelectType(index: number) {
-    if (index) {
-      setIsActive(true);
-    }
-  }
 
   return (
     <Box style={styles.container}>
@@ -165,10 +163,7 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
           <ScrollView horizontal contentContainerStyle={styles.tabel}>
             {types.map((el, index) => {
               return (
-                <Pressable
-                  key={index.toString()}
-                  style={styles.headers}
-                  onPress={() => onSelectType(index)}>
+                <Pressable key={index.toString()} style={styles.headers}>
                   <CustomText
                     color="White"
                     fontFamily="Roboto-Regular"
@@ -181,7 +176,87 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
             })}
           </ScrollView>
           <Box style={styles.body}>
-            <CustomText>test</CustomText>
+            <CustomText
+              color="#111111"
+              fontFamily="Roboto-Bold"
+              lineHeight={26}
+              fontSize={16}>
+              Car Documents
+            </CustomText>
+            <Box style={styles.title}>
+              <CustomText style={styles.dataValue}>Chasis No:</CustomText>
+              <CustomText style={styles.value}>
+                {vehicleDetails?.car_docs?.chasis_no.toUpperCase()}
+              </CustomText>
+            </Box>
+            <Box style={styles.title}>
+              <CustomText style={styles.dataValue}>Fitness Upto</CustomText>
+              <CustomText style={styles.value}>
+                {vehicleDetails?.car_docs?.fitness_upto}
+              </CustomText>
+            </Box>
+            <Box style={styles.title}>
+              <CustomText style={styles.dataValue}>RC Availability:</CustomText>
+              <CustomText style={styles.value}>
+                {vehicleDetails?.car_docs?.rc_availability.toUpperCase()}
+              </CustomText>
+            </Box>
+            <Box style={styles.title}>
+              <CustomText style={styles.dataValue}>Road Tax Paid:</CustomText>
+              <CustomText style={styles.value}>
+                {vehicleDetails?.car_docs?.road_tax_paid.toUpperCase()}
+              </CustomText>
+            </Box>
+            <Box style={styles.title}>
+              <CustomText style={styles.dataValue}>Insurance</CustomText>
+              <CustomText style={styles.value}>
+                {vehicleDetails?.car_docs?.insurance.toUpperCase()}
+              </CustomText>
+            </Box>
+            <Box style={styles.title}>
+              <CustomText style={styles.dataValue}>RC Noc Issued</CustomText>
+              <CustomText style={styles.value}>
+                {vehicleDetails?.car_docs?.rc_noc_issued.toUpperCase()}
+              </CustomText>
+            </Box>
+            <Box style={styles.title}>
+              <CustomText style={styles.dataValue}>Rto</CustomText>
+              <CustomText style={styles.value}>
+                {vehicleDetails?.car_docs?.rto.toUpperCase()}
+              </CustomText>
+            </Box>
+            <Box style={styles.title}>
+              <CustomText style={styles.dataValue}>CNG Fitment</CustomText>
+              <CustomText style={styles.value}>
+                {vehicleDetails?.car_docs?.cng_lpg_fitment.toUpperCase()}
+              </CustomText>
+            </Box>
+            <Box style={styles.title}>
+              <CustomText style={styles.dataValue}>
+                CNG Fitment Endorsed
+              </CustomText>
+              <CustomText style={styles.value}>
+                {vehicleDetails?.car_docs?.cng_lpg_fitment_endorsed_on_rc.toUpperCase()}
+              </CustomText>
+            </Box>
+            <Box style={styles.title}>
+              <CustomText style={styles.dataValue}>Duplicate Key</CustomText>
+              <CustomText style={styles.value}>
+                {vehicleDetails?.car_docs?.duplicate_key.toUpperCase()}
+              </CustomText>
+            </Box>
+            <Box style={styles.title}>
+              <CustomText style={styles.dataValue}>RC Mismatch</CustomText>
+              <CustomText style={styles.value}>
+                {vehicleDetails?.car_docs?.mismatch_in_rc.toUpperCase()}
+              </CustomText>
+            </Box>
+            <Box style={styles.title}>
+              <CustomText style={styles.dataValue}>Partipeshi</CustomText>
+              <CustomText style={styles.value}>
+                {vehicleDetails?.car_docs?.partipeshi_request.toUpperCase()}
+              </CustomText>
+            </Box>
           </Box>
         </Box>
       </ScrollView>
@@ -213,6 +288,26 @@ const styles = EStyleSheet.create({
     marginRight: '5rem',
   },
   body: {
-    borderWidth: 1,
+    backgroundColor: '#D9D9D9',
+    paddingHorizontal: widthPercentageToDP('4%'),
+    paddingVertical: heightPercentageToDP('2%'),
+  },
+  title: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '80%',
+    paddingVertical: '1%',
+  },
+  dataValue: {
+    color: '#111111',
+    fontFamily: 'Roboto-Medium',
+    lineHeight: 22,
+    fontSize: 15,
+  },
+  value: {
+    fontFamily: 'Roboto-Bold',
+    color: '#34A02C',
+    lineHeight: 22,
+    fontSize: 14,
   },
 });

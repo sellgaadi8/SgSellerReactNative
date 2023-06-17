@@ -41,6 +41,9 @@ export const onAddEngine =
     cooling: string,
     heater: string,
     condensor: string,
+    gear_oil_leakage_image: string,
+    exhaust_smoke_image: string,
+    engine_sound_video: string,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = addEngineUrl(id);
@@ -66,6 +69,9 @@ export const onAddEngine =
     body.append('cooling', cooling);
     body.append('heater', heater);
     body.append('condensor', condensor);
+    body.append('gear_oil_leakage_image', gear_oil_leakage_image);
+    body.append('exhaust_smoke_image', exhaust_smoke_image);
+    body.append('engine_sound_video', engine_sound_video);
 
     axiosInstance
       .post(url, body, config)

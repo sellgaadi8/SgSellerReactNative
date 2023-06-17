@@ -101,7 +101,8 @@ type AppColors =
   | '#FF0000'
   | '#111111'
   | '#EFC24F'
-  | '#5D5D5D';
+  | '#5D5D5D'
+  | '#34A02C';
 
 type InputProps = {
   disableCopyPaste?: boolean;
@@ -398,3 +399,5 @@ type CalenderProps = {
   maximumDate?: Date;
   minimumDate?: Date;
 };
+
+type EngineType = 'gear_oil' | 'exhaust_smoke' | 'engine_sound';

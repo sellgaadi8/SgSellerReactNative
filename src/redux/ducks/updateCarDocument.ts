@@ -41,6 +41,7 @@ export const onUpdateCarDocuments =
     under_hypothication: string,
     rto: string,
     fitness_upto: string,
+    permit_upto: string,
     cng_lpg_fitment: string,
     cng_lpg_fitment_endorsed_on_rc: string,
     road_tax_paid: string,
@@ -74,6 +75,7 @@ export const onUpdateCarDocuments =
     body.append('under_hypothication', under_hypothication);
     body.append('rto', rto);
     body.append('fitness_upto', fitness_upto);
+    body.append('permit_upto', permit_upto);
     body.append('cng_lpg_fitment', cng_lpg_fitment);
     body.append(
       'cng_lpg_fitment_endorsed_on_rc',
