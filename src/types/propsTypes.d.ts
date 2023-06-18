@@ -402,3 +402,24 @@ type CalenderProps = {
 };
 
 type EngineType = 'gear_oil' | 'exhaust_smoke' | 'engine_sound';
+
+type DetailWithImageProps = {
+  title: string;
+  image?: string | null;
+  value: string;
+};
+
+type ExteriorImage = {
+  [key: string]: string | null;
+};
+
+type DataWithImagesProps = {
+  okValues: ExteriorImage;
+  notokValues: ExteriorImage;
+};
+
+type TyresImagesProps = {
+  title: string;
+  value: string | null;
+  image?: string | null;
+};

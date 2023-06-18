@@ -1,5 +1,30 @@
 type GET_VEHICLE_DETAIL = 'sgSeller/getVehicleDetail';
 
+type ExteriorDetails = {
+  boot_floor: string | null;
+  left_apron: string | null;
+  right_apron: string | null;
+  left_pillarA: string | null;
+  left_pillarB: string | null;
+  left_pillarC: string | null;
+  right_pillarA: string | null;
+  right_pillarB: string | null;
+  right_pillarC: string | null;
+  left_apron_leg: string | null;
+  right_apron_leg: string | null;
+  left_pillarA_image: string | null;
+  left_pillarB_image: string | null;
+  left_pillarC_image: string | null;
+  right_pillarA_image: string | null;
+  right_pillarB_image: string | null;
+  right_pillarC_image: string | null;
+  left_apron_image: string | null;
+  left_apron_leg_image: string | null;
+  right_apron_leg_image: string | null;
+  right_apron_image: string | null;
+  boot_floor_image: string | null;
+};
+
 type VehicleDetail = {
   display_info: {
     make: string;
@@ -68,30 +93,7 @@ type VehicleDetail = {
     left_quater_panel_image: string | null;
     right_quater_panel_image: string | null;
   } | null;
-  exterior: {
-    boot_floor: string | null;
-    left_apron: string | null;
-    right_apron: string | null;
-    left_pillarA: string | null;
-    left_pillarB: string | null;
-    left_pillarC: string | null;
-    right_pillarA: string | null;
-    right_pillarB: string | null;
-    right_pillarC: string | null;
-    left_apron_leg: string | null;
-    right_apron_leg: string | null;
-    left_pillarA_image: string | null;
-    left_pillarB_image: string | null;
-    left_pillarC_image: string | null;
-    right_pillarA_image: string | null;
-    right_pillarB_image: string | null;
-    right_pillarC_image: string | null;
-    left_apron_image: string | null;
-    left_apron_leg_image: string | null;
-    right_apron_leg_image: string | null;
-    right_apron_image: string | null;
-    boot_floor_image: string | null;
-  } | null;
+  exterior_img: ExteriorDetails | null;
   tyres: {
     spare_type: string;
     lhs_back_type: string;
@@ -127,6 +129,12 @@ type VehicleDetail = {
     parking_sensor: string | null;
     electrical_odomoter: string | null;
     lights_crack_broken: string | null;
+    overall_image: string | null;
+    music_system_image: string | null;
+    jack_tool_box_image: string | null;
+    power_windows_image: string | null;
+    parking_sensor_image: string | null;
+    electrical_odomoter_image: string | null;
     lights_crack_broken_image: string | null;
   } | null;
   steering: {

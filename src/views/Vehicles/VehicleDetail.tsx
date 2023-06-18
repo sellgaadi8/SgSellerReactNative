@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
 import {onGetVehicleDetails} from '../../redux/ducks/getVehicleDetails';
-import {VehicleDetailProps} from '../../types/propsTypes';
+import {ExteriorImage, VehicleDetailProps} from '../../types/propsTypes';
 import {container} from '../../utils/styles';
 import {useAppSelector} from '../../utils/hooks';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -16,6 +16,10 @@ import {
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
 import Video from 'react-native-video';
+import DetailWithImage from '../../components/DetailWithImage';
+import DataWithImages from '../../components/DataWithImages';
+import TyresImages from '../../components/TyresImages';
+import Loader from '../../components/Loader';
 const {height, width} = Dimensions.get('window');
 const types = [
   'Car documents',
@@ -33,26 +37,82 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
   const [vehicleDetails, setVehicleDetails] = useState<VehicleDetail | null>();
   const [vehicleImage, setVehicleImage] = useState<(string | null)[]>();
   const [play, setPlay] = useState(false);
+  const [okValues, setOkValues] = useState<ExteriorImage>({});
+  const [notokValues, setNotOkValues] = useState<ExteriorImage>({});
+  const [exterior, setExterior] = useState<ExteriorImage>();
+
+  const [okValuesExternel, setOkValuesExternel] = useState<ExteriorImage>({});
+  const [notokValuesExternel, setNotOkValuesExternel] = useState<ExteriorImage>(
+    {},
+  );
+  const [externel, setExternel] = useState<ExteriorImage>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     dispatch(onGetVehicleDetails(route.params.vehicleId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (selectVehicleDetails.called) {
+      setLoading(false);
       const {data, success, error} = selectVehicleDetails;
       if (success && !error && data) {
         setVehicleDetails(data);
         if (data.car_images) {
           setVehicleImage(Object.values(data.car_images));
+          if (data.exterior_img) {
+            setExterior(data.exterior_img);
+            getExteriorData();
+          }
+          if (data.external_panel) {
+            setExternel(data.external_panel);
+            getExternelData();
+          }
         }
       }
     }
-  }, [selectVehicleDetails]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectVehicleDetails, exterior]);
+
+  function getExteriorData() {
+    const okValue: Partial<ExteriorDetails> = {};
+    const nonOkValues: Partial<ExteriorDetails> = {};
+
+    for (const key in exterior) {
+      if (exterior && exterior.hasOwnProperty(key)) {
+        if (exterior && exterior[key] === 'Ok') {
+          okValue[key as keyof ExteriorDetails] = exterior[key];
+        } else if (exterior[key] !== null) {
+          nonOkValues[key as keyof ExteriorDetails] = exterior[key];
+        }
+      }
+    }
+    setOkValues(okValue);
+    setNotOkValues(nonOkValues);
+  }
+
+  function getExternelData() {
+    const okValue: Partial<ExteriorImage> = {};
+    const nonOkValues: Partial<ExteriorImage> = {};
+
+    for (const key in externel) {
+      if (externel && externel.hasOwnProperty(key)) {
+        if (externel && externel[key] === 'Ok') {
+          okValue[key as keyof ExteriorImage] = externel[key];
+        } else if (externel[key] !== null) {
+          nonOkValues[key as keyof ExteriorImage] = externel[key];
+        }
+      }
+    }
+    setOkValuesExternel(okValue);
+    setNotOkValuesExternel(nonOkValues);
+  }
 
   return (
     <Box style={styles.container}>
+      {loading && <Loader />}
       <ScrollView>
         <ScrollView horizontal={true}>
           {vehicleImage &&
@@ -169,7 +229,7 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
                   <CustomText
                     color="White"
                     fontFamily="Roboto-Regular"
-                    fontSize={14}
+                    fontSize={16}
                     lineHeight={22}>
                     {el}
                   </CustomText>
@@ -185,12 +245,7 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
                   <CustomText style={styles.vehicleHeading}>
                     Car Documents
                   </CustomText>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Chasis No:</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.car_docs?.chasis_no.toUpperCase()}
-                    </CustomText>
-                  </Box>
+
                   <Box style={styles.title}>
                     <CustomText style={styles.dataValue}>
                       Fitness Upto
@@ -199,22 +254,7 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
                       {vehicleDetails?.car_docs?.fitness_upto}
                     </CustomText>
                   </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      RC Availability:
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.car_docs?.rc_availability.toUpperCase()}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Road Tax Paid:
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.car_docs?.road_tax_paid.toUpperCase()}
-                    </CustomText>
-                  </Box>
+
                   <Box style={styles.title}>
                     <CustomText style={styles.dataValue}>Insurance</CustomText>
                     <CustomText style={styles.value}>
@@ -253,260 +293,86 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
                   </Box>
                   <Box style={styles.title}>
                     <CustomText style={styles.dataValue}>
-                      Duplicate Key
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.car_docs?.duplicate_key.toUpperCase()}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
                       RC Mismatch
                     </CustomText>
                     <CustomText style={styles.value}>
                       {vehicleDetails?.car_docs?.mismatch_in_rc.toUpperCase()}
                     </CustomText>
                   </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Partipeshi</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.car_docs?.partipeshi_request.toUpperCase()}
-                    </CustomText>
-                  </Box>
+                  <DetailWithImage
+                    title="Chasis No."
+                    image={vehicleDetails.car_docs.chasis_no_image}
+                    value={vehicleDetails?.car_docs?.chasis_no.toUpperCase()}
+                  />
+                  <DetailWithImage
+                    title="RC Availability:"
+                    image={vehicleDetails.car_docs.rc_availability_image}
+                    value={vehicleDetails?.car_docs?.rc_availability.toUpperCase()}
+                  />
+                  <DetailWithImage
+                    title="Road Tax Paid"
+                    image={vehicleDetails.car_docs.road_tax_paid_image}
+                    value={vehicleDetails?.car_docs?.road_tax_paid.toUpperCase()}
+                  />
+                  <DetailWithImage
+                    title="Duplicate Key"
+                    image={vehicleDetails.car_docs.duplicate_key_image}
+                    value={vehicleDetails?.car_docs?.duplicate_key.toUpperCase()}
+                  />
+                  <DetailWithImage
+                    title="Partipeshi Request"
+                    image={vehicleDetails.car_docs.partipeshi_request_image}
+                    value={vehicleDetails?.car_docs?.partipeshi_request.toUpperCase()}
+                  />
                 </Box>
               )}
-              {vehicleDetails?.exterior && (
-                <Box>
-                  <CustomText style={styles.vehicleHeading}>
-                    Exterior
-                  </CustomText>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Left Pillar A
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.exterior?.left_pillarA}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Left Pillar B
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.exterior?.left_pillarB}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Left Pillar C
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.exterior?.left_pillarC}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Right Pillar A
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.exterior?.right_pillarA}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Right Pillar B
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.exterior?.right_pillarB}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Right Pillar C
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.exterior?.right_pillarB}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Left Apron</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.exterior?.left_apron}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Left Apron Leg
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.exterior?.left_apron_leg}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Right Apron
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.exterior?.right_apron}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Right Apron Leg
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.exterior?.right_apron_leg}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Boot Floor</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.exterior?.boot_floor}
-                    </CustomText>
-                  </Box>
-                </Box>
+              {vehicleDetails?.exterior_img && (
+                <DataWithImages notokValues={notokValues} okValues={okValues} />
               )}
               {vehicleDetails?.external_panel && (
-                <Box>
-                  <CustomText style={styles.vehicleHeading}>
-                    Externel panel
-                  </CustomText>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Bonnet Head
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.external_panel?.bonnet_head}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Dickey Door
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.external_panel?.dickey_door}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Left Door Back
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.external_panel?.left_door_back}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Left Door Front
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.external_panel?.left_door_front}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Right Door Back
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.external_panel?.right_door_back}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Right Door Front
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.external_panel?.right_door_front}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Left Fender
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.external_panel?.left_fender}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Right Fender
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.external_panel?.right_fender}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Left Quater Panel
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.external_panel?.left_quater_panel}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Right Quater Panel
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.external_panel?.right_quater_panel}
-                    </CustomText>
-                  </Box>
-                </Box>
+                <DataWithImages
+                  notokValues={notokValuesExternel}
+                  okValues={okValuesExternel}
+                />
               )}
               {vehicleDetails?.tyres && (
                 <Box>
                   <CustomText style={styles.vehicleHeading}>Tyres</CustomText>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      LHS Back Type
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.tyres?.lhs_back_type}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      RHS Back Type
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.tyres?.rhs_back_type}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      LHS Front Type
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.tyres?.lhs_front_type}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      RHS Front Type
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.tyres?.rhs_front_type}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Spare Type</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.tyres?.spare_type}
-                    </CustomText>
-                  </Box>
+                  <TyresImages
+                    title="LHS Back Type"
+                    value={vehicleDetails?.tyres?.lhs_back_type}
+                    image={vehicleDetails?.tyres.lhs_back_image}
+                  />
+                  <TyresImages
+                    title="RHS Back Type"
+                    value={vehicleDetails?.tyres?.rhs_back_type}
+                    image={vehicleDetails?.tyres.rhs_back_image}
+                  />
+                  <TyresImages
+                    title="LHS Front Type"
+                    value={vehicleDetails?.tyres?.lhs_front_type}
+                    image={vehicleDetails?.tyres.lhs_front_image}
+                  />
+                  <TyresImages
+                    title="RHS Front Type"
+                    value={vehicleDetails?.tyres?.rhs_front_type}
+                    image={vehicleDetails?.tyres.rhs_front_image}
+                  />
+                  <TyresImages
+                    title="Spare Type"
+                    value={vehicleDetails?.tyres?.spare_type}
+                    image={vehicleDetails?.tyres.spare_image}
+                  />
                 </Box>
               )}
               {vehicleDetails?.engine && (
                 <Box>
                   <CustomText style={styles.vehicleHeading}>Engine</CustomText>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Engine Sound
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.engine?.engine_sound}
-                    </CustomText>
-                  </Box>
+                  <TyresImages
+                    title="Engine Sound"
+                    value={vehicleDetails?.engine?.engine_sound}
+                    image={vehicleDetails?.engine?.engine_sound_video}
+                  />
                   <Box style={styles.title}>
                     <CustomText style={styles.dataValue}>
                       Clutch Bearing Sound
@@ -523,22 +389,16 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
                       {vehicleDetails?.engine?.engine_mounting}
                     </CustomText>
                   </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Exhaust Smoke
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.engine?.exhaust_smoke}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Gear Oil Leakage
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.engine?.gear_oil_leakage}
-                    </CustomText>
-                  </Box>
+                  <TyresImages
+                    title="Exhaust Smoke"
+                    value={vehicleDetails?.engine?.exhaust_smoke}
+                    image={vehicleDetails?.engine?.exhaust_smoke_image}
+                  />
+                  <TyresImages
+                    title="Gear Oil Leakage"
+                    value={vehicleDetails?.engine?.gear_oil_leakage}
+                    image={vehicleDetails?.engine?.gear_oil_leakage_image}
+                  />
                   <Box style={styles.title}>
                     <CustomText style={styles.dataValue}>
                       Engine Perm Blow Back
@@ -578,60 +438,46 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
                   <CustomText style={styles.vehicleHeading}>
                     Electricals
                   </CustomText>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Electrical Odomoter
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.electricals?.electrical_odomoter}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Jack Tool Box
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.electricals?.jack_tool_box}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Lights Crack Broken
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.electricals?.lights_crack_broken}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Music System
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.electricals?.music_system}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Overall</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.electricals?.overall}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Parking Sensor
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.electricals?.parking_sensor}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Power Windows
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.electricals?.power_windows}
-                    </CustomText>
-                  </Box>
+                  <TyresImages
+                    title="Electrical Odomoter"
+                    value={vehicleDetails?.electricals?.electrical_odomoter}
+                    image={
+                      vehicleDetails?.electricals?.electrical_odomoter_image
+                    }
+                  />
+                  <TyresImages
+                    title="Jack Tool Box"
+                    value={vehicleDetails?.electricals?.jack_tool_box}
+                    image={vehicleDetails?.electricals?.jack_tool_box_image}
+                  />
+
+                  <TyresImages
+                    title="Lights Crack Broken"
+                    value={vehicleDetails?.electricals?.lights_crack_broken}
+                    image={
+                      vehicleDetails?.electricals?.lights_crack_broken_image
+                    }
+                  />
+                  <TyresImages
+                    title="Music System"
+                    value={vehicleDetails?.electricals?.music_system}
+                    image={vehicleDetails?.electricals?.music_system_image}
+                  />
+                  <TyresImages
+                    title="Overall"
+                    value={vehicleDetails?.electricals?.overall}
+                    image={vehicleDetails?.electricals?.overall_image}
+                  />
+                  <TyresImages
+                    title="Parking Sensor"
+                    value={vehicleDetails?.electricals?.parking_sensor}
+                    image={vehicleDetails?.electricals?.parking_sensor_image}
+                  />
+                  <TyresImages
+                    title="Power Windows"
+                    value={vehicleDetails?.electricals?.power_windows}
+                    image={vehicleDetails?.electricals?.power_windows_image}
+                  />
                 </Box>
               )}
               {vehicleDetails?.steering && (
@@ -639,32 +485,42 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
                   <CustomText style={styles.vehicleHeading}>
                     Steering
                   </CustomText>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Brake</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.steering?.brake}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Steering</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.steering?.steering}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Suspension</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.steering?.suspension}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Wheel Bearing Noise
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.steering?.wheel_bearing_noise}
-                    </CustomText>
-                  </Box>
+                  {vehicleDetails?.steering?.brake && (
+                    <Box style={styles.title}>
+                      <CustomText style={styles.dataValue}>Brake</CustomText>
+                      <CustomText style={styles.value}>
+                        {vehicleDetails?.steering?.brake}
+                      </CustomText>
+                    </Box>
+                  )}
+                  {vehicleDetails?.steering?.steering && (
+                    <Box style={styles.title}>
+                      <CustomText style={styles.dataValue}>Steering</CustomText>
+                      <CustomText style={styles.value}>
+                        {vehicleDetails?.steering?.steering}
+                      </CustomText>
+                    </Box>
+                  )}
+                  {vehicleDetails?.steering?.suspension && (
+                    <Box style={styles.title}>
+                      <CustomText style={styles.dataValue}>
+                        Suspension
+                      </CustomText>
+                      <CustomText style={styles.value}>
+                        {vehicleDetails?.steering?.suspension}
+                      </CustomText>
+                    </Box>
+                  )}
+                  {vehicleDetails?.steering?.wheel_bearing_noise && (
+                    <Box style={styles.title}>
+                      <CustomText style={styles.dataValue}>
+                        Wheel Bearing Noise
+                      </CustomText>
+                      <CustomText style={styles.value}>
+                        {vehicleDetails?.steering?.wheel_bearing_noise}
+                      </CustomText>
+                    </Box>
+                  )}
                 </Box>
               )}
             </ScrollView>
@@ -745,5 +601,9 @@ const styles = EStyleSheet.create({
     color: '#111111',
     fontFamily: 'Roboto-Medium',
     marginLeft: 5,
+  },
+  image: {
+    height: 50,
+    width: 50,
   },
 });
