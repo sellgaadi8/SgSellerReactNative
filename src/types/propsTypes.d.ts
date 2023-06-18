@@ -407,6 +407,7 @@ type DetailWithImageProps = {
   title: string;
   image?: string | null;
   value: string;
+  onPressImage?: () => void;
 };
 
 type ExteriorImage = {
@@ -422,4 +423,6 @@ type TyresImagesProps = {
   title: string;
   value: string | null;
   image?: string | null;
+  video?: string | null;
+  onPressImage?: () => void;
 };

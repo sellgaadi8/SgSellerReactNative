@@ -1,5 +1,6 @@
 import axiosInstance from '../../axios';
 import {DELETE_VALUATOR} from '../../utils/api';
+import {handleError} from '../../utils/helper';
 import {getUserToken} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
 
@@ -52,6 +53,7 @@ export const onDeleteValuator =
         dispatch(deleteValuatorAction({...res.data, error: false}));
       })
       .catch(err => {
+        handleError(err, dispatch);
         if (err?.request?._repsonse) {
           dispatch(
             deleteValuatorAction({

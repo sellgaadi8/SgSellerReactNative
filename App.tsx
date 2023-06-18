@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import {NavigationContainer, RouteProp} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import Header from './src/components/Header';
 import GlobalContext from './src/contexts/GlobalContext';
@@ -25,16 +25,47 @@ import Electricals from './src/views/Vehicles/Electricals';
 import Steering from './src/views/Vehicles/Steering';
 import Ac from './src/views/Vehicles/Ac';
 import VehicleDetail from './src/views/Vehicles/VehicleDetail';
+import {useAppSelector} from './src/utils/hooks';
+import Snackbar from 'react-native-snackbar';
+import ImageViewerCarousel from './src/views/ImageViewCarousel/ImageViewCarousel';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
   const [authenticated, setAuthenticated] = useState(false);
   const [vehicleId, setVehicleId] = useState('');
   const [name, setName] = useState('');
+  const [video1, setVideo1] = useState('');
+  const [video2, setVideo2] = useState('');
+  const selectLogoutState = useAppSelector(state => state.logout);
+
+  useEffect(() => {
+    if (selectLogoutState.called) {
+      const {error, message} = selectLogoutState;
+      if (!error && message) {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'red',
+          duration: Snackbar.LENGTH_SHORT,
+        });
+        setAuthenticated(false);
+        setVehicleId('');
+      }
+    }
+  }, [selectLogoutState]);
 
   return (
     <GlobalContext.Provider
-      value={{setAuthenticated, name, setName, vehicleId, setVehicleId}}>
+      value={{
+        setAuthenticated,
+        name,
+        setName,
+        vehicleId,
+        setVehicleId,
+        video1,
+        setVideo1,
+        video2,
+        setVideo2,
+      }}>
       <SafeAreaView style={styles.container}>
         <StatusBar backgroundColor={colors.primary} />
         <NavigationContainer>
@@ -275,16 +306,12 @@ export default function App() {
                   options={() => {
                     return {
                       header: props => (
-                        <Header
-                          headerProps={props}
-                          title="Add new vehicle"
-                          back
-                        />
+                        <Header headerProps={props} title="Images" back />
                       ),
                     };
                   }}
-                  component={Ac}
-                  name="Ac"
+                  component={ImageViewerCarousel}
+                  name="ImageViewerCarousel"
                 />
               </>
             )}

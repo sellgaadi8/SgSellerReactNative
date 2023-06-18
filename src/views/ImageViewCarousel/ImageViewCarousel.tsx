@@ -1,5 +1,5 @@
-import React, {useRef, useState} from 'react';
-import {Dimensions, Text, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {Dimensions, View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Animated from 'react-native-reanimated';
 import Carousel from 'react-native-snap-carousel';
@@ -8,18 +8,23 @@ import colors from '../../utils/colors';
 import {container, contentCenter} from '../../utils/styles';
 import {PinchBox} from '../../components/PinchBox';
 import {ImageViewerCarouselProps} from '../../types/propsTypes';
-import IconButton from '../../components/IconButton';
 
 const {width, height} = Dimensions.get('screen');
 
 export default function ImageViewerCarousel({route}: ImageViewerCarouselProps) {
   const {data, index: startingIndex} = route.params;
 
-  const [images, setImages] = useState([...data]);
+  const [images, setImages] = useState<string[]>([]);
 
   const _caoursel = useRef<Carousel<any>>(null);
 
   const [currentIndex, setCurrentIndex] = useState(startingIndex);
+
+  useEffect(() => {
+    let temp = [];
+    temp.push(data);
+    setImages(temp);
+  }, [data]);
 
   function _renderItem(image: any) {
     return (
@@ -27,7 +32,7 @@ export default function ImageViewerCarousel({route}: ImageViewerCarouselProps) {
         <PinchBox>
           <Animated.Image
             resizeMode="contain"
-            source={{uri: image.src}}
+            source={{uri: image}}
             style={styles.item}
           />
         </PinchBox>
@@ -75,28 +80,6 @@ export default function ImageViewerCarousel({route}: ImageViewerCarouselProps) {
           firstItem={startingIndex}
           itemWidth={width}
         />
-      </View>
-      <View
-        style={[
-          styles.indicatorContainer,
-          images.length <= 1 && styles.equalPadding,
-        ]}>
-        <Text style={styles.name}>
-          {!images[currentIndex].isApproved && (
-            <Text style={styles.warn}>(Under Review)</Text>
-          )}
-        </Text>
-        <View style={[styles.row, images.length <= 1 && styles.center]}>
-          {images.length > 1 && (
-            <IconButton onPress={onPrev} size={18} icon="left" />
-          )}
-          <Text style={styles.indicator}>
-            {currentIndex + 1} / {images.length}
-          </Text>
-          {images.length > 1 && (
-            <IconButton onPress={onNext} size={18} icon="right" />
-          )}
-        </View>
       </View>
     </View>
   );

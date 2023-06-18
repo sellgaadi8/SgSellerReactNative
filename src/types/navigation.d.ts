@@ -25,8 +25,8 @@ type RootStackParamList = {
   DetailsViewPage: undefined;
   ImageViewerCarousel: {
     onRemoveImage?: (index: number) => void;
-    updateImages?: (data: FundraiserMedia[]) => void;
-    data: FundraiserMedia[];
+    updateImages?: (data: string) => void;
+    data: string;
     index: number;
   };
 };

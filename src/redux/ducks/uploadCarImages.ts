@@ -3,6 +3,7 @@ import axiosInstance from '../../axios';
 import {uploadCardImageUrl} from '../../utils/api';
 import {getUserToken} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
+import {handleError} from '../../utils/helper';
 
 const UPLOAD_CAR_IMAGES: UPLOAD_CAR_IMAGES = 'sgSeller/uploadCarImage';
 
@@ -71,6 +72,7 @@ export const onUploadCarImages =
         dispatch(uploadCarImageAction({...res.data, error: false}));
       })
       .catch((err: AxiosError) => {
+        handleError(err, dispatch);
         if (err?.request?._repsonse) {
           dispatch(
             uploadCarImageAction({

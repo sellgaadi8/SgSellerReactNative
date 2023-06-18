@@ -1,11 +1,21 @@
-import {Image} from 'react-native';
-import React from 'react';
+import {Image, Pressable} from 'react-native';
+import React, {useContext} from 'react';
 import Box from './Box';
 import CustomText from './CustomText';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {TyresImagesProps} from '../types/propsTypes';
+import Video from 'react-native-video';
+import GlobalContext from '../contexts/GlobalContext';
 
-export default function TyresImages({title, value, image}: TyresImagesProps) {
+export default function TyresImages({
+  title,
+  value,
+  image,
+  video,
+  onPressImage,
+}: TyresImagesProps) {
+  const {video2} = useContext(GlobalContext);
+
   return (
     <Box style={value && styles.title}>
       {value && (
@@ -14,7 +24,20 @@ export default function TyresImages({title, value, image}: TyresImagesProps) {
             <CustomText style={styles.dataValue}>{title}</CustomText>
             <CustomText style={styles.value}>{value}</CustomText>
           </Box>
-          {image && <Image source={{uri: image}} style={styles.image} />}
+          {image && (
+            <Pressable onPress={onPressImage}>
+              <Image source={{uri: image}} style={styles.image} />
+            </Pressable>
+          )}
+          {video && (
+            <Video
+              source={{uri: video2}}
+              style={styles.images}
+              resizeMode="cover"
+              paused={false}
+              repeat={true}
+            />
+          )}
         </>
       )}
     </Box>

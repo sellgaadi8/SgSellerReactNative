@@ -1,6 +1,7 @@
 import axiosInstance from '../../axios';
 import {ImageType} from '../../types/propsTypes';
 import {UPLOAD_IMAGE} from '../../utils/api';
+import {handleError} from '../../utils/helper';
 import {getUserToken} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
 
@@ -51,6 +52,7 @@ export const onUploadImage =
         dispatch(uploadImageAction({...res.data, error: false}));
       })
       .catch(err => {
+        handleError(err, dispatch);
         if (err?.request?._repsonse) {
           dispatch(
             uploadImageAction({

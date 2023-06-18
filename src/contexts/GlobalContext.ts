@@ -5,7 +5,11 @@ const GlobalContext = React.createContext<AppContext>({
   setName: () => {},
   name: '',
   vehicleId: '',
+  video1: '',
   setVehicleId: () => {},
+  setVideo1: () => {},
+  video2: '',
+  setVideo2: () => {},
 });
 
 export default GlobalContext;

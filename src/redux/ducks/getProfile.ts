@@ -1,5 +1,6 @@
 import axiosInstance from '../../axios';
 import {GET_PROFILE} from '../../utils/api';
+import {handleError} from '../../utils/helper';
 import {getUserToken} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
 
@@ -43,6 +44,7 @@ export const onGetProfile = () => async (dispatch: AppDispatch) => {
       dispatch(getProfileAction({...res.data, error: false}));
     })
     .catch(err => {
+      handleError(err, dispatch);
       if (err?.request?._repsonse) {
         dispatch(
           getProfileAction({

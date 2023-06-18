@@ -1,7 +1,12 @@
 import axiosInstance from '../../axios';
 import {LOGOUT_URL} from '../../utils/api';
 import Globals from '../../utils/globals';
-import {deleteUserToken, getUserToken} from '../../utils/localStorage';
+import {handleError} from '../../utils/helper';
+import {
+  deleteUserToken,
+  getUserToken,
+  saveTokenValidity,
+} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
 
 const LOGOUT: LOGOUT = 'sgSeller/logout';
@@ -39,20 +44,21 @@ export const onLogout = () => async (dispatch: AppDispatch) => {
 
   axiosInstance
     .post(url, '', config)
-    .then(async res => {
-      Globals.instance().setTokenValidity(0);
-      await deleteUserToken();
+    .then(res => {
       dispatch(logoutAction({...res.data, error: false}));
+      deleteUserToken();
+      Globals.instance().setTokenValidity(-1);
+      saveTokenValidity(-1);
     })
-    .catch(async _ => {
-      await deleteUserToken();
-      dispatch(
-        logoutAction({
-          called: true,
-          error: true,
-          message: null,
-          success: false,
-        }),
-      );
+    .catch(err => {
+      handleError(err, dispatch);
+      if (err?.request?._response) {
+        dispatch(
+          logoutAction({
+            ...JSON.parse(err.request._response),
+            error: true,
+          }),
+        );
+      }
     });
 };

@@ -87,3 +87,8 @@ export const ColorList = [
   {label: 'Blue', value: 'blue'},
   {label: 'Other', value: 'other'},
 ];
+
+export const StatusList = [
+  {label: 'Select Status', value: '-1'},
+  {label: 'In Valuation', value: 'in_valuation'},
+];

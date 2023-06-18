@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {useDispatch} from 'react-redux';
 import Box from '../../components/Box';
@@ -20,6 +20,7 @@ import DetailWithImage from '../../components/DetailWithImage';
 import DataWithImages from '../../components/DataWithImages';
 import TyresImages from '../../components/TyresImages';
 import Loader from '../../components/Loader';
+import GlobalContext from '../../contexts/GlobalContext';
 const {height, width} = Dimensions.get('window');
 const types = [
   'Car documents',
@@ -31,7 +32,7 @@ const types = [
   'Steering',
 ];
 
-export default function VehicleDetail({route}: VehicleDetailProps) {
+export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
   const dispatch = useDispatch<any>();
   const selectVehicleDetails = useAppSelector(state => state.getVehicleDetails);
   const [vehicleDetails, setVehicleDetails] = useState<VehicleDetail | null>();
@@ -47,6 +48,7 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
   );
   const [externel, setExternel] = useState<ExteriorImage>();
   const [loading, setLoading] = useState(false);
+  const {video1} = useContext(GlobalContext);
 
   useEffect(() => {
     setLoading(true);
@@ -122,10 +124,10 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
                   {el && index === 0 ? (
                     <Box>
                       <Video
-                        source={{uri: el}}
+                        source={{uri: video1}}
                         style={styles.images}
                         resizeMode="cover"
-                        paused={false}
+                        paused={!play}
                         repeat={true}
                       />
                       <Pressable
@@ -303,26 +305,66 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
                     title="Chasis No."
                     image={vehicleDetails.car_docs.chasis_no_image}
                     value={vehicleDetails?.car_docs?.chasis_no.toUpperCase()}
+                    onPressImage={() =>
+                      navigation.navigate('ImageViewerCarousel', {
+                        data: vehicleDetails?.car_docs?.chasis_no_image
+                          ? vehicleDetails?.car_docs?.chasis_no_image
+                          : '',
+                        index: 0,
+                      })
+                    }
                   />
                   <DetailWithImage
                     title="RC Availability:"
                     image={vehicleDetails.car_docs.rc_availability_image}
                     value={vehicleDetails?.car_docs?.rc_availability.toUpperCase()}
+                    onPressImage={() =>
+                      navigation.navigate('ImageViewerCarousel', {
+                        data: vehicleDetails?.car_docs?.rc_availability_image
+                          ? vehicleDetails?.car_docs?.rc_availability_image
+                          : '',
+                        index: 0,
+                      })
+                    }
                   />
                   <DetailWithImage
                     title="Road Tax Paid"
                     image={vehicleDetails.car_docs.road_tax_paid_image}
                     value={vehicleDetails?.car_docs?.road_tax_paid.toUpperCase()}
+                    onPressImage={() =>
+                      navigation.navigate('ImageViewerCarousel', {
+                        data: vehicleDetails?.car_docs?.road_tax_paid_image
+                          ? vehicleDetails?.car_docs?.road_tax_paid_image
+                          : '',
+                        index: 0,
+                      })
+                    }
                   />
                   <DetailWithImage
                     title="Duplicate Key"
                     image={vehicleDetails.car_docs.duplicate_key_image}
                     value={vehicleDetails?.car_docs?.duplicate_key.toUpperCase()}
+                    onPressImage={() =>
+                      navigation.navigate('ImageViewerCarousel', {
+                        data: vehicleDetails?.car_docs?.duplicate_key_image
+                          ? vehicleDetails?.car_docs?.duplicate_key_image
+                          : '',
+                        index: 0,
+                      })
+                    }
                   />
                   <DetailWithImage
                     title="Partipeshi Request"
                     image={vehicleDetails.car_docs.partipeshi_request_image}
                     value={vehicleDetails?.car_docs?.partipeshi_request.toUpperCase()}
+                    onPressImage={() =>
+                      navigation.navigate('ImageViewerCarousel', {
+                        data: vehicleDetails?.car_docs?.partipeshi_request_image
+                          ? vehicleDetails?.car_docs?.partipeshi_request_image
+                          : '',
+                        index: 0,
+                      })
+                    }
                   />
                 </Box>
               )}
@@ -342,26 +384,66 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
                     title="LHS Back Type"
                     value={vehicleDetails?.tyres?.lhs_back_type}
                     image={vehicleDetails?.tyres.lhs_back_image}
+                    onPressImage={() =>
+                      navigation.navigate('ImageViewerCarousel', {
+                        data: vehicleDetails?.tyres?.lhs_back_image
+                          ? vehicleDetails?.tyres?.lhs_back_image
+                          : '',
+                        index: 0,
+                      })
+                    }
                   />
                   <TyresImages
                     title="RHS Back Type"
                     value={vehicleDetails?.tyres?.rhs_back_type}
                     image={vehicleDetails?.tyres.rhs_back_image}
+                    onPressImage={() =>
+                      navigation.navigate('ImageViewerCarousel', {
+                        data: vehicleDetails?.tyres?.rhs_back_image
+                          ? vehicleDetails?.tyres?.rhs_back_image
+                          : '',
+                        index: 0,
+                      })
+                    }
                   />
                   <TyresImages
                     title="LHS Front Type"
                     value={vehicleDetails?.tyres?.lhs_front_type}
                     image={vehicleDetails?.tyres.lhs_front_image}
+                    onPressImage={() =>
+                      navigation.navigate('ImageViewerCarousel', {
+                        data: vehicleDetails?.tyres?.lhs_front_image
+                          ? vehicleDetails?.tyres?.lhs_front_image
+                          : '',
+                        index: 0,
+                      })
+                    }
                   />
                   <TyresImages
                     title="RHS Front Type"
                     value={vehicleDetails?.tyres?.rhs_front_type}
                     image={vehicleDetails?.tyres.rhs_front_image}
+                    onPressImage={() =>
+                      navigation.navigate('ImageViewerCarousel', {
+                        data: vehicleDetails?.tyres?.rhs_front_image
+                          ? vehicleDetails?.tyres?.rhs_front_image
+                          : '',
+                        index: 0,
+                      })
+                    }
                   />
                   <TyresImages
                     title="Spare Type"
                     value={vehicleDetails?.tyres?.spare_type}
                     image={vehicleDetails?.tyres.spare_image}
+                    onPressImage={() =>
+                      navigation.navigate('ImageViewerCarousel', {
+                        data: vehicleDetails?.tyres?.spare_image
+                          ? vehicleDetails?.tyres?.spare_image
+                          : '',
+                        index: 0,
+                      })
+                    }
                   />
                 </Box>
               )}
@@ -371,7 +453,7 @@ export default function VehicleDetail({route}: VehicleDetailProps) {
                   <TyresImages
                     title="Engine Sound"
                     value={vehicleDetails?.engine?.engine_sound}
-                    image={vehicleDetails?.engine?.engine_sound_video}
+                    video={vehicleDetails?.engine?.engine_sound_video}
                   />
                   <Box style={styles.title}>
                     <CustomText style={styles.dataValue}>

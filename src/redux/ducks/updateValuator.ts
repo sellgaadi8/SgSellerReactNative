@@ -1,5 +1,6 @@
 import axiosInstance from '../../axios';
 import {UPDATE_VALUATOR} from '../../utils/api';
+import {handleError} from '../../utils/helper';
 import {getUserToken} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
 
@@ -67,6 +68,7 @@ export const onUpdateValuator =
         dispatch(updateValuatorAction({...res.data, error: false}));
       })
       .catch(err => {
+        handleError(err, dispatch);
         if (err?.request?._repsonse) {
           dispatch(
             updateValuatorAction({

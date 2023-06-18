@@ -1,6 +1,6 @@
 import axiosInstance from '../../axios';
 import {LOGIN_SUBMIT} from '../../utils/api';
-import {postAuth} from '../../utils/helper';
+import {handleError, postAuth} from '../../utils/helper';
 import {AppDispatch} from '../store';
 
 const LOGIN: LOGIN = 'sgSeller/login';
@@ -52,6 +52,7 @@ export const onLogin =
         }
       })
       .catch(err => {
+        handleError(err, dispatch);
         if (err?.request?._repsonse) {
           dispatch(
             loginAction({

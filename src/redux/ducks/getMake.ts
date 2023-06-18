@@ -1,5 +1,6 @@
 import axiosInstance from '../../axios';
 import {MAKE_LIST} from '../../utils/api';
+import {handleError} from '../../utils/helper';
 import {getUserToken} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
 
@@ -41,6 +42,7 @@ export const getMakeList = () => async (dispatch: AppDispatch) => {
       dispatch(makeAction({...res.data, error: false}));
     })
     .catch(err => {
+      handleError(err, dispatch);
       if (err?.request?._repsonse) {
         dispatch(
           makeAction({

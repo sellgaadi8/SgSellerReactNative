@@ -1,5 +1,6 @@
 import axiosInstance from '../../axios';
 import {LOGIN_SEND_OTP} from '../../utils/api';
+import {handleError} from '../../utils/helper';
 import {AppDispatch} from '../store';
 
 const SEND_OTP: SEND_OTP = 'sgSeller/sendOtp';
@@ -46,6 +47,7 @@ export const onSendOtp = (phone: string) => (dispatch: AppDispatch) => {
       console.log(err, 'err');
 
       if (err?.request?._repsonse) {
+        handleError(err, dispatch);
         dispatch(
           sendOtpAction({
             ...JSON.parse(err.request._repsonse),

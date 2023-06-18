@@ -1,13 +1,13 @@
-import axios, {AxiosRequestConfig} from 'axios';
-import Globals from '../utils/globals';
-import store from '../redux/store';
-import {onLogout} from '../redux/ducks/logout';
+import axios from 'axios';
 
 const BASE_URL = 'http://3.110.1.47/api';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
 });
+
+let CancelToken = axios.CancelToken;
+let source = CancelToken.source();
 
 export const Log = (tag: string, ...msg: any) => {
   console.log(tag, ...msg);
@@ -28,6 +28,15 @@ export const Log = (tag: string, ...msg: any) => {
 //     // Token is expired
 //   }
 // }
+
+export function cancelRequest(msg: string) {
+  source.cancel(msg);
+
+  // Update the cancel token
+  CancelToken = axios.CancelToken;
+  source = CancelToken.source();
+  axiosInstance.defaults.cancelToken = source.token;
+}
 
 axiosInstance.interceptors.request.use(
   // On Success

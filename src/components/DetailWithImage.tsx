@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from './Box';
 import CustomText from './CustomText';
-import {Image} from 'react-native';
+import {Image, Pressable} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {DetailWithImageProps} from '../types/propsTypes';
 
@@ -9,6 +9,7 @@ export default function DetailWithImage({
   title,
   image,
   value,
+  onPressImage,
 }: DetailWithImageProps) {
   return (
     <Box style={styles.title}>
@@ -17,12 +18,14 @@ export default function DetailWithImage({
       </CustomText>
 
       {image ? (
-        <Image
-          source={{
-            uri: image,
-          }}
-          style={styles.image}
-        />
+        <Pressable onPress={onPressImage}>
+          <Image
+            source={{
+              uri: image,
+            }}
+            style={styles.image}
+          />
+        </Pressable>
       ) : (
         <CustomText style={styles.value}>{value}</CustomText>
       )}

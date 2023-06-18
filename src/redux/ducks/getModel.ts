@@ -1,5 +1,6 @@
 import axiosInstance from '../../axios';
 import {MODEL_LIST} from '../../utils/api';
+import {handleError} from '../../utils/helper';
 import {getUserToken} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
 
@@ -45,6 +46,7 @@ export const getModelList = (make: string) => async (dispatch: AppDispatch) => {
       dispatch(modelAction({...res.data, error: false}));
     })
     .catch(err => {
+      handleError(err, dispatch);
       if (err?.request?._repsonse) {
         dispatch(
           modelAction({

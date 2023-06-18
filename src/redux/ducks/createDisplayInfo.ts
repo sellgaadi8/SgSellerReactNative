@@ -1,5 +1,6 @@
 import axiosInstance from '../../axios';
 import {ADD_DISPLAY_INFO} from '../../utils/api';
+import {handleError} from '../../utils/helper';
 import {getUserToken} from '../../utils/localStorage';
 import {AppDispatch} from '../store';
 
@@ -75,6 +76,7 @@ export const createDisplayForm =
         dispatch(createDisplayInfoAction({...res.data, error: false}));
       })
       .catch(err => {
+        handleError(err, dispatch);
         if (err?.request?._repsonse) {
           dispatch(
             createDisplayInfoAction({
