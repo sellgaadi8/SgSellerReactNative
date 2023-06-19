@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">SgSellerReactNative</string>
+	<string name="app_name">
+		Seller Admin
+	</string>
 </resources>
