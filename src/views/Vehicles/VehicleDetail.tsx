@@ -48,7 +48,6 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
   );
   const [externel, setExternel] = useState<ExteriorImage>();
   const [loading, setLoading] = useState(false);
-  const {video1} = useContext(GlobalContext);
 
   useEffect(() => {
     setLoading(true);
@@ -124,7 +123,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                   {el && index === 0 ? (
                     <Box>
                       <Video
-                        source={{uri: video1}}
+                        source={{uri: el}}
                         style={styles.images}
                         resizeMode="cover"
                         paused={!play}

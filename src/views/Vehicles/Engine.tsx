@@ -45,7 +45,7 @@ export default function Engine({navigation, route}: EngineProps) {
   const [condensor, setCondensor] = useState('');
   const [mediaType, setMediaType] = useState<'photo' | 'video'>('photo');
   const dispatch = useDispatch<any>();
-  const {vehicleId, setVideo2} = useContext(GlobalContext);
+  const {vehicleId} = useContext(GlobalContext);
   const [errors, setErrors] = useState<EngineError>();
   const [loading, setLoading] = useState(false);
   const [engineType, setEngineType] = useState<EngineType>();
@@ -149,7 +149,6 @@ export default function Engine({navigation, route}: EngineProps) {
             break;
           case 'engine_sound':
             setSoundVideo(image.file);
-            setVideo2(image.url);
             temp[2].url = image.url;
             break;
 
@@ -199,7 +198,6 @@ export default function Engine({navigation, route}: EngineProps) {
         if (data.engine_sound_video) {
           setSoundVideo(data.engine_sound_video.file);
           temp[2].url = data.engine_sound_video.url;
-          setVideo2(data.engine_sound_video.url);
         }
         temp[0].url = data.gear_oil_leakage_image.url;
         temp[1].url = data.exhaust_smoke_image.url;

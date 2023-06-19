@@ -34,8 +34,6 @@ export default function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [vehicleId, setVehicleId] = useState('');
   const [name, setName] = useState('');
-  const [video1, setVideo1] = useState('');
-  const [video2, setVideo2] = useState('');
   const selectLogoutState = useAppSelector(state => state.logout);
 
   useEffect(() => {
@@ -61,10 +59,6 @@ export default function App() {
         setName,
         vehicleId,
         setVehicleId,
-        video1,
-        setVideo1,
-        video2,
-        setVideo2,
       }}>
       <SafeAreaView style={styles.container}>
         <StatusBar backgroundColor={colors.primary} />

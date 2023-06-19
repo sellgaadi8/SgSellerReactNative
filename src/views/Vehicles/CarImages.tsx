@@ -59,7 +59,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
   const [loading, setLoading] = useState(false);
   const [mediaType, setMediaType] = useState<'photo' | 'video'>('photo');
 
-  const {vehicleId, setVehicleId, setVideo1} = useContext(GlobalContext);
+  const {vehicleId, setVehicleId} = useContext(GlobalContext);
 
   useEffect(() => {
     if (route.params.from === 'edit') {
@@ -123,7 +123,6 @@ export default function CarImages({route, navigation}: CarImagesProps) {
             break;
           case 'video':
             setVideo(image.file);
-            setVideo1(image.url);
             temp[7].url = image.url;
             break;
           default:
@@ -169,7 +168,6 @@ export default function CarImages({route, navigation}: CarImagesProps) {
         if (data.video) {
           temp[7].url = data.video.url;
           setVideo(data.video.file);
-          setVideo1(data.video.url);
         }
         setImage1(data.left_wheel_corner_front.file);
         setImage2(data.centre_front.file);

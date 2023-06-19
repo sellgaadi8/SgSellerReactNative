@@ -14,8 +14,6 @@ export default function TyresImages({
   video,
   onPressImage,
 }: TyresImagesProps) {
-  const {video2} = useContext(GlobalContext);
-
   return (
     <Box style={value && styles.title}>
       {value && (
@@ -31,7 +29,7 @@ export default function TyresImages({
           )}
           {video && (
             <Video
-              source={{uri: video2}}
+              source={{uri: video}}
               style={styles.images}
               resizeMode="cover"
               paused={false}

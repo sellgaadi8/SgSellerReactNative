@@ -426,3 +426,5 @@ type TyresImagesProps = {
   video?: string | null;
   onPressImage?: () => void;
 };
+
+type VehicleType = '2_wheeler' | 'commercial' | '4_wheeler';
