@@ -33,7 +33,7 @@ export default function Login({navigation}: LoginProps) {
   const selectOtp = useAppSelector(state => state.sendOtp);
   const selectLogin = useAppSelector(state => state.login);
   const dispatch = useDispatch<any>();
-  const {setAuthenticated, setName} = useContext(GlobalContext);
+  const {setAuthenticated, setName, setVehicleType} = useContext(GlobalContext);
 
   function onSubmit() {
     Keyboard.dismiss();
@@ -87,6 +87,7 @@ export default function Login({navigation}: LoginProps) {
       if (success && name && message) {
         setAuthenticated(true);
         setName(name);
+        setVehicleType('2_wheeler');
         Snackbar.show({
           text: message,
           backgroundColor: 'green',

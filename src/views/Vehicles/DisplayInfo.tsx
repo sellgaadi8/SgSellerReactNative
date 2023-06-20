@@ -50,7 +50,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
   const [loading, setLoading] = useState(false);
   const [modalData, setModalData] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const {setVehicleId, vehicleId} = useContext(GlobalContext);
+  const {setVehicleId, vehicleId, vehicleType} = useContext(GlobalContext);
   const selectCreateDisplay = useAppSelector(state => state.createDisplayInfo);
   const selectGetDisplay = useAppSelector(state => state.editDisplayInfo);
   const selectMake = useAppSelector(state => state.getMake);
@@ -473,43 +473,45 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
               onPressEndIcon={() => setShowCalendar(true)}
             />
           </Pressable>
-          <Box style={styles.checkbox}>
-            <CustomText
-              fontSize={14}
-              lineHeight={28}
-              color="#111111"
-              fontFamily="Roboto-Regular">
-              Transmission<Text style={{color: 'red'}}>*</Text>
-            </CustomText>
-            <Box style={[styles.checkboxWrap]}>
-              {transmissionType.map((el, index) => {
-                return (
-                  <Pressable
-                    key={index.toString()}
-                    style={[styles.checkboxPress]}
-                    onPress={() => onPressTransmissionCheckBox(el.id)}>
-                    <Icon
-                      name={
-                        el.selected
-                          ? 'checkbox-marked'
-                          : 'checkbox-blank-outline'
-                      }
-                      size={20}
-                      color={el.selected ? colors.secondary : '#111111'}
-                    />
-                    <CustomText
-                      color="#1C1B1F"
-                      fontFamily="Roboto-Regular"
-                      fontSize={16}
-                      lineHeight={24}
-                      style={{left: 10}}>
-                      {el.title}
-                    </CustomText>
-                  </Pressable>
-                );
-              })}
+          {vehicleType === '4_wheeler' && (
+            <Box style={styles.checkbox}>
+              <CustomText
+                fontSize={14}
+                lineHeight={28}
+                color="#111111"
+                fontFamily="Roboto-Regular">
+                Transmission<Text style={{color: 'red'}}>*</Text>
+              </CustomText>
+              <Box style={[styles.checkboxWrap]}>
+                {transmissionType.map((el, index) => {
+                  return (
+                    <Pressable
+                      key={index.toString()}
+                      style={[styles.checkboxPress]}
+                      onPress={() => onPressTransmissionCheckBox(el.id)}>
+                      <Icon
+                        name={
+                          el.selected
+                            ? 'checkbox-marked'
+                            : 'checkbox-blank-outline'
+                        }
+                        size={20}
+                        color={el.selected ? colors.secondary : '#111111'}
+                      />
+                      <CustomText
+                        color="#1C1B1F"
+                        fontFamily="Roboto-Regular"
+                        fontSize={16}
+                        lineHeight={24}
+                        style={{left: 10}}>
+                        {el.title}
+                      </CustomText>
+                    </Pressable>
+                  );
+                })}
+              </Box>
             </Box>
-          </Box>
+          )}
           <Box>
             <CustomDropdown
               values={ColorList}
