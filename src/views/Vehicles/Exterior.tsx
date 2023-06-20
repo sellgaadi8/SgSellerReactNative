@@ -24,7 +24,7 @@ import Loader from '../../components/Loader';
 import BasePicker from '../../components/BasePicker';
 import {onUploadImage} from '../../redux/ducks/uploadImage';
 const list = [
-  {label: 'Ok', value: 'Ok'},
+  {label: 'Ok', value: 'ok'},
   {label: 'Scratched', value: 'scratched'},
   {label: 'Dented', value: 'dented'},
   {label: 'Repainted', value: 'repainted'},

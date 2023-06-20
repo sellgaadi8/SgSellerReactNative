@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {useDispatch} from 'react-redux';
 import Box from '../../components/Box';
@@ -20,7 +20,6 @@ import DetailWithImage from '../../components/DetailWithImage';
 import DataWithImages from '../../components/DataWithImages';
 import TyresImages from '../../components/TyresImages';
 import Loader from '../../components/Loader';
-import GlobalContext from '../../contexts/GlobalContext';
 const {height, width} = Dimensions.get('window');
 const types = [
   'Car documents',
@@ -75,7 +74,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectVehicleDetails, exterior]);
+  }, [selectVehicleDetails, exterior, externel]);
 
   function getExteriorData() {
     const okValue: Partial<ExteriorDetails> = {};
@@ -83,7 +82,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
 
     for (const key in exterior) {
       if (exterior && exterior.hasOwnProperty(key)) {
-        if (exterior && exterior[key] === 'Ok') {
+        if (exterior && exterior[key] === 'ok') {
           okValue[key as keyof ExteriorDetails] = exterior[key];
         } else if (exterior[key] !== null) {
           nonOkValues[key as keyof ExteriorDetails] = exterior[key];
@@ -100,7 +99,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
 
     for (const key in externel) {
       if (externel && externel.hasOwnProperty(key)) {
-        if (externel && externel[key] === 'Ok') {
+        if (externel && externel[key] === 'ok') {
           okValue[key as keyof ExteriorImage] = externel[key];
         } else if (externel[key] !== null) {
           nonOkValues[key as keyof ExteriorImage] = externel[key];
@@ -367,14 +366,33 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                   />
                 </Box>
               )}
+
               {vehicleDetails?.exterior_img && (
-                <DataWithImages notokValues={notokValues} okValues={okValues} />
+                <Box>
+                  <CustomText style={styles.vehicleHeading}>
+                    Exterior
+                  </CustomText>
+                  <DataWithImages
+                    notokValues={notokValues}
+                    okValues={okValues}
+                    label="Exterior"
+                    data={exterior}
+                  />
+                </Box>
               )}
+
               {vehicleDetails?.external_panel && (
-                <DataWithImages
-                  notokValues={notokValuesExternel}
-                  okValues={okValuesExternel}
-                />
+                <Box>
+                  <CustomText style={styles.vehicleHeading}>
+                    Externel Panel
+                  </CustomText>
+                  <DataWithImages
+                    notokValues={notokValuesExternel}
+                    okValues={okValuesExternel}
+                    label="Externel"
+                    data={externel}
+                  />
+                </Box>
               )}
               {vehicleDetails?.tyres && (
                 <Box>

@@ -4,4 +4,6 @@ type AppContext = {
   name: string;
   vehicleId: string;
   setVehicleId: (value: string) => void;
+  vehicleType: string;
+  setVehicleType: (value: string) => void;
 };

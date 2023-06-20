@@ -415,8 +415,10 @@ type ExteriorImage = {
 };
 
 type DataWithImagesProps = {
+  label: string;
   okValues: ExteriorImage;
   notokValues: ExteriorImage;
+  data: ExteriorImage | undefined;
 };
 
 type TyresImagesProps = {

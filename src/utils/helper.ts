@@ -44,7 +44,7 @@ export function showAlert(
   cancelable = true,
 ) {
   Alert.alert(
-    title || 'Impact Guru',
+    title || 'Sell Gaadi',
     msg,
     [
       {text: 'No', onPress: onCancel, style: 'cancel'},

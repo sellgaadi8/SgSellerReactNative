@@ -90,5 +90,9 @@ export const ColorList = [
 
 export const StatusList = [
   {label: 'Select Status', value: '-1'},
-  {label: 'In Valuation', value: 'in_valuation'},
+  {label: 'Under Valuation', value: 'in_valuation'},
+  {label: 'Live Auction', value: 'live_auction'},
+  {label: 'Auction Done', value: 'auction_done'},
+  {label: 'One Click Buy', value: 'one_click_buy'},
+  {label: 'Car Not Sold', value: 'car_not_sold'},
 ];

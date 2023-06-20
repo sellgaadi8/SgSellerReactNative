@@ -34,6 +34,7 @@ export default function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [vehicleId, setVehicleId] = useState('');
   const [name, setName] = useState('');
+  const [vehicleType, setVehicleType] = useState('');
   const selectLogoutState = useAppSelector(state => state.logout);
 
   useEffect(() => {
@@ -59,6 +60,8 @@ export default function App() {
         setName,
         vehicleId,
         setVehicleId,
+        vehicleType,
+        setVehicleType,
       }}>
       <SafeAreaView style={styles.container}>
         <StatusBar backgroundColor={colors.primary} />

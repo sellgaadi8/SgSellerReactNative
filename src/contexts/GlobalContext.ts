@@ -6,6 +6,8 @@ const GlobalContext = React.createContext<AppContext>({
   name: '',
   vehicleId: '',
   setVehicleId: () => {},
+  vehicleType: '',
+  setVehicleType: () => {},
 });
 
 export default GlobalContext;
