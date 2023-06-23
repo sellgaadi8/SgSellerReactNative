@@ -31,7 +31,6 @@ export const Log = (tag: string, ...msg: any) => {
 
 export function cancelRequest(msg: string) {
   source.cancel(msg);
-
   // Update the cancel token
   CancelToken = axios.CancelToken;
   source = CancelToken.source();

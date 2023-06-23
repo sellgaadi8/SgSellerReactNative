@@ -23,18 +23,19 @@ import Tyres from './src/views/Vehicles/Tyres';
 import Engine from './src/views/Vehicles/Engine';
 import Electricals from './src/views/Vehicles/Electricals';
 import Steering from './src/views/Vehicles/Steering';
-import Ac from './src/views/Vehicles/Ac';
 import VehicleDetail from './src/views/Vehicles/VehicleDetail';
 import {useAppSelector} from './src/utils/hooks';
 import Snackbar from 'react-native-snackbar';
 import ImageViewerCarousel from './src/views/ImageViewCarousel/ImageViewCarousel';
+import {VehicleType} from './src/types/propsTypes';
+import {deleteUserToken} from './src/utils/localStorage';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
   const [authenticated, setAuthenticated] = useState(false);
   const [vehicleId, setVehicleId] = useState('');
   const [name, setName] = useState('');
-  const [vehicleType, setVehicleType] = useState('');
+  const [vehicleType, setVehicleType] = useState<VehicleType>('4_wheeler');
   const selectLogoutState = useAppSelector(state => state.logout);
 
   useEffect(() => {
@@ -48,6 +49,9 @@ export default function App() {
         });
         setAuthenticated(false);
         setVehicleId('');
+      } else {
+        deleteUserToken();
+        setAuthenticated(false);
       }
     }
   }, [selectLogoutState]);

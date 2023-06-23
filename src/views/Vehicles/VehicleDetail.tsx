@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
 import {onGetVehicleDetails} from '../../redux/ducks/getVehicleDetails';
-import {ExteriorImage, VehicleDetailProps} from '../../types/propsTypes';
+import {VehicleDetailProps} from '../../types/propsTypes';
 import {container} from '../../utils/styles';
 import {useAppSelector} from '../../utils/hooks';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -16,8 +16,8 @@ import {
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
 import Video from 'react-native-video';
-import DetailWithImage from '../../components/DetailWithImage';
-import DataWithImages from '../../components/DataWithImages';
+// import DetailWithImage from '../../components/DetailWithImage';
+// import DataWithImages from '../../components/DataWithImages';
 import TyresImages from '../../components/TyresImages';
 import Loader from '../../components/Loader';
 const {height, width} = Dimensions.get('window');
@@ -37,15 +37,15 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
   const [vehicleDetails, setVehicleDetails] = useState<VehicleDetail | null>();
   const [vehicleImage, setVehicleImage] = useState<(string | null)[]>();
   const [play, setPlay] = useState(false);
-  const [okValues, setOkValues] = useState<ExteriorImage>({});
-  const [notokValues, setNotOkValues] = useState<ExteriorImage>({});
-  const [exterior, setExterior] = useState<ExteriorImage>();
+  // const [okValues, setOkValues] = useState<ExteriorImage>({});
+  // const [notokValues, setNotOkValues] = useState<ExteriorImage>({});
+  // const [exterior, setExterior] = useState<ExteriorImage>();
 
-  const [okValuesExternel, setOkValuesExternel] = useState<ExteriorImage>({});
-  const [notokValuesExternel, setNotOkValuesExternel] = useState<ExteriorImage>(
-    {},
-  );
-  const [externel, setExternel] = useState<ExteriorImage>();
+  // const [okValuesExternel, setOkValuesExternel] = useState<ExteriorImage>({});
+  // const [notokValuesExternel, setNotOkValuesExternel] = useState<ExteriorImage>(
+  //   {},
+  // );
+  // const [externel, setExternel] = useState<ExteriorImage>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -62,53 +62,44 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
         setVehicleDetails(data);
         if (data.car_images) {
           setVehicleImage(Object.values(data.car_images));
-          if (data.exterior_img) {
-            setExterior(data.exterior_img);
-            getExteriorData();
-          }
-          if (data.external_panel) {
-            setExternel(data.external_panel);
-            getExternelData();
-          }
         }
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectVehicleDetails, exterior, externel]);
+  }, [selectVehicleDetails]);
 
-  function getExteriorData() {
-    const okValue: Partial<ExteriorDetails> = {};
-    const nonOkValues: Partial<ExteriorDetails> = {};
+  // function getExteriorData() {
+  //   const okValue: Partial<ExteriorDetails> = {};
+  //   const nonOkValues: Partial<ExteriorDetails> = {};
 
-    for (const key in exterior) {
-      if (exterior && exterior.hasOwnProperty(key)) {
-        if (exterior && exterior[key] === 'ok') {
-          okValue[key as keyof ExteriorDetails] = exterior[key];
-        } else if (exterior[key] !== null) {
-          nonOkValues[key as keyof ExteriorDetails] = exterior[key];
-        }
-      }
-    }
-    setOkValues(okValue);
-    setNotOkValues(nonOkValues);
-  }
+  //   for (const key in exterior) {
+  //     if (exterior && exterior.hasOwnProperty(key)) {
+  //       if (exterior && exterior[key] === 'ok') {
+  //         okValue[key as keyof ExteriorDetails] = exterior[key];
+  //       } else if (exterior[key] !== null) {
+  //         nonOkValues[key as keyof ExteriorDetails] = exterior[key];
+  //       }
+  //     }
+  //   }
+  //   setOkValues(okValue);
+  //   setNotOkValues(nonOkValues);
+  // }
 
-  function getExternelData() {
-    const okValue: Partial<ExteriorImage> = {};
-    const nonOkValues: Partial<ExteriorImage> = {};
+  // function getExternelData() {
+  //   const okValue: Partial<ExteriorImage> = {};
+  //   const nonOkValues: Partial<ExteriorImage> = {};
 
-    for (const key in externel) {
-      if (externel && externel.hasOwnProperty(key)) {
-        if (externel && externel[key] === 'ok') {
-          okValue[key as keyof ExteriorImage] = externel[key];
-        } else if (externel[key] !== null) {
-          nonOkValues[key as keyof ExteriorImage] = externel[key];
-        }
-      }
-    }
-    setOkValuesExternel(okValue);
-    setNotOkValuesExternel(nonOkValues);
-  }
+  //   for (const key in externel) {
+  //     if (externel && externel.hasOwnProperty(key)) {
+  //       if (externel && externel[key] === 'ok') {
+  //         okValue[key as keyof ExteriorImage] = externel[key];
+  //       } else if (externel[key] !== null) {
+  //         nonOkValues[key as keyof ExteriorImage] = externel[key];
+  //       }
+  //     }
+  //   }
+  //   setOkValuesExternel(okValue);
+  //   setNotOkValuesExternel(nonOkValues);
+  // }
 
   return (
     <Box style={styles.container}>
@@ -299,7 +290,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                       {vehicleDetails?.car_docs?.mismatch_in_rc.toUpperCase()}
                     </CustomText>
                   </Box>
-                  <DetailWithImage
+                  {/* <DetailWithImage
                     title="Chasis No."
                     image={vehicleDetails.car_docs.chasis_no_image}
                     value={vehicleDetails?.car_docs?.chasis_no.toUpperCase()}
@@ -363,7 +354,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                         index: 0,
                       })
                     }
-                  />
+                  /> */}
                 </Box>
               )}
 
@@ -372,12 +363,12 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                   <CustomText style={styles.vehicleHeading}>
                     Exterior
                   </CustomText>
-                  <DataWithImages
+                  {/* <DataWithImages
                     notokValues={notokValues}
                     okValues={okValues}
                     label="Exterior"
                     data={exterior}
-                  />
+                  /> */}
                 </Box>
               )}
 
@@ -386,12 +377,12 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                   <CustomText style={styles.vehicleHeading}>
                     Externel Panel
                   </CustomText>
-                  <DataWithImages
+                  {/* <DataWithImages
                     notokValues={notokValuesExternel}
                     okValues={okValuesExternel}
                     label="Externel"
                     data={externel}
-                  />
+                  /> */}
                 </Box>
               )}
               {vehicleDetails?.tyres && (
@@ -488,7 +479,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                       {vehicleDetails?.engine?.engine_mounting}
                     </CustomText>
                   </Box>
-                  <TyresImages
+                  {/* <TyresImages
                     title="Exhaust Smoke"
                     value={vehicleDetails?.engine?.exhaust_smoke}
                     image={vehicleDetails?.engine?.exhaust_smoke_image}
@@ -497,7 +488,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                     title="Gear Oil Leakage"
                     value={vehicleDetails?.engine?.gear_oil_leakage}
                     image={vehicleDetails?.engine?.gear_oil_leakage_image}
-                  />
+                  /> */}
                   <Box style={styles.title}>
                     <CustomText style={styles.dataValue}>
                       Engine Perm Blow Back
@@ -537,7 +528,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                   <CustomText style={styles.vehicleHeading}>
                     Electricals
                   </CustomText>
-                  <TyresImages
+                  {/* <TyresImages
                     title="Electrical Odomoter"
                     value={vehicleDetails?.electricals?.electrical_odomoter}
                     image={
@@ -566,8 +557,8 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                     title="Overall"
                     value={vehicleDetails?.electricals?.overall}
                     image={vehicleDetails?.electricals?.overall_image}
-                  />
-                  <TyresImages
+                  /> */}
+                  {/* <TyresImages
                     title="Parking Sensor"
                     value={vehicleDetails?.electricals?.parking_sensor}
                     image={vehicleDetails?.electricals?.parking_sensor_image}
@@ -576,7 +567,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                     title="Power Windows"
                     value={vehicleDetails?.electricals?.power_windows}
                     image={vehicleDetails?.electricals?.power_windows_image}
-                  />
+                  /> */}
                 </Box>
               )}
               {vehicleDetails?.steering && (
