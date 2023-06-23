@@ -1,3 +1,5 @@
+type VehicleType = '2_wheeler' | 'commercial' | '4_wheeler';
+
 type LOGIN = 'sgSeller/login';
 
 type LoginState = {
@@ -7,6 +9,7 @@ type LoginState = {
   error: boolean;
   name: string | null;
   token: string | null;
+  seller_type: VehicleType;
 };
 
 type LoginAction = {
