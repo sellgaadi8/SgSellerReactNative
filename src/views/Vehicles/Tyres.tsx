@@ -1,4 +1,4 @@
-import {ScrollView, ToastAndroid} from 'react-native';
+import {ScrollView} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
@@ -93,13 +93,17 @@ export default function Tyres({navigation, route}: TyresProps) {
       tempErrors.spare = 'Spare tyre (%, damaged ) required';
     }
     if (
-      lhsfrontImage.length === 0 &&
-      rhsfrontImage.length === 0 &&
-      lhsbackImage.length === 0 &&
-      rhsbackImage.length === 0 &&
+      lhsfrontImage.length === 0 ||
+      rhsfrontImage.length === 0 ||
+      lhsbackImage.length === 0 ||
+      rhsbackImage.length === 0 ||
       spareImage.length === 0
     ) {
-      ToastAndroid.show('Images are required', ToastAndroid.LONG);
+      Snackbar.show({
+        text: 'Kindly upload all images',
+        backgroundColor: 'red',
+        duration: Snackbar.LENGTH_SHORT,
+      });
     }
 
     setErrors(tempErrors);

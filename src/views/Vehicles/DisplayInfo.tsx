@@ -130,6 +130,8 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
       tempErrors.run = 'The run field is required.';
     } else if (+run > 400000) {
       tempErrors.run = 'Run in Km should less then 4 lakh';
+    } else if (+run < 0) {
+      tempErrors.run = 'Run in Km should not be in negative';
     }
     if (owners.length === 0) {
       tempErrors.owners = 'The owners field is required.';
@@ -570,6 +572,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
             error={errors?.run}
             noMargin
             isMandatory
+            keyboardType="number-pad"
           />
           <ProfileInput
             label="No. of owners"
@@ -578,6 +581,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
             error={errors?.owners}
             noMargin
             isMandatory
+            keyboardType="number-pad"
           />
         </Box>
         <Box style={styles.buttonContainer}>

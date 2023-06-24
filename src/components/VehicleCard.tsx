@@ -1,5 +1,5 @@
 import {Image, Pressable, ScrollView, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Box from './Box';
 import CustomText from './CustomText';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -10,6 +10,7 @@ import {contentCenter} from '../utils/styles';
 import {Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Video from 'react-native-video';
+import Indicator from './Indicator';
 const {height, width} = Dimensions.get('window');
 
 export default function VehicleCard({
@@ -18,10 +19,20 @@ export default function VehicleCard({
   onPressView,
 }: VehicleCardProps) {
   const [play, setPlay] = useState(false);
+  const [scrollIndex, setScrollIndex] = useState(0);
+
+  function handleOnScroll(event: any) {
+    var abc =
+      event.nativeEvent.contentOffset.x / Dimensions.get('window').width;
+    setScrollIndex(Math.round(abc));
+  }
 
   return (
     <Box style={styles.container}>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+      <ScrollView
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        onScroll={handleOnScroll}>
         {data.images ? (
           data.images.map((el, index) => {
             return (
@@ -32,9 +43,9 @@ export default function VehicleCard({
                       source={{uri: el}}
                       style={styles.image}
                       resizeMode="cover"
-                      paused={play}
+                      paused={false}
                     />
-                    <Pressable
+                    {/* <Pressable
                       style={styles.play}
                       onPress={() => setPlay(!play)}>
                       <Ionicons
@@ -42,7 +53,7 @@ export default function VehicleCard({
                         color="#FFFFFF"
                         size={30}
                       />
-                    </Pressable>
+                    </Pressable> */}
                   </Box>
                 ) : (
                   <FastImage
@@ -64,6 +75,17 @@ export default function VehicleCard({
           />
         )}
       </ScrollView>
+      {data.images && (
+        <View
+          // eslint-disable-next-line react-native/no-inline-styles
+          style={{
+            position: 'absolute',
+            padding: 10,
+            right: 10,
+          }}>
+          <Indicator index={scrollIndex} length={data.images.length} />
+        </View>
+      )}
 
       <Box style={styles.body}>
         <Box ph={'6%'}>

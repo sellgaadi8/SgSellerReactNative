@@ -17,7 +17,7 @@ export default function PopulateImageWithData({
     <Box style={value && styles.title}>
       {value && (
         <>
-          <Box>
+          <Box style={!image && styles.row}>
             <CustomText style={styles.dataValue}>{title}</CustomText>
             <CustomText style={styles.value}>{value}</CustomText>
           </Box>
@@ -64,4 +64,8 @@ const styles = EStyleSheet.create({
     textTransform: 'uppercase',
   },
   image: {height: 50, width: 50},
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 });

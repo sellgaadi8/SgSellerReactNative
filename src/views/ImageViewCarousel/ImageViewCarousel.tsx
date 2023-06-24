@@ -7,7 +7,6 @@ import Carousel from 'react-native-snap-carousel';
 import colors from '../../utils/colors';
 import {container, contentCenter} from '../../utils/styles';
 import {ImageViewerCarouselProps} from '../../types/propsTypes';
-import IconButton from '../../components/IconButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const {width, height} = Dimensions.get('screen');
@@ -15,6 +14,7 @@ const {width, height} = Dimensions.get('screen');
 export default function ImageViewerCarousel({route}: ImageViewerCarouselProps) {
   const {data, index: startingIndex} = route.params;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = useState<{key: string; value: string}[]>([
     ...data,
   ]);
@@ -29,7 +29,7 @@ export default function ImageViewerCarousel({route}: ImageViewerCarouselProps) {
         {item.image !== null && (
           <Animated.Image
             resizeMode="contain"
-            source={{uri: item.image}}
+            source={{uri: item.value}}
             style={styles.item}
           />
         )}

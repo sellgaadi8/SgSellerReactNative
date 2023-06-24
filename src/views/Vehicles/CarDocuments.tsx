@@ -358,7 +358,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
         <Box pv={'3%'}>
           <ProfileInput
             label="RTO"
-            value={rto}
+            value={rto.toUpperCase()}
             onChangeText={setRto}
             isMandatory
             placeholder="( Ex MH02 )"

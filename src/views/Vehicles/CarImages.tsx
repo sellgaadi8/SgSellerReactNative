@@ -128,13 +128,6 @@ export default function CarImages({route, navigation}: CarImagesProps) {
           default:
             break;
         }
-      } else if (error && !success) {
-        console.log('calleddd');
-        Snackbar.show({
-          text: 'Something went wrong please try again',
-          backgroundColor: 'green',
-          duration: Snackbar.LENGTH_SHORT,
-        });
       }
 
       setCarImageType([...temp]);
@@ -200,16 +193,23 @@ export default function CarImages({route, navigation}: CarImagesProps) {
 
   function onSubmit() {
     if (
-      image1.length === 0 &&
-      image2.length === 0 &&
-      image3.length === 0 &&
-      image4.length === 0 &&
-      image5.length === 0 &&
-      image6.length === 0 &&
+      image1.length === 0 ||
+      image2.length === 0 ||
+      image3.length === 0 ||
+      image4.length === 0 ||
+      image5.length === 0 ||
+      image6.length === 0 ||
       image7.length === 0
     ) {
-      ToastAndroid.show('Images are required', ToastAndroid.LONG);
+      // ToastAndroid.show('Images are required', ToastAndroid.LONG);
+      Snackbar.show({
+        text: 'Please upload mandatory images',
+        backgroundColor: 'red',
+        duration: Snackbar.LENGTH_SHORT,
+      });
     } else {
+      console.log('terst');
+
       setLoading(true);
       if (route.params.from === 'add') {
         dispatch(

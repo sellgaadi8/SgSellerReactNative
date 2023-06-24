@@ -2,16 +2,46 @@ type GET_VEHICLE_DETAIL = 'sgSeller/getVehicleDetail';
 
 type VehicleDetail = {
   display_info: {
-    make: string;
-    color: string;
-    model: string;
-    variant: string;
-    mfg_year: string;
-    reg_date: string;
-    fuel_type: string;
-    no_of_kms: string;
-    no_of_owners: string;
-    transmission: string;
+    make: {
+      value: string;
+      image: string;
+    };
+    color: {
+      value: string;
+      image: string;
+    };
+    model: {
+      value: string;
+      image: string;
+    };
+    variant: {
+      value: string;
+      image: string;
+    };
+    mfg_year: {
+      value: string;
+      image: string;
+    };
+    reg_date: {
+      value: string;
+      image: string;
+    };
+    fuel_type: {
+      value: string;
+      image: string;
+    };
+    no_of_kms: {
+      value: string;
+      image: string;
+    };
+    no_of_owners: {
+      value: string;
+      image: string;
+    };
+    transmission: {
+      value: string;
+      image: string;
+    };
   };
   car_images: {
     video: string;
@@ -24,25 +54,46 @@ type VehicleDetail = {
     left_wheel_corner_front: string;
   };
   car_docs: {
-    rto: string;
+    rto: {
+      value: string;
+      image: string;
+    };
     chasis_no: {
       value: string;
       image: string;
     };
-    insurance: string;
-    permit_upto: string;
-    fitness_upto: string;
+    insurance: {
+      value: string;
+      image: string;
+    };
+    permit_upto: {
+      value: string;
+      image: string;
+    };
+    fitness_upto: {
+      value: string;
+      image: string;
+    };
     duplicate_key: {
       value: string;
       image: string;
     };
-    rc_noc_issued: string;
+    rc_noc_issued: {
+      value: string;
+      image: string;
+    };
     road_tax_paid: {
       value: string;
       image: string;
     };
-    mismatch_in_rc: string;
-    cng_lpg_fitment: string;
+    mismatch_in_rc: {
+      value: string;
+      image: string;
+    };
+    cng_lpg_fitment: {
+      value: string;
+      image: string;
+    };
     rc_availability: {
       value: string;
       image: string;
@@ -51,8 +102,14 @@ type VehicleDetail = {
       value: string;
       image: string;
     };
-    under_hypothication: string;
-    cng_lpg_fitment_endorsed_on_rc: string;
+    under_hypothication: {
+      value: string;
+      image: string;
+    };
+    cng_lpg_fitment_endorsed_on_rc: {
+      value: string;
+      image: string;
+    };
   };
   exterior_img: {
     boot_floor: {
@@ -147,27 +204,72 @@ type VehicleDetail = {
     };
   };
   tyres: {
-    spare_type: string;
-    spare_image: string;
-    lhs_back_type: string;
-    rhs_back_type: string;
-    lhs_back_image: string;
-    lhs_front_type: string;
-    rhs_back_image: string;
-    rhs_front_type: string;
-    lhs_front_image: string;
-    rhs_front_image: string;
+    spare_type: {
+      value: string;
+      image: string;
+    };
+    spare_image: {
+      value: string;
+      image: string;
+    };
+    lhs_back_type: {
+      value: string;
+      image: string;
+    };
+    rhs_back_type: {
+      value: string;
+      image: string;
+    };
+    lhs_back_image: {
+      value: string;
+      image: string;
+    };
+    lhs_front_type: {
+      value: string;
+      image: string;
+    };
+    rhs_back_image: {
+      value: string;
+      image: string;
+    };
+    rhs_front_type: {
+      value: string;
+      image: string;
+    };
+    lhs_front_image: {
+      value: string;
+      image: string;
+    };
+    rhs_front_image: {
+      value: string;
+      image: string;
+    };
   };
   engine: {
-    ac: string;
-    heater: string;
-    cooling: string;
-    condensor: string;
+    ac: {
+      value: string;
+      image: string;
+    };
+    heater: {
+      value: string;
+      image: string;
+    };
+    cooling: {
+      value: string;
+      image: string;
+    };
+    condensor: {
+      value: string;
+      image: string;
+    };
     exhaust_smoke: {
       value: string;
       image: string;
     };
-    engine_mounting: string;
+    engine_mounting: {
+      value: string;
+      image: string;
+    };
     gear_oil_leakage: {
       value: string;
       image: string;
@@ -176,8 +278,14 @@ type VehicleDetail = {
       value: string;
       image: string;
     };
-    clutch_bearing_sound: string;
-    engine_perm_blow_back: string;
+    clutch_bearing_sound: {
+      value: string;
+      image: string;
+    };
+    engine_perm_blow_back: {
+      value: string;
+      image: string;
+    };
   };
   electricals: {
     overall: {
@@ -210,10 +318,22 @@ type VehicleDetail = {
     };
   };
   steering: {
-    brake: string;
-    steering: string;
-    suspension: string;
-    wheel_bearing_noise: string;
+    brake: {
+      value: string;
+      image: string;
+    };
+    steering: {
+      value: string;
+      image: string;
+    };
+    suspension: {
+      value: string;
+      image: string;
+    };
+    wheel_bearing_noise: {
+      value: string;
+      image: string;
+    };
   };
 };
 
@@ -230,6 +350,6 @@ type GetVehicleDetailAction = {
 };
 
 type VehicleImageType = {
-  name: string;
+  value: string;
   image: string;
 };

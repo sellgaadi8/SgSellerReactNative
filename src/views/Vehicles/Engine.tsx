@@ -18,7 +18,6 @@ import {useAppSelector} from '../../utils/hooks';
 import Snackbar from 'react-native-snackbar';
 import {onUpdateEngine} from '../../redux/ducks/updateEngine';
 import {onGetEngineDetails} from '../../redux/ducks/getEngine';
-import {ToastAndroid} from 'react-native';
 import Loader from '../../components/Loader';
 import ImagePicker from '../../components/ImagePicker';
 import DocumentPicker from 'react-native-document-picker';
@@ -78,7 +77,11 @@ export default function Engine({navigation, route}: EngineProps) {
     }
 
     if (soundVideo.length === 0) {
-      ToastAndroid.show('Engine sound video is required', ToastAndroid.LONG);
+      Snackbar.show({
+        text: 'Engine sound video is required',
+        backgroundColor: 'red',
+        duration: Snackbar.LENGTH_SHORT,
+      });
     }
 
     setErrors(tempErrors);
