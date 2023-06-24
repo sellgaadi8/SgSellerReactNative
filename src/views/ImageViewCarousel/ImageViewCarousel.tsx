@@ -1,41 +1,60 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Dimensions, View} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {Dimensions, Pressable, Text, View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Animated from 'react-native-reanimated';
 import Carousel from 'react-native-snap-carousel';
 
 import colors from '../../utils/colors';
 import {container, contentCenter} from '../../utils/styles';
-import {PinchBox} from '../../components/PinchBox';
 import {ImageViewerCarouselProps} from '../../types/propsTypes';
+import IconButton from '../../components/IconButton';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const {width, height} = Dimensions.get('screen');
 
 export default function ImageViewerCarousel({route}: ImageViewerCarouselProps) {
   const {data, index: startingIndex} = route.params;
 
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<{key: string; value: string}[]>([
+    ...data,
+  ]);
 
   const _caoursel = useRef<Carousel<any>>(null);
 
   const [currentIndex, setCurrentIndex] = useState(startingIndex);
 
-  useEffect(() => {
-    let temp = [];
-    temp.push(data);
-    setImages(temp);
-  }, [data]);
-
-  function _renderItem(image: any) {
+  function _renderItem(item: any) {
     return (
       <View style={styles.itemContainer}>
-        <PinchBox>
+        {item.image !== null && (
           <Animated.Image
             resizeMode="contain"
-            source={{uri: image}}
+            source={{uri: item.image}}
             style={styles.item}
           />
-        </PinchBox>
+        )}
+        <View
+          style={[
+            styles.indicatorContainer,
+            images.length <= 1 && styles.equalPadding,
+          ]}>
+          <View style={[styles.row, images.length <= 1 && styles.center]}>
+            {images.length > 1 && (
+              <Pressable onPress={onPrev}>
+                <Icon size={20} name="menu-left" />
+              </Pressable>
+            )}
+            <Text style={styles.indicator}>
+              {currentIndex + 1} / {images.length}
+            </Text>
+            {images.length > 1 && (
+              <Pressable onPress={onNext}>
+                <Icon onPress={onNext} size={20} name="menu-right" />
+              </Pressable>
+            )}
+          </View>
+          <Text style={styles.text}>{item.key.replace(/_/g, ' ')}</Text>
+        </View>
       </View>
     );
   }
@@ -93,20 +112,26 @@ const styles = EStyleSheet.create({
     marginTop: 'auto',
     backgroundColor: colors.White,
     paddingBottom: '2rem',
+    ...contentCenter,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  name: {
-    fontFamily: 'Roboto-Bold',
-    color: '#B32F2D',
-    alignSelf: 'center',
   },
   itemContainer: {height: '100%', width: '100%', backgroundColor: 'black'},
   item: {height: '100%', width: '100%'},
   center: {...contentCenter},
   equalPadding: {paddingBottom: '1rem'},
   indicator: {alignSelf: 'center'},
+  text: {
+    color: colors.primary,
+    fontFamily: 'Roboto-Medium',
+    fontSize: 16,
+    textTransform: 'uppercase',
+  },
+  length: {
+    color: colors.primary,
+    fontFamily: 'Roboto-Medium',
+    fontSize: 16,
+  },
 });

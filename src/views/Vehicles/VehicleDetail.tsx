@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
 import {onGetVehicleDetails} from '../../redux/ducks/getVehicleDetails';
-import {VehicleDetailProps} from '../../types/propsTypes';
+import {ExteriorImage, VehicleDetailProps} from '../../types/propsTypes';
 import {container} from '../../utils/styles';
 import {useAppSelector} from '../../utils/hooks';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -16,10 +16,11 @@ import {
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
 import Video from 'react-native-video';
-// import DetailWithImage from '../../components/DetailWithImage';
+// import PopulateImageWithData from '../../components/PopulateImageWithData';
 // import DataWithImages from '../../components/DataWithImages';
-import TyresImages from '../../components/TyresImages';
 import Loader from '../../components/Loader';
+import PopulateImageWithData from '../../components/PopulateImageWithData';
+import {Animated} from 'react-native';
 const {height, width} = Dimensions.get('window');
 const types = [
   'Car documents',
@@ -30,22 +31,31 @@ const types = [
   'Electricals',
   'Steering',
 ];
+const max_height = 460;
+const min_height = 0;
+const HEADER_SCROLL_DISTANCE = max_height - min_height;
 
 export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
   const dispatch = useDispatch<any>();
   const selectVehicleDetails = useAppSelector(state => state.getVehicleDetails);
   const [vehicleDetails, setVehicleDetails] = useState<VehicleDetail | null>();
   const [vehicleImage, setVehicleImage] = useState<(string | null)[]>();
+  const [images, setImages] = useState<{key: string; value: string}[]>([]);
   const [play, setPlay] = useState(false);
-  // const [okValues, setOkValues] = useState<ExteriorImage>({});
-  // const [notokValues, setNotOkValues] = useState<ExteriorImage>({});
-  // const [exterior, setExterior] = useState<ExteriorImage>();
+  const scrollY = new Animated.Value(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const headerHeight = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [max_height, min_height],
+    extrapolate: 'clamp',
+  });
 
-  // const [okValuesExternel, setOkValuesExternel] = useState<ExteriorImage>({});
-  // const [notokValuesExternel, setNotOkValuesExternel] = useState<ExteriorImage>(
-  //   {},
-  // );
-  // const [externel, setExternel] = useState<ExteriorImage>();
+  const [okValues, setOkValues] = useState<VehicleImageType>();
+  const [exterior, setExterior] = useState<VehicleImageType>();
+
+  const [okValuesExternel, setOkValuesExternel] = useState<VehicleImageType>();
+
+  const [externel, setExternel] = useState<VehicleImageType>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -58,53 +68,89 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
     if (selectVehicleDetails.called) {
       setLoading(false);
       const {data, success, error} = selectVehicleDetails;
+
       if (success && !error && data) {
         setVehicleDetails(data);
         if (data.car_images) {
           setVehicleImage(Object.values(data.car_images));
         }
+
+        if (data.exterior_img) {
+          setExterior(data.exterior_img);
+          getExteriorData();
+        }
+        if (data.external_panel) {
+          setExternel(data.external_panel);
+          getExternelData();
+        }
+
+        const imageArray: {key: string; value: string}[] = [];
+
+        // Push image values with keys into the array
+        for (const key in vehicleDetails) {
+          const section = vehicleDetails[key];
+          if (typeof section === 'object' && section !== null) {
+            for (const subKey in section) {
+              const subSection = section[subKey];
+              if (
+                typeof subSection === 'object' &&
+                subSection !== null &&
+                'image' in subSection
+              ) {
+                imageArray.push({key: subKey, value: subSection.image});
+              }
+            }
+          }
+        }
+        setImages(imageArray);
       }
     }
-  }, [selectVehicleDetails]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectVehicleDetails, vehicleDetails]);
 
-  // function getExteriorData() {
-  //   const okValue: Partial<ExteriorDetails> = {};
-  //   const nonOkValues: Partial<ExteriorDetails> = {};
+  function getExteriorData() {
+    const okValue: Partial<VehicleImageType> = {};
 
-  //   for (const key in exterior) {
-  //     if (exterior && exterior.hasOwnProperty(key)) {
-  //       if (exterior && exterior[key] === 'ok') {
-  //         okValue[key as keyof ExteriorDetails] = exterior[key];
-  //       } else if (exterior[key] !== null) {
-  //         nonOkValues[key as keyof ExteriorDetails] = exterior[key];
-  //       }
-  //     }
-  //   }
-  //   setOkValues(okValue);
-  //   setNotOkValues(nonOkValues);
-  // }
+    for (const key in exterior) {
+      if (exterior && exterior.hasOwnProperty(key)) {
+        if (exterior && exterior[key] === 'ok') {
+          okValue[key as keyof VehicleImageType] = exterior[key];
+        }
+      }
+    }
+    setOkValues(okValue);
+  }
 
-  // function getExternelData() {
-  //   const okValue: Partial<ExteriorImage> = {};
-  //   const nonOkValues: Partial<ExteriorImage> = {};
+  function getExternelData() {
+    const okValue: Partial<VehicleImageType> = {};
 
-  //   for (const key in externel) {
-  //     if (externel && externel.hasOwnProperty(key)) {
-  //       if (externel && externel[key] === 'ok') {
-  //         okValue[key as keyof ExteriorImage] = externel[key];
-  //       } else if (externel[key] !== null) {
-  //         nonOkValues[key as keyof ExteriorImage] = externel[key];
-  //       }
-  //     }
-  //   }
-  //   setOkValuesExternel(okValue);
-  //   setNotOkValuesExternel(nonOkValues);
-  // }
+    for (const key in externel) {
+      if (externel && externel.hasOwnProperty(key)) {
+        if (externel && externel[key] === 'ok') {
+          okValue[key as keyof VehicleImageType] = externel[key];
+        }
+      }
+    }
+    setOkValuesExternel(okValue);
+  }
+
+  function handleOnScroll(event: any) {
+    var abc =
+      event.nativeEvent.contentOffset.y / Dimensions.get('window').height;
+    setCurrentIndex(abc);
+  }
+
+  function onPressImage(index: number) {
+    navigation.navigate('ImageViewerCarousel', {
+      data: images,
+      index: index,
+    });
+  }
 
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
-      <ScrollView>
+      <Animated.View style={[{height: headerHeight}]}>
         <ScrollView horizontal={true}>
           {vehicleImage &&
             vehicleImage?.map((el, index) => {
@@ -130,14 +176,19 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                       </Pressable>
                     </Box>
                   ) : (
-                    el && <Image source={{uri: el}} style={styles.images} />
+                    el && (
+                      <Image
+                        source={{uri: el}}
+                        style={styles.images}
+                        resizeMode="cover"
+                      />
+                    )
                   )}
                 </Box>
               );
             })}
         </ScrollView>
-
-        <Box pv={'2%'} ph={'6%'}>
+        <Box ph={'6%'}>
           <CustomText
             color="#111111"
             fontFamily="Roboto-Regular"
@@ -213,408 +264,402 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               </CustomText>
             </Box>
           </Box>
-          <ScrollView horizontal contentContainerStyle={styles.tabel}>
-            {types.map((el, index) => {
-              return (
-                <Pressable key={index.toString()} style={styles.headers}>
-                  <CustomText
-                    color="White"
-                    fontFamily="Roboto-Regular"
-                    fontSize={16}
-                    lineHeight={22}>
-                    {el}
-                  </CustomText>
-                </Pressable>
-              );
-            })}
-          </ScrollView>
+        </Box>
+      </Animated.View>
+      <ScrollView horizontal>
+        {types.map((el, index) => {
+          return (
+            <Animated.View
+              // eslint-disable-next-line react-native/no-inline-styles
+              style={{
+                backgroundColor: '#000000',
+                padding: 10,
+                height: currentIndex > 0 ? 50 : 300,
+                marginTop: currentIndex > 0 ? 0 : 20,
+              }}>
+              <Pressable key={index.toString()} style={styles.headers}>
+                <CustomText
+                  color="White"
+                  fontFamily="Roboto-Regular"
+                  fontSize={16}
+                  lineHeight={22}>
+                  {el}
+                </CustomText>
+              </Pressable>
+            </Animated.View>
+          );
+        })}
+      </ScrollView>
+      <ScrollView
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: scrollY}}}],
+          {useNativeDriver: false, listener: handleOnScroll},
+        )}>
+        <Box style={styles.body}>
+          {vehicleDetails?.car_docs && (
+            <Box>
+              <CustomText style={styles.vehicleHeading}>
+                Car Documents
+              </CustomText>
 
-          <Box style={styles.body}>
-            <ScrollView>
-              {vehicleDetails?.car_docs && (
-                <Box>
-                  <CustomText style={styles.vehicleHeading}>
-                    Car Documents
-                  </CustomText>
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>Fitness Upto</CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.car_docs?.fitness_upto}
+                </CustomText>
+              </Box>
 
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Fitness Upto
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.car_docs?.fitness_upto}
-                    </CustomText>
-                  </Box>
-
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Insurance</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.car_docs?.insurance.toUpperCase()}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      RC Noc Issued
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.car_docs?.rc_noc_issued.toUpperCase()}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Rto</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.car_docs?.rto.toUpperCase()}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      CNG Fitment
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.car_docs?.cng_lpg_fitment.toUpperCase()}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      CNG Fitment Endorsed
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.car_docs?.cng_lpg_fitment_endorsed_on_rc.toUpperCase()}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      RC Mismatch
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.car_docs?.mismatch_in_rc.toUpperCase()}
-                    </CustomText>
-                  </Box>
-                  {/* <DetailWithImage
-                    title="Chasis No."
-                    image={vehicleDetails.car_docs.chasis_no_image}
-                    value={vehicleDetails?.car_docs?.chasis_no.toUpperCase()}
-                    onPressImage={() =>
-                      navigation.navigate('ImageViewerCarousel', {
-                        data: vehicleDetails?.car_docs?.chasis_no_image
-                          ? vehicleDetails?.car_docs?.chasis_no_image
-                          : '',
-                        index: 0,
-                      })
-                    }
-                  />
-                  <DetailWithImage
-                    title="RC Availability:"
-                    image={vehicleDetails.car_docs.rc_availability_image}
-                    value={vehicleDetails?.car_docs?.rc_availability.toUpperCase()}
-                    onPressImage={() =>
-                      navigation.navigate('ImageViewerCarousel', {
-                        data: vehicleDetails?.car_docs?.rc_availability_image
-                          ? vehicleDetails?.car_docs?.rc_availability_image
-                          : '',
-                        index: 0,
-                      })
-                    }
-                  />
-                  <DetailWithImage
-                    title="Road Tax Paid"
-                    image={vehicleDetails.car_docs.road_tax_paid_image}
-                    value={vehicleDetails?.car_docs?.road_tax_paid.toUpperCase()}
-                    onPressImage={() =>
-                      navigation.navigate('ImageViewerCarousel', {
-                        data: vehicleDetails?.car_docs?.road_tax_paid_image
-                          ? vehicleDetails?.car_docs?.road_tax_paid_image
-                          : '',
-                        index: 0,
-                      })
-                    }
-                  />
-                  <DetailWithImage
-                    title="Duplicate Key"
-                    image={vehicleDetails.car_docs.duplicate_key_image}
-                    value={vehicleDetails?.car_docs?.duplicate_key.toUpperCase()}
-                    onPressImage={() =>
-                      navigation.navigate('ImageViewerCarousel', {
-                        data: vehicleDetails?.car_docs?.duplicate_key_image
-                          ? vehicleDetails?.car_docs?.duplicate_key_image
-                          : '',
-                        index: 0,
-                      })
-                    }
-                  />
-                  <DetailWithImage
-                    title="Partipeshi Request"
-                    image={vehicleDetails.car_docs.partipeshi_request_image}
-                    value={vehicleDetails?.car_docs?.partipeshi_request.toUpperCase()}
-                    onPressImage={() =>
-                      navigation.navigate('ImageViewerCarousel', {
-                        data: vehicleDetails?.car_docs?.partipeshi_request_image
-                          ? vehicleDetails?.car_docs?.partipeshi_request_image
-                          : '',
-                        index: 0,
-                      })
-                    }
-                  /> */}
-                </Box>
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>Insurance</CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.car_docs?.insurance.toUpperCase()}
+                </CustomText>
+              </Box>
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>RC Noc Issued</CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.car_docs?.rc_noc_issued.toUpperCase()}
+                </CustomText>
+              </Box>
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>Rto</CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.car_docs?.rto.toUpperCase()}
+                </CustomText>
+              </Box>
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>CNG Fitment</CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.car_docs?.cng_lpg_fitment.toUpperCase()}
+                </CustomText>
+              </Box>
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>
+                  CNG Fitment Endorsed
+                </CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.car_docs?.cng_lpg_fitment_endorsed_on_rc.toUpperCase()}
+                </CustomText>
+              </Box>
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>RC Mismatch</CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.car_docs?.mismatch_in_rc.toUpperCase()}
+                </CustomText>
+              </Box>
+              {vehicleDetails?.car_docs?.chasis_no && (
+                <PopulateImageWithData
+                  title="Chasis No."
+                  image={vehicleDetails.car_docs.chasis_no.image}
+                  value={vehicleDetails?.car_docs?.chasis_no.value.toUpperCase()}
+                  onPressImage={() => onPressImage(0)}
+                />
+              )}
+              {vehicleDetails.car_docs.rc_availability && (
+                <PopulateImageWithData
+                  title="RC Availability:"
+                  image={vehicleDetails.car_docs.rc_availability.image}
+                  value={vehicleDetails?.car_docs?.rc_availability.value.toUpperCase()}
+                  onPressImage={() => onPressImage(1)}
+                />
               )}
 
-              {vehicleDetails?.exterior_img && (
-                <Box>
-                  <CustomText style={styles.vehicleHeading}>
-                    Exterior
-                  </CustomText>
-                  {/* <DataWithImages
-                    notokValues={notokValues}
-                    okValues={okValues}
-                    label="Exterior"
-                    data={exterior}
-                  /> */}
-                </Box>
+              {vehicleDetails.car_docs.road_tax_paid && (
+                <PopulateImageWithData
+                  title="Road Tax Paid"
+                  image={vehicleDetails.car_docs.road_tax_paid.image}
+                  value={vehicleDetails?.car_docs?.road_tax_paid.value.toUpperCase()}
+                  onPressImage={() => onPressImage(2)}
+                />
               )}
+              {vehicleDetails?.car_docs?.duplicate_key && (
+                <PopulateImageWithData
+                  title="Duplicate Key"
+                  image={vehicleDetails.car_docs.duplicate_key.image}
+                  value={vehicleDetails?.car_docs?.duplicate_key.value.toUpperCase()}
+                  onPressImage={() => onPressImage(3)}
+                />
+              )}
+              {vehicleDetails?.car_docs?.partipeshi_request && (
+                <PopulateImageWithData
+                  title="Partipeshi Request"
+                  image={vehicleDetails.car_docs.partipeshi_request.image}
+                  value={vehicleDetails?.car_docs?.partipeshi_request.value.toUpperCase()}
+                  onPressImage={() => onPressImage(4)}
+                />
+              )}
+            </Box>
+          )}
 
-              {vehicleDetails?.external_panel && (
-                <Box>
-                  <CustomText style={styles.vehicleHeading}>
-                    Externel Panel
-                  </CustomText>
-                  {/* <DataWithImages
-                    notokValues={notokValuesExternel}
-                    okValues={okValuesExternel}
-                    label="Externel"
-                    data={externel}
-                  /> */}
-                </Box>
-              )}
-              {vehicleDetails?.tyres && (
-                <Box>
-                  <CustomText style={styles.vehicleHeading}>Tyres</CustomText>
-                  <TyresImages
-                    title="LHS Back Type"
-                    value={vehicleDetails?.tyres?.lhs_back_type}
-                    image={vehicleDetails?.tyres.lhs_back_image}
-                    onPressImage={() =>
-                      navigation.navigate('ImageViewerCarousel', {
-                        data: vehicleDetails?.tyres?.lhs_back_image
-                          ? vehicleDetails?.tyres?.lhs_back_image
-                          : '',
-                        index: 0,
+          {vehicleDetails?.exterior_img && (
+            <Box>
+              <CustomText style={styles.vehicleHeading}>Exterior</CustomText>
+              <Box pv={'2%'}>
+                <CustomText style={styles.value}>
+                  {okValues &&
+                    Object.keys(okValues)
+                      .map(el => {
+                        return el
+                          .split('_')
+                          .map(
+                            word =>
+                              word.charAt(0).toUpperCase() + word.slice(1),
+                          )
+                          .join(' ');
                       })
-                    }
-                  />
-                  <TyresImages
-                    title="RHS Back Type"
-                    value={vehicleDetails?.tyres?.rhs_back_type}
-                    image={vehicleDetails?.tyres.rhs_back_image}
-                    onPressImage={() =>
-                      navigation.navigate('ImageViewerCarousel', {
-                        data: vehicleDetails?.tyres?.rhs_back_image
-                          ? vehicleDetails?.tyres?.rhs_back_image
-                          : '',
-                        index: 0,
+                      .join(', ')}
+                </CustomText>
+              </Box>
+              {vehicleDetails.exterior_img &&
+                Object.entries(vehicleDetails.exterior_img).map((el, index) => {
+                  return (
+                    <PopulateImageWithData
+                      title={el[0].replace(/_/g, ' ').toUpperCase()}
+                      image={el[1] ? el[1].image : ''}
+                      value={el[1] ? el[1].value : ''}
+                      onPressImage={() => onPressImage(index)}
+                    />
+                  );
+                })}
+            </Box>
+          )}
+
+          {vehicleDetails?.external_panel && (
+            <Box>
+              <CustomText style={styles.vehicleHeading}>
+                Externel Panel
+              </CustomText>
+              <Box pv={'2%'}>
+                <CustomText style={styles.value}>
+                  {okValuesExternel &&
+                    Object.keys(okValuesExternel)
+                      .map(el => {
+                        return el
+                          .split('_')
+                          .map(
+                            word =>
+                              word.charAt(0).toUpperCase() + word.slice(1),
+                          )
+                          .join(' ');
                       })
-                    }
-                  />
-                  <TyresImages
-                    title="LHS Front Type"
-                    value={vehicleDetails?.tyres?.lhs_front_type}
-                    image={vehicleDetails?.tyres.lhs_front_image}
-                    onPressImage={() =>
-                      navigation.navigate('ImageViewerCarousel', {
-                        data: vehicleDetails?.tyres?.lhs_front_image
-                          ? vehicleDetails?.tyres?.lhs_front_image
-                          : '',
-                        index: 0,
-                      })
-                    }
-                  />
-                  <TyresImages
-                    title="RHS Front Type"
-                    value={vehicleDetails?.tyres?.rhs_front_type}
-                    image={vehicleDetails?.tyres.rhs_front_image}
-                    onPressImage={() =>
-                      navigation.navigate('ImageViewerCarousel', {
-                        data: vehicleDetails?.tyres?.rhs_front_image
-                          ? vehicleDetails?.tyres?.rhs_front_image
-                          : '',
-                        index: 0,
-                      })
-                    }
-                  />
-                  <TyresImages
-                    title="Spare Type"
-                    value={vehicleDetails?.tyres?.spare_type}
-                    image={vehicleDetails?.tyres.spare_image}
-                    onPressImage={() =>
-                      navigation.navigate('ImageViewerCarousel', {
-                        data: vehicleDetails?.tyres?.spare_image
-                          ? vehicleDetails?.tyres?.spare_image
-                          : '',
-                        index: 0,
-                      })
-                    }
-                  />
-                </Box>
-              )}
-              {vehicleDetails?.engine && (
-                <Box>
-                  <CustomText style={styles.vehicleHeading}>Engine</CustomText>
-                  <TyresImages
-                    title="Engine Sound"
-                    value={vehicleDetails?.engine?.engine_sound}
-                    video={vehicleDetails?.engine?.engine_sound_video}
-                  />
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Clutch Bearing Sound
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.engine?.clutch_bearing_sound}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Engine Mounting
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.engine?.engine_mounting}
-                    </CustomText>
-                  </Box>
-                  {/* <TyresImages
+                      .join(', ')}
+                </CustomText>
+              </Box>
+              {vehicleDetails.external_panel &&
+                Object.entries(vehicleDetails.external_panel).map(
+                  (el, index) => {
+                    return (
+                      <PopulateImageWithData
+                        title={el[0].replace(/_/g, ' ').toUpperCase()}
+                        image={el[1] ? el[1].image : ''}
+                        value={el[1] ? el[1].value : ''}
+                        onPressImage={() => onPressImage(index)}
+                      />
+                    );
+                  },
+                )}
+            </Box>
+          )}
+          {vehicleDetails?.tyres && (
+            <Box>
+              <CustomText style={styles.vehicleHeading}>Tyres</CustomText>
+              <PopulateImageWithData
+                title="LHS Back Type"
+                value={vehicleDetails?.tyres?.lhs_back_type}
+                image={vehicleDetails?.tyres.lhs_back_image}
+                onPressImage={() => onPressImage(5)}
+              />
+              <PopulateImageWithData
+                title="RHS Back Type"
+                value={vehicleDetails?.tyres?.rhs_back_type}
+                image={vehicleDetails?.tyres.rhs_back_image}
+                onPressImage={() => onPressImage(6)}
+              />
+              <PopulateImageWithData
+                title="LHS Front Type"
+                value={vehicleDetails?.tyres?.lhs_front_type}
+                image={vehicleDetails?.tyres.lhs_front_image}
+                onPressImage={() => onPressImage(7)}
+              />
+              <PopulateImageWithData
+                title="RHS Front Type"
+                value={vehicleDetails?.tyres?.rhs_front_type}
+                image={vehicleDetails?.tyres.rhs_front_image}
+                onPressImage={() => onPressImage(8)}
+              />
+              <PopulateImageWithData
+                title="Spare Type"
+                value={vehicleDetails?.tyres?.spare_type}
+                image={vehicleDetails?.tyres.spare_image}
+                onPressImage={() => onPressImage(9)}
+              />
+            </Box>
+          )}
+          {vehicleDetails?.engine && (
+            <Box>
+              <CustomText style={styles.vehicleHeading}>Engine</CustomText>
+              <PopulateImageWithData
+                title="Engine Sound"
+                value={vehicleDetails?.engine?.engine_sound_video.value}
+                video={vehicleDetails?.engine?.engine_sound_video.image}
+              />
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>
+                  Clutch Bearing Sound
+                </CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.engine?.clutch_bearing_sound}
+                </CustomText>
+              </Box>
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>
+                  Engine Mounting
+                </CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.engine?.engine_mounting}
+                </CustomText>
+              </Box>
+              {/* <PopulateImageWithData
                     title="Exhaust Smoke"
                     value={vehicleDetails?.engine?.exhaust_smoke}
                     image={vehicleDetails?.engine?.exhaust_smoke_image}
                   />
-                  <TyresImages
+                  <PopulateImageWithData
                     title="Gear Oil Leakage"
                     value={vehicleDetails?.engine?.gear_oil_leakage}
                     image={vehicleDetails?.engine?.gear_oil_leakage_image}
                   /> */}
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>
-                      Engine Perm Blow Back
-                    </CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.engine?.engine_perm_blow_back}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Heater</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.engine?.heater}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>AC</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.engine?.ac}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Cooling</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.engine?.cooling}
-                    </CustomText>
-                  </Box>
-                  <Box style={styles.title}>
-                    <CustomText style={styles.dataValue}>Condensor</CustomText>
-                    <CustomText style={styles.value}>
-                      {vehicleDetails?.engine?.condensor}
-                    </CustomText>
-                  </Box>
-                </Box>
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>
+                  Engine Perm Blow Back
+                </CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.engine?.engine_perm_blow_back}
+                </CustomText>
+              </Box>
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>Heater</CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.engine?.heater}
+                </CustomText>
+              </Box>
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>AC</CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.engine?.ac}
+                </CustomText>
+              </Box>
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>Cooling</CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.engine?.cooling}
+                </CustomText>
+              </Box>
+              <Box style={styles.title}>
+                <CustomText style={styles.dataValue}>Condensor</CustomText>
+                <CustomText style={styles.value}>
+                  {vehicleDetails?.engine?.condensor}
+                </CustomText>
+              </Box>
+            </Box>
+          )}
+          {vehicleDetails?.electricals && (
+            <Box>
+              <CustomText style={styles.vehicleHeading}>Electricals</CustomText>
+              {vehicleDetails?.electricals?.electrical_odomoter && (
+                <PopulateImageWithData
+                  title="Electrical Odomoter"
+                  value={vehicleDetails?.electricals?.electrical_odomoter.value}
+                  image={vehicleDetails?.electricals?.electrical_odomoter.image}
+                />
               )}
-              {vehicleDetails?.electricals && (
-                <Box>
-                  <CustomText style={styles.vehicleHeading}>
-                    Electricals
-                  </CustomText>
-                  {/* <TyresImages
-                    title="Electrical Odomoter"
-                    value={vehicleDetails?.electricals?.electrical_odomoter}
-                    image={
-                      vehicleDetails?.electricals?.electrical_odomoter_image
-                    }
-                  />
-                  <TyresImages
-                    title="Jack Tool Box"
-                    value={vehicleDetails?.electricals?.jack_tool_box}
-                    image={vehicleDetails?.electricals?.jack_tool_box_image}
-                  />
 
-                  <TyresImages
-                    title="Lights Crack Broken"
-                    value={vehicleDetails?.electricals?.lights_crack_broken}
-                    image={
-                      vehicleDetails?.electricals?.lights_crack_broken_image
-                    }
-                  />
-                  <TyresImages
-                    title="Music System"
-                    value={vehicleDetails?.electricals?.music_system}
-                    image={vehicleDetails?.electricals?.music_system_image}
-                  />
-                  <TyresImages
-                    title="Overall"
-                    value={vehicleDetails?.electricals?.overall}
-                    image={vehicleDetails?.electricals?.overall_image}
-                  /> */}
-                  {/* <TyresImages
-                    title="Parking Sensor"
-                    value={vehicleDetails?.electricals?.parking_sensor}
-                    image={vehicleDetails?.electricals?.parking_sensor_image}
-                  />
-                  <TyresImages
-                    title="Power Windows"
-                    value={vehicleDetails?.electricals?.power_windows}
-                    image={vehicleDetails?.electricals?.power_windows_image}
-                  /> */}
-                </Box>
+              {vehicleDetails?.electricals?.jack_tool_box && (
+                <PopulateImageWithData
+                  title="Jack Tool Box"
+                  value={vehicleDetails?.electricals?.jack_tool_box.value}
+                  image={vehicleDetails?.electricals?.jack_tool_box.image}
+                />
               )}
-              {vehicleDetails?.steering && (
-                <Box>
-                  <CustomText style={styles.vehicleHeading}>
-                    Steering
+
+              {vehicleDetails?.electricals?.lights_crack_broken && (
+                <PopulateImageWithData
+                  title="Lights Crack Broken"
+                  value={vehicleDetails?.electricals?.lights_crack_broken.value}
+                  image={vehicleDetails?.electricals?.lights_crack_broken.image}
+                />
+              )}
+              {vehicleDetails?.electricals?.music_system && (
+                <PopulateImageWithData
+                  title="Music System"
+                  value={vehicleDetails?.electricals?.music_system.value}
+                  image={vehicleDetails?.electricals?.music_system.image}
+                />
+              )}
+
+              {vehicleDetails?.electricals?.overall && (
+                <PopulateImageWithData
+                  title="Overall"
+                  value={vehicleDetails?.electricals?.overall.value}
+                  image={vehicleDetails?.electricals?.overall.image}
+                />
+              )}
+              {vehicleDetails?.electricals?.parking_sensor && (
+                <PopulateImageWithData
+                  title="Parking Sensor"
+                  value={vehicleDetails?.electricals?.parking_sensor.value}
+                  image={vehicleDetails?.electricals?.parking_sensor.image}
+                />
+              )}
+              {vehicleDetails?.electricals?.power_windows && (
+                <PopulateImageWithData
+                  title="Power Windows"
+                  value={vehicleDetails?.electricals?.power_windows.value}
+                  image={vehicleDetails?.electricals?.power_windows.image}
+                />
+              )}
+            </Box>
+          )}
+          {vehicleDetails?.steering && (
+            <Box>
+              <CustomText style={styles.vehicleHeading}>Steering</CustomText>
+              {vehicleDetails?.steering?.brake && (
+                <Box style={styles.title}>
+                  <CustomText style={styles.dataValue}>Brake</CustomText>
+                  <CustomText style={styles.value}>
+                    {vehicleDetails?.steering?.brake}
                   </CustomText>
-                  {vehicleDetails?.steering?.brake && (
-                    <Box style={styles.title}>
-                      <CustomText style={styles.dataValue}>Brake</CustomText>
-                      <CustomText style={styles.value}>
-                        {vehicleDetails?.steering?.brake}
-                      </CustomText>
-                    </Box>
-                  )}
-                  {vehicleDetails?.steering?.steering && (
-                    <Box style={styles.title}>
-                      <CustomText style={styles.dataValue}>Steering</CustomText>
-                      <CustomText style={styles.value}>
-                        {vehicleDetails?.steering?.steering}
-                      </CustomText>
-                    </Box>
-                  )}
-                  {vehicleDetails?.steering?.suspension && (
-                    <Box style={styles.title}>
-                      <CustomText style={styles.dataValue}>
-                        Suspension
-                      </CustomText>
-                      <CustomText style={styles.value}>
-                        {vehicleDetails?.steering?.suspension}
-                      </CustomText>
-                    </Box>
-                  )}
-                  {vehicleDetails?.steering?.wheel_bearing_noise && (
-                    <Box style={styles.title}>
-                      <CustomText style={styles.dataValue}>
-                        Wheel Bearing Noise
-                      </CustomText>
-                      <CustomText style={styles.value}>
-                        {vehicleDetails?.steering?.wheel_bearing_noise}
-                      </CustomText>
-                    </Box>
-                  )}
                 </Box>
               )}
-            </ScrollView>
-          </Box>
+              {vehicleDetails?.steering?.steering && (
+                <Box style={styles.title}>
+                  <CustomText style={styles.dataValue}>Steering</CustomText>
+                  <CustomText style={styles.value}>
+                    {vehicleDetails?.steering?.steering}
+                  </CustomText>
+                </Box>
+              )}
+              {vehicleDetails?.steering?.suspension && (
+                <Box style={styles.title}>
+                  <CustomText style={styles.dataValue}>Suspension</CustomText>
+                  <CustomText style={styles.value}>
+                    {vehicleDetails?.steering?.suspension}
+                  </CustomText>
+                </Box>
+              )}
+              {vehicleDetails?.steering?.wheel_bearing_noise && (
+                <Box style={styles.title}>
+                  <CustomText style={styles.dataValue}>
+                    Wheel Bearing Noise
+                  </CustomText>
+                  <CustomText style={styles.value}>
+                    {vehicleDetails?.steering?.wheel_bearing_noise}
+                  </CustomText>
+                </Box>
+              )}
+            </Box>
+          )}
         </Box>
       </ScrollView>
     </Box>
@@ -626,7 +671,7 @@ const styles = EStyleSheet.create({
     ...container,
   },
   images: {
-    height: height * 0.35,
+    height: height * 0.3,
     width: width,
   },
   line: {
@@ -636,11 +681,7 @@ const styles = EStyleSheet.create({
     alignSelf: 'center',
     marginBottom: '1rem',
   },
-  tabel: {
-    backgroundColor: '#000000',
-    marginTop: '2rem',
-    padding: 10,
-  },
+  tabel: {},
   headers: {
     marginRight: '5rem',
   },

@@ -1,13 +1,12 @@
 import {Image, Pressable} from 'react-native';
-import React, {useContext} from 'react';
+import React from 'react';
 import Box from './Box';
 import CustomText from './CustomText';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {TyresImagesProps} from '../types/propsTypes';
 import Video from 'react-native-video';
-import GlobalContext from '../contexts/GlobalContext';
 
-export default function TyresImages({
+export default function PopulateImageWithData({
   title,
   value,
   image,
@@ -23,18 +22,20 @@ export default function TyresImages({
             <CustomText style={styles.value}>{value}</CustomText>
           </Box>
           {image && (
-            <Pressable onPress={onPressImage}>
+            <Pressable onPress={onPressImage} style={{borderWidth: 1}}>
               <Image source={{uri: image}} style={styles.image} />
             </Pressable>
           )}
           {video && (
-            <Video
-              source={{uri: video}}
-              style={styles.images}
-              resizeMode="cover"
-              paused={false}
-              repeat={true}
-            />
+            <Pressable onPress={onPressImage} style={{borderWidth: 1}}>
+              <Video
+                source={{uri: video}}
+                style={styles.images}
+                resizeMode="cover"
+                paused={false}
+                repeat={true}
+              />
+            </Pressable>
           )}
         </>
       )}

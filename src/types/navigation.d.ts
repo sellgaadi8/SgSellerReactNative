@@ -26,7 +26,7 @@ type RootStackParamList = {
   ImageViewerCarousel: {
     onRemoveImage?: (index: number) => void;
     updateImages?: (data: string) => void;
-    data: string;
+    data: {key: string; value: string}[];
     index: number;
   };
 };

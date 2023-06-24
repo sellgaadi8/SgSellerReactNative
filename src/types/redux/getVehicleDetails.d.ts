@@ -55,12 +55,30 @@ type VehicleDetail = {
     cng_lpg_fitment_endorsed_on_rc: string;
   };
   exterior_img: {
-    boot_floor: string;
-    left_apron: string;
-    right_apron: string;
-    right_pillarC: string;
-    left_apron_leg: string;
-    right_apron_leg: string;
+    boot_floor: {
+      value: string;
+      image: string;
+    };
+    left_apron: {
+      value: string;
+      image: string;
+    };
+    right_apron: {
+      value: string;
+      image: string;
+    };
+    right_pillarC: {
+      value: string;
+      image: string;
+    };
+    left_apron_leg: {
+      value: string;
+      image: string;
+    };
+    right_apron_leg: {
+      value: string;
+      image: string;
+    };
     left_pillarA: {
       value: string;
       image: string;
@@ -91,15 +109,42 @@ type VehicleDetail = {
       value: string;
       image: string;
     };
-    dickey_door: string;
-    left_fender: string;
-    right_fender: string;
-    left_door_back: string;
-    left_door_front: string;
-    right_door_back: string;
-    right_door_front: string;
-    left_quater_panel: string;
-    right_quater_panel: string;
+    dickey_door: {
+      value: string;
+      image: string;
+    };
+    left_fender: {
+      value: string;
+      image: string;
+    };
+    right_fender: {
+      value: string;
+      image: string;
+    };
+    left_door_back: {
+      value: string;
+      image: string;
+    };
+    left_door_front: {
+      value: string;
+      image: string;
+    };
+    right_door_back: {
+      value: string;
+      image: string;
+    };
+    right_door_front: {
+      value: string;
+      image: string;
+    };
+    left_quater_panel: {
+      value: string;
+      image: string;
+    };
+    right_quater_panel: {
+      value: string;
+      image: string;
+    };
   };
   tyres: {
     spare_type: string;
@@ -118,7 +163,6 @@ type VehicleDetail = {
     heater: string;
     cooling: string;
     condensor: string;
-    engine_sound: string;
     exhaust_smoke: {
       value: string;
       image: string;
@@ -128,24 +172,39 @@ type VehicleDetail = {
       value: string;
       image: string;
     };
-    engine_sound_video: string;
+    engine_sound_video: {
+      value: string;
+      image: string;
+    };
     clutch_bearing_sound: string;
     engine_perm_blow_back: string;
   };
   electricals: {
-    overall: string;
+    overall: {
+      value: string;
+      image: string;
+    };
     music_system: {
       value: string;
       image: string;
     };
-    jack_tool_box: string;
-    overall_image: string;
+    jack_tool_box: {
+      value: string;
+      image: string;
+    };
     power_windows: {
       value: string;
       image: string;
     };
-    parking_sensor: string;
+    parking_sensor: {
+      value: string;
+      image: string;
+    };
     electrical_odomoter: {
+      value: string;
+      image: string;
+    };
+    lights_crack_broken: {
       value: string;
       image: string;
     };
@@ -168,4 +227,9 @@ type GetVehicleDetailState = {
 type GetVehicleDetailAction = {
   type: GET_VEHICLE_DETAIL;
   payload: GetVehicleDetailState;
+};
+
+type VehicleImageType = {
+  name: string;
+  image: string;
 };
