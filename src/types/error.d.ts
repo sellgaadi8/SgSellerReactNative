@@ -59,11 +59,9 @@ type TyresImageError = {
   lhsback?: string;
   rhsback?: string;
   spare?: string;
-  lhsfrontImage?: string;
-  rhsfrontImage?: string;
-  lhsbackImage?: string;
-  rhsbackImage?: string;
-  spareImage?: string;
+  frontWheel?: string;
+  rearWheel?: string;
+  frontTyre?: string;
 };
 
 type EngineError = {

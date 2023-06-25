@@ -42,9 +42,12 @@ export default function Engine({navigation, route}: EngineProps) {
   const [cooling, setCooling] = useState('');
   const [heater, setHeater] = useState('');
   const [condensor, setCondensor] = useState('');
+  const [chain, setChain] = useState('');
+  const [engineOilLevel, setEngineOilLevel] = useState('');
+  const [coolantLevel, setCoolantLevel] = useState('');
   const [mediaType, setMediaType] = useState<'photo' | 'video'>('photo');
   const dispatch = useDispatch<any>();
-  const {vehicleId} = useContext(GlobalContext);
+  const {vehicleId, vehicleType} = useContext(GlobalContext);
   const [errors, setErrors] = useState<EngineError>();
   const [loading, setLoading] = useState(false);
   const [engineType, setEngineType] = useState<EngineType>();
@@ -109,6 +112,9 @@ export default function Engine({navigation, route}: EngineProps) {
             oilLeakImage,
             smokeImage,
             soundVideo,
+            coolantLevel,
+            engineOilLevel,
+            chain,
           ),
         );
       } else {
@@ -128,6 +134,9 @@ export default function Engine({navigation, route}: EngineProps) {
             oilLeakImage,
             smokeImage,
             soundVideo,
+            coolantLevel,
+            engineOilLevel,
+            chain,
           ),
         );
       }
@@ -198,6 +207,9 @@ export default function Engine({navigation, route}: EngineProps) {
         setCondensor(data.condensor);
         setOilLeakImage(data.gear_oil_leakage_image.file);
         setSmokeImage(data.exhaust_smoke_image.file);
+        setChain(data.chain_belt_assembly);
+        setEngineOilLevel(data.engine_oil_level);
+        setCoolantLevel(data.engine_coolant_level);
         if (data.engine_sound_video) {
           setSoundVideo(data.engine_sound_video.file);
           temp[2].url = data.engine_sound_video.url;
@@ -258,18 +270,20 @@ export default function Engine({navigation, route}: EngineProps) {
           Step 7: Engine
         </CustomText>
         <Box style={styles.body}>
-          <RadioButtons
-            label="Gear Oil leakage"
-            data={[
-              {label: 'OK', value: 'ok'},
-              {label: 'Leakage', value: 'leakage'}, ///image
-            ]}
-            onSelect={(label, value) => onPressOilLeak(label, value)}
-            isImage
-            selectValue={oilLeak}
-            onPressCamera={() => onCameraAction('gear_oil')}
-            selectPhoto={engineImageTypes[0].url}
-          />
+          {vehicleType !== 'two_wheeler' && (
+            <RadioButtons
+              label="Gear Oil leakage"
+              data={[
+                {label: 'OK', value: 'ok'},
+                {label: 'Leakage', value: 'leakage'}, ///image
+              ]}
+              onSelect={(label, value) => onPressOilLeak(label, value)}
+              isImage
+              selectValue={oilLeak}
+              onPressCamera={() => onCameraAction('gear_oil')}
+              selectPhoto={engineImageTypes[0].url}
+            />
+          )}
           <RadioButtons
             label="Exhaust smoke"
             data={[
@@ -284,7 +298,7 @@ export default function Engine({navigation, route}: EngineProps) {
             isImage
           />
           <RadioButtons
-            label="Engine permissible blow back"
+            label={'Engine permissible blow back'}
             data={[
               {label: 'YES', value: 'yes'},
               {label: 'NO BLOW BACK', value: 'no_blow_back'},
@@ -292,8 +306,31 @@ export default function Engine({navigation, route}: EngineProps) {
             onSelect={(label, value) => setPermissble(value)}
             selectValue={permissble}
           />
+          {vehicleType === 'two_wheeler' && (
+            <RadioButtons
+              label={'Engine Coolant Level'}
+              data={[
+                {label: 'YES', value: 'yes'},
+                {label: 'NO BLOW BACK', value: 'no_blow_back'},
+              ]}
+              onSelect={(label, value) => setCoolantLevel(value)}
+              selectValue={coolantLevel}
+            />
+          )}
+          {vehicleType === 'two_wheeler' && (
+            <RadioButtons
+              label={'Engine Oil Level'}
+              data={[
+                {label: 'OK', value: 'ok'},
+                {label: 'SOUND', value: 'sound'},
+              ]}
+              onSelect={(label, value) => setEngineOilLevel(value)}
+              selectValue={engineOilLevel}
+            />
+          )}
+
           <RadioButtons
-            label="Engine mounting"
+            label={'Engine mounting'}
             data={[
               {label: 'OK', value: 'ok'},
               {label: 'SOUND', value: 'sound'},
@@ -301,6 +338,7 @@ export default function Engine({navigation, route}: EngineProps) {
             onSelect={(label, value) => setMounting(value)}
             selectValue={mounting}
           />
+
           <RadioButtons
             label="Engine sound"
             data={[
@@ -315,57 +353,74 @@ export default function Engine({navigation, route}: EngineProps) {
             error={errors?.sound}
             selectPhoto={engineImageTypes[2].url}
           />
-          <RadioButtons
-            label="Clutch bearing Noise"
-            data={[
-              {label: 'YES', value: 'yes'},
-              {label: 'NO', value: 'no'},
-            ]}
-            onSelect={(label, value) => setClutch(value)}
-            selectValue={clutch}
-          />
-          <RadioButtons
-            label="AC"
-            data={[
-              {label: 'OK', value: 'ok'},
-              {label: 'Leakage', value: 'leakage'},
-            ]}
-            onSelect={(label, value) => setAc(value)}
-            selectValue={ac}
-          />
-          <RadioButtons
-            label="Cooling"
-            data={[
-              {label: 'OK', value: 'ok'},
-              {label: 'NOT OK', value: 'not_ok'},
-            ]}
-            onSelect={(label, value) => setCooling(value)}
-            isMandatory
-            selectValue={cooling}
-            error={errors?.cooling}
-          />
-          <RadioButtons
-            label="Heater"
-            data={[
-              {label: 'OK', value: 'ok'},
-              {label: 'NOT OK', value: 'not_ok'},
-            ]}
-            onSelect={(label, value) => setHeater(value)}
-            isMandatory
-            selectValue={heater}
-            error={errors?.heater}
-          />
-          <RadioButtons
-            label="Condensor"
-            data={[
-              {label: 'OK', value: 'ok'},
-              {label: 'NOT OK', value: 'not_ok'},
-            ]}
-            onSelect={(label, value) => setCondensor(value)}
-            isMandatory
-            selectValue={condensor}
-            error={errors?.condensor}
-          />
+          {vehicleType !== 'two_wheeler' && (
+            <RadioButtons
+              label="Clutch bearing Noise"
+              data={[
+                {label: 'YES', value: 'yes'},
+                {label: 'NO', value: 'no'},
+              ]}
+              onSelect={(label, value) => setClutch(value)}
+              selectValue={clutch}
+            />
+          )}
+          {vehicleType === 'two_wheeler' && (
+            <RadioButtons
+              label="Chain & Belt Assembly"
+              data={[
+                {label: 'YES', value: 'yes'},
+                {label: 'NO', value: 'no'},
+              ]}
+              onSelect={(label, value) => setChain(value)}
+              selectValue={chain}
+            />
+          )}
+          {vehicleType === 'four_wheeler' && (
+            <>
+              <RadioButtons
+                label="AC"
+                data={[
+                  {label: 'OK', value: 'ok'},
+                  {label: 'Leakage', value: 'leakage'},
+                ]}
+                onSelect={(label, value) => setAc(value)}
+                selectValue={ac}
+              />
+              <RadioButtons
+                label="Cooling"
+                data={[
+                  {label: 'OK', value: 'ok'},
+                  {label: 'NOT OK', value: 'not_ok'},
+                ]}
+                onSelect={(label, value) => setCooling(value)}
+                isMandatory
+                selectValue={cooling}
+                error={errors?.cooling}
+              />
+              <RadioButtons
+                label="Heater"
+                data={[
+                  {label: 'OK', value: 'ok'},
+                  {label: 'NOT OK', value: 'not_ok'},
+                ]}
+                onSelect={(label, value) => setHeater(value)}
+                isMandatory
+                selectValue={heater}
+                error={errors?.heater}
+              />
+              <RadioButtons
+                label="Condensor"
+                data={[
+                  {label: 'OK', value: 'ok'},
+                  {label: 'NOT OK', value: 'not_ok'},
+                ]}
+                onSelect={(label, value) => setCondensor(value)}
+                isMandatory
+                selectValue={condensor}
+                error={errors?.condensor}
+              />
+            </>
+          )}
         </Box>
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>

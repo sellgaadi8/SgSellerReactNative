@@ -20,7 +20,9 @@ type RootStackParamList = {
   Engine: {from: 'edit' | 'add'};
   Electricals: {from: 'edit' | 'add'};
   Steering: {from: 'edit' | 'add'};
-  Ac: undefined;
+  HandlingSuspension: {from: 'edit' | 'add'};
+  TwoWheelerExterior: {from: 'edit' | 'add'};
+  TwoWheelerElectrical: {from: 'edit' | 'add'};
   VehicleDetail: {title: string; vehicleId: string};
   DetailsViewPage: undefined;
   ImageViewerCarousel: {

@@ -341,6 +341,11 @@ type ElectricalsProps = {
   route: RouteProp<RootStackParamList, 'Electricals'>;
 };
 
+type TwoWheelerElectricalsProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'TwoWheelerElectrical'>;
+  route: RouteProp<RootStackParamList, 'TwoWheelerElectrical'>;
+};
+
 type SteeringProps = {
   navigation: StackNavigationProp<RootStackParamList, 'Steering'>;
   route: RouteProp<RootStackParamList, 'Steering'>;
@@ -390,7 +395,10 @@ type TyresType =
   | 'rhs_front_type'
   | 'lhs_back_type'
   | 'rhs_back_type'
-  | 'spare_type';
+  | 'spare_type'
+  | 'front_wheel_condition'
+  | 'rear_wheel_condition'
+  | 'front_tyre_life';
 
 type CalenderProps = {
   isOpen: boolean;
@@ -427,4 +435,9 @@ type TyresImagesProps = {
   image?: string | null;
   video?: string | null;
   onPressImage?: () => void;
+};
+
+type HandlingSuspensionProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'HandlingSuspension'>;
+  route: RouteProp<RootStackParamList, 'HandlingSuspension'>;
 };

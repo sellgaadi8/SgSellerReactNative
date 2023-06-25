@@ -30,21 +30,80 @@ const list = [
   {label: 'Repainted', value: 'repainted'},
 ];
 
-export default function Exterior({navigation, route}: ExteriorProps) {
-  const [exteriorType, setExteriorType] = useState([
-    {id: 'left_pillarA', name: 'Left Pillar A', url: ''},
-    {id: 'left_pillarB', name: 'Left Pillar B', url: ''},
-    {id: 'left_pillarC', name: 'Left Pillar C', url: ''},
-    {id: 'right_pillarA', name: 'Right Pillar A', url: ''},
-    {id: 'right_pillarB', name: 'Right Pillar B', url: ''},
-    {id: 'right_pillarC', name: 'Right Pillar C', url: ''},
-    {id: 'left_apron', name: 'Left Apron', url: ''},
-    {id: 'left_apron_leg', name: 'Left Apron Leg', url: ''},
-    {id: 'right_apron_leg', name: 'Right Apron', url: ''},
-    {id: 'right_apron', name: 'Right Apron Leg', url: ''},
-    {id: 'boot_floor', name: 'Boot Floor', url: ''},
+export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
+  const [twoWheelerType, setTwoWheelerType] = useState([
+    {
+      id: 'headlight_visor',
+      name: 'Headlight Visor',
+      url: '',
+      selectedValue: '',
+    },
+    {id: 'front_panel', name: 'Front Panel', url: '', selectedValue: ''},
+    {id: 'mudguard_front', name: 'Mudguard Front', url: '', selectedValue: ''},
+    {id: 'fuel_tank', name: 'Fuel Tank', url: '', selectedValue: ''},
+    {
+      id: 'front_panel_left',
+      name: 'Front Panel - Left Side',
+      url: '',
+      selectedValue: '',
+    },
+    {
+      id: 'middle_panel',
+      name: 'Middle Panel - Left Side',
+      url: '',
+      selectedValue: '',
+    },
+    {id: 'chassis', name: 'Chassis', url: '', selectedValue: ''},
+    {
+      id: 'engine_guard_left',
+      name: 'Engine Guard - Left Side',
+      url: '',
+      selectedValue: '',
+    },
+    {
+      id: 'pillion_footrest',
+      name: 'Pillion Footrest',
+      url: '',
+      selectedValue: '',
+    },
+    {
+      id: 'rear_panel_left',
+      name: 'Rear Panel - Left Side',
+      url: '',
+      selectedValue: '',
+    },
+    {id: 'mudguard_rear', name: 'Mudguard Rear', url: '', selectedValue: ''},
+    {
+      id: 'silencer_assembly',
+      name: 'Silencer Assembly',
+      url: '',
+      selectedValue: '',
+    },
+    {
+      id: 'rear_panel_right',
+      name: 'Rear Panel - Right Side',
+      url: '',
+      selectedValue: '',
+    },
+    {
+      id: 'middle_panel_right',
+      name: 'Middle Panel - Right Side',
+      url: '',
+      selectedValue: '',
+    },
+    {
+      id: 'engine_guard_right',
+      name: 'Engine Guard - Right Side',
+      url: '',
+      selectedValue: '',
+    },
+    {
+      id: 'front_panel_right',
+      name: 'Front Panel - Right Side',
+      url: '',
+      selectedValue: '',
+    },
   ]);
-
   const [openImagePicker, setOpenImagePicker] = useState(false);
   const [image1, setImage1] = useState('');
   const [image2, setImage2] = useState('');
@@ -57,22 +116,31 @@ export default function Exterior({navigation, route}: ExteriorProps) {
   const [image9, setImage9] = useState('');
   const [image10, setImage10] = useState('');
   const [image11, setImage11] = useState('');
+  const [image12, setImage12] = useState('');
+  const [image13, setImage13] = useState('');
+  const [image14, setImage14] = useState('');
+  const [image15, setImage15] = useState('');
+  const [image16, setImage16] = useState('');
 
-  const [leftPA, setLeftPA] = useState('Ok');
-  const [leftPB, setLeftPB] = useState('Ok');
-  const [leftPC, setLeftPC] = useState('Ok');
-  const [rightPA, setRightPA] = useState('Ok');
-  const [rightPB, setRightPB] = useState('Ok');
-  const [rightPC, setRightPC] = useState('Ok');
-  const [leftApron, setLeftApron] = useState('Ok');
-  const [leftApronLeg, setLeftApronLeg] = useState('Ok');
-  const [rightApron, setRightApron] = useState('Ok');
-  const [rightApronLeg, setRightApronLeg] = useState('Ok');
-  const [boot, setBoot] = useState('Ok');
-
+  const [item1, setItem1] = useState('Ok');
+  const [item2, setItem2] = useState('Ok');
+  const [item3, setItem3] = useState('Ok');
+  const [item4, setItem4] = useState('Ok');
+  const [item5, setItem5] = useState('Ok');
+  const [item6, setItem6] = useState('Ok');
+  const [item7, setItem7] = useState('Ok');
+  const [item8, setItem8] = useState('Ok');
+  const [item9, setItem9] = useState('Ok');
+  const [item10, setItem10] = useState('Ok');
+  const [item11, setItem11] = useState('Ok');
+  const [item12, setItem12] = useState('Ok');
+  const [item13, setItem13] = useState('Ok');
+  const [item14, setItem14] = useState('Ok');
+  const [item15, setItem15] = useState('Ok');
+  const [item16, setItem16] = useState('Ok');
   const [loading, setLoading] = useState(false);
   const [uploadType, setUploadType] =
-    useState<ExteriorDocumentType>('left_pillarA');
+    useState<TwoWheelerExteriorDocumentType>('headlight_visor');
   const dispatch = useDispatch<any>();
   const selectUploadImage = useAppSelector(state => state.uploadImage);
   const selectUploadExteriorImage = useAppSelector(state => state.addExterior);
@@ -102,60 +170,80 @@ export default function Exterior({navigation, route}: ExteriorProps) {
     if (selectUploadImage.called) {
       setLoading(false);
       const {error, image} = selectUploadImage;
-      let temp = [...exteriorType];
+      let temp = [...twoWheelerType];
 
       if (!error && image) {
         switch (uploadType) {
-          case 'left_pillarA':
+          case 'headlight_visor':
             setImage1(image.file);
             temp[0].url = image.url;
             break;
-          case 'left_pillarB':
+          case 'front_panel':
             setImage2(image.file);
             temp[1].url = image.url;
             break;
-          case 'left_pillarC':
+          case 'mudguard_front':
             setImage3(image.file);
             temp[2].url = image.url;
             break;
-          case 'right_pillarA':
+          case 'fuel_tank':
             setImage4(image.file);
             temp[3].url = image.url;
             break;
-          case 'right_pillarB':
+          case 'front_panel_left':
             setImage5(image.file);
             temp[4].url = image.url;
             break;
-          case 'right_pillarC':
+          case 'middle_panel':
             setImage6(image.file);
             temp[5].url = image.url;
             break;
-          case 'left_apron':
+          case 'chassis':
             setImage7(image.file);
             temp[6].url = image.url;
             break;
-          case 'left_apron_leg':
+          case 'engine_guard_left':
             setImage8(image.file);
             temp[7].url = image.url;
             break;
-          case 'right_apron_leg':
+          case 'pillion_footrest':
             setImage9(image.file);
             temp[8].url = image.url;
             break;
-          case 'right_apron':
+          case 'rear_panel_left':
             setImage10(image.file);
             temp[9].url = image.url;
             break;
-          case 'boot_floor':
+          case 'mudguard_rear':
             setImage11(image.file);
             temp[10].url = image.url;
+            break;
+          case 'silencer_assembly':
+            setImage12(image.file);
+            temp[11].url = image.url;
+            break;
+          case 'rear_panel_right':
+            setImage13(image.file);
+            temp[12].url = image.url;
+            break;
+          case 'middle_panel_right':
+            setImage14(image.file);
+            temp[13].url = image.url;
+            break;
+          case 'engine_guard_right':
+            setImage15(image.file);
+            temp[14].url = image.url;
+            break;
+          case 'front_panel_right':
+            setImage16(image.file);
+            temp[15].url = image.url;
             break;
           default:
             break;
         }
       }
 
-      setExteriorType([...temp]);
+      setTwoWheelerType([...temp]);
     }
     if (selectUploadExteriorImage.called) {
       setLoading(false);
@@ -174,18 +262,18 @@ export default function Exterior({navigation, route}: ExteriorProps) {
       setLoading(false);
       const {error, data} = selectGetExteriorData;
       if (!error && data) {
-        setLeftPA(data.left_pillarA.toLowerCase());
-        setLeftPB(data.left_pillarB.toLowerCase());
-        setLeftPC(data.left_pillarC.toLowerCase());
-        setRightPA(data.right_pillarA.toLowerCase());
-        setRightPB(data.right_pillarB.toLowerCase());
-        setRightPC(data.right_pillarC.toLowerCase());
-        setLeftApron(data.left_apron.toLowerCase());
-        setLeftApronLeg(data.left_apron_leg.toLowerCase());
-        setRightApronLeg(data.right_apron_leg.toLowerCase());
-        setRightApron(data.right_apron.toLowerCase());
-        setBoot(data.boot_floor.toLowerCase());
-        let temp = [...exteriorType];
+        setItem1(data.left_pillarA.toLowerCase());
+        setItem2(data.left_pillarB.toLowerCase());
+        setItem3(data.left_pillarC.toLowerCase());
+        setItem4(data.right_pillarA.toLowerCase());
+        setItem5(data.right_pillarB.toLowerCase());
+        setItem6(data.right_pillarC.toLowerCase());
+        setItem7(data.left_apron.toLowerCase());
+        setItem8(data.left_apron_leg.toLowerCase());
+        setItem9(data.right_apron_leg.toLowerCase());
+        setItem10(data.right_apron.toLowerCase());
+        setItem11(data.boot_floor.toLowerCase());
+        let temp = [...twoWheelerType];
         if (data.left_pillarA_image) {
           temp[0].url = data.left_pillarA_image.url;
           setImage1(data.left_pillarA_image.file);
@@ -230,7 +318,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           temp[10].url = data.boot_floor_image.url;
           setImage11(data.boot_floor_image.file);
         }
-        setExteriorType([...temp]);
+        setTwoWheelerType([...temp]);
       }
     }
     if (selectUpdateExteriorData.called) {
@@ -259,17 +347,44 @@ export default function Exterior({navigation, route}: ExteriorProps) {
       dispatch(
         onAddExterior(
           vehicleId,
-          leftPA,
-          leftPB,
-          leftPC,
-          rightPA,
-          rightPB,
-          rightPC,
-          leftApron,
-          leftApronLeg,
-          rightApron,
-          rightApronLeg,
-          boot,
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          item1,
+          item2,
+          item3,
+          item4,
+          item5,
+          item6,
+          item7,
+          item8,
+          item9,
+          item10,
+          item11,
+          item12,
+          item13,
+          item14,
+          item15,
+          item16,
           image1,
           image2,
           image3,
@@ -281,55 +396,55 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           image9,
           image10,
           image11,
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
+          image12,
+          image13,
+          image14,
+          image15,
+          image16,
         ),
       );
     } else {
       dispatch(
         onUpdateExterior(
           vehicleId,
-          leftPA,
-          leftPB,
-          leftPC,
-          rightPA,
-          rightPB,
-          rightPC,
-          leftApron,
-          leftApronLeg,
-          rightApron,
-          rightApronLeg,
-          boot,
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          item1,
+          item2,
+          item3,
+          item4,
+          item5,
+          item6,
+          item7,
+          item8,
+          item9,
+          item10,
+          item11,
+          item12,
+          item13,
+          item14,
+          item15,
+          item16,
           image1,
           image2,
           image3,
@@ -341,83 +456,139 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           image9,
           image10,
           image11,
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
+          image12,
+          image13,
+          image14,
+          image15,
+          image16,
         ),
       );
     }
   }
 
-  function onOpenPicker(type: ExteriorDocumentType) {
+  function onOpenPicker(type: string) {
     setOpenImagePicker(true);
     switch (type) {
-      case 'left_pillarA':
-        setUploadType('left_pillarA');
+      case 'headlight_visor':
+        setUploadType('headlight_visor');
         break;
-      case 'left_pillarB':
-        setUploadType('left_pillarB');
+      case 'chassis':
+        setUploadType('chassis');
         break;
-      case 'left_pillarC':
-        setUploadType('left_pillarC');
+      case 'engine_guard_left':
+        setUploadType('engine_guard_left');
         break;
-      case 'right_pillarA':
-        setUploadType('right_pillarA');
+      case 'engine_guard_right':
+        setUploadType('engine_guard_right');
         break;
-      case 'right_pillarB':
-        setUploadType('right_pillarB');
+      case 'front_panel':
+        setUploadType('front_panel');
         break;
-      case 'right_pillarC':
-        setUploadType('right_pillarC');
+      case 'front_panel_right':
+        setUploadType('front_panel_right');
         break;
-      case 'left_apron':
-        setUploadType('left_apron');
+      case 'fuel_tank':
+        setUploadType('fuel_tank');
         break;
-      case 'left_apron_leg':
-        setUploadType('left_apron_leg');
+      case 'middle_panel':
+        setUploadType('middle_panel');
         break;
-      case 'right_apron':
-        setUploadType('right_apron');
+      case 'middle_panel_right':
+        setUploadType('middle_panel_right');
         break;
-      case 'right_apron_leg':
-        setUploadType('right_apron_leg');
+      case 'mudguard_front':
+        setUploadType('mudguard_front');
         break;
-      case 'boot_floor':
-        setUploadType('boot_floor');
+      case 'mudguard_rear':
+        setUploadType('mudguard_rear');
+        break;
+      case 'pillion_footrest':
+        setUploadType('pillion_footrest');
+        break;
+      case 'rear_panel_left':
+        setUploadType('rear_panel_left');
+        break;
+      case 'rear_panel_right':
+        setUploadType('rear_panel_right');
+        break;
+      case 'silencer_assembly':
+        setUploadType('silencer_assembly');
         break;
     }
   }
 
-  console.log('kpa', leftPA);
+  function onChangeValue(value: string, index: number) {
+    let temp = [...twoWheelerType];
+    switch (index) {
+      case 0:
+        setItem1(value);
+        temp[0].selectedValue = value;
+        break;
+      case 1:
+        setItem2(value);
+        temp[1].selectedValue = value;
+        break;
+      case 2:
+        setItem3(value);
+        temp[2].selectedValue = value;
+        break;
+      case 3:
+        setItem4(value);
+        temp[3].selectedValue = value;
+        break;
+      case 4:
+        setItem5(value);
+        temp[4].selectedValue = value;
+        break;
+      case 5:
+        setItem6(value);
+        temp[5].selectedValue = value;
+        break;
+      case 6:
+        setItem7(value);
+        temp[6].selectedValue = value;
+        break;
+      case 7:
+        setItem8(value);
+        temp[7].selectedValue = value;
+        break;
+      case 8:
+        setItem9(value);
+        temp[8].selectedValue = value;
+        break;
+      case 9:
+        setItem10(value);
+        temp[9].selectedValue = value;
+        break;
+      case 10:
+        setItem11(value);
+        temp[10].selectedValue = value;
+        break;
+      case 11:
+        setItem12(value);
+        temp[11].selectedValue = value;
+        break;
+      case 12:
+        setItem13(value);
+        temp[12].selectedValue = value;
+        break;
+      case 13:
+        setItem14(value);
+        temp[13].selectedValue = value;
+        break;
+      case 14:
+        setItem15(value);
+        temp[14].selectedValue = value;
+        break;
+      case 15:
+        setItem16(value);
+        temp[15].selectedValue = value;
+        break;
+      default:
+        break;
+    }
+    setTwoWheelerType([...temp]);
+  }
 
   return (
     <Box style={styles.container}>
@@ -431,94 +602,19 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           Step 4: Exterior
         </CustomText>
         <Box pv={'2%'}>
-          <BasePicker
-            data={list}
-            title="Left Pillar A"
-            onValueChange={setLeftPA}
-            selectedValue={leftPA}
-            onPressCamera={() => onOpenPicker('left_pillarA')}
-            selectPhoto={exteriorType[0].url}
-          />
-          <BasePicker
-            data={list}
-            title="Left Pillar B"
-            onValueChange={setLeftPB}
-            selectedValue={leftPB}
-            onPressCamera={() => onOpenPicker('left_pillarB')}
-            selectPhoto={exteriorType[1].url}
-          />
-          <BasePicker
-            data={list}
-            title="Left Pillar C"
-            onValueChange={setLeftPC}
-            selectedValue={leftPC}
-            onPressCamera={() => onOpenPicker('left_pillarC')}
-            selectPhoto={exteriorType[2].url}
-          />
-          <BasePicker
-            data={list}
-            title="Right Pillar A"
-            onValueChange={setRightPA}
-            selectedValue={rightPA}
-            onPressCamera={() => onOpenPicker('right_pillarA')}
-            selectPhoto={exteriorType[3].url}
-          />
-          <BasePicker
-            data={list}
-            title="Right Pillar B"
-            onValueChange={setRightPB}
-            selectedValue={rightPB}
-            onPressCamera={() => onOpenPicker('right_pillarB')}
-            selectPhoto={exteriorType[4].url}
-          />
-          <BasePicker
-            data={list}
-            title="Right Pillar C"
-            onValueChange={setRightPC}
-            selectedValue={rightPC}
-            onPressCamera={() => onOpenPicker('right_pillarC')}
-            selectPhoto={exteriorType[5].url}
-          />
-          <BasePicker
-            data={list}
-            title="Left Apron"
-            onValueChange={setLeftApron}
-            selectedValue={leftApron}
-            onPressCamera={() => onOpenPicker('left_apron')}
-            selectPhoto={exteriorType[6].url}
-          />
-          <BasePicker
-            data={list}
-            title="Left Apron Leg"
-            onValueChange={setLeftApronLeg}
-            selectedValue={leftApronLeg}
-            onPressCamera={() => onOpenPicker('left_apron_leg')}
-            selectPhoto={exteriorType[7].url}
-          />
-          <BasePicker
-            data={list}
-            title="Right Apron Leg"
-            onValueChange={setRightApronLeg}
-            selectedValue={rightApronLeg}
-            onPressCamera={() => onOpenPicker('right_apron_leg')}
-            selectPhoto={exteriorType[8].url}
-          />
-          <BasePicker
-            data={list}
-            title="Right Apron Leg"
-            onValueChange={setRightApron}
-            selectedValue={rightApron}
-            onPressCamera={() => onOpenPicker('right_apron')}
-            selectPhoto={exteriorType[9].url}
-          />
-          <BasePicker
-            data={list}
-            title="Boot Floor"
-            onValueChange={setBoot}
-            selectedValue={boot}
-            onPressCamera={() => onOpenPicker('boot_floor')}
-            selectPhoto={exteriorType[10].url}
-          />
+          {twoWheelerType.map((el, index) => {
+            return (
+              <BasePicker
+                key={index.toString()}
+                data={list}
+                title={el.name}
+                onValueChange={value => onChangeValue(value, index)}
+                selectedValue={el.selectedValue}
+                onPressCamera={() => onOpenPicker(el.id)}
+                selectPhoto={el.url}
+              />
+            );
+          })}
         </Box>
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>

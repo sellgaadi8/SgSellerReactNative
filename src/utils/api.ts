@@ -61,6 +61,13 @@ const addSteeringUrl = (id: string) => `/vehicle/steering/create/${id}`;
 const getSteeringUrl = (id: string) => `/vehicle/steering/edit/${id}`;
 const updateSteeringUrl = (id: string) => `/vehicle/steering/update/${id}`;
 
+const addSuspension = (id: string) =>
+  `/vehicle/handling-and-suspension/create/${id}`;
+const getSuspension = (id: string) =>
+  `/vehicle/handling-and-suspension/edit/${id}`;
+const updateSuspensionUrl = (id: string) =>
+  `/vehicle/handling-and-suspension/update/${id}`;
+
 const getVehicleDetailsUrl = (id: string) => `vehicle/getVehicleDetails/${id}`;
 
 export {
@@ -107,4 +114,7 @@ export {
   getSteeringUrl,
   updateSteeringUrl,
   getVehicleDetailsUrl,
+  addSuspension,
+  getSuspension,
+  updateSuspensionUrl,
 };

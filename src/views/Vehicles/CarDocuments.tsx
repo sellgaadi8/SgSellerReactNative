@@ -63,7 +63,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
   const [showCalendar, setShowCalendar] = useState(false);
   const [calType, setCalType] = useState<'fitness' | 'permit'>('fitness');
   const dispatch = useDispatch<any>();
-  const {vehicleId} = useContext(GlobalContext);
+  const {vehicleId, vehicleType} = useContext(GlobalContext);
   const selectAddCarDocs = useAppSelector(state => state.addCarDocument);
   const selectUpdateCarDocs = useAppSelector(state => state.updateCarDocument);
   const selectGetCarDocs = useAppSelector(state => state.getCarDocuments);
@@ -107,25 +107,25 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
     if (rto.length === 0) {
       tempErrors.rto = 'The Rto field is required';
     }
-    if (fitness.length === 0) {
+    if (vehicleType !== 'two_wheeler' && fitness.length === 0) {
       tempErrors.fitness = 'The Fitness field is required';
     }
-    if (permit.length === 0) {
+    if (vehicleType !== 'two_wheeler' && permit.length === 0) {
       tempErrors.permit = 'The Permit field is required';
     }
     if (rcAvail.length === 0) {
       tempErrors.rcAvail = 'The Rc availability field is required';
     }
-    if (rcAvailImage.length === 0) {
+    if (rcAvail === 'yes' && rcAvailImage.length === 0) {
       tempErrors.rcAvailImage = 'The Rc availability image field is required';
     }
     if (insurance.length === 0) {
       tempErrors.insurance = 'The Insurance - type field is required';
     }
-    if (fitment.length === 0) {
+    if (vehicleType !== 'two_wheeler' && fitment.length === 0) {
       tempErrors.fitment = 'The CNG/LPG fitment field is required';
     }
-    if (fitmentEndorsed.length === 0) {
+    if (vehicleType !== 'two_wheeler' && fitmentEndorsed.length === 0) {
       tempErrors.fitmentEndorsed = 'CNG/LPG fitment endorsed on RC';
     }
     if (rcAvail === 'yes') {
@@ -136,6 +136,8 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   }
+
+  console.log(errors);
 
   console.log('insurance.length', insurance);
 
@@ -366,35 +368,38 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
             error={errors?.rto}
             noMargin
           />
-          <Pressable onPress={() => onPressCalend('fitness')}>
-            <ProfileInput
-              pointerEvents="none"
-              label="Fitness Upto"
-              value={fitness}
-              onChangeText={setFitness}
-              isMandatory
-              endIcon="calendar-month"
-              editable={false}
-              onPressEndIcon={() => onPressCalend('fitness')}
-              error={errors?.fitness}
-              noMargin
-            />
-          </Pressable>
-          <Pressable onPress={() => onPressCalend('permit')}>
-            <ProfileInput
-              pointerEvents="none"
-              label="Permit Upto"
-              value={permit}
-              onChangeText={setPermit}
-              isMandatory
-              endIcon="calendar-month"
-              editable={false}
-              onPressEndIcon={() => onPressCalend('permit')}
-              error={errors?.permit}
-              noMargin
-            />
-          </Pressable>
-
+          {vehicleType !== 'two_wheeler' && (
+            <>
+              <Pressable onPress={() => onPressCalend('fitness')}>
+                <ProfileInput
+                  pointerEvents="none"
+                  label="Fitness Upto"
+                  value={fitness}
+                  onChangeText={setFitness}
+                  isMandatory
+                  endIcon="calendar-month"
+                  editable={false}
+                  onPressEndIcon={() => onPressCalend('fitness')}
+                  error={errors?.fitness}
+                  noMargin
+                />
+              </Pressable>
+              <Pressable onPress={() => onPressCalend('permit')}>
+                <ProfileInput
+                  pointerEvents="none"
+                  label="Permit Upto"
+                  value={permit}
+                  onChangeText={setPermit}
+                  isMandatory
+                  endIcon="calendar-month"
+                  editable={false}
+                  onPressEndIcon={() => onPressCalend('permit')}
+                  error={errors?.permit}
+                  noMargin
+                />
+              </Pressable>
+            </>
+          )}
           <Box style={{marginTop: -10}}>
             <RadioButtons
               label="RC availability"
@@ -420,15 +425,17 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
               selectValue={noc}
             />
 
-            <RadioButtons
-              label="Mismatch in RC"
-              data={[
-                {label: 'Yes', value: 'yes'},
-                {label: 'No', value: 'no'},
-              ]}
-              onSelect={(label, value) => setMismatch(value)}
-              selectValue={mismatch}
-            />
+            {vehicleType === 'four_wheeler' && (
+              <RadioButtons
+                label="Mismatch in RC"
+                data={[
+                  {label: 'Yes', value: 'yes'},
+                  {label: 'No', value: 'no'},
+                ]}
+                onSelect={(label, value) => setMismatch(value)}
+                selectValue={mismatch}
+              />
+            )}
             <RadioButtons
               label="Insurance - type"
               data={[
@@ -450,76 +457,86 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
               onSelect={(label, value) => setHypo(value)}
               selectValue={hypo}
             />
-            <RadioButtons
-              label="Road tax paid"
-              data={[
-                {label: 'Yes', value: 'yes'},
-                {label: 'No', value: 'no'},
-              ]}
-              onSelect={(label, value) => setRoadTax(value)}
-              selectValue={roadTax}
-              isImage
-              selectPhoto={carDocsType[1].url}
-              onPressCamera={() => onOpenPicker('road')}
-            />
-            <RadioButtons
-              label="Partipeshi Request"
-              data={[
-                {label: 'Yes', value: 'yes'},
-                {label: 'No', value: 'no'},
-              ]}
-              onSelect={(label, value) => setPartipeshi(value)}
-              selectValue={partipeshi}
-              isImage
-              selectPhoto={carDocsType[2].url}
-              onPressCamera={() => onOpenPicker('partpeshi')}
-            />
-            <RadioButtons
-              label="Duplicate Key"
-              data={[
-                {label: 'Yes', value: 'yes'},
-                {label: 'No', value: 'no'},
-              ]}
-              onSelect={(label, value) => setKey(value)}
-              selectValue={key}
-              isImage
-              selectPhoto={carDocsType[3].url}
-              onPressCamera={() => onOpenPicker('key')}
-            />
-            <RadioButtons
-              label="Chessis Number embossing ( Tracable/Nor tracable)"
-              data={[
-                {label: 'Yes', value: 'yes'},
-                {label: 'No', value: 'no'},
-              ]}
-              onSelect={(label, value) => setChessis(value)}
-              selectValue={chessis}
-              isImage
-              selectPhoto={carDocsType[4].url}
-              onPressCamera={() => onOpenPicker('chesis')}
-            />
-            <RadioButtons
-              label="CNG/LPG fitment"
-              data={[
-                {label: 'Yes', value: 'yes'},
-                {label: 'No', value: 'no'},
-              ]}
-              onSelect={(label, value) => setFitment(value)}
-              selectValue={fitment}
-              isMandatory
-              error={errors?.fitment}
-            />
-            <RadioButtons
-              label="CNG/LPG fitment endorsed on RC"
-              data={[
-                {label: 'Yes', value: 'yes'},
-                {label: 'No', value: 'no'},
-              ]}
-              onSelect={(label, value) => setFitmentEndorsed(value)}
-              selectValue={fitmentEndorsed}
-              isMandatory
-              error={errors?.fitmentEndorsed}
-            />
+            {vehicleType !== 'two_wheeler' && (
+              <>
+                <RadioButtons
+                  label="Road tax paid"
+                  data={[
+                    {label: 'Yes', value: 'yes'},
+                    {label: 'No', value: 'no'},
+                  ]}
+                  onSelect={(label, value) => setRoadTax(value)}
+                  selectValue={roadTax}
+                  isImage
+                  selectPhoto={carDocsType[1].url}
+                  onPressCamera={() => onOpenPicker('road')}
+                />
+                {vehicleType !== 'three_wheeler' && (
+                  <RadioButtons
+                    label="Partipeshi Request"
+                    data={[
+                      {label: 'Yes', value: 'yes'},
+                      {label: 'No', value: 'no'},
+                    ]}
+                    onSelect={(label, value) => setPartipeshi(value)}
+                    selectValue={partipeshi}
+                    isImage
+                    selectPhoto={carDocsType[2].url}
+                    onPressCamera={() => onOpenPicker('partpeshi')}
+                  />
+                )}
+                <RadioButtons
+                  label="Duplicate Key"
+                  data={[
+                    {label: 'Yes', value: 'yes'},
+                    {label: 'No', value: 'no'},
+                  ]}
+                  onSelect={(label, value) => setKey(value)}
+                  selectValue={key}
+                  isImage
+                  selectPhoto={carDocsType[3].url}
+                  onPressCamera={() => onOpenPicker('key')}
+                />
+                <RadioButtons
+                  label="Chessis Number embossing ( Tracable/Nor tracable)"
+                  data={[
+                    {label: 'Yes', value: 'yes'},
+                    {label: 'No', value: 'no'},
+                  ]}
+                  onSelect={(label, value) => setChessis(value)}
+                  selectValue={chessis}
+                  isImage
+                  selectPhoto={carDocsType[4].url}
+                  onPressCamera={() => onOpenPicker('chesis')}
+                />
+              </>
+            )}
+            {vehicleType !== 'two_wheeler' && (
+              <>
+                <RadioButtons
+                  label="CNG/LPG fitment"
+                  data={[
+                    {label: 'Yes', value: 'yes'},
+                    {label: 'No', value: 'no'},
+                  ]}
+                  onSelect={(label, value) => setFitment(value)}
+                  selectValue={fitment}
+                  isMandatory
+                  error={errors?.fitment}
+                />
+                <RadioButtons
+                  label="CNG/LPG fitment endorsed on RC"
+                  data={[
+                    {label: 'Yes', value: 'yes'},
+                    {label: 'No', value: 'no'},
+                  ]}
+                  onSelect={(label, value) => setFitmentEndorsed(value)}
+                  selectValue={fitmentEndorsed}
+                  isMandatory
+                  error={errors?.fitmentEndorsed}
+                />
+              </>
+            )}
           </Box>
         </Box>
         <Box style={styles.buttonContainer}>

@@ -67,5 +67,8 @@ const styles = EStyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    width: '100%',
+    paddingVertical: '2%',
+    alignSelf: 'center',
   },
 });

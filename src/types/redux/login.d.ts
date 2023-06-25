@@ -1,4 +1,4 @@
-type VehicleType = '2_wheeler' | 'commercial' | '4_wheeler';
+type VehicleType = 'two_wheeler' | 'three_wheeler' | 'four_wheeler';
 
 type LOGIN = 'sgSeller/login';
 

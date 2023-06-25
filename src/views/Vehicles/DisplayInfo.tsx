@@ -152,7 +152,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
       });
       return false;
     }
-    if (transmission.length === 0) {
+    if (vehicleType === 'two_wheeler' && transmission.length === 0) {
       Snackbar.show({
         text: 'Select Transmission type',
         backgroundColor: 'red',

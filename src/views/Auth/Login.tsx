@@ -83,11 +83,11 @@ export default function Login({navigation}: LoginProps) {
     }
     if (selectLogin.called) {
       setLoading(false);
-      const {message, success, name} = selectLogin;
+      const {message, success, name, seller_type} = selectLogin;
       if (success && name && message) {
         setAuthenticated(true);
         setName(name);
-        setVehicleType('2_wheeler');
+        setVehicleType(seller_type);
         Snackbar.show({
           text: message,
           backgroundColor: 'green',

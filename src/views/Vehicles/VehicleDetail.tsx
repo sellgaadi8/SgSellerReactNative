@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
 import {onGetVehicleDetails} from '../../redux/ducks/getVehicleDetails';
-import {ExteriorImage, VehicleDetailProps} from '../../types/propsTypes';
+import {VehicleDetailProps} from '../../types/propsTypes';
 import {container} from '../../utils/styles';
 import {useAppSelector} from '../../utils/hooks';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -20,7 +20,7 @@ import Video from 'react-native-video';
 // import DataWithImages from '../../components/DataWithImages';
 import Loader from '../../components/Loader';
 import PopulateImageWithData from '../../components/PopulateImageWithData';
-import {Animated} from 'react-native';
+// import {Animated} from 'react-native';
 import Indicator from '../../components/Indicator';
 const {height, width} = Dimensions.get('window');
 const types = [
@@ -32,9 +32,9 @@ const types = [
   'Electricals',
   'Steering',
 ];
-const max_height = 460;
-const min_height = 0;
-const HEADER_SCROLL_DISTANCE = max_height - min_height;
+// const max_height = 460;
+// const min_height = 0;
+// const HEADER_SCROLL_DISTANCE = max_height - min_height;
 
 export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
   const dispatch = useDispatch<any>();
@@ -43,20 +43,28 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
   const [vehicleImage, setVehicleImage] = useState<(string | null)[]>();
   const [images, setImages] = useState<{key: string; value: string}[]>([]);
   const [play, setPlay] = useState(true);
-  const scrollY = new Animated.Value(0);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const headerHeight = scrollY.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE],
-    outputRange: [max_height, min_height],
-    extrapolate: 'clamp',
-  });
+  // const scrollY = new Animated.Value(0);
+  // const [currentIndex, setCurrentIndex] = useState(0);
+  // const headerHeight = scrollY.interpolate({
+  //   inputRange: [0, HEADER_SCROLL_DISTANCE],
+  //   outputRange: [max_height, min_height],
+  //   extrapolate: 'clamp',
+  // });
 
-  const [okValues, setOkValues] = useState<VehicleImageType>();
-  const [exterior, setExterior] = useState<VehicleImageType>();
+  const [okValues, setOkValues] = useState<{
+    [key: string]: string | {value: string; image: string};
+  }>();
+  const [exterior, setExterior] = useState<{
+    [key: string]: string | {value: string; image: string};
+  }>();
 
-  const [okValuesExternel, setOkValuesExternel] = useState<VehicleImageType>();
+  const [okValuesExternel, setOkValuesExternel] = useState<{
+    [key: string]: string | {value: string; image: string};
+  }>();
 
-  const [externel, setExternel] = useState<VehicleImageType>();
+  const [externel, setExternel] = useState<{
+    [key: string]: string | {value: string; image: string};
+  }>();
   const [loading, setLoading] = useState(false);
   const [scrollIndex, setScrollIndex] = useState(0);
 
@@ -111,12 +119,18 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
   }, [selectVehicleDetails, vehicleDetails]);
 
   function getExteriorData() {
-    const okValue: Partial<VehicleImageType> = {};
+    const okValue: Partial<{
+      [key: string]: string | {value: string; image: string};
+    }> = {};
 
     for (const key in exterior) {
       if (exterior && exterior.hasOwnProperty(key)) {
         if (exterior && exterior[key] === 'ok') {
-          okValue[key as keyof VehicleImageType] = exterior[key];
+          okValue[
+            key as keyof {
+              [key: string]: string | {value: string; image: string};
+            }
+          ] = exterior[key];
         }
       }
     }
@@ -124,16 +138,23 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
   }
 
   function getExternelData() {
-    const okValue: Partial<VehicleImageType> = {};
+    const okValue: Partial<{
+      [key: string]: string | {value: string; image: string};
+    }> = {};
 
     for (const key in externel) {
       if (externel && externel.hasOwnProperty(key)) {
         if (externel && externel[key] === 'ok') {
-          okValue[key as keyof VehicleImageType] = externel[key];
+          okValue[
+            key as keyof {
+              [key: string]: string | {value: string; image: string};
+            }
+          ] = externel[key];
         }
       }
     }
     setOkValuesExternel(okValue);
+    console.log('ok', okValue);
   }
 
   function handleOnScroll(event: any) {
@@ -212,15 +233,15 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               fontFamily="Roboto-Regular"
               fontSize={22}
               lineHeight={32}>
-              {vehicleDetails?.display_info.make.value}(
-              {vehicleDetails?.display_info.mfg_year.value})
+              {vehicleDetails?.display_info.make}(
+              {vehicleDetails?.display_info.mfg_year})
             </CustomText>
             <CustomText
               color="#111111"
               fontFamily="Roboto-Regular"
               fontSize={11}
               lineHeight={16}>
-              {vehicleDetails?.display_info.model.value}
+              {vehicleDetails?.display_info.model}
             </CustomText>
             <Box flexDirection="row" justifyContent="space-between" pv={'4%'}>
               <Box flexDirection="row">
@@ -231,7 +252,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                   style={styles.marginRight}
                 />
                 <CustomText style={styles.display}>
-                  {vehicleDetails?.display_info.fuel_type.value}
+                  {vehicleDetails?.display_info.fuel_type}
                 </CustomText>
               </Box>
               <Box flexDirection="row">
@@ -242,7 +263,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                   style={styles.marginRight}
                 />
                 <CustomText style={styles.display}>
-                  {vehicleDetails?.display_info.no_of_kms.value} (Km)
+                  {vehicleDetails?.display_info.no_of_kms} (Km)
                 </CustomText>
               </Box>
               <Box flexDirection="row">
@@ -253,7 +274,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                   style={styles.marginRight}
                 />
                 <CustomText style={styles.display}>
-                  {vehicleDetails?.display_info.variant.value}
+                  {vehicleDetails?.display_info.variant}
                 </CustomText>
               </Box>
             </Box>
@@ -267,7 +288,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                   style={styles.marginRight}
                 />
                 <CustomText style={styles.display}>
-                  {vehicleDetails?.display_info.no_of_owners.value}
+                  {vehicleDetails?.display_info.no_of_owners}
                 </CustomText>
               </Box>
               <Box flexDirection="row" ph={'20%'}>
@@ -278,7 +299,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                   style={styles.marginRight}
                 />
                 <CustomText style={styles.display}>
-                  {vehicleDetails?.display_info.color.value}
+                  {vehicleDetails?.display_info.color}
                 </CustomText>
               </Box>
             </Box>
@@ -312,18 +333,20 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               <CustomText style={styles.vehicleHeading}>
                 Car Documents
               </CustomText>
-              {Object.entries(vehicleDetails?.car_docs).map(el => {
+              {Object.entries(vehicleDetails?.car_docs).map((el, index) => {
                 return (
-                  el[1].value && (
-                    <Box style={styles.title}>
-                      <CustomText style={styles.dataValue}>
-                        {el[0].replace(/_/g, ' ').toUpperCase()}
-                      </CustomText>
-                      <CustomText style={styles.value}>
-                        {el[1].value}
-                      </CustomText>
-                    </Box>
-                  )
+                  <PopulateImageWithData
+                    title={el[0].replace(/_/g, ' ').toUpperCase()}
+                    image={typeof el[1] === 'object' ? el[1].image : ''}
+                    value={
+                      typeof el[1] === 'object'
+                        ? el[1].value
+                        : !el[1].includes('https')
+                        ? el[1]
+                        : ''
+                    }
+                    onPressImage={() => onPressImage(index)}
+                  />
                 );
               })}
             </Box>
@@ -332,7 +355,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
           {vehicleDetails?.exterior_img && (
             <Box>
               <CustomText style={styles.vehicleHeading}>Exterior</CustomText>
-              <Box pv={'-2%'}>
+              <Box pv={'3%'}>
                 <CustomText style={styles.value}>
                   {okValues &&
                     Object.keys(okValues)
@@ -350,14 +373,16 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
 
                 {Object.entries(vehicleDetails.exterior_img).map(
                   (el, index) => {
-                    return (
-                      <PopulateImageWithData
-                        title={el[0].replace(/_/g, ' ').toUpperCase()}
-                        image={el[1] ? el[1].image : ''}
-                        value={el[1] ? el[1].value : ''}
-                        onPressImage={() => onPressImage(index)}
-                      />
-                    );
+                    if (typeof el[1] === 'object') {
+                      return (
+                        <PopulateImageWithData
+                          title={el[0].replace(/_/g, ' ').toUpperCase()}
+                          image={el[1] ? el[1].image : ''}
+                          value={el[1] ? el[1].value : ''}
+                          onPressImage={() => onPressImage(index)}
+                        />
+                      );
+                    }
                   },
                 )}
               </Box>
@@ -369,7 +394,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               <CustomText style={styles.vehicleHeading}>
                 Externel Panel
               </CustomText>
-              <Box pv={'-2%'}>
+              <Box pv={'3%'}>
                 <CustomText style={styles.value}>
                   {okValuesExternel &&
                     Object.keys(okValuesExternel)
@@ -387,14 +412,16 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               </Box>
               {Object.entries(vehicleDetails.external_panel).map(
                 (el, index) => {
-                  return (
-                    <PopulateImageWithData
-                      title={el[0].replace(/_/g, ' ').toUpperCase()}
-                      image={el[1] ? el[1].image : ''}
-                      value={el[1] ? el[1].value : ''}
-                      onPressImage={() => onPressImage(index)}
-                    />
-                  );
+                  if (typeof el[1] === 'object') {
+                    return (
+                      <PopulateImageWithData
+                        title={el[0].replace(/_/g, ' ').toUpperCase()}
+                        image={el[1] ? el[1].image : ''}
+                        value={el[1] ? el[1].value : ''}
+                        onPressImage={() => onPressImage(index)}
+                      />
+                    );
+                  }
                 },
               )}
             </Box>
@@ -421,8 +448,14 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                 return (
                   <PopulateImageWithData
                     title={el[0].replace(/_/g, ' ').toUpperCase()}
-                    image={el[1] ? el[1].image : ''}
-                    value={el[1] ? el[1].value : ''}
+                    image={typeof el[1] === 'object' ? el[1].image : ''}
+                    value={
+                      typeof el[1] === 'object'
+                        ? el[1].value
+                        : !el[1].includes('https')
+                        ? el[1]
+                        : ''
+                    }
                     onPressImage={() => onPressImage(index)}
                   />
                 );
@@ -448,14 +481,22 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
             <Box>
               <CustomText style={styles.vehicleHeading}>Steering</CustomText>
               {Object.entries(vehicleDetails.steering).map((el, index) => {
-                return (
-                  <PopulateImageWithData
-                    title={el[0].replace(/_/g, ' ').toUpperCase()}
-                    image={el[1] ? el[1].image : ''}
-                    value={el[1] ? el[1].value : ''}
-                    onPressImage={() => onPressImage(index)}
-                  />
-                );
+                if (typeof el[1] !== 'object') {
+                  return (
+                    <Box
+                      key={index.toString()}
+                      flexDirection="row"
+                      justifyContent="space-between"
+                      pv={'3%'}
+                      alignItems="center"
+                      width={'90%'}>
+                      <CustomText style={styles.dataValue}>
+                        {el[0].replace(/_/g, ' ').toUpperCase()}
+                      </CustomText>
+                      <CustomText style={styles.value}>{el[1]}</CustomText>
+                    </Box>
+                  );
+                }
               })}
             </Box>
           )}

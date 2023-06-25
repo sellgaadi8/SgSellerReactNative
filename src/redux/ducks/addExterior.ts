@@ -55,6 +55,38 @@ export const onAddExterior =
     right_apron_leg_image: string,
     right_apron_image: string,
     boot_floor_image: string,
+    headlight_visor: string,
+    front_panel: string,
+    mudguard_front: string,
+    fuel_tank: string,
+    front_panel_left: string,
+    middle_panel: string,
+    chassis: string,
+    engine_guard_left: string,
+    pillion_footrest: string,
+    rear_panel_left: string,
+    mudguard_rear: string,
+    silencer_assembly: string,
+    rear_panel_right: string,
+    middle_panel_right: string,
+    engine_guard_right: string,
+    front_panel_right: string,
+    headlight_visor_image: string,
+    front_panel_image: string,
+    mudguard_front_image: string,
+    fuel_tank_image: string,
+    front_panel_left_image: string,
+    middle_panel_image: string,
+    chassis_image: string,
+    engine_guard_left_image: string,
+    pillion_footrest_image: string,
+    rear_panel_left_image: string,
+    mudguard_rear_image: string,
+    silencer_assembly_image: string,
+    rear_panel_right_image: string,
+    middle_panel_right_image: string,
+    engine_guard_right_image: string,
+    front_panel_right_image: string,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = addExteriorUrl(id);
@@ -92,6 +124,38 @@ export const onAddExterior =
     body.append('right_apron_leg_image', right_apron_leg_image);
     body.append('right_apron_image', right_apron_image);
     body.append('boot_floor_image', boot_floor_image);
+    body.append('headlight_visor', headlight_visor);
+    body.append('front_panel', front_panel);
+    body.append('mudguard_front', mudguard_front);
+    body.append('fuel_tank', fuel_tank);
+    body.append('front_panel_left', front_panel_left);
+    body.append('middle_panel', middle_panel);
+    body.append('chassis', chassis);
+    body.append('engine_guard_left', engine_guard_left);
+    body.append('pillion_footrest', pillion_footrest);
+    body.append('rear_panel_left', rear_panel_left);
+    body.append('mudguard_rear', mudguard_rear);
+    body.append('silencer_assembly', silencer_assembly);
+    body.append('rear_panel_right', rear_panel_right);
+    body.append('middle_panel_right', middle_panel_right);
+    body.append('engine_guard_right', engine_guard_right);
+    body.append('front_panel_right', front_panel_right);
+    body.append('headlight_visor_image', headlight_visor_image);
+    body.append('front_panel_image', front_panel_image);
+    body.append('mudguard_front_image', mudguard_front_image);
+    body.append('fuel_tank_image', fuel_tank_image);
+    body.append('front_panel_left_image', front_panel_left_image);
+    body.append('middle_panel_image', middle_panel_image);
+    body.append('chassis_image', chassis_image);
+    body.append('engine_guard_left_image', engine_guard_left_image);
+    body.append('pillion_footrest_image', pillion_footrest_image);
+    body.append('rear_panel_left_image', rear_panel_left_image);
+    body.append('mudguard_rear_image', mudguard_rear_image);
+    body.append('silencer_assembly_image', silencer_assembly_image);
+    body.append('rear_panel_right_image', rear_panel_right_image);
+    body.append('middle_panel_right_image', middle_panel_right_image);
+    body.append('engine_guard_right_image', engine_guard_right_image);
+    body.append('front_panel_right_image', front_panel_right_image);
 
     axiosInstance
       .post(url, body, config)

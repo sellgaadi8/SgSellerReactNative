@@ -56,6 +56,86 @@ type Exterior = {
     url: string;
     file: string;
   };
+  headlight_visor: string;
+  front_panel: string;
+  mudguard_front: string;
+  fuel_tank: string;
+  front_panel_left: string;
+  middle_panel: string;
+  chassis: string;
+  engine_guard_left: string;
+  pillion_footrest: string;
+  rear_panel_left: string;
+  mudguard_rear: string;
+  silencer_assembly: string;
+  rear_panel_right: string;
+  middle_panel_right: string;
+  engine_guard_right: string;
+  front_panel_right: string;
+  headlight_visor_image: {
+    url: string;
+    file: string;
+  };
+  front_panel_image: {
+    url: string;
+    file: string;
+  };
+  mudguard_front_image: {
+    url: string;
+    file: string;
+  };
+  fuel_tank_image: {
+    url: string;
+    file: string;
+  };
+  front_panel_left_image: {
+    url: string;
+    file: string;
+  };
+  middle_panel_image: {
+    url: string;
+    file: string;
+  };
+  chassis_image: {
+    url: string;
+    file: string;
+  };
+  engine_guard_left_image: {
+    url: string;
+    file: string;
+  };
+  pillion_footrest_image: {
+    url: string;
+    file: string;
+  };
+  rear_panel_left_image: {
+    url: string;
+    file: string;
+  };
+  mudguard_rear_image: {
+    url: string;
+    file: string;
+  };
+  silencer_assembly_image: {
+    url: string;
+    file: string;
+  };
+  rear_panel_right_image: {
+    url: string;
+    file: string;
+  };
+  middle_panel_right_image: {
+    url: string;
+    file: string;
+  };
+  engine_guard_right_image: {
+    url: string;
+    file: string;
+  };
+  front_panel_right_image: {
+    url: string;
+    file: string;
+  };
 };
 
 type GetExteriorState = {

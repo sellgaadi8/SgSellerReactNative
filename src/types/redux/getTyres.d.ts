@@ -26,6 +26,21 @@ type Tyres = {
     url: string;
     file: string;
   };
+  front_wheel_condition: string;
+  rear_wheel_condition: string;
+  front_tyre_life: string;
+  front_wheel_condition_image: {
+    url: string;
+    file: string;
+  };
+  rear_wheel_condition_image: {
+    url: string;
+    file: string;
+  };
+  front_tyre_life_image: {
+    url: string;
+    file: string;
+  };
 };
 
 type GetTyresState = {

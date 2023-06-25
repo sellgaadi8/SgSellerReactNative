@@ -33,13 +33,63 @@ const list = [
 ];
 
 export default function Tyres({navigation, route}: TyresProps) {
-  const [tyresImage, setTyresImage] = useState([
-    {id: 'lhs_front_type', url: ''},
-    {id: 'rhs_front_type', url: ''},
-    {id: 'lhs_back_type', url: ''},
-    {id: 'rhs_back_type', url: ''},
-    {id: 'spare_type', url: ''},
-  ]);
+  const {vehicleId, vehicleType} = useContext(GlobalContext);
+  const [tyresImage, setTyresImage] = useState(
+    vehicleType === 'two_wheeler'
+      ? [
+          {
+            title: 'Front Wheel Condition',
+            id: 'front_wheel_condition',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'Rear Wheel Condition',
+            id: 'rear_wheel_condition',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'Front Tyre Life (%)',
+            id: 'front_tyre_life',
+            url: '',
+            selectedValue: '',
+          },
+        ]
+      : [
+          {
+            title: 'LHS front tyre ( % / damaged )',
+            id: 'lhs_front_type',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'RHS front tyre ( % / damaged )',
+            id: 'rhs_front_type',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'LHS Back tyre ( % / damaged )',
+            id: 'lhs_back_type',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'RHS back tyre ( % / damaged )',
+            id: 'rhs_back_type',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'Spare tyre (%, damaged )',
+            id: 'spare_type',
+            url: '',
+            selectedValue: '',
+          },
+        ],
+  );
+
   const [lhsfront, setLhsFront] = useState('');
   const [rhsfront, setRhsFront] = useState('');
   const [lhsback, setLhsBack] = useState('');
@@ -50,9 +100,16 @@ export default function Tyres({navigation, route}: TyresProps) {
   const [lhsbackImage, setLhsBackImage] = useState('');
   const [rhsbackImage, setRhsBackImage] = useState('');
   const [spareImage, setSpareImage] = useState('');
+
+  const [frontWheel, setFrontWheel] = useState('');
+  const [rearWheel, setRearWheel] = useState('');
+  const [frontTyre, setFrontTyre] = useState('');
+  const [frontWheelImage, setFrontWheelImage] = useState('');
+  const [rearWheelImage, setRearWheelImage] = useState('');
+  const [frontTyreImage, setFrontTyreImage] = useState('');
+
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<any>();
-  const {vehicleId} = useContext(GlobalContext);
   const selectAddTyres = useAppSelector(state => state.addTyres);
   const selectUpdateTyres = useAppSelector(state => state.updateTyres);
   const selectGetTyres = useAppSelector(state => state.getTyres);
@@ -71,12 +128,63 @@ export default function Tyres({navigation, route}: TyresProps) {
 
   function onSaveImage(image: any) {
     if (image) {
-      dispatch(onUploadImage(image[0], 'exterior-images'));
+      dispatch(onUploadImage(image[0], 'tyres-images'));
     }
   }
 
   function validateInputs() {
     const tempErrors: TyresImageError = {};
+    if (vehicleType === 'two_wheeler') {
+      if (frontWheel.length === 0) {
+        tempErrors.frontWheel = 'Front Wheel Condition field required';
+      }
+      if (rearWheel.length === 0) {
+        tempErrors.rearWheel = 'Rear Wheel Condition field required';
+      }
+      if (frontTyre.length === 0) {
+        tempErrors.frontTyre = 'Front Tyre Life (%) field required';
+      }
+      if (
+        frontWheelImage.length === 0 ||
+        rearWheelImage.length === 0 ||
+        frontTyreImage.length === 0
+      ) {
+        Snackbar.show({
+          text: 'Kindly upload all images and select all fields',
+          backgroundColor: 'red',
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      }
+    } else {
+      if (lhsfront.length === 0) {
+        tempErrors.lhsfront = 'LHS front tyre ( % / damaged ) required';
+      }
+      if (rhsfront.length === 0) {
+        tempErrors.rhsfront = 'RHS front tyre ( % / damaged ) required';
+      }
+      if (lhsback.length === 0) {
+        tempErrors.lhsback = 'LHS Back tyre ( % / damaged ) required';
+      }
+      if (rhsback.length === 0) {
+        tempErrors.rhsback = 'RHS Back tyre ( % / damaged ) required';
+      }
+      if (spare.length === 0) {
+        tempErrors.spare = 'Spare tyre (%, damaged ) required';
+      }
+      if (
+        lhsfrontImage.length === 0 ||
+        rhsfrontImage.length === 0 ||
+        lhsbackImage.length === 0 ||
+        rhsbackImage.length === 0 ||
+        spareImage.length === 0
+      ) {
+        Snackbar.show({
+          text: 'Kindly upload all images and select all fields',
+          backgroundColor: 'red',
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      }
+    }
     if (lhsfront.length === 0) {
       tempErrors.lhsfront = 'LHS front tyre ( % / damaged ) required';
     }
@@ -128,6 +236,12 @@ export default function Tyres({navigation, route}: TyresProps) {
             lhsbackImage,
             rhsbackImage,
             spareImage,
+            frontWheel,
+            rearWheel,
+            frontTyre,
+            frontWheelImage,
+            rearWheelImage,
+            frontTyreImage,
           ),
         );
       } else {
@@ -144,6 +258,12 @@ export default function Tyres({navigation, route}: TyresProps) {
             lhsbackImage,
             rhsbackImage,
             spareImage,
+            frontWheel,
+            rearWheel,
+            frontTyre,
+            frontWheelImage,
+            rearWheelImage,
+            frontTyreImage,
           ),
         );
       }
@@ -157,29 +277,46 @@ export default function Tyres({navigation, route}: TyresProps) {
       let temp = [...tyresImage];
 
       if (!error && image) {
-        switch (tyreType) {
-          case 'lhs_front_type':
-            setLhsFrontImage(image.file);
-            temp[0].url = image.url;
-            break;
-          case 'rhs_front_type':
-            setRhsFrontImage(image.file);
-            temp[1].url = image.url;
-            break;
-          case 'lhs_back_type':
-            setLhsBackImage(image.file);
-            temp[2].url = image.url;
-            break;
-          case 'rhs_back_type':
-            setRhsBackImage(image.file);
-            temp[3].url = image.url;
-            break;
-          case 'spare_type':
-            setSpareImage(image.file);
-            temp[4].url = image.url;
-            break;
-          default:
-            break;
+        if (vehicleType === 'two_wheeler') {
+          switch (tyreType) {
+            case 'front_wheel_condition':
+              setFrontWheelImage(image.file);
+              temp[0].url = image.url;
+              break;
+            case 'rear_wheel_condition':
+              setRearWheelImage(image.file);
+              temp[1].url = image.url;
+              break;
+            case 'front_tyre_life':
+              setFrontTyreImage(image.file);
+              temp[2].url = image.url;
+              break;
+          }
+        } else {
+          switch (tyreType) {
+            case 'lhs_front_type':
+              setLhsFrontImage(image.file);
+              temp[0].url = image.url;
+              break;
+            case 'rhs_front_type':
+              setRhsFrontImage(image.file);
+              temp[1].url = image.url;
+              break;
+            case 'lhs_back_type':
+              setLhsBackImage(image.file);
+              temp[2].url = image.url;
+              break;
+            case 'rhs_back_type':
+              setRhsBackImage(image.file);
+              temp[3].url = image.url;
+              break;
+            case 'spare_type':
+              setSpareImage(image.file);
+              temp[4].url = image.url;
+              break;
+            default:
+              break;
+          }
         }
       }
 
@@ -245,7 +382,7 @@ export default function Tyres({navigation, route}: TyresProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectAddTyres, selectUpdateTyres, selectGetTyres]);
 
-  function onCameraAction(type: TyresType) {
+  function onCameraAction(type: string) {
     setOpenImagePicker(true);
     switch (type) {
       case 'lhs_front_type':
@@ -263,7 +400,60 @@ export default function Tyres({navigation, route}: TyresProps) {
       case 'spare_type':
         setTyreType('spare_type');
         break;
+      case 'front_tyre_life':
+        setTyreType('front_tyre_life');
+        break;
+      case 'front_wheel_condition':
+        setTyreType('front_wheel_condition');
+        break;
+      case 'rear_wheel_condition':
+        setTyreType('rear_wheel_condition');
+        break;
     }
+  }
+  function onChangeValue(value: string, index: number) {
+    let temp = [...tyresImage];
+    if (vehicleType === 'two_wheeler') {
+      switch (index) {
+        case 0:
+          setFrontWheel(value);
+          temp[0].selectedValue = value;
+          break;
+        case 1:
+          setRearWheel(value);
+          temp[1].selectedValue = value;
+          break;
+        case 2:
+          setFrontTyre(value);
+          temp[2].selectedValue = value;
+          break;
+      }
+    } else {
+      switch (index) {
+        case 0:
+          setLhsFront(value);
+          temp[0].selectedValue = value;
+          break;
+        case 1:
+          setRhsFront(value);
+          temp[1].selectedValue = value;
+          break;
+        case 2:
+          setLhsBack(value);
+          temp[2].selectedValue = value;
+          break;
+        case 3:
+          setRhsBack(value);
+          temp[3].selectedValue = value;
+          break;
+        case 4:
+          setSpare(value);
+          temp[4].selectedValue = value;
+          break;
+      }
+    }
+
+    setTyresImage([...temp]);
   }
 
   return (
@@ -278,17 +468,21 @@ export default function Tyres({navigation, route}: TyresProps) {
           Step 6: Tyres
         </CustomText>
         <Box pv={'5%'}>
-          <BasePicker
-            data={list}
-            title="LHS front tyre ( % / damaged )"
-            onValueChange={setLhsFront}
-            selectedValue={lhsfront}
-            onPressCamera={() => onCameraAction('lhs_front_type')}
-            selectPhoto={tyresImage[0].url}
-            isMandatory
-            error={errors?.lhsfront}
-          />
-          <BasePicker
+          {tyresImage.map((el, index) => {
+            return (
+              <BasePicker
+                key={index.toString()}
+                data={list}
+                title={el.title}
+                onValueChange={value => onChangeValue(value, index)}
+                selectedValue={el.selectedValue}
+                onPressCamera={() => onCameraAction(el.id)}
+                selectPhoto={el.url}
+                isMandatory
+              />
+            );
+          })}
+          {/* <BasePicker
             data={list}
             title="RHS front tyre ( % / damaged )"
             onValueChange={setRhsFront}
@@ -327,7 +521,7 @@ export default function Tyres({navigation, route}: TyresProps) {
             selectPhoto={tyresImage[4].url}
             isMandatory
             error={errors?.spare}
-          />
+          /> */}
         </Box>
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>

@@ -27,15 +27,17 @@ import VehicleDetail from './src/views/Vehicles/VehicleDetail';
 import {useAppSelector} from './src/utils/hooks';
 import Snackbar from 'react-native-snackbar';
 import ImageViewerCarousel from './src/views/ImageViewCarousel/ImageViewCarousel';
-import {VehicleType} from './src/types/propsTypes';
 import {deleteUserToken} from './src/utils/localStorage';
+import HandlingSuspension from './src/views/Vehicles/HandlingSuspension';
+import TwoWheelerExterior from './src/views/Vehicles/TwoWheelerExterior';
+import TwoWheelerElectrical from './src/views/Vehicles/TwoWheelerElectrical';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
   const [authenticated, setAuthenticated] = useState(false);
   const [vehicleId, setVehicleId] = useState('');
   const [name, setName] = useState('');
-  const [vehicleType, setVehicleType] = useState<VehicleType>('4_wheeler');
+  const [vehicleType, setVehicleType] = useState('');
   const selectLogoutState = useAppSelector(state => state.logout);
 
   useEffect(() => {
@@ -240,8 +242,38 @@ export default function App() {
                       ),
                     };
                   }}
+                  component={TwoWheelerExterior}
+                  name="TwoWheelerExterior"
+                />
+                <RootStack.Screen
+                  options={() => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title="Add new vehicle"
+                          back
+                        />
+                      ),
+                    };
+                  }}
                   component={ExternelPanel}
                   name="ExternelPanel"
+                />
+                <RootStack.Screen
+                  options={() => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title="Add new vehicle"
+                          back
+                        />
+                      ),
+                    };
+                  }}
+                  component={HandlingSuspension}
+                  name="HandlingSuspension"
                 />
                 <RootStack.Screen
                   options={() => {
@@ -287,6 +319,21 @@ export default function App() {
                   }}
                   component={Electricals}
                   name="Electricals"
+                />
+                <RootStack.Screen
+                  options={() => {
+                    return {
+                      header: props => (
+                        <Header
+                          headerProps={props}
+                          title="Add new vehicle"
+                          back
+                        />
+                      ),
+                    };
+                  }}
+                  component={TwoWheelerElectrical}
+                  name="TwoWheelerElectrical"
                 />
                 <RootStack.Screen
                   options={() => {

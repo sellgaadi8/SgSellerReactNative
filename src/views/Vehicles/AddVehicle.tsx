@@ -20,10 +20,13 @@ import GlobalContext from '../../contexts/GlobalContext';
 
 export default function AddVehicle({navigation}: AddVehicleProps) {
   const dispatch = useDispatch<any>();
-  const [form, setForm] = useState<VehicleForm>();
+  const [form, setForm] = useState<{
+    [key: string]: {heading: string; percentage: number; sub_heading: string};
+  }>();
   const [loading, setLoading] = useState(false);
   const [isStep1Completed, setIsStep1Completed] = useState(false);
-  const {vehicleId} = useContext(GlobalContext);
+  const [percentage, setPercentage] = useState(0);
+  const {vehicleId, vehicleType} = useContext(GlobalContext);
   const selectVehicleForm = useAppSelector(state => state.addVehicleForm);
   const selectUpdateVehicleForm = useAppSelector(
     state => state.updateVehicleForm,
@@ -52,6 +55,7 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
       setLoading(false);
       const {data, error} = selectVehicleForm;
       if (!error && data) {
+        setPercentage(data.total_percentage);
         setForm(data);
         if (data.total_percentage === 0) {
           setIsStep1Completed(false);
@@ -74,6 +78,71 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
     }
   }, [selectVehicleForm, selectUpdateVehicleForm]);
 
+  function navigateScreen(index: number, per: number) {
+    switch (index) {
+      case 0:
+        navigation.navigate('DisplayInfo', {
+          from: per === 0 ? 'add' : 'edit',
+        });
+        break;
+      case 1:
+        navigation.navigate('CarImages', {
+          from: per === 0 ? 'add' : 'edit',
+        });
+        break;
+      case 2:
+        navigation.navigate('CarDocuments', {
+          from: per === 0 ? 'add' : 'edit',
+        });
+        break;
+      case 3:
+        navigation.navigate(
+          vehicleType === 'two_wheeler' ? 'TwoWheelerExterior' : 'Exterior',
+          {
+            from: per === 0 ? 'add' : 'edit',
+          },
+        );
+        break;
+      case 4:
+        navigation.navigate(
+          vehicleType === 'two_wheeler'
+            ? 'HandlingSuspension'
+            : 'ExternelPanel',
+          {
+            from: per === 0 ? 'add' : 'edit',
+          },
+        );
+        break;
+      case 5:
+        navigation.navigate('Tyres', {
+          from: per === 0 ? 'add' : 'edit',
+        });
+        break;
+      case 6:
+        navigation.navigate('Engine', {
+          from: per === 0 ? 'add' : 'edit',
+        });
+        break;
+      case 7:
+        navigation.navigate(
+          vehicleType === 'two_wheeler'
+            ? 'TwoWheelerElectrical'
+            : 'Electricals',
+          {
+            from: per === 0 ? 'add' : 'edit',
+          },
+        );
+        break;
+      case 8:
+        navigation.navigate('Steering', {
+          from: per === 0 ? 'add' : 'edit',
+        });
+        break;
+      default:
+        break;
+    }
+  }
+
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
@@ -91,113 +160,27 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
         {form && (
           <>
             <Box width="90%" alignSelf="center">
-              <CustomProgressBar progress={form?.total_percentage} />
+              <CustomProgressBar progress={percentage} />
             </Box>
             <Box style={styles.onScroll}>
-              <AddVehicleCard
-                fill={form.display_info.percentage}
-                title={form?.display_info.heading}
-                desc={form.display_info.sub_heading}
-                onComplete={() =>
-                  navigation.navigate('DisplayInfo', {
-                    from: form.display_info.percentage === 0 ? 'add' : 'edit',
-                  })
+              {Object.entries(form).map((el, index) => {
+                if (
+                  typeof el[1] === 'object' &&
+                  el[1].hasOwnProperty('percentage')
+                ) {
+                  return (
+                    <AddVehicleCard
+                      fill={el[1].percentage}
+                      title={el[1].heading}
+                      desc={el[1].sub_heading}
+                      onComplete={() => navigateScreen(index, el[1].percentage)}
+                      // isStep1Complete={isStep1Completed}
+                    />
+                  );
                 }
-              />
-              <AddVehicleCard
-                fill={form.car_images.percentage}
-                title={form.car_images.heading}
-                desc={form.car_images.sub_heading}
-                onComplete={() =>
-                  navigation.navigate('CarImages', {
-                    from: form.car_images.percentage === 0 ? 'add' : 'edit',
-                  })
-                }
-                isStep1Complete={!isStep1Completed}
-              />
-              <AddVehicleCard
-                fill={form.car_docs.percentage}
-                title={form.car_docs.heading}
-                desc={form.car_docs.sub_heading}
-                onComplete={() =>
-                  navigation.navigate('CarDocuments', {
-                    from: form.car_docs.percentage === 0 ? 'add' : 'edit',
-                  })
-                }
-                isStep1Complete={!isStep1Completed}
-              />
-              <AddVehicleCard
-                fill={form.exterior_img.percentage}
-                title={form.exterior_img.heading}
-                desc={form.exterior_img.sub_heading}
-                onComplete={() =>
-                  navigation.navigate('Exterior', {
-                    from: form.exterior_img.percentage === 0 ? 'add' : 'edit',
-                  })
-                }
-                isStep1Complete={!isStep1Completed}
-              />
-              <AddVehicleCard
-                fill={form.external_panel.percentage}
-                title={form.external_panel.heading}
-                desc={form.external_panel.sub_heading}
-                onComplete={() =>
-                  navigation.navigate('ExternelPanel', {
-                    from: form.external_panel.percentage === 0 ? 'add' : 'edit',
-                  })
-                }
-              />
-              <AddVehicleCard
-                fill={form.tyres.percentage}
-                title={form.tyres.heading}
-                desc={form.tyres.sub_heading}
-                onComplete={() =>
-                  navigation.navigate('Tyres', {
-                    from: form.tyres.percentage === 0 ? 'add' : 'edit',
-                  })
-                }
-                isStep1Complete={!isStep1Completed}
-              />
-              <AddVehicleCard
-                fill={form.engine.percentage}
-                title={form.engine.heading}
-                desc={form.engine.sub_heading}
-                onComplete={() =>
-                  navigation.navigate('Engine', {
-                    from: form.engine.percentage === 0 ? 'add' : 'edit',
-                  })
-                }
-                isStep1Complete={!isStep1Completed}
-              />
-              <AddVehicleCard
-                fill={form.electricals.percentage}
-                title={form.electricals.heading}
-                desc={form.electricals.sub_heading}
-                onComplete={() =>
-                  navigation.navigate('Electricals', {
-                    from: form.electricals.percentage === 0 ? 'add' : 'edit',
-                  })
-                }
-                isStep1Complete={!isStep1Completed}
-              />
-              <AddVehicleCard
-                fill={form.steering.percentage}
-                title={form.steering.heading}
-                desc={form.steering.sub_heading}
-                onComplete={() =>
-                  navigation.navigate('Steering', {
-                    from: form.steering.percentage === 0 ? 'add' : 'edit',
-                  })
-                }
-                isStep1Complete={!isStep1Completed}
-              />
-              {/* <AddVehicleCard
-                fill={form.ac_info.percentage}
-                title={form.ac_info.heading}
-                desc={form.ac_info.sub_heading}
-                onComplete={() => navigation.navigate('Ac')}
-              /> */}
+              })}
             </Box>
+
             <Box width={'50%'} alignSelf="center" pv={'5%'}>
               <PrimaryButton
                 label="Submit form"

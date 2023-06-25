@@ -41,6 +41,7 @@ export default function Steering({navigation, route}: SteeringProps) {
   }, []);
 
   function submit() {
+    setLoading(true);
     if (route.params.from === 'add') {
       setLoading(true);
       dispatch(onAddSteering(vehicleId, suspension, steering, brake, wheel));

@@ -23,6 +23,9 @@ type ENGINE = {
     url: string;
     file: string;
   };
+  engine_coolant_level: string;
+  engine_oil_level: string;
+  chain_belt_assembly: string;
 };
 
 type GetEngineDetailsState = {
