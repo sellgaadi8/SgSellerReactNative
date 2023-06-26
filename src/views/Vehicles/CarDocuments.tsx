@@ -355,7 +355,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
           lineHeight={28}
           fontFamily="Roboto-Medium"
           color="#201A1B">
-          Step 3: Car Documents
+          Step 3: Documents
         </CustomText>
         <Box pv={'3%'}>
           <ProfileInput

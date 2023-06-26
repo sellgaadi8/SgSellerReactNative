@@ -15,6 +15,8 @@ export default function MonthYearPicker({
   onSubmitMonthYear,
   showYear = false,
 }: MonthYearPickerProps) {
+  console.log('componnet', years);
+
   return (
     <View style={styles.container}>
       <View style={styles.box}>

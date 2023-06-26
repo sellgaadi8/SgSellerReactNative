@@ -44,68 +44,101 @@ export default function TwoWheelerElectrical({
   navigation,
   route,
 }: TwoWheelerElectricalsProps) {
-  const [electricalType, setElectricalType] = useState([
-    {title: 'Headlight', id: 'headlight', url: '', selectedValue: ''},
-    {title: 'Tail Light', id: 'tailLight', url: '', selectedValue: ''},
-    {title: 'Brake Light', id: 'brakeLight', url: '', selectedValue: ''},
-    {
-      title: 'Front Turn Indicator',
-      id: 'front_turn_indicator',
-      url: '',
-      selectedValue: '',
-    },
-    {
-      title: 'Rear Turn Indicator',
-      id: 'rear_turn_indicator',
-      url: '',
-      selectedValue: '',
-    },
-    {
-      title: 'Ignition Switch',
-      id: 'ignition_switch',
-      url: '',
-      selectedValue: '',
-    },
-    {
-      title: 'Indicator Switch',
-      id: 'indicator_switch',
-      url: '',
-      selectedValue: '',
-    },
-    {title: 'Horn', id: 'horn', url: '', selectedValue: ''},
-    {
-      title: 'Headlight Switch',
-      id: 'headlight_switch',
-      url: '',
-      selectedValue: '',
-    },
-    {
-      title: 'Passing Light Switch',
-      id: 'passing_light_switch',
-      url: '',
-      selectedValue: '',
-    },
-    {
-      title: 'Self Starter Switch',
-      id: 'self_starter_switch',
-      url: '',
-      selectedValue: '',
-    },
-    {
-      title: 'High & Low Beam Switch',
-      id: 'high_low_beam_switch',
-      url: '',
-      selectedValue: '',
-    },
-    {
-      title: 'Instrument Cluster',
-      id: 'instrument_cluster',
-      url: '',
-      selectedValue: '',
-    },
-    {title: 'Battery', id: 'battery', url: '', selectedValue: ''},
-    {title: 'Lockset', id: 'lockset', url: '', selectedValue: ''},
-  ]);
+  const {vehicleId, vehicleType} = useContext(GlobalContext);
+  const [electricalType, setElectricalType] = useState(
+    vehicleType === 'two_wheeler'
+      ? [
+          {title: 'Headlight', id: 'headlight', url: '', selectedValue: ''},
+          {title: 'Tail Light', id: 'tailLight', url: '', selectedValue: ''},
+          {title: 'Brake Light', id: 'brakeLight', url: '', selectedValue: ''},
+          {
+            title: 'Front Turn Indicator',
+            id: 'front_turn_indicator',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'Rear Turn Indicator',
+            id: 'rear_turn_indicator',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'Ignition Switch',
+            id: 'ignition_switch',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'Indicator Switch',
+            id: 'indicator_switch',
+            url: '',
+            selectedValue: '',
+          },
+          {title: 'Horn', id: 'horn', url: '', selectedValue: ''},
+          {
+            title: 'Headlight Switch',
+            id: 'headlight_switch',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'Passing Light Switch',
+            id: 'passing_light_switch',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'Self Starter Switch',
+            id: 'self_starter_switch',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'High & Low Beam Switch',
+            id: 'high_low_beam_switch',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'Instrument Cluster',
+            id: 'instrument_cluster',
+            url: '',
+            selectedValue: '',
+          },
+          {title: 'Battery', id: 'battery', url: '', selectedValue: ''},
+          {title: 'Lockset', id: 'lockset', url: '', selectedValue: ''},
+        ]
+      : [
+          {title: 'Headlight', id: 'headlight', url: '', selectedValue: ''},
+          {title: 'Tail Light', id: 'tailLight', url: '', selectedValue: ''},
+          {title: 'Brake Light', id: 'brakeLight', url: '', selectedValue: ''},
+          {
+            title: 'Front Turn Indicator',
+            id: 'front_turn_indicator',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'Rear Turn Indicator',
+            id: 'rear_turn_indicator',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'Ignition Switch',
+            id: 'ignition_switch',
+            url: '',
+            selectedValue: '',
+          },
+          {
+            title: 'Indicator Switch',
+            id: 'indicator_switch',
+            url: '',
+            selectedValue: '',
+          },
+        ],
+  );
 
   const [item1, setItem1] = useState('');
   const [item2, setItem2] = useState('');
@@ -142,7 +175,7 @@ export default function TwoWheelerElectrical({
   const [openImagePicker, setOpenImagePicker] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<any>();
-  const {vehicleId} = useContext(GlobalContext);
+
   const selectAddElectrical = useAppSelector(state => state.addElectrical);
   const selectUpdateElectrical = useAppSelector(
     state => state.updateElectrical,

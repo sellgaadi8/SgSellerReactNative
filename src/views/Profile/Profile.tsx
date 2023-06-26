@@ -210,6 +210,6 @@ const styles = EStyleSheet.create({
     paddingHorizontal: '2rem',
     borderRadius: '2.5rem',
     borderColor: '#FF0000',
-    marginTop: '10rem',
+    marginTop: '2rem',
   },
 });

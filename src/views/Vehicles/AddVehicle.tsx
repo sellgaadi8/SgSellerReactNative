@@ -125,7 +125,7 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
         break;
       case 7:
         navigation.navigate(
-          vehicleType === 'two_wheeler'
+          vehicleType !== 'four_wheeler'
             ? 'TwoWheelerElectrical'
             : 'Electricals',
           {
@@ -174,7 +174,7 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
                       title={el[1].heading}
                       desc={el[1].sub_heading}
                       onComplete={() => navigateScreen(index, el[1].percentage)}
-                      // isStep1Complete={isStep1Completed}
+                      isStep1Complete={index !== 0 ? !isStep1Completed : false}
                     />
                   );
                 }

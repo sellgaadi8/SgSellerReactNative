@@ -31,11 +31,12 @@ import {getModelList} from '../../redux/ducks/getModel';
 import {getVariantList} from '../../redux/ducks/getVariant';
 import {updateDisplayForm} from '../../redux/ducks/updateDisplayInfo';
 import MonthYearPicker from '../../components/MonthYearPicker';
-import {ColorList, Months, Years} from '../../utils/constant';
+import {ColorList, Months} from '../../utils/constant';
 import CustomDropdown from '../../components/CustomDropDown';
 const {height, width} = Dimensions.get('window');
 
 export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
+  const [years, setYears] = useState<string[]>([]);
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
   const [varaint, setVariant] = useState('');
@@ -70,11 +71,35 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
 
   const dispatch = useDispatch<any>();
 
-  const [fuelType, setFuelType] = useState([
-    {id: 'petrol', title: 'Petrol', selected: false},
-    {id: 'diesel', title: 'Diesel', selected: false},
-    {id: 'cng', title: 'CNG', selected: false},
-  ]);
+  useEffect(() => {
+    let temp: string[] = [];
+    for (let i = 1997; i <= new Date().getFullYear(); i++) {
+      temp.push(i.toString());
+    }
+    setYears(temp);
+  }, []);
+
+  // useEffect(() => {
+  //   let temp: string[] = [];
+  //   for (let i = 1997; i <= +ryear; i++) {
+  //     temp.push(i.toString());
+  //   }
+  //   setRYears(temp);
+  // }, [manufacture]);
+
+  const [fuelType, setFuelType] = useState(
+    vehicleType !== 'two_wheeler'
+      ? [
+          {id: 'petrol', title: 'Petrol', selected: false},
+          {id: 'diesel', title: 'Diesel', selected: false},
+          {id: 'cng', title: 'CNG', selected: false},
+          {id: 'ev', title: 'EV', selected: false},
+        ]
+      : [
+          {id: 'petrol', title: 'Petrol', selected: false},
+          {id: 'ev', title: 'EV', selected: false},
+        ],
+  );
 
   const [transmissionType, setTransmissionType] = useState([
     {id: 'MT', title: 'MT', selected: false},
@@ -152,7 +177,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
       });
       return false;
     }
-    if (vehicleType === 'two_wheeler' && transmission.length === 0) {
+    if (vehicleType === 'four_wheeler' && transmission.length === 0) {
       Snackbar.show({
         text: 'Select Transmission type',
         backgroundColor: 'red',
@@ -330,21 +355,22 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
     setShowModal(true);
   }
 
-  function onPressDone() {
-    switch (dataType) {
-      case 'Make':
-        setSearchQuery('');
-        break;
-      case 'Model':
-        setModel(searchQuery);
-        setSearchQuery('');
-        break;
-      case 'Variant':
-        setVariant(searchQuery);
-        break;
-    }
-    onCloseMakeModal();
-  }
+  // function onPressDone() {
+  //   // switch (dataType) {
+  //   //   case 'Make':
+  //   //     setSearchQuery('');
+  //   //     break;
+  //   //   case 'Model':
+  //   //     setModel(searchQuery);
+  //   //     setSearchQuery('');
+  //   //     break;
+  //   //   case 'Variant':
+  //   //     setVariant(searchQuery);
+  //   //     break;
+  //   // }
+
+  //   onCloseMakeModal();
+  // }
 
   function onChangeQuery(value: string) {
     const lowerCaseQuery = value.toLowerCase();
@@ -389,6 +415,11 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
 
   function onYearChange(value: string) {
     setYear(value);
+    // let temp: string[] = [];
+    // for (let i = 1997; i <= +year; i++) {
+    //   temp.push(i.toString());
+    // }
+    // setYears(temp);
   }
 
   function onSubmitMonthYear() {
@@ -404,6 +435,8 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
   function onColorChange(value: string) {
     setColor(value);
   }
+
+  console.log('years', years);
 
   return (
     <Box style={styles.container}>
@@ -523,10 +556,6 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
               error={errors?.color}
             />
           </Box>
-          {/* {color === 'other' && (
-            <ProfileInput value={color} onChangeText={setColor} />
-          )} */}
-
           <Box style={styles.checkbox}>
             <CustomText
               fontSize={14}
@@ -614,7 +643,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
           dataType={dataType}
           query={searchQuery}
           onChangeText={onChangeQuery}
-          onPressDone={onPressDone}
+          // onPressDone={onPressDone}
         />
       </Modal>
       <Modal
@@ -625,7 +654,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
         style={styles.monthModal}>
         <MonthYearPicker
           months={Months}
-          years={Years}
+          years={years}
           onMonthChange={onMonthChange}
           onYearChange={onYearChange}
           selectedMonth={month}
@@ -641,7 +670,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
         style={styles.monthModal}>
         <MonthYearPicker
           months={Months}
-          years={Years}
+          years={years}
           onYearChange={onYearChange}
           selectedYear={year}
           onSubmitMonthYear={onSubmitYear}

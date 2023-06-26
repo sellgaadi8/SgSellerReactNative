@@ -44,10 +44,8 @@ export const onUpdateTyres =
     spare_image: string,
     front_wheel_condition: string,
     rear_wheel_condition: string,
-    front_tyre_life: string,
     front_wheel_condition_image: string,
     rear_wheel_condition_image: string,
-    front_tyre_life_image: string,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = updateTyresUrl(id);
@@ -75,10 +73,8 @@ export const onUpdateTyres =
     body.append('spare_image', spare_image);
     body.append('front_wheel_condition', front_wheel_condition);
     body.append('rear_wheel_condition', rear_wheel_condition);
-    body.append('front_tyre_life', front_tyre_life);
     body.append('front_wheel_condition_image', front_wheel_condition_image);
     body.append('rear_wheel_condition_image', rear_wheel_condition_image);
-    body.append('front_tyre_life_image', front_tyre_life_image);
 
     axiosInstance
       .post(url, body, config)

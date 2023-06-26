@@ -1,5 +1,5 @@
 import SInfo from 'react-native-sensitive-info';
-import {TOKEN, TOKEN_VALIDITY} from './constant';
+import {TOKEN, TOKEN_VALIDITY, VEHICLE_TYPE} from './constant';
 
 export function saveUserToken(token: string): Promise<null> {
   return SInfo.setItem(TOKEN, token, {
@@ -28,4 +28,12 @@ export function saveTokenValidity(time: number): Promise<null> {
 
 export function getTokenValidity(): Promise<string> {
   return SInfo.getItem(TOKEN_VALIDITY, {});
+}
+
+export function saveVehicleType(string: string): Promise<null> {
+  return SInfo.setItem(VEHICLE_TYPE, string, {});
+}
+
+export function getVehicleType(): Promise<string> {
+  return SInfo.getItem(VEHICLE_TYPE, {});
 }

@@ -49,12 +49,6 @@ export default function Tyres({navigation, route}: TyresProps) {
             url: '',
             selectedValue: '',
           },
-          {
-            title: 'Front Tyre Life (%)',
-            id: 'front_tyre_life',
-            url: '',
-            selectedValue: '',
-          },
         ]
       : [
           {
@@ -103,10 +97,8 @@ export default function Tyres({navigation, route}: TyresProps) {
 
   const [frontWheel, setFrontWheel] = useState('');
   const [rearWheel, setRearWheel] = useState('');
-  const [frontTyre, setFrontTyre] = useState('');
   const [frontWheelImage, setFrontWheelImage] = useState('');
   const [rearWheelImage, setRearWheelImage] = useState('');
-  const [frontTyreImage, setFrontTyreImage] = useState('');
 
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<any>();
@@ -141,14 +133,8 @@ export default function Tyres({navigation, route}: TyresProps) {
       if (rearWheel.length === 0) {
         tempErrors.rearWheel = 'Rear Wheel Condition field required';
       }
-      if (frontTyre.length === 0) {
-        tempErrors.frontTyre = 'Front Tyre Life (%) field required';
-      }
-      if (
-        frontWheelImage.length === 0 ||
-        rearWheelImage.length === 0 ||
-        frontTyreImage.length === 0
-      ) {
+
+      if (frontWheelImage.length === 0 || rearWheelImage.length === 0) {
         Snackbar.show({
           text: 'Kindly upload all images and select all fields',
           backgroundColor: 'red',
@@ -238,10 +224,8 @@ export default function Tyres({navigation, route}: TyresProps) {
             spareImage,
             frontWheel,
             rearWheel,
-            frontTyre,
             frontWheelImage,
             rearWheelImage,
-            frontTyreImage,
           ),
         );
       } else {
@@ -260,10 +244,8 @@ export default function Tyres({navigation, route}: TyresProps) {
             spareImage,
             frontWheel,
             rearWheel,
-            frontTyre,
             frontWheelImage,
             rearWheelImage,
-            frontTyreImage,
           ),
         );
       }
@@ -286,10 +268,6 @@ export default function Tyres({navigation, route}: TyresProps) {
             case 'rear_wheel_condition':
               setRearWheelImage(image.file);
               temp[1].url = image.url;
-              break;
-            case 'front_tyre_life':
-              setFrontTyreImage(image.file);
-              temp[2].url = image.url;
               break;
           }
         } else {
@@ -422,10 +400,6 @@ export default function Tyres({navigation, route}: TyresProps) {
         case 1:
           setRearWheel(value);
           temp[1].selectedValue = value;
-          break;
-        case 2:
-          setFrontTyre(value);
-          temp[2].selectedValue = value;
           break;
       }
     } else {

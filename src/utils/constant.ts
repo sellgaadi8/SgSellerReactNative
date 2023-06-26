@@ -1,5 +1,6 @@
 export const TOKEN = 'auth/token';
 export const TOKEN_VALIDITY = 'sellgaadi/token-validity';
+export const VEHICLE_TYPE = 'sellgaadi/vehicle-type';
 
 export const Months = [
   {label: 'Jan', value: '01'},

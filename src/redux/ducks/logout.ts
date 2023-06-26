@@ -6,6 +6,7 @@ import {
   deleteUserToken,
   getUserToken,
   saveTokenValidity,
+  saveVehicleType,
 } from '../../utils/localStorage';
 import {AppDispatch} from '../store';
 
@@ -49,6 +50,7 @@ export const onLogout = () => async (dispatch: AppDispatch) => {
       deleteUserToken();
       Globals.instance().setTokenValidity(-1);
       saveTokenValidity(-1);
+      saveVehicleType('');
     })
     .catch(err => {
       handleError(err, dispatch);

@@ -21,9 +21,10 @@ import {useAppSelector} from '../../utils/hooks';
 import {onLogin} from '../../redux/ducks/login';
 import GlobalContext from '../../contexts/GlobalContext';
 import Loader from '../../components/Loader';
+import {saveVehicleType} from '../../utils/localStorage';
 
 export default function Login({navigation}: LoginProps) {
-  const [mobile, setMobile] = useState('7021483690');
+  const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('123456');
   const [loading, setLoading] = useState(false);
 
@@ -88,6 +89,7 @@ export default function Login({navigation}: LoginProps) {
         setAuthenticated(true);
         setName(name);
         setVehicleType(seller_type);
+        saveVehicleType(seller_type);
         Snackbar.show({
           text: message,
           backgroundColor: 'green',
@@ -106,10 +108,12 @@ export default function Login({navigation}: LoginProps) {
             <Image
               source={require('../../assets/loginCircle.png')}
               style={styles.headerBg}
+              // resizeMode=''
             />
             <Image
               source={require('../../assets/logo.png')}
               style={styles.logo}
+              resizeMode="contain"
             />
           </Box>
           <Box style={styles.body}>
@@ -171,12 +175,12 @@ const styles = EStyleSheet.create({
     position: 'relative',
   },
   headerBg: {
-    height: pixelSizeVertical(287),
+    height: pixelSizeVertical(316),
     width: pixelSizeHorizontal(352),
   },
   logo: {
-    height: pixelSizeVertical(110),
-    width: pixelSizeHorizontal(105),
+    height: pixelSizeVertical(130),
+    width: pixelSizeHorizontal(120),
     position: 'absolute',
     bottom: 50,
     right: 20,

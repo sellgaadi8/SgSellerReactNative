@@ -27,7 +27,7 @@ import VehicleDetail from './src/views/Vehicles/VehicleDetail';
 import {useAppSelector} from './src/utils/hooks';
 import Snackbar from 'react-native-snackbar';
 import ImageViewerCarousel from './src/views/ImageViewCarousel/ImageViewCarousel';
-import {deleteUserToken} from './src/utils/localStorage';
+import {deleteUserToken, saveVehicleType} from './src/utils/localStorage';
 import HandlingSuspension from './src/views/Vehicles/HandlingSuspension';
 import TwoWheelerExterior from './src/views/Vehicles/TwoWheelerExterior';
 import TwoWheelerElectrical from './src/views/Vehicles/TwoWheelerElectrical';
@@ -54,6 +54,7 @@ export default function App() {
       } else {
         deleteUserToken();
         setAuthenticated(false);
+        saveVehicleType('');
       }
     }
   }, [selectLogoutState]);

@@ -266,7 +266,7 @@ type SearchModalProps = {
   dataType: ModalType;
   query: string;
   onChangeText: (value: string) => void;
-  onPressDone: () => void;
+  // onPressDone: () => void;
 };
 
 type ModalType = 'Make' | 'Model' | 'Variant';

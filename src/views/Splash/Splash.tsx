@@ -1,6 +1,6 @@
 import {View, Image} from 'react-native';
 import React, {useContext, useEffect} from 'react';
-import {getUserToken} from '../../utils/localStorage';
+import {getUserToken, getVehicleType} from '../../utils/localStorage';
 import GlobalContext from '../../contexts/GlobalContext';
 import {SplashProps} from '../../types/propsTypes';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -13,7 +13,7 @@ import {
 import colors from '../../utils/colors';
 
 export default function Splash({navigation}: SplashProps) {
-  const {setAuthenticated} = useContext(GlobalContext);
+  const {setAuthenticated, setVehicleType} = useContext(GlobalContext);
 
   useEffect(() => {
     getToken();
@@ -29,8 +29,13 @@ export default function Splash({navigation}: SplashProps) {
   async function getToken() {
     const token = await getUserToken();
     console.log('====>', token);
+
     if (token) {
       setAuthenticated(true);
+      getVehicleType().then(type => {
+        setVehicleType(type);
+        console.log('====>', type);
+      });
     } else {
       navigation.navigate('Login');
     }
@@ -38,7 +43,11 @@ export default function Splash({navigation}: SplashProps) {
   return (
     <Box style={styles.container}>
       <View style={styles.content}>
-        <Image style={styles.image} source={require('../../assets/logo.png')} />
+        <Image
+          style={styles.image}
+          source={require('../../assets/logo.png')}
+          resizeMode="contain"
+        />
         {/* <CustomText
           fontFamily="Roboto-Medium"
           fontSize={16}

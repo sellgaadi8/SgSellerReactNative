@@ -1,12 +1,10 @@
 import React from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Box from './Box';
 import Input from './Input';
 import {SearchModalProps} from '../types/propsTypes';
 import colors from '../utils/colors';
 import CustomText from './CustomText';
 import {FlatList, ListRenderItemInfo, Pressable} from 'react-native';
-import PrimaryButton from './PrimaryButton';
 
 export default function SearchModal({
   placeholder,
@@ -39,9 +37,9 @@ export default function SearchModal({
         keyExtractor={(_, index) => index.toString()}
         data={data}
       />
-      <Box style={styles.button}>
+      {/* <Box style={styles.button}>
         <PrimaryButton label="Done" onPress={onPressDone} />
-      </Box>
+      </Box> */}
     </>
   );
 }

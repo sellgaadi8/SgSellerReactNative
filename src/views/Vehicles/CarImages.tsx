@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import {Image, ScrollView, Text, ToastAndroid, View} from 'react-native';
+import {Image, ScrollView, Text, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
@@ -252,7 +252,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
           lineHeight={28}
           fontFamily="Roboto-Medium"
           color="#201A1B">
-          Step 2: Car Images
+          Step 2: Images
         </CustomText>
         <Box pv={'7%'}>
           {carImageType.map((el, index) => {

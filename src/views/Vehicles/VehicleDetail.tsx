@@ -24,7 +24,7 @@ import PopulateImageWithData from '../../components/PopulateImageWithData';
 import Indicator from '../../components/Indicator';
 const {height, width} = Dimensions.get('window');
 const types = [
-  'Car documents',
+  'Documents',
   'Exterior',
   'Externel panel',
   'Tyres',
@@ -330,9 +330,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
         <Box style={styles.body}>
           {vehicleDetails?.car_docs && (
             <Box>
-              <CustomText style={styles.vehicleHeading}>
-                Car Documents
-              </CustomText>
+              <CustomText style={styles.vehicleHeading}>Documents</CustomText>
               {Object.entries(vehicleDetails?.car_docs).map((el, index) => {
                 return (
                   <PopulateImageWithData
