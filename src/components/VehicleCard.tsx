@@ -10,7 +10,6 @@ import {contentCenter} from '../utils/styles';
 import {Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Video from 'react-native-video';
-import Indicator from './Indicator';
 const {height, width} = Dimensions.get('window');
 
 export default function VehicleCard({
@@ -18,8 +17,8 @@ export default function VehicleCard({
   onPressEdit,
   onPressView,
 }: VehicleCardProps) {
-  const [play, setPlay] = useState(false);
   const [scrollIndex, setScrollIndex] = useState(0);
+  const [images, setImages] = useState<string[]>([...data.images]);
 
   function handleOnScroll(event: any) {
     var abc =
@@ -33,29 +32,18 @@ export default function VehicleCard({
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         onScroll={handleOnScroll}>
-        {data.images ? (
-          data.images.map((el, index) => {
+        {images ? (
+          images.map((el, index) => {
             return (
               <Box key={index.toString()}>
-                {index === 0 ? (
-                  <Box>
-                    <Video
-                      source={{uri: el}}
-                      style={styles.image}
-                      resizeMode="cover"
-                      paused={false}
-                    />
-                    {/* <Pressable
-                      style={styles.play}
-                      onPress={() => setPlay(!play)}>
-                      <Ionicons
-                        name={play ? 'play' : 'pause'}
-                        color="#FFFFFF"
-                        size={30}
-                      />
-                    </Pressable> */}
-                  </Box>
-                ) : (
+                {index === 0 && el !== '' ? (
+                  <Video
+                    source={{uri: el}}
+                    style={styles.image}
+                    resizeMode="cover"
+                    paused={false}
+                  />
+                ) : el !== '' ? (
                   <FastImage
                     source={{
                       uri: el,
@@ -63,7 +51,7 @@ export default function VehicleCard({
                     style={styles.image}
                     resizeMode="cover"
                   />
-                )}
+                ) : null}
               </Box>
             );
           })
@@ -75,7 +63,7 @@ export default function VehicleCard({
           />
         )}
       </ScrollView>
-      {data.images && (
+      {/* {data.images && (
         <View
           // eslint-disable-next-line react-native/no-inline-styles
           style={{
@@ -85,7 +73,7 @@ export default function VehicleCard({
           }}>
           <Indicator index={scrollIndex} length={data.images.length} />
         </View>
-      )}
+      )} */}
 
       <Box style={styles.body}>
         <Box ph={'6%'}>
@@ -246,7 +234,7 @@ const styles = EStyleSheet.create({
   },
   image: {
     height: height * 0.3,
-    width: width * 0.9,
+    width: width * 0.89,
     borderTopRightRadius: '1.2rem',
     borderTopLeftRadius: '1.2rem',
     marginRight: 5,

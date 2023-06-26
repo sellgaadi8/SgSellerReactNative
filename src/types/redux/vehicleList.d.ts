@@ -12,13 +12,13 @@ type Vehicle = {
   no_of_owners: string;
   transmission: string;
   uuid: string;
-  images: [];
+  images: string[];
 };
 
 type VehicleListState = {
   called: boolean;
   success: boolean;
-  data: Vehicle[] | null;
+  data: Vehicle[];
   error: boolean;
 };
 

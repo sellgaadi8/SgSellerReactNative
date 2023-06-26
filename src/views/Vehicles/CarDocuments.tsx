@@ -542,7 +542,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>
             <PrimaryButton
-              label="Close"
+              label="Discard"
               onPress={() => console.log('mc')}
               varient="Secondary"
             />

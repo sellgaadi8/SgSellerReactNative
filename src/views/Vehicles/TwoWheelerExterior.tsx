@@ -262,61 +262,103 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
       setLoading(false);
       const {error, data} = selectGetExteriorData;
       if (!error && data) {
-        setItem1(data.left_pillarA.toLowerCase());
-        setItem2(data.left_pillarB.toLowerCase());
-        setItem3(data.left_pillarC.toLowerCase());
-        setItem4(data.right_pillarA.toLowerCase());
-        setItem5(data.right_pillarB.toLowerCase());
-        setItem6(data.right_pillarC.toLowerCase());
-        setItem7(data.left_apron.toLowerCase());
-        setItem8(data.left_apron_leg.toLowerCase());
-        setItem9(data.right_apron_leg.toLowerCase());
-        setItem10(data.right_apron.toLowerCase());
-        setItem11(data.boot_floor.toLowerCase());
         let temp = [...twoWheelerType];
-        if (data.left_pillarA_image) {
-          temp[0].url = data.left_pillarA_image.url;
-          setImage1(data.left_pillarA_image.file);
+        setItem1(data.headlight_visor.toLowerCase());
+        temp[0].selectedValue = data.headlight_visor.toLowerCase();
+        setItem2(data.front_panel.toLowerCase());
+        temp[1].selectedValue = data.front_panel.toLowerCase();
+        setItem3(data.mudguard_front.toLowerCase());
+        temp[2].selectedValue = data.mudguard_front.toLowerCase();
+        setItem4(data.fuel_tank.toLowerCase());
+        temp[3].selectedValue = data.fuel_tank.toLowerCase();
+        setItem5(data.front_panel_left.toLowerCase());
+        temp[4].selectedValue = data.front_panel_left.toLowerCase();
+        setItem6(data.middle_panel.toLowerCase());
+        temp[5].selectedValue = data.middle_panel.toLowerCase();
+        setItem7(data.chassis.toLowerCase());
+        temp[6].selectedValue = data.chassis.toLowerCase();
+        setItem8(data.engine_guard_left.toLowerCase());
+        temp[7].selectedValue = data.engine_guard_left.toLowerCase();
+        setItem9(data.pillion_footrest.toLowerCase());
+        temp[8].selectedValue = data.pillion_footrest.toLowerCase();
+        setItem10(data.rear_panel_left.toLowerCase());
+        temp[9].selectedValue = data.rear_panel_left.toLowerCase();
+        setItem11(data.mudguard_rear.toLowerCase());
+        temp[10].selectedValue = data.mudguard_rear.toLowerCase();
+        setItem12(data.silencer_assembly.toLowerCase());
+        temp[11].selectedValue = data.silencer_assembly.toLowerCase();
+        setItem13(data.rear_panel_right.toLowerCase());
+        temp[12].selectedValue = data.rear_panel_right.toLowerCase();
+        setItem14(data.middle_panel_right.toLowerCase());
+        temp[13].selectedValue = data.middle_panel_right.toLowerCase();
+        setItem15(data.engine_guard_right.toLowerCase());
+        temp[14].selectedValue = data.engine_guard_right.toLowerCase();
+        setItem16(data.front_panel_right.toLowerCase());
+        temp[15].selectedValue = data.front_panel_right.toLowerCase();
+
+        if (data.headlight_visor_image) {
+          temp[0].url = data.headlight_visor_image.url;
+          setImage1(data.headlight_visor_image.file);
         }
-        if (data.left_pillarB_image) {
-          temp[1].url = data.left_pillarB_image.url;
-          setImage2(data.left_pillarB_image.file);
+        if (data.front_panel_image) {
+          temp[1].url = data.front_panel_image.url;
+          setImage2(data.front_panel_image.file);
         }
-        if (data.left_pillarC_image) {
-          temp[2].url = data.left_pillarC_image.url;
-          setImage3(data.left_pillarC_image.file);
+        if (data.mudguard_front_image) {
+          temp[2].url = data.mudguard_front_image.url;
+          setImage3(data.mudguard_front_image.file);
         }
-        if (data.right_pillarA_image) {
-          temp[3].url = data.right_pillarA_image.url;
-          setImage4(data.right_pillarA_image.file);
+        if (data.fuel_tank_image) {
+          temp[3].url = data.fuel_tank_image.url;
+          setImage4(data.fuel_tank_image.file);
         }
-        if (data.right_pillarB_image) {
-          temp[4].url = data.right_pillarB_image.url;
-          setImage5(data.right_pillarA_image.file);
+        if (data.front_panel_left_image) {
+          temp[4].url = data.front_panel_left_image.url;
+          setImage5(data.front_panel_left_image.file);
         }
-        if (data.right_pillarC_image) {
-          temp[5].url = data.right_pillarC_image.url;
-          setImage6(data.right_pillarA_image.file);
+        if (data.middle_panel_image) {
+          temp[5].url = data.middle_panel_image.url;
+          setImage6(data.middle_panel_image.file);
         }
-        if (data.left_apron_image) {
-          temp[6].url = data.left_apron_image.url;
-          setImage7(data.left_apron_image.file);
+        if (data.chassis_image) {
+          temp[6].url = data.chassis_image.url;
+          setImage7(data.chassis_image.file);
         }
-        if (data.left_apron_leg_image) {
-          temp[7].url = data.left_apron_leg_image.url;
-          setImage8(data.left_apron_leg_image.file);
+        if (data.engine_guard_left_image) {
+          temp[7].url = data.engine_guard_left_image.url;
+          setImage8(data.engine_guard_left_image.file);
         }
-        if (data.right_apron_image) {
-          temp[8].url = data.right_apron_image.url;
-          setImage9(data.right_apron_image.file);
+        if (data.pillion_footrest_image) {
+          temp[8].url = data.pillion_footrest_image.url;
+          setImage9(data.pillion_footrest_image.file);
         }
-        if (data.right_apron_leg_image) {
-          temp[9].url = data.right_apron_leg_image.url;
-          setImage10(data.right_apron_leg_image.file);
+        if (data.rear_panel_left_image) {
+          temp[9].url = data.rear_panel_left_image.url;
+          setImage10(data.rear_panel_left_image.file);
         }
-        if (data.boot_floor_image) {
-          temp[10].url = data.boot_floor_image.url;
-          setImage11(data.boot_floor_image.file);
+        if (data.mudguard_rear_image) {
+          temp[10].url = data.mudguard_rear_image.url;
+          setImage11(data.mudguard_rear_image.file);
+        }
+        if (data.silencer_assembly_image) {
+          temp[11].url = data.silencer_assembly_image.url;
+          setImage12(data.silencer_assembly_image.file);
+        }
+        if (data.rear_panel_right_image) {
+          temp[12].url = data.rear_panel_right_image.url;
+          setImage13(data.rear_panel_right_image.file);
+        }
+        if (data.middle_panel_right_image) {
+          temp[13].url = data.middle_panel_right_image.url;
+          setImage14(data.middle_panel_right_image.file);
+        }
+        if (data.engine_guard_right_image) {
+          temp[14].url = data.engine_guard_right_image.url;
+          setImage15(data.engine_guard_right_image.file);
+        }
+        if (data.front_panel_right_image) {
+          temp[15].url = data.front_panel_right_image.url;
+          setImage16(data.front_panel_right_image.file);
         }
         setTwoWheelerType([...temp]);
       }
@@ -619,7 +661,7 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>
             <PrimaryButton
-              label="Close"
+              label="Discard"
               onPress={() => console.log('')}
               varient="Secondary"
             />

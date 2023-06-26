@@ -1,5 +1,16 @@
 type GET_VEHICLE_DETAIL = 'sgSeller/getVehicleDetail';
 
+type Car_Images = {
+  video: string | null;
+  centre_back: string;
+  centre_front: string;
+  meter_console: string;
+  engine_hood_open: string;
+  right_corner_back: string;
+  interior_dashboard: string;
+  left_wheel_corner_front: string;
+};
+
 type VehicleDetail = {
   display_info: {
     make: string;
@@ -13,16 +24,7 @@ type VehicleDetail = {
     no_of_owners: string;
     transmission: string;
   };
-  car_images: {
-    video: string;
-    centre_back: string;
-    centre_front: string;
-    meter_console: string;
-    engine_hood_open: string;
-    right_corner_back: string;
-    interior_dashboard: string;
-    left_wheel_corner_front: string;
-  };
+  car_images: Car_Images;
   car_docs: {
     [key: string]: {value: string; image: string} | string;
     // rto: string;

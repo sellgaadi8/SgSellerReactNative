@@ -8,7 +8,7 @@ import {VehicleDetailProps} from '../../types/propsTypes';
 import {container} from '../../utils/styles';
 import {useAppSelector} from '../../utils/hooks';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Dimensions, Image, Pressable, ScrollView} from 'react-native';
+import {Dimensions, Image, Pressable, ScrollView, Text} from 'react-native';
 import colors from '../../utils/colors';
 import {View} from 'react-native';
 import {
@@ -183,7 +183,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               vehicleImage?.map((el, index) => {
                 return (
                   <Box key={index.toString()}>
-                    {el && index === 0 ? (
+                    {el && el?.includes('mp4') ? (
                       <Box>
                         <Video
                           source={{uri: el}}
@@ -215,7 +215,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                 );
               })}
           </ScrollView>
-          {vehicleImage && (
+          {/* {vehicleImage && (
             <View
               // eslint-disable-next-line react-native/no-inline-styles
               style={{
@@ -226,7 +226,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               }}>
               <Indicator index={scrollIndex} length={vehicleImage.length} />
             </View>
-          )}
+          )} */}
           <Box pv={'5%'} ph={'6%'}>
             <CustomText
               color="#111111"
@@ -335,13 +335,15 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                 return (
                   <PopulateImageWithData
                     title={el[0].replace(/_/g, ' ').toUpperCase()}
-                    image={typeof el[1] === 'object' ? el[1].image : ''}
-                    value={
-                      typeof el[1] === 'object'
-                        ? el[1].value
-                        : !el[1].includes('https')
-                        ? el[1]
+                    image={
+                      typeof el[1] === 'object' && el[1] !== null
+                        ? el[1].image
                         : ''
+                    }
+                    value={
+                      typeof el[1] === 'object' && el[1] !== null
+                        ? el[1].value
+                        : el[1]
                     }
                     onPressImage={() => onPressImage(index)}
                   />
@@ -446,13 +448,15 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                 return (
                   <PopulateImageWithData
                     title={el[0].replace(/_/g, ' ').toUpperCase()}
-                    image={typeof el[1] === 'object' ? el[1].image : ''}
-                    value={
-                      typeof el[1] === 'object'
-                        ? el[1].value
-                        : !el[1].includes('https')
-                        ? el[1]
+                    image={
+                      typeof el[1] === 'object' && el[1] !== null
+                        ? el[1].image
                         : ''
+                    }
+                    value={
+                      typeof el[1] === 'object' && el[1] !== null
+                        ? el[1].value
+                        : el[1]
                     }
                     onPressImage={() => onPressImage(index)}
                   />

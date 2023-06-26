@@ -171,34 +171,6 @@ export default function Tyres({navigation, route}: TyresProps) {
         });
       }
     }
-    if (lhsfront.length === 0) {
-      tempErrors.lhsfront = 'LHS front tyre ( % / damaged ) required';
-    }
-    if (rhsfront.length === 0) {
-      tempErrors.rhsfront = 'RHS front tyre ( % / damaged ) required';
-    }
-    if (lhsback.length === 0) {
-      tempErrors.lhsback = 'LHS Back tyre ( % / damaged ) required';
-    }
-    if (rhsback.length === 0) {
-      tempErrors.rhsback = 'RHS Back tyre ( % / damaged ) required';
-    }
-    if (spare.length === 0) {
-      tempErrors.spare = 'Spare tyre (%, damaged ) required';
-    }
-    if (
-      lhsfrontImage.length === 0 ||
-      rhsfrontImage.length === 0 ||
-      lhsbackImage.length === 0 ||
-      rhsbackImage.length === 0 ||
-      spareImage.length === 0
-    ) {
-      Snackbar.show({
-        text: 'Kindly upload all images',
-        backgroundColor: 'red',
-        duration: Snackbar.LENGTH_SHORT,
-      });
-    }
 
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;

@@ -109,7 +109,7 @@ export default function ValuatorForm({route, navigation}: ValuatorFormProps) {
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>
             <PrimaryButton
-              label="Close"
+              label="Discard"
               onPress={() => navigation.goBack()}
               varient="Secondary"
             />

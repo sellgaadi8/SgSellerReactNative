@@ -69,27 +69,30 @@ export default function Engine({navigation, route}: EngineProps) {
     if (sound.length === 0) {
       tempErrors.sound = 'Engine sound is required';
     }
-    if (cooling.length === 0) {
+    if (vehicleType !== 'two_wheeler' && cooling.length === 0) {
       tempErrors.cooling = 'Cooling is required';
     }
-    if (heater.length === 0) {
+    if (vehicleType !== 'two_wheeler' && heater.length === 0) {
       tempErrors.heater = 'Heater is required';
     }
-    if (condensor.length === 0) {
+    if (vehicleType !== 'two_wheeler' && condensor.length === 0) {
       tempErrors.condensor = 'Condensor is required';
     }
 
-    if (soundVideo.length === 0) {
+    if (sound === 'major_sound' || soundVideo.length === 0) {
       Snackbar.show({
         text: 'Engine sound video is required',
         backgroundColor: 'red',
         duration: Snackbar.LENGTH_SHORT,
       });
+      tempErrors.sound = 'Engine Sound Video is required';
     }
 
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   }
+
+  console.log('errors', errors);
 
   function submit() {
     const isValid = validateInputs();
@@ -205,8 +208,14 @@ export default function Engine({navigation, route}: EngineProps) {
         setAc(data.ac);
         setCooling(data.cooling);
         setCondensor(data.condensor);
-        setOilLeakImage(data.gear_oil_leakage_image.file);
-        setSmokeImage(data.exhaust_smoke_image.file);
+        if (data.gear_oil_leakage_image) {
+          setOilLeakImage(data.gear_oil_leakage_image.file);
+          temp[0].url = data.gear_oil_leakage_image.url;
+        }
+        if (data.exhaust_smoke_image) {
+          setSmokeImage(data.exhaust_smoke_image.file);
+          temp[1].url = data.exhaust_smoke_image.url;
+        }
         setChain(data.chain_belt_assembly);
         setEngineOilLevel(data.engine_oil_level);
         setCoolantLevel(data.engine_coolant_level);
@@ -214,8 +223,6 @@ export default function Engine({navigation, route}: EngineProps) {
           setSoundVideo(data.engine_sound_video.file);
           temp[2].url = data.engine_sound_video.url;
         }
-        temp[0].url = data.gear_oil_leakage_image.url;
-        temp[1].url = data.exhaust_smoke_image.url;
       }
       setEngineImageTypes([...temp]);
     }

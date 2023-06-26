@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {Picker} from '@react-native-picker/picker';
 import React from 'react';
 import {Text, View} from 'react-native';
@@ -13,10 +14,16 @@ export default function CustomDropdown({
   title,
   mode = 'dialog',
   error,
+  isMandatory = false,
 }: CustomDropdownProps) {
   return (
     <View style={styles.pickerContainer}>
-      {title && <Text style={styles.label}>{title}</Text>}
+      {title && (
+        <Text style={styles.label}>
+          {title}
+          {isMandatory && <Text style={{color: 'red'}}>*</Text>}
+        </Text>
+      )}
       <View style={styles.picker}>
         <Picker
           mode={mode}

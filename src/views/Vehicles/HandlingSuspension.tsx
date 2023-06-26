@@ -22,6 +22,8 @@ import {onAddSuspension} from '../../redux/ducks/addSuspensionData';
 import {onUpdateSuspension} from '../../redux/ducks/updateSuspensionData';
 import GlobalContext from '../../contexts/GlobalContext';
 import Snackbar from 'react-native-snackbar';
+import {onGetSuspensionDetails} from '../../redux/ducks/getSuspensionData';
+
 const list = [
   {label: 'Ok', value: 'ok'},
   {label: 'Scratched', value: 'scratched'},
@@ -81,6 +83,11 @@ export default function HandlingSuspension({
   );
   const selectGetSuspension = useAppSelector(state => state.getSuspensionData);
   const {vehicleId} = useContext(GlobalContext);
+
+  useEffect(() => {
+    dispatch(onGetSuspensionDetails(vehicleId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function onOpenPicker(type: string) {
     setOpenImagePicker(true);
@@ -239,26 +246,38 @@ export default function HandlingSuspension({
       setLoading(false);
       const {error, data} = selectGetSuspension;
       if (!error && data) {
+        let temp = [...handlingSusp];
         setItem1(data.handle);
+        temp[0].selectedValue = data.handle;
         setItem2(data.front_shock_absorber);
+        temp[1].selectedValue = data.front_shock_absorber;
         setItem3(data.rear_shock_absorber);
+        temp[2].selectedValue = data.rear_shock_absorber;
         setItem4(data.front_brake_condition);
+        temp[3].selectedValue = data.front_brake_condition;
         setItem5(data.rear_brake_condition);
+        temp[4].selectedValue = data.rear_brake_condition;
         if (data.handle_image) {
           setImage1(data.handle_image.file);
+          temp[0].url = data.handle_image.url;
         }
-        if (data.front_shock_absorber) {
+        if (data.front_shock_absorber_image) {
           setImage2(data.front_shock_absorber_image.file);
+          temp[0].url = data.front_shock_absorber_image.url;
         }
         if (data.rear_shock_absorber_image) {
           setImage3(data.rear_shock_absorber_image.file);
+          temp[0].url = data.rear_shock_absorber_image.url;
         }
         if (data.front_brake_condition_image) {
           setImage4(data.front_brake_condition_image.file);
+          temp[0].url = data.front_brake_condition_image.url;
         }
         if (data.rear_brake_condition_image) {
           setImage5(data.rear_brake_condition_image.file);
+          temp[0].url = data.rear_brake_condition_image.url;
         }
+        setHandlingSusp([...temp]);
       }
     }
 
@@ -279,10 +298,12 @@ export default function HandlingSuspension({
           lineHeight={28}
           fontFamily="Roboto-Medium"
           color="#201A1B">
-          Step 4: Exterior
+          Step 5: Handling and Suspension
         </CustomText>
         <Box pv={'2%'}>
           {handlingSusp.map((el, index) => {
+            console.log('el', el.selectedValue);
+
             return (
               <BasePicker
                 key={index.toString()}
@@ -299,8 +320,8 @@ export default function HandlingSuspension({
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>
             <PrimaryButton
-              label="Close"
-              onPress={() => console.log('')}
+              label="Discard"
+              onPress={() => navigation.goBack()}
               varient="Secondary"
             />
           </Box>

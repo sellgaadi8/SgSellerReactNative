@@ -36,6 +36,81 @@ type ELECTRICAL = {
     url: string;
     file: string;
   };
+  headlight: string;
+  tailLight: string;
+  brakeLight: string;
+  front_turn_indicator: string;
+  rear_turn_indicator: string;
+  ignition_switch: string;
+  indicator_switch: string;
+  horn: string;
+  headlight_switch: string;
+  passing_light_switch: string;
+  self_starter_switch: string;
+  high_low_beam_switch: string;
+  instrument_cluster: string;
+  battery: string;
+  lockset: string;
+  headlight_image: {
+    url: string;
+    file: string;
+  };
+  tailLight_image: {
+    url: string;
+    file: string;
+  };
+  brakeLight_image: {
+    url: string;
+    file: string;
+  };
+  front_turn_indicator_image: {
+    url: string;
+    file: string;
+  };
+  rear_turn_indicator_image: {
+    url: string;
+    file: string;
+  };
+  ignition_switch_image: {
+    url: string;
+    file: string;
+  };
+  indicator_switch_image: {
+    url: string;
+    file: string;
+  };
+  horn_image: {
+    url: string;
+    file: string;
+  };
+  headlight_switch_image: {
+    url: string;
+    file: string;
+  };
+  passing_light_switch_image: {
+    url: string;
+    file: string;
+  };
+  self_starter_switch_image: {
+    url: string;
+    file: string;
+  };
+  high_low_beam_switch_image: {
+    url: string;
+    file: string;
+  };
+  instrument_cluster_image: {
+    url: string;
+    file: string;
+  };
+  battery_image: {
+    url: string;
+    file: string;
+  };
+  lockset_image: {
+    url: string;
+    file: string;
+  };
 };
 
 type GetElectricalState = {

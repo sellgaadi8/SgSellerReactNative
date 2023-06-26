@@ -383,50 +383,119 @@ export default function TwoWheelerElectrical({
         });
       }
     }
-    // if (selectGetElectrical.called) {
-    //   setLoading(false);
-    //   const {data, error} = selectGetElectrical;
-    //   if (!error && data) {
-    //     setPowerWindows(data.power_windows);
-    //     setMusic(data.music_system);
-    //     setElectrical(data.electrical_odomoter);
-    //     setParking(data.parking_sensor);
-    //     setOverall(data.overall);
-    //     setJackTool(data.jack_tool_box);
-    //     setLightsCrack(data.lights_crack_broken);
-    //     let temp = [...electricalType];
+    if (selectGetElectrical.called) {
+      setLoading(false);
+      const {data, error} = selectGetElectrical;
+      if (!error && data) {
+        let temp = [...electricalType];
+        setItem1(data.headlight);
+        temp[0].selectedValue = data.headlight;
 
-    //     if (data.power_windows_image) {
-    //       setPowerWindowsImage(data.power_windows_image.file);
-    //       temp[0].url = data.power_windows_image.url;
-    //     }
-    //     if (data.music_system_image) {
-    //       setMusicImage(data.music_system_image.file);
-    //       temp[1].url = data.music_system_image.url;
-    //     }
-    //     if (data.electrical_odomoter_image) {
-    //       setElectricalImage(data.electrical_odomoter_image.file);
-    //       temp[2].url = data.electrical_odomoter_image.url;
-    //     }
-    //     if (data.parking_sensor_image) {
-    //       setParkingImage(data.parking_sensor_image.file);
-    //       temp[3].url = data.parking_sensor_image.url;
-    //     }
-    //     if (data.overall_image) {
-    //       setOverallImage(data.overall_image.file);
-    //       temp[4].url = data.overall_image.url;
-    //     }
-    //     if (data.jack_tool_box_image) {
-    //       setJackToolImage(data.jack_tool_box_image.file);
-    //       temp[5].url = data.jack_tool_box_image.url;
-    //     }
-    //     if (data.lights_crack_broken_image) {
-    //       setLightsCrackImage(data.lights_crack_broken_image.file);
-    //       temp[6].url = data.lights_crack_broken_image.url;
-    //     }
-    //     setElectricalType([...temp]);
-    //   }
-    // }
+        setItem2(data.tailLight);
+        temp[1].selectedValue = data.tailLight;
+
+        setItem3(data.brakeLight);
+        temp[2].selectedValue = data.brakeLight;
+
+        setItem4(data.front_turn_indicator);
+        temp[3].selectedValue = data.front_turn_indicator;
+
+        setItem5(data.rear_turn_indicator);
+        temp[4].selectedValue = data.rear_turn_indicator;
+
+        setItem6(data.ignition_switch);
+        temp[5].selectedValue = data.ignition_switch;
+
+        setItem7(data.indicator_switch);
+        temp[6].selectedValue = data.indicator_switch;
+
+        setItem8(data.horn);
+        temp[7].selectedValue = data.horn;
+
+        setItem9(data.headlight_switch);
+        temp[8].selectedValue = data.headlight_switch;
+
+        setItem10(data.passing_light_switch);
+        temp[9].selectedValue = data.passing_light_switch;
+
+        setItem11(data.self_starter_switch);
+        temp[10].selectedValue = data.self_starter_switch;
+
+        setItem12(data.high_low_beam_switch);
+        temp[11].selectedValue = data.high_low_beam_switch;
+
+        setItem13(data.instrument_cluster);
+        temp[12].selectedValue = data.instrument_cluster;
+
+        setItem14(data.battery);
+        temp[13].selectedValue = data.battery;
+
+        setItem15(data.lockset);
+        temp[14].selectedValue = data.lockset;
+
+        if (data.headlight_image) {
+          setImage1(data.headlight_image.file);
+          temp[0].url = data.headlight_image.url;
+        }
+        if (data.tailLight_image) {
+          setImage2(data.tailLight_image.file);
+          temp[1].url = data.tailLight_image.url;
+        }
+        if (data.brakeLight_image) {
+          setImage3(data.brakeLight_image.file);
+          temp[2].url = data.brakeLight_image.url;
+        }
+        if (data.front_turn_indicator_image) {
+          setImage4(data.front_turn_indicator_image.file);
+          temp[3].url = data.front_turn_indicator_image.url;
+        }
+        if (data.rear_turn_indicator_image) {
+          setImage5(data.rear_turn_indicator_image.file);
+          temp[4].url = data.rear_turn_indicator_image.url;
+        }
+        if (data.ignition_switch_image) {
+          setImage6(data.ignition_switch_image.file);
+          temp[5].url = data.ignition_switch_image.url;
+        }
+        if (data.indicator_switch_image) {
+          setImage7(data.indicator_switch_image.file);
+          temp[6].url = data.indicator_switch_image.url;
+        }
+        if (data.horn_image) {
+          setImage8(data.horn_image.file);
+          temp[7].url = data.horn_image.url;
+        }
+        if (data.headlight_switch_image) {
+          setImage9(data.headlight_switch_image.file);
+          temp[8].url = data.headlight_switch_image.url;
+        }
+        if (data.passing_light_switch_image) {
+          setImage10(data.passing_light_switch_image.file);
+          temp[9].url = data.passing_light_switch_image.url;
+        }
+        if (data.self_starter_switch_image) {
+          setImage11(data.self_starter_switch_image.file);
+          temp[10].url = data.self_starter_switch_image.url;
+        }
+        if (data.high_low_beam_switch_image) {
+          setImage12(data.high_low_beam_switch_image.file);
+          temp[11].url = data.high_low_beam_switch_image.url;
+        }
+        if (data.instrument_cluster_image) {
+          setImage13(data.instrument_cluster_image.file);
+          temp[12].url = data.instrument_cluster_image.url;
+        }
+        if (data.battery_image) {
+          setImage14(data.battery_image.file);
+          temp[13].url = data.battery_image.url;
+        }
+        if (data.lockset_image) {
+          setImage15(data.lockset_image.file);
+          temp[14].url = data.lockset_image.url;
+        }
+        setElectricalType([...temp]);
+      }
+    }
     if (selectUploadImage.called) {
       const {error, image, success} = selectUploadImage;
       if (!error && success && image) {

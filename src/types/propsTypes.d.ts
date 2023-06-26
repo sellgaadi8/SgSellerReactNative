@@ -266,7 +266,8 @@ type SearchModalProps = {
   dataType: ModalType;
   query: string;
   onChangeText: (value: string) => void;
-  // onPressDone: () => void;
+  onPressDone: () => void;
+  showDone?: boolean;
 };
 
 type ModalType = 'Make' | 'Model' | 'Variant';
@@ -374,6 +375,7 @@ type CustomDropdownProps = {
   values: {label: string; value: any}[];
   mode?: 'dialog' | 'dropdown';
   error?: string;
+  isMandatory?: boolean;
 };
 
 type ImageViewerCarouselProps = {

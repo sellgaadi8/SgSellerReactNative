@@ -523,7 +523,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>
             <PrimaryButton
-              label="Close"
+              label="Discard"
               onPress={() => console.log('')}
               varient="Secondary"
             />

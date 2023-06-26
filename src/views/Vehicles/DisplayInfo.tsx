@@ -554,6 +554,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
               selectedValue={color}
               title="Color"
               error={errors?.color}
+              isMandatory
             />
           </Box>
           <Box style={styles.checkbox}>

@@ -18,7 +18,7 @@ export default function Indicator({index, length}: IndicatorProps) {
   const translateX = useSharedValue(0);
 
   useEffect(() => {
-    translateX.value = withSpring(wp('9.8%') * index);
+    translateX.value = withSpring(wp('2%') * index);
   }, [translateX, index]);
 
   const animatedStyles = useAnimatedStyle(() => {

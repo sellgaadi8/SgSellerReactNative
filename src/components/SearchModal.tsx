@@ -5,6 +5,8 @@ import {SearchModalProps} from '../types/propsTypes';
 import colors from '../utils/colors';
 import CustomText from './CustomText';
 import {FlatList, ListRenderItemInfo, Pressable} from 'react-native';
+import Box from './Box';
+import PrimaryButton from './PrimaryButton';
 
 export default function SearchModal({
   placeholder,
@@ -14,6 +16,7 @@ export default function SearchModal({
   query,
   onChangeText,
   onPressDone,
+  showDone = false,
 }: SearchModalProps) {
   function renderItem({item}: ListRenderItemInfo<string>) {
     return (
@@ -37,9 +40,11 @@ export default function SearchModal({
         keyExtractor={(_, index) => index.toString()}
         data={data}
       />
-      {/* <Box style={styles.button}>
-        <PrimaryButton label="Done" onPress={onPressDone} />
-      </Box> */}
+      {showDone && (
+        <Box style={styles.button}>
+          <PrimaryButton label="Done" onPress={onPressDone} />
+        </Box>
+      )}
     </>
   );
 }

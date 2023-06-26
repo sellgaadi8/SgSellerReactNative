@@ -15,47 +15,47 @@ type Exterior = {
   left_pillarA_image: {
     url: string;
     file: string;
-  };
+  } | null;
   left_pillarB_image: {
     url: string;
-    file: string;
-  };
+    file: stri | nullg;
+  } | null;
   left_pillarC_image: {
     url: string;
-    file: string;
-  };
+    file: stri | nullg;
+  } | null;
   right_pillarA_image: {
     url: string;
-    file: string;
-  };
+    file: stri | nullg;
+  } | null;
   right_pillarB_image: {
     url: string;
-    file: string;
-  };
+    file: stri | nullg;
+  } | null;
   right_pillarC_image: {
     url: string;
-    file: string;
-  };
+    file: stri | nullg;
+  } | null;
   left_apron_image: {
     url: string;
-    file: string;
-  };
+    file: stri | nullg;
+  } | null;
   left_apron_leg_image: {
     url: string;
-    file: string;
-  };
+    file: stri | nullg;
+  } | null;
   right_apron_leg_image: {
     url: string;
-    file: string;
-  };
+    file: stri | nullg;
+  } | null;
   right_apron_image: {
     url: string;
-    file: string;
-  };
+    file: stri | nullg;
+  } | null;
   boot_floor_image: {
     url: string;
-    file: string;
-  };
+    file: stri | nullg;
+  } | null;
   headlight_visor: string;
   front_panel: string;
   mudguard_front: string;
@@ -75,67 +75,67 @@ type Exterior = {
   headlight_visor_image: {
     url: string;
     file: string;
-  };
+  } | null;
   front_panel_image: {
     url: string;
     file: string;
-  };
+  } | null;
   mudguard_front_image: {
     url: string;
     file: string;
-  };
+  } | null;
   fuel_tank_image: {
     url: string;
     file: string;
-  };
+  } | null;
   front_panel_left_image: {
     url: string;
     file: string;
-  };
+  } | null;
   middle_panel_image: {
     url: string;
     file: string;
-  };
+  } | null;
   chassis_image: {
     url: string;
     file: string;
-  };
+  } | null;
   engine_guard_left_image: {
     url: string;
     file: string;
-  };
+  } | null;
   pillion_footrest_image: {
     url: string;
     file: string;
-  };
+  } | null;
   rear_panel_left_image: {
     url: string;
     file: string;
-  };
+  } | null;
   mudguard_rear_image: {
     url: string;
     file: string;
-  };
+  } | null;
   silencer_assembly_image: {
     url: string;
     file: string;
-  };
+  } | null;
   rear_panel_right_image: {
     url: string;
     file: string;
-  };
+  } | null;
   middle_panel_right_image: {
     url: string;
     file: string;
-  };
+  } | null;
   engine_guard_right_image: {
     url: string;
     file: string;
-  };
+  } | null;
   front_panel_right_image: {
     url: string;
     file: string;
-  };
+  } | null;
 };
 
 type GetExteriorState = {
