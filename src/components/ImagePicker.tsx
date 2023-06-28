@@ -93,6 +93,8 @@ export default function ImagePicker(props: ImagePickerProps) {
             // 10MB = 1,00,00,000 Bytes
             fileError = 'File size cannot be more than 10 MB';
           } else {
+            console.log('====>', res);
+
             result.push({
               name: res.filename || extractFileNameFromUri(res.path),
               size: res.size,
@@ -154,6 +156,8 @@ export default function ImagePicker(props: ImagePickerProps) {
               // 10MB = 1,00,00,000 Bytes
 
               res.fileCopyUri = 'file://' + res.fileCopyUri;
+              console.log('==>', res);
+
               result.push({
                 name: res.name || extractFileNameFromUri(res.fileCopyUri),
                 size: res.size,

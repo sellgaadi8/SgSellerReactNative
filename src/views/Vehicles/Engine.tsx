@@ -94,8 +94,6 @@ export default function Engine({navigation, route}: EngineProps) {
     return Object.keys(tempErrors).length === 0;
   }
 
-  console.log('errors', errors);
-
   function submit() {
     const isValid = validateInputs();
     if (isValid) {
@@ -227,6 +225,7 @@ export default function Engine({navigation, route}: EngineProps) {
         if (data.engine_sound_video) {
           setSoundVideo(data.engine_sound_video.file);
           temp[2].url = data.engine_sound_video.url;
+          setMediaType('video');
         }
         if (data.overall_rating) {
           setRating(data.overall_rating);
