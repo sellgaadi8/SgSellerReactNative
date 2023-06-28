@@ -443,3 +443,8 @@ type HandlingSuspensionProps = {
   navigation: StackNavigationProp<RootStackParamList, 'HandlingSuspension'>;
   route: RouteProp<RootStackParamList, 'HandlingSuspension'>;
 };
+
+type RatingProps = {
+  defaultRating: number;
+  onPress: (value: number) => void;
+};

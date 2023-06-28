@@ -508,7 +508,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
               onPressEndIcon={() => setShowCalendar(true)}
             />
           </Pressable>
-          {vehicleType === '4_wheeler' && (
+          {vehicleType === 'four_wheeler' && (
             <Box style={styles.checkbox}>
               <CustomText
                 fontSize={14}
@@ -612,6 +612,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
             noMargin
             isMandatory
             keyboardType="number-pad"
+            maxLength={2}
           />
         </Box>
         <Box style={styles.buttonContainer}>

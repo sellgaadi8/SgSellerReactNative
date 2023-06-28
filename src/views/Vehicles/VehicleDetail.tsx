@@ -456,7 +456,9 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                     value={
                       typeof el[1] === 'object' && el[1] !== null
                         ? el[1].value
-                        : el[1]
+                        : !el[1]?.includes('https')
+                        ? el[1]
+                        : ''
                     }
                     onPressImage={() => onPressImage(index)}
                   />
@@ -471,12 +473,39 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                 return (
                   <PopulateImageWithData
                     title={el[0].replace(/_/g, ' ').toUpperCase()}
-                    image={el[1] ? el[1].image : ''}
-                    value={el[1] ? el[1].value : ''}
+                    image={
+                      typeof el[1] === 'object' && el[1] !== null
+                        ? el[1].image
+                        : ''
+                    }
+                    value={
+                      typeof el[1] === 'object' && el[1] !== null
+                        ? el[1].value
+                        : el[1]
+                    }
                     onPressImage={() => onPressImage(index)}
                   />
                 );
               })}
+            </Box>
+          )}
+          {vehicleDetails?.handling_and_suspension && (
+            <Box>
+              <CustomText style={styles.vehicleHeading}>
+                Handling and Suspension
+              </CustomText>
+              {Object.entries(vehicleDetails.handling_and_suspension).map(
+                (el, index) => {
+                  return (
+                    <PopulateImageWithData
+                      title={el[0].replace(/_/g, ' ').toUpperCase()}
+                      image={el[1] ? el[1].image : ''}
+                      value={el[1] ? el[1].value : ''}
+                      onPressImage={() => onPressImage(index)}
+                    />
+                  );
+                },
+              )}
             </Box>
           )}
           {vehicleDetails?.steering && (

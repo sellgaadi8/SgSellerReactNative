@@ -56,6 +56,7 @@ export const onUpdateExternal =
     right_fender_image: string,
     left_quater_panel_image: string,
     right_quater_panel_image: string,
+    overall_rating: number,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = updateExternelUrl(id);
@@ -93,6 +94,7 @@ export const onUpdateExternal =
     body.append('right_fender_image', right_fender_image);
     body.append('left_quater_panel_image', left_quater_panel_image);
     body.append('right_quater_panel_image', right_quater_panel_image);
+    body.append('overall_rating', overall_rating);
 
     axiosInstance
       .post(url, body, config)

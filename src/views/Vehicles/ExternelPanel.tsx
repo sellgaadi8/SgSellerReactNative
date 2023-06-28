@@ -22,6 +22,7 @@ import BasePicker from '../../components/BasePicker';
 import ImagePicker from '../../components/ImagePicker';
 import DocumentPicker from 'react-native-document-picker';
 import {onUploadImage} from '../../redux/ducks/uploadImage';
+import Rating from '../../components/Rating';
 const list = [
   {label: 'Ok', value: 'ok'},
   {label: 'Scratched', value: 'scratched'},
@@ -44,29 +45,30 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
     {id: 'right_quater_panel', label: 'Right Quarter Panel', url: ''},
   ]);
   const [openImagePicker, setOpenImagePicker] = useState(false);
-  const [hood, setHood] = useState('Ok');
+  const [hood, setHood] = useState('ok');
   const [hoodImage, setHoodImage] = useState('');
-  const [roof, setRoof] = useState('Ok');
+  const [roof, setRoof] = useState('ok');
   const [roofImage, setRoofImage] = useState('');
-  const [dicky, setDickey] = useState('Ok');
+  const [dicky, setDickey] = useState('ok');
   const [dickyImage, setDickeyImage] = useState('');
-  const [ldoorf, setLdoorf] = useState('Ok');
+  const [ldoorf, setLdoorf] = useState('ok');
   const [ldoorfImage, setLdoorfImage] = useState('');
-  const [ldoorb, setLdoorb] = useState('Ok');
+  const [ldoorb, setLdoorb] = useState('ok');
   const [ldoorbImage, setLdoorbImage] = useState('');
-  const [rdoorf, setRdoorf] = useState('Ok');
+  const [rdoorf, setRdoorf] = useState('ok');
   const [rdoorfImage, setRdoorfImage] = useState('');
-  const [rdoorb, setRdoorb] = useState('Ok');
+  const [rdoorb, setRdoorb] = useState('ok');
   const [rdoorbImage, setRdoorbImage] = useState('');
-  const [lfender, setLfender] = useState('Ok');
+  const [lfender, setLfender] = useState('ok');
   const [lfenderImage, setLfenderImage] = useState('');
-  const [rfender, setRfender] = useState('Ok');
+  const [rfender, setRfender] = useState('ok');
   const [rfenderImage, setRfenderImage] = useState('');
-  const [lQPanel, setLqPanel] = useState('Ok');
+  const [lQPanel, setLqPanel] = useState('ok');
   const [lQPanelImage, setLqPanelImage] = useState('');
-  const [rQPanel, setRqPanel] = useState('Ok');
+  const [rQPanel, setRqPanel] = useState('ok');
   const [rQPanelImage, setRqPanelImage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [rating, setRating] = useState(0);
   const {vehicleId} = useContext(GlobalContext);
   const selectAdd = useAppSelector(state => state.addExternal);
   const selectUpdate = useAppSelector(state => state.updateExternal);
@@ -113,6 +115,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
           rfenderImage,
           lQPanelImage,
           rQPanelImage,
+          rating,
         ),
       );
     } else {
@@ -141,6 +144,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
           rfenderImage,
           lQPanelImage,
           rQPanelImage,
+          rating,
         ),
       );
     }
@@ -289,6 +293,9 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
           temp[10].url = data.right_quater_panel_image.url;
           setRqPanelImage(data.right_quater_panel_image.file);
         }
+        if (data.overall_rating) {
+          setRating(data.overall_rating);
+        }
         setExternelType([...temp]);
       }
     }
@@ -348,72 +355,9 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
     setOpenImagePicker(true);
   }
 
-  // function getDocs(type: ExternelDocumentType) {
-  //   switch (type) {
-  //     case 'bonnet_head':
-  //       return hoodImage;
-  //     case 'roof':
-  //       return roofImage;
-  //     case 'dickey_door':
-  //       return dickyImage;
-  //     case 'left_door_front':
-  //       return ldoorfImage;
-  //     case 'left_door_back':
-  //       return ldoorbImage;
-  //     case 'right_door_front':
-  //       return rdoorfImage;
-  //     case 'right_door_back':
-  //       return rdoorbImage;
-  //     case 'left_fender':
-  //       return lfenderImage;
-  //     case 'right_fender':
-  //       return rfenderImage;
-  //     case 'left_quater_panel':
-  //       return lQPanelImage;
-  //     case 'right_quater_panel':
-  //       return rQPanelImage;
-  //     default:
-  //       return [];
-  //   }
-  // }
-
-  // function saveDocs(type: ExternelDocumentType, files: ConsentFile[]) {
-  //   switch (type) {
-  //     case 'bonnet_head':
-  //       setHoodImage(files);
-  //       break;
-  //     case 'roof':
-  //       setRoofImage(files);
-  //       break;
-  //     case 'dickey_door':
-  //       setDickeyImage(files);
-  //       break;
-  //     case 'left_door_front':
-  //       setLdoorfImage(files);
-  //       break;
-  //     case 'left_door_back':
-  //       setLdoorbImage(files);
-  //       break;
-  //     case 'right_door_front':
-  //       setRdoorfImage(files);
-  //       break;
-  //     case 'right_door_back':
-  //       setRdoorbImage(files);
-  //       break;
-  //     case 'left_fender':
-  //       setLfenderImage(files);
-  //       break;
-  //     case 'right_fender':
-  //       setRfenderImage(files);
-  //       break;
-  //     case 'left_quater_panel':
-  //       setLqPanelImage(files);
-  //       break;
-  //     case 'right_quater_panel':
-  //       setRqPanelImage(files);
-  //       break;
-  //   }
-  // }
+  const updateRating = (key: number) => {
+    setRating(key);
+  };
 
   return (
     <Box style={styles.container}>
@@ -515,6 +459,12 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
             selectedValue={rQPanel}
             onPressCamera={onChangeRPanel}
             selectPhoto={externelType[10].url}
+          />
+        </Box>
+        <Box pv={'2%'}>
+          <Rating
+            onPress={value => updateRating(value)}
+            defaultRating={rating}
           />
         </Box>
         <Box style={styles.buttonContainer}>

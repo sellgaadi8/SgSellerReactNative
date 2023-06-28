@@ -41,6 +41,7 @@ type Tyres = {
     url: string;
     file: string;
   };
+  overall_rating: number | null;
 };
 
 type GetTyresState = {

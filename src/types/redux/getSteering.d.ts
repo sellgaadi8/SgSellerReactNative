@@ -5,6 +5,7 @@ type Steering = {
   steering: string;
   brake: string;
   wheel_bearing_noise: string;
+  overall_rating: number | null;
 };
 
 type GetSteeringState = {

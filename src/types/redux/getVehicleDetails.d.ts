@@ -196,7 +196,7 @@ type VehicleDetail = {
     // };
   };
   engine: {
-    [key: string]: {value: string; image: string} | string;
+    [key: string]: {value: string; image: string} | string | null;
     // ac: string;
     // heater: string;
     // cooling: string;
@@ -211,6 +211,7 @@ type VehicleDetail = {
     // clutch_bearing_sound: string;
     // engine_perm_blow_back: string;
   };
+  handling_and_suspension: {[key: string]: {value: string; image: string}};
   electricals: {
     [key: string]: {value: string; image: string};
     // overall: {

@@ -23,6 +23,7 @@ import {onUpdateExterior} from '../../redux/ducks/updateExterior';
 import Loader from '../../components/Loader';
 import BasePicker from '../../components/BasePicker';
 import {onUploadImage} from '../../redux/ducks/uploadImage';
+import Rating from '../../components/Rating';
 const list = [
   {label: 'Ok', value: 'ok'},
   {label: 'Scratched', value: 'scratched'},
@@ -57,18 +58,18 @@ export default function Exterior({navigation, route}: ExteriorProps) {
   const [image9, setImage9] = useState('');
   const [image10, setImage10] = useState('');
   const [image11, setImage11] = useState('');
-
-  const [leftPA, setLeftPA] = useState('Ok');
-  const [leftPB, setLeftPB] = useState('Ok');
-  const [leftPC, setLeftPC] = useState('Ok');
-  const [rightPA, setRightPA] = useState('Ok');
-  const [rightPB, setRightPB] = useState('Ok');
-  const [rightPC, setRightPC] = useState('Ok');
-  const [leftApron, setLeftApron] = useState('Ok');
-  const [leftApronLeg, setLeftApronLeg] = useState('Ok');
-  const [rightApron, setRightApron] = useState('Ok');
-  const [rightApronLeg, setRightApronLeg] = useState('Ok');
-  const [boot, setBoot] = useState('Ok');
+  const [rating, setRating] = useState(0);
+  const [leftPA, setLeftPA] = useState('ok');
+  const [leftPB, setLeftPB] = useState('ok');
+  const [leftPC, setLeftPC] = useState('ok');
+  const [rightPA, setRightPA] = useState('ok');
+  const [rightPB, setRightPB] = useState('ok');
+  const [rightPC, setRightPC] = useState('ok');
+  const [leftApron, setLeftApron] = useState('ok');
+  const [leftApronLeg, setLeftApronLeg] = useState('ok');
+  const [rightApron, setRightApron] = useState('ok');
+  const [rightApronLeg, setRightApronLeg] = useState('ok');
+  const [boot, setBoot] = useState('ok');
 
   const [loading, setLoading] = useState(false);
   const [uploadType, setUploadType] =
@@ -204,11 +205,11 @@ export default function Exterior({navigation, route}: ExteriorProps) {
         }
         if (data.right_pillarB_image) {
           temp[4].url = data.right_pillarB_image.url;
-          setImage5(data.right_pillarA_image.file);
+          setImage5(data.right_pillarB_image.file);
         }
         if (data.right_pillarC_image) {
           temp[5].url = data.right_pillarC_image.url;
-          setImage6(data.right_pillarA_image.file);
+          setImage6(data.right_pillarC_image.file);
         }
         if (data.left_apron_image) {
           temp[6].url = data.left_apron_image.url;
@@ -229,6 +230,9 @@ export default function Exterior({navigation, route}: ExteriorProps) {
         if (data.boot_floor_image) {
           temp[10].url = data.boot_floor_image.url;
           setImage11(data.boot_floor_image.file);
+        }
+        if (data.overall_rating) {
+          setRating(data.overall_rating);
         }
         setExteriorType([...temp]);
       }
@@ -313,6 +317,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           '',
           '',
           '',
+          rating,
         ),
       );
     } else {
@@ -373,6 +378,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           '',
           '',
           '',
+          rating,
         ),
       );
     }
@@ -417,7 +423,9 @@ export default function Exterior({navigation, route}: ExteriorProps) {
     }
   }
 
-  console.log('kpa', leftPA);
+  const updateRating = (key: number) => {
+    setRating(key);
+  };
 
   return (
     <Box style={styles.container}>
@@ -519,6 +527,12 @@ export default function Exterior({navigation, route}: ExteriorProps) {
             onPressCamera={() => onOpenPicker('boot_floor')}
             selectPhoto={exteriorType[10].url}
           />
+          <Box pv={'2%'}>
+            <Rating
+              onPress={value => updateRating(value)}
+              defaultRating={rating}
+            />
+          </Box>
         </Box>
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>

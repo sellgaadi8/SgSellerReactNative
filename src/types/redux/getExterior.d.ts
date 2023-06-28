@@ -136,6 +136,7 @@ type Exterior = {
     url: string;
     file: string;
   } | null;
+  overall_rating: number | null;
 };
 
 type GetExteriorState = {

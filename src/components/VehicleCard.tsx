@@ -18,7 +18,6 @@ export default function VehicleCard({
   onPressView,
 }: VehicleCardProps) {
   const [scrollIndex, setScrollIndex] = useState(0);
-  const [images, setImages] = useState<string[]>([...data.images]);
 
   function handleOnScroll(event: any) {
     var abc =
@@ -32,8 +31,8 @@ export default function VehicleCard({
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         onScroll={handleOnScroll}>
-        {images ? (
-          images.map((el, index) => {
+        {data.images ? (
+          data.images.map((el, index) => {
             return (
               <Box key={index.toString()}>
                 {index === 0 && el !== '' ? (

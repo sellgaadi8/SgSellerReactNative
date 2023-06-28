@@ -22,6 +22,7 @@ import Loader from '../../components/Loader';
 import ImagePicker from '../../components/ImagePicker';
 import DocumentPicker from 'react-native-document-picker';
 import {onUploadImage} from '../../redux/ducks/uploadImage';
+import Rating from '../../components/Rating';
 
 export default function Engine({navigation, route}: EngineProps) {
   const [engineImageTypes, setEngineImageTypes] = useState([
@@ -29,6 +30,7 @@ export default function Engine({navigation, route}: EngineProps) {
     {id: 'exhaust_smoke', url: ''},
     {id: 'engine_sound', url: ''},
   ]);
+  const [rating, setRating] = useState(0);
   const [oilLeak, setOilLeak] = useState('');
   const [oilLeakImage, setOilLeakImage] = useState('');
   const [smoke, setSmoke] = useState('');
@@ -69,17 +71,17 @@ export default function Engine({navigation, route}: EngineProps) {
     if (sound.length === 0) {
       tempErrors.sound = 'Engine sound is required';
     }
-    if (vehicleType !== 'two_wheeler' && cooling.length === 0) {
+    if (vehicleType === 'four_wheeler' && cooling.length === 0) {
       tempErrors.cooling = 'Cooling is required';
     }
-    if (vehicleType !== 'two_wheeler' && heater.length === 0) {
+    if (vehicleType === 'four_wheeler' && heater.length === 0) {
       tempErrors.heater = 'Heater is required';
     }
-    if (vehicleType !== 'two_wheeler' && condensor.length === 0) {
+    if (vehicleType === 'four_wheeler' && condensor.length === 0) {
       tempErrors.condensor = 'Condensor is required';
     }
 
-    if (sound === 'major_sound' || soundVideo.length === 0) {
+    if (sound === 'major_sound' && soundVideo.length === 0) {
       Snackbar.show({
         text: 'Engine sound video is required',
         backgroundColor: 'red',
@@ -118,6 +120,7 @@ export default function Engine({navigation, route}: EngineProps) {
             coolantLevel,
             engineOilLevel,
             chain,
+            rating,
           ),
         );
       } else {
@@ -140,6 +143,7 @@ export default function Engine({navigation, route}: EngineProps) {
             coolantLevel,
             engineOilLevel,
             chain,
+            rating,
           ),
         );
       }
@@ -207,6 +211,7 @@ export default function Engine({navigation, route}: EngineProps) {
         setClutch(data.clutch_bearing_sound);
         setAc(data.ac);
         setCooling(data.cooling);
+        setHeater(data.heater);
         setCondensor(data.condensor);
         if (data.gear_oil_leakage_image) {
           setOilLeakImage(data.gear_oil_leakage_image.file);
@@ -222,6 +227,9 @@ export default function Engine({navigation, route}: EngineProps) {
         if (data.engine_sound_video) {
           setSoundVideo(data.engine_sound_video.file);
           temp[2].url = data.engine_sound_video.url;
+        }
+        if (data.overall_rating) {
+          setRating(data.overall_rating);
         }
       }
       setEngineImageTypes([...temp]);
@@ -264,6 +272,10 @@ export default function Engine({navigation, route}: EngineProps) {
     setSmoke(value);
     setMediaType('photo');
   }
+
+  const updateRating = (key: number) => {
+    setRating(key);
+  };
 
   return (
     <Box style={styles.container}>
@@ -429,6 +441,12 @@ export default function Engine({navigation, route}: EngineProps) {
             </>
           )}
         </Box>
+        <Box pv={'2%'}>
+          <Rating
+            onPress={value => updateRating(value)}
+            defaultRating={rating}
+          />
+        </Box>
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>
             <PrimaryButton
@@ -476,5 +494,6 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: '4rem',
+    marginTop: '1rem',
   },
 });

@@ -26,6 +26,7 @@ type SuspensionHandling = {
     url: string;
     file: string;
   };
+  overall_rating: number | null;
 };
 
 type GetSuspensionState = {

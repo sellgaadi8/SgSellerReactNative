@@ -22,6 +22,7 @@ import ImagePicker from '../../components/ImagePicker';
 import DocumentPicker from 'react-native-document-picker';
 import {onUploadImage} from '../../redux/ducks/uploadImage';
 import Loader from '../../components/Loader';
+import Rating from '../../components/Rating';
 
 type ElectType =
   | 'headlight'
@@ -171,6 +172,7 @@ export default function TwoWheelerElectrical({
   const [image13, setImage13] = useState('');
   const [image14, setImage14] = useState('');
   const [image15, setImage15] = useState('');
+  const [rating, setRating] = useState(0);
 
   const [openImagePicker, setOpenImagePicker] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -388,50 +390,66 @@ export default function TwoWheelerElectrical({
       const {data, error} = selectGetElectrical;
       if (!error && data) {
         let temp = [...electricalType];
-        setItem1(data.headlight);
-        temp[0].selectedValue = data.headlight;
-
-        setItem2(data.tailLight);
-        temp[1].selectedValue = data.tailLight;
-
-        setItem3(data.brakeLight);
-        temp[2].selectedValue = data.brakeLight;
-
-        setItem4(data.front_turn_indicator);
-        temp[3].selectedValue = data.front_turn_indicator;
-
-        setItem5(data.rear_turn_indicator);
-        temp[4].selectedValue = data.rear_turn_indicator;
-
-        setItem6(data.ignition_switch);
-        temp[5].selectedValue = data.ignition_switch;
-
-        setItem7(data.indicator_switch);
-        temp[6].selectedValue = data.indicator_switch;
-
-        setItem8(data.horn);
-        temp[7].selectedValue = data.horn;
-
-        setItem9(data.headlight_switch);
-        temp[8].selectedValue = data.headlight_switch;
-
-        setItem10(data.passing_light_switch);
-        temp[9].selectedValue = data.passing_light_switch;
-
-        setItem11(data.self_starter_switch);
-        temp[10].selectedValue = data.self_starter_switch;
-
-        setItem12(data.high_low_beam_switch);
-        temp[11].selectedValue = data.high_low_beam_switch;
-
-        setItem13(data.instrument_cluster);
-        temp[12].selectedValue = data.instrument_cluster;
-
-        setItem14(data.battery);
-        temp[13].selectedValue = data.battery;
-
-        setItem15(data.lockset);
-        temp[14].selectedValue = data.lockset;
+        if (data.headlight) {
+          setItem1(data.headlight);
+          temp[0].selectedValue = data.headlight;
+        }
+        if (data.tailLight) {
+          setItem2(data.tailLight);
+          temp[1].selectedValue = data.tailLight;
+        }
+        if (data.brakeLight) {
+          setItem3(data.brakeLight);
+          temp[2].selectedValue = data.brakeLight;
+        }
+        if (data.front_turn_indicator) {
+          setItem4(data.front_turn_indicator);
+          temp[3].selectedValue = data.front_turn_indicator;
+        }
+        if (data.rear_turn_indicator) {
+          setItem5(data.rear_turn_indicator);
+          temp[4].selectedValue = data.rear_turn_indicator;
+        }
+        if (data.ignition_switch) {
+          setItem6(data.ignition_switch);
+          temp[5].selectedValue = data.ignition_switch;
+        }
+        if (data.indicator_switch) {
+          setItem7(data.indicator_switch);
+          temp[6].selectedValue = data.indicator_switch;
+        }
+        if (data.horn) {
+          setItem8(data.horn);
+          temp[7].selectedValue = data.horn;
+        }
+        if (data.headlight_switch) {
+          setItem9(data.headlight_switch);
+          temp[8].selectedValue = data.headlight_switch;
+        }
+        if (data.passing_light_switch) {
+          setItem10(data.passing_light_switch);
+          temp[9].selectedValue = data.passing_light_switch;
+        }
+        if (data.self_starter_switch) {
+          setItem11(data.self_starter_switch);
+          temp[10].selectedValue = data.self_starter_switch;
+        }
+        if (data.high_low_beam_switch) {
+          setItem12(data.high_low_beam_switch);
+          temp[11].selectedValue = data.high_low_beam_switch;
+        }
+        if (data.instrument_cluster) {
+          setItem13(data.instrument_cluster);
+          temp[12].selectedValue = data.instrument_cluster;
+        }
+        if (data.battery) {
+          setItem14(data.battery);
+          temp[13].selectedValue = data.battery;
+        }
+        if (data.lockset) {
+          setItem15(data.lockset);
+          temp[14].selectedValue = data.lockset;
+        }
 
         if (data.headlight_image) {
           setImage1(data.headlight_image.file);
@@ -642,6 +660,10 @@ export default function TwoWheelerElectrical({
     setElectricalType([...temp]);
   }
 
+  const updateRating = (key: number) => {
+    setRating(key);
+  };
+
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
@@ -754,6 +776,12 @@ export default function TwoWheelerElectrical({
             onPressCamera={() => onOpenImagePicker('lightsCrack')}
             selectPhoto={electricalType[6].url}
           /> */}
+        </Box>
+        <Box pv={'2%'}>
+          <Rating
+            onPress={value => updateRating(value)}
+            defaultRating={rating}
+          />
         </Box>
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>

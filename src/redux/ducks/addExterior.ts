@@ -87,6 +87,7 @@ export const onAddExterior =
     middle_panel_right_image: string,
     engine_guard_right_image: string,
     front_panel_right_image: string,
+    overall_rating: number,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = addExteriorUrl(id);
@@ -156,6 +157,7 @@ export const onAddExterior =
     body.append('middle_panel_right_image', middle_panel_right_image);
     body.append('engine_guard_right_image', engine_guard_right_image);
     body.append('front_panel_right_image', front_panel_right_image);
+    body.append('overall_rating', overall_rating);
 
     axiosInstance
       .post(url, body, config)

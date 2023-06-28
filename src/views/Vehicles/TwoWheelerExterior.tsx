@@ -23,6 +23,7 @@ import {onUpdateExterior} from '../../redux/ducks/updateExterior';
 import Loader from '../../components/Loader';
 import BasePicker from '../../components/BasePicker';
 import {onUploadImage} from '../../redux/ducks/uploadImage';
+import Rating from '../../components/Rating';
 const list = [
   {label: 'Ok', value: 'ok'},
   {label: 'Scratched', value: 'scratched'},
@@ -122,23 +123,25 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
   const [image15, setImage15] = useState('');
   const [image16, setImage16] = useState('');
 
-  const [item1, setItem1] = useState('Ok');
-  const [item2, setItem2] = useState('Ok');
-  const [item3, setItem3] = useState('Ok');
-  const [item4, setItem4] = useState('Ok');
-  const [item5, setItem5] = useState('Ok');
-  const [item6, setItem6] = useState('Ok');
-  const [item7, setItem7] = useState('Ok');
-  const [item8, setItem8] = useState('Ok');
-  const [item9, setItem9] = useState('Ok');
-  const [item10, setItem10] = useState('Ok');
-  const [item11, setItem11] = useState('Ok');
-  const [item12, setItem12] = useState('Ok');
-  const [item13, setItem13] = useState('Ok');
-  const [item14, setItem14] = useState('Ok');
-  const [item15, setItem15] = useState('Ok');
-  const [item16, setItem16] = useState('Ok');
+  const [item1, setItem1] = useState('ok');
+  const [item2, setItem2] = useState('ok');
+  const [item3, setItem3] = useState('ok');
+  const [item4, setItem4] = useState('ok');
+  const [item5, setItem5] = useState('ok');
+  const [item6, setItem6] = useState('ok');
+  const [item7, setItem7] = useState('ok');
+  const [item8, setItem8] = useState('ok');
+  const [item9, setItem9] = useState('ok');
+  const [item10, setItem10] = useState('ok');
+  const [item11, setItem11] = useState('ok');
+  const [item12, setItem12] = useState('ok');
+  const [item13, setItem13] = useState('ok');
+  const [item14, setItem14] = useState('ok');
+  const [item15, setItem15] = useState('ok');
+  const [item16, setItem16] = useState('ok');
   const [loading, setLoading] = useState(false);
+  const [rating, setRating] = useState(0);
+
   const [uploadType, setUploadType] =
     useState<TwoWheelerExteriorDocumentType>('headlight_visor');
   const dispatch = useDispatch<any>();
@@ -360,6 +363,9 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
           temp[15].url = data.front_panel_right_image.url;
           setImage16(data.front_panel_right_image.file);
         }
+        if (data.overall_rating) {
+          setRating(data.overall_rating);
+        }
         setTwoWheelerType([...temp]);
       }
     }
@@ -443,6 +449,7 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
           image14,
           image15,
           image16,
+          rating,
         ),
       );
     } else {
@@ -503,6 +510,7 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
           image14,
           image15,
           image16,
+          rating,
         ),
       );
     }
@@ -632,6 +640,10 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
     setTwoWheelerType([...temp]);
   }
 
+  const updateRating = (key: number) => {
+    setRating(key);
+  };
+
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
@@ -657,6 +669,12 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
               />
             );
           })}
+        </Box>
+        <Box pv={'2%'}>
+          <Rating
+            onPress={value => updateRating(value)}
+            defaultRating={rating}
+          />
         </Box>
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>

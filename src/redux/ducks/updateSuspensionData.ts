@@ -44,6 +44,7 @@ export const onUpdateSuspension =
     rear_shock_absorber_image: string,
     front_brake_condition_image: string,
     rear_brake_condition_image: string,
+    overall_rating: number,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = updateSuspensionUrl(id);
@@ -69,6 +70,7 @@ export const onUpdateSuspension =
     body.append('rear_shock_absorber_image', rear_shock_absorber_image);
     body.append('front_brake_condition_image', front_brake_condition_image);
     body.append('rear_brake_condition_image', rear_brake_condition_image);
+    body.append('overall_rating', overall_rating);
 
     axiosInstance
       .post(url, body, config)

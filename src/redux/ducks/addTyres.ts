@@ -46,6 +46,7 @@ export const onAddTyres =
     rear_wheel_condition: string,
     front_wheel_condition_image: string,
     rear_wheel_condition_image: string,
+    overall_rating: number,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = addTyresUrl(id);
@@ -75,6 +76,7 @@ export const onAddTyres =
     body.append('rear_wheel_condition', rear_wheel_condition);
     body.append('front_wheel_condition_image', front_wheel_condition_image);
     body.append('rear_wheel_condition_image', rear_wheel_condition_image);
+    body.append('overall_rating', overall_rating);
 
     axiosInstance
       .post(url, body, config)

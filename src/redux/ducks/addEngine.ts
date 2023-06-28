@@ -48,6 +48,7 @@ export const onAddEngine =
     engine_coolant_level: string,
     engine_oil_level: string,
     chain_belt_assembly: string,
+    overall_rating: number,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = addEngineUrl(id);
@@ -79,6 +80,7 @@ export const onAddEngine =
     body.append('engine_coolant_level', engine_coolant_level);
     body.append('engine_oil_level', engine_oil_level);
     body.append('chain_belt_assembly', chain_belt_assembly);
+    body.append('overall_rating', overall_rating);
 
     axiosInstance
       .post(url, body, config)

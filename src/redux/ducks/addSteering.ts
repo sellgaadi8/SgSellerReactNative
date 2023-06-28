@@ -36,6 +36,7 @@ export const onAddSteering =
     steering: string,
     brake: string,
     wheel_bearing_noise: string,
+    overall_rating: number,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = addSteeringUrl(id);
@@ -55,6 +56,7 @@ export const onAddSteering =
     body.append('steering', steering);
     body.append('brake', brake);
     body.append('wheel_bearing_noise', wheel_bearing_noise);
+    body.append('overall_rating', overall_rating);
 
     axiosInstance
       .post(url, body, config)

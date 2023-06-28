@@ -19,6 +19,7 @@ import {useAppSelector} from '../../utils/hooks';
 import Snackbar from 'react-native-snackbar';
 import {onGetSteeringDetails} from '../../redux/ducks/getSteering';
 import Loader from '../../components/Loader';
+import Rating from '../../components/Rating';
 
 export default function Steering({navigation, route}: SteeringProps) {
   const [suspension, setSuspension] = useState('');
@@ -31,6 +32,7 @@ export default function Steering({navigation, route}: SteeringProps) {
   const selectUpdateSteering = useAppSelector(state => state.updateSteering);
   const selectGetSteering = useAppSelector(state => state.getSteering);
   const [loading, setLoading] = useState(false);
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
     if (route.params.from === 'edit') {
@@ -44,10 +46,14 @@ export default function Steering({navigation, route}: SteeringProps) {
     setLoading(true);
     if (route.params.from === 'add') {
       setLoading(true);
-      dispatch(onAddSteering(vehicleId, suspension, steering, brake, wheel));
+      dispatch(
+        onAddSteering(vehicleId, suspension, steering, brake, wheel, rating),
+      );
     } else {
       setLoading(true);
-      dispatch(onUpdateSteering(vehicleId, suspension, steering, brake, wheel));
+      dispatch(
+        onUpdateSteering(vehicleId, suspension, steering, brake, wheel, rating),
+      );
     }
   }
 
@@ -84,10 +90,18 @@ export default function Steering({navigation, route}: SteeringProps) {
         setSteering(data.steering);
         setBrake(data.brake);
         setWheel(data.wheel_bearing_noise);
+        if (data.overall_rating) {
+          setRating(data.overall_rating);
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectAddSteering, selectUpdateSteering, selectGetSteering]);
+
+  const updateRating = (key: number) => {
+    setRating(key);
+  };
+
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
@@ -138,6 +152,12 @@ export default function Steering({navigation, route}: SteeringProps) {
             selectValue={wheel}
           />
         </Box>
+        <Box pv={'2%'}>
+          <Rating
+            onPress={value => updateRating(value)}
+            defaultRating={rating}
+          />
+        </Box>
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>
             <PrimaryButton
@@ -169,6 +189,6 @@ const styles = EStyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: '5rem',
+    marginTop: '1rem',
   },
 });

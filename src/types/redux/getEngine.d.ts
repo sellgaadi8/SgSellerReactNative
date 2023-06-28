@@ -26,6 +26,7 @@ type ENGINE = {
   engine_coolant_level: string;
   engine_oil_level: string;
   chain_belt_assembly: string;
+  overall_rating: number | null;
 };
 
 type GetEngineDetailsState = {

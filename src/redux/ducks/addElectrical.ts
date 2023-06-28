@@ -46,7 +46,6 @@ export const onAddElectrical =
     overall_image: string,
     jack_tool_box_image: string,
     lights_crack_broken_image: string,
-
     headlight: string,
     tailLight: string,
     brakeLight: string,
@@ -77,6 +76,7 @@ export const onAddElectrical =
     instrument_cluster_image: string,
     battery_image: string,
     lockset_image: string,
+    overall_rating: number,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = addElectricalsUrl(id);
@@ -136,6 +136,7 @@ export const onAddElectrical =
     body.append('instrument_cluster_image', instrument_cluster_image);
     body.append('battery_image', battery_image);
     body.append('lockset_image', lockset_image);
+    body.append('overall_rating', overall_rating);
 
     axiosInstance
       .post(url, body, config)

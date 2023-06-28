@@ -75,7 +75,7 @@ export default function BasePicker({
             {
               width:
                 selectedValue !== ''
-                  ? selectedValue !== 'Ok'
+                  ? selectedValue !== 'ok'
                     ? '65%'
                     : '100%'
                   : '100%',
@@ -112,7 +112,7 @@ export default function BasePicker({
             </Picker>
           )}
         </Box>
-        {selectedValue !== 'Ok' &&
+        {selectedValue !== 'ok' &&
           selectedValue !== '' &&
           selectedValue !== null && (
             <Pressable

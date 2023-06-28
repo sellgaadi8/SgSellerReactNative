@@ -22,6 +22,7 @@ import ImagePicker from '../../components/ImagePicker';
 import DocumentPicker from 'react-native-document-picker';
 import {onUploadImage} from '../../redux/ducks/uploadImage';
 import Loader from '../../components/Loader';
+import Rating from '../../components/Rating';
 
 type ElectType =
   | 'powerWindows'
@@ -61,6 +62,8 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<any>();
   const {vehicleId} = useContext(GlobalContext);
+  const [rating, setRating] = useState(0);
+
   const selectAddElectrical = useAppSelector(state => state.addElectrical);
   const selectUpdateElectrical = useAppSelector(
     state => state.updateElectrical,
@@ -134,6 +137,7 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
           '',
           '',
           '',
+          rating,
         ),
       );
     } else {
@@ -185,6 +189,7 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
           '',
           '',
           '',
+          rating,
         ),
       );
     }
@@ -248,13 +253,27 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
       setLoading(false);
       const {data, error} = selectGetElectrical;
       if (!error && data) {
-        setPowerWindows(data.power_windows);
-        setMusic(data.music_system);
-        setElectrical(data.electrical_odomoter);
-        setParking(data.parking_sensor);
-        setOverall(data.overall);
-        setJackTool(data.jack_tool_box);
-        setLightsCrack(data.lights_crack_broken);
+        if (data.power_windows) {
+          setPowerWindows(data.power_windows);
+        }
+        if (data.music_system) {
+          setMusic(data.music_system);
+        }
+        if (data.electrical_odomoter) {
+          setElectrical(data.electrical_odomoter);
+        }
+        if (data.parking_sensor) {
+          setParking(data.parking_sensor);
+        }
+        if (data.overall) {
+          setOverall(data.overall);
+        }
+        if (data.jack_tool_box) {
+          setJackTool(data.jack_tool_box);
+        }
+        if (data.lights_crack_broken) {
+          setLightsCrack(data.lights_crack_broken);
+        }
         let temp = [...electricalType];
 
         if (data.power_windows_image) {
@@ -284,6 +303,9 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
         if (data.lights_crack_broken_image) {
           setLightsCrackImage(data.lights_crack_broken_image.file);
           temp[6].url = data.lights_crack_broken_image.url;
+        }
+        if (data.overall_rating) {
+          setRating(data.overall_rating);
         }
         setElectricalType([...temp]);
       }
@@ -332,6 +354,10 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
     selectGetElectrical,
     selectUploadImage,
   ]);
+
+  const updateRating = (key: number) => {
+    setRating(key);
+  };
 
   return (
     <Box style={styles.container}>
@@ -430,6 +456,12 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
             selectPhoto={electricalType[6].url}
           />
         </Box>
+        <Box pv={'2%'}>
+          <Rating
+            onPress={value => updateRating(value)}
+            defaultRating={rating}
+          />
+        </Box>
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>
             <PrimaryButton
@@ -473,6 +505,6 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: '4rem',
-    marginTop: '2rem',
+    marginTop: '1rem',
   },
 });

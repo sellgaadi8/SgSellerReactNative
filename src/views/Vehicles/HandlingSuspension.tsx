@@ -23,6 +23,7 @@ import {onUpdateSuspension} from '../../redux/ducks/updateSuspensionData';
 import GlobalContext from '../../contexts/GlobalContext';
 import Snackbar from 'react-native-snackbar';
 import {onGetSuspensionDetails} from '../../redux/ducks/getSuspensionData';
+import Rating from '../../components/Rating';
 
 const list = [
   {label: 'Ok', value: 'ok'},
@@ -73,6 +74,7 @@ export default function HandlingSuspension({
   const [image3, setImage3] = useState('');
   const [image4, setImage4] = useState('');
   const [image5, setImage5] = useState('');
+  const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(false);
   const [uploadType, setUploadType] = useState<HandleSusType>('handle');
   const dispatch = useDispatch<any>();
@@ -160,6 +162,7 @@ export default function HandlingSuspension({
           image3,
           image4,
           image5,
+          rating,
         ),
       );
     } else {
@@ -177,6 +180,7 @@ export default function HandlingSuspension({
           image3,
           image4,
           image5,
+          rating,
         ),
       );
     }
@@ -277,6 +281,9 @@ export default function HandlingSuspension({
           setImage5(data.rear_brake_condition_image.file);
           temp[0].url = data.rear_brake_condition_image.url;
         }
+        if (data.overall_rating) {
+          setRating(data.overall_rating);
+        }
         setHandlingSusp([...temp]);
       }
     }
@@ -288,6 +295,10 @@ export default function HandlingSuspension({
     selectUpdateSuspension,
     selectGetSuspension,
   ]);
+
+  const updateRating = (key: number) => {
+    setRating(key);
+  };
 
   return (
     <Box style={styles.container}>
@@ -316,6 +327,12 @@ export default function HandlingSuspension({
               />
             );
           })}
+        </Box>
+        <Box pv={'2%'}>
+          <Rating
+            onPress={value => updateRating(value)}
+            defaultRating={rating}
+          />
         </Box>
         <Box style={styles.buttonContainer}>
           <Box width={'45%'}>

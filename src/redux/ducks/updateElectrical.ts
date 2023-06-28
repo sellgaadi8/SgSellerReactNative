@@ -78,6 +78,7 @@ export const onUpdateElectrical =
     instrument_cluster_image: string,
     battery_image: string,
     lockset_image: string,
+    overall_rating: number,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = updateElectricalUrl(id);
@@ -137,6 +138,7 @@ export const onUpdateElectrical =
     body.append('instrument_cluster_image', instrument_cluster_image);
     body.append('battery_image', battery_image);
     body.append('lockset_image', lockset_image);
+    body.append('overall_rating', overall_rating);
 
     axiosInstance
       .post(url, body, config)
