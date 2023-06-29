@@ -112,13 +112,13 @@ export default function ImagePicker(props: ImagePickerProps) {
           : uploadDocument(type === 'video' ? videoTypes : fileTypes));
 
         if (res) {
-          console.log(res);
+          console.log('res', res);
           // If documents are multiple
           if (Array.isArray(res)) {
             res.map(async el => {
               el.fileCopyUri =
                 (Platform.OS === 'android' ? 'file://' : '') + el.fileCopyUri;
-              console.log(el);
+              console.log('el', el);
               if (!validatateExtension(el.name || res.filename)) {
                 fileError = 'File type is invalid';
               } else if (

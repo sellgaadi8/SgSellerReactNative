@@ -10,6 +10,7 @@ import {contentCenter} from '../utils/styles';
 import {Dimensions} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Video from 'react-native-video';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const {height, width} = Dimensions.get('window');
 
 export default function VehicleCard({
@@ -81,20 +82,34 @@ export default function VehicleCard({
             lineHeight={32}
             color="#111111"
             fontFamily="Roboto-Medium">
-            {data.make} ({data.mfg_year})
+            {data.make} {data.model}
           </CustomText>
-          <CustomText
-            fontSize={11}
-            lineHeight={18}
-            color="#111111"
-            fontFamily="Roboto-Medium">
-            {data.model}
-          </CustomText>
-        </Box>
-        <Box flexDirection="row" justifyContent="space-around" pv={'3%'}>
           <Box flexDirection="row">
-            <Ionicons
-              name="car-outline"
+            <CustomText
+              fontSize={11}
+              lineHeight={18}
+              color="#111111"
+              fontFamily="Roboto-Medium">
+              {data.variant}
+            </CustomText>
+            <CustomText
+              fontSize={12}
+              lineHeight={18}
+              color="#111111"
+              fontFamily="Roboto-Medium"
+              style={{marginLeft: 5}}>
+              ({data.color})
+            </CustomText>
+          </Box>
+        </Box>
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          pv={'3%'}
+          ph={'5%'}>
+          <Box flexDirection="row">
+            <MaterialCommunityIcons
+              name="gas-station-outline"
               size={20}
               color={colors.primary}
               style={styles.marginRight}
@@ -124,7 +139,7 @@ export default function VehicleCard({
           </Box>
           <Box flexDirection="row">
             <Ionicons
-              name="car-outline"
+              name="people-outline"
               size={20}
               color={colors.primary}
               style={styles.marginRight}
@@ -134,12 +149,12 @@ export default function VehicleCard({
               lineHeight={18}
               color="#111111"
               fontFamily="Roboto-Medium">
-              {data.variant}
+              {data.no_of_owners}
             </CustomText>
           </Box>
         </Box>
         <View style={styles.line} />
-        <Box flexDirection="row" ph={'8%'}>
+        {/* <Box flexDirection="row" ph={'8%'}>
           <Box flexDirection="row">
             <Ionicons
               name="car-outline"
@@ -170,26 +185,18 @@ export default function VehicleCard({
               {data.color}
             </CustomText>
           </Box>
-        </Box>
-        <Box flexDirection="row" justifyContent="space-around" pv={'5%'}>
-          <Box style={styles.stock}>
+        </Box> */}
+
+        <Box flexDirection="row" pv={'5%'} justifyContent="space-around">
+          <Box style={styles.statusContain}>
             <CustomText
               fontSize={11}
               lineHeight={16}
               color="#111111"
               fontFamily="Roboto-Medium">
-              Out of Stock
+              Status
             </CustomText>
           </Box>
-          <Pressable style={styles.edit} onPress={onPressEdit}>
-            <CustomText
-              fontSize={11}
-              lineHeight={16}
-              color="#111111"
-              fontFamily="Roboto-Medium">
-              Edit
-            </CustomText>
-          </Pressable>
           <Pressable style={styles.view} onPress={onPressView}>
             <CustomText
               fontSize={11}
@@ -197,6 +204,15 @@ export default function VehicleCard({
               color="#111111"
               fontFamily="Roboto-Medium">
               View Details
+            </CustomText>
+          </Pressable>
+          <Pressable style={styles.edit} onPress={onPressEdit}>
+            <CustomText
+              fontSize={11}
+              lineHeight={16}
+              color="White"
+              fontFamily="Roboto-Medium">
+              Edit
             </CustomText>
           </Pressable>
         </Box>
@@ -212,11 +228,12 @@ const styles = EStyleSheet.create({
     marginBottom: '3rem',
   },
   line: {
-    backgroundColor: colors.primary,
-    height: '0.15rem',
+    backgroundColor: '#ACACAC',
+    height: '0.18rem',
     width: '90%',
     alignSelf: 'center',
     marginBottom: '1rem',
+    top: 5,
   },
   marginRight: {marginRight: 5},
   body: {
@@ -238,26 +255,31 @@ const styles = EStyleSheet.create({
     borderTopLeftRadius: '1.2rem',
     marginRight: 5,
   },
-  stock: {
-    padding: '0.3rem',
-    backgroundColor: 'rgba(239, 194, 79, 0.12)',
-    borderRadius: 15,
-    width: 80,
-    ...contentCenter,
-  },
-  view: {
+  statusContain: {
     padding: '0.3rem',
     backgroundColor: colors.secondary,
     borderRadius: 15,
     width: 80,
     ...contentCenter,
+    elevation: 2,
   },
-  edit: {
+  view: {
     padding: '0.3rem',
-    backgroundColor: 'rgba(239, 194, 79, 0.6)',
+    backgroundColor: '#FFFFFF',
     borderRadius: 15,
     width: 80,
     ...contentCenter,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: colors.secondaryLight,
+  },
+  edit: {
+    padding: '0.3rem',
+    backgroundColor: colors.primary,
+    borderRadius: 15,
+    width: 80,
+    ...contentCenter,
+    elevation: 2,
   },
   play: {
     position: 'absolute',
