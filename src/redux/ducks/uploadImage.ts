@@ -1,3 +1,4 @@
+import {AxiosRequestConfig} from 'axios';
 import axiosInstance from '../../axios';
 import {ImageType} from '../../types/propsTypes';
 import {UPLOAD_IMAGE} from '../../utils/api';
@@ -35,14 +36,16 @@ export const onUploadImage =
     const url = UPLOAD_IMAGE;
     const token = await getUserToken();
 
-    const config = {
+    const config: AxiosRequestConfig = {
       headers: {
         Authorization: `Bearer ${token}`,
-        'content-type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data',
       },
     };
 
     const body = new FormData();
+    console.log('image', image);
+
     body.append('image', image);
     body.append('path', path);
 

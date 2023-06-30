@@ -39,7 +39,7 @@ export const onGetVehicleDetails =
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
-        'content-type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data',
       },
     };
 

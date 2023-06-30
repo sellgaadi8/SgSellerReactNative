@@ -37,7 +37,7 @@ export const onUpdateProfile =
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
-        'content-type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data',
       },
     };
 

@@ -53,7 +53,7 @@ export const onUpdateSuspension =
 
     const config = {
       headers: {
-        'content-type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
     };

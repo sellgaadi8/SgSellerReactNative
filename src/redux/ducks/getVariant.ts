@@ -34,7 +34,7 @@ export const getVariantList =
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
-        'content-type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data',
       },
     };
 

@@ -95,7 +95,7 @@ export default function ImagePicker(props: ImagePickerProps) {
           fileError = 'File size cannot be more than 10 MB';
         } else {
           result.push({
-            name: res.filename || extractFileNameFromUri(res.path),
+            name: res.filename || extractFileNameFromUri(res.path).trim(),
             size: res.size,
             type: res.mime,
             uri: res.path,
