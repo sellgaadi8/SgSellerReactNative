@@ -82,7 +82,7 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
   }, []);
 
   function onSaveImage(image: any) {
-    if (image) {
+    if (image.length !== 0) {
       dispatch(onUploadImage(image[0], 'electricals-images'));
     }
   }

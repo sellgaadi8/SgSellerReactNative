@@ -11,7 +11,7 @@ import {askMultipleAndroidPermissions} from './helper';
  * @param {boolean} camera
  */
 export const openPicker = async (
-  camera = false,
+  gallery: string,
   includeBase64 = true,
   multiple = false,
   cropping = true,
@@ -21,6 +21,8 @@ export const openPicker = async (
     PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
     PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
     PERMISSIONS.ANDROID.CAMERA,
+    PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
+    PERMISSIONS.ANDROID.READ_MEDIA_VIDEO,
   ]);
   const config: Options = {
     width: 400,
@@ -36,9 +38,11 @@ export const openPicker = async (
   };
   let result = null;
   try {
-    if (!camera) {
+    if (gallery === 'file') {
+      console.log('file');
       result = await ImageCropPicker.openPicker(config);
     } else {
+      console.log('camera');
       result = await ImageCropPicker.openCamera(config);
     }
   } catch (error: any) {

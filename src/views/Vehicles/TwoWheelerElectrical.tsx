@@ -196,7 +196,7 @@ export default function TwoWheelerElectrical({
   }, []);
 
   function onSaveImage(image: any) {
-    if (image) {
+    if (image.length !== 0) {
       dispatch(onUploadImage(image[0], 'electricals-images'));
     }
   }
@@ -251,6 +251,7 @@ export default function TwoWheelerElectrical({
           image13,
           image14,
           image15,
+          rating,
         ),
       );
     } else {
@@ -302,6 +303,7 @@ export default function TwoWheelerElectrical({
           image13,
           image14,
           image15,
+          rating,
         ),
       );
     }
@@ -390,6 +392,9 @@ export default function TwoWheelerElectrical({
       const {data, error} = selectGetElectrical;
       if (!error && data) {
         let temp = [...electricalType];
+        if (data.overall_rating) {
+          setRating(data.overall_rating);
+        }
         if (data.headlight) {
           setItem1(data.headlight);
           temp[0].selectedValue = data.headlight;

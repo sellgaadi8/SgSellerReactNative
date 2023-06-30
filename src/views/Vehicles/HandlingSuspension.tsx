@@ -140,7 +140,7 @@ export default function HandlingSuspension({
   }
 
   function onSaveImage(image: any) {
-    if (image) {
+    if (image.length !== 0) {
       dispatch(onUploadImage(image[0], 'exterior-images'));
     }
   }

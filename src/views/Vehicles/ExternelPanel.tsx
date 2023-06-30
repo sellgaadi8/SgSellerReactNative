@@ -303,7 +303,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
   }, [selectAdd, selectUpdate]);
 
   function onSaveImage(image: any) {
-    if (image) {
+    if (image.length !== 0) {
       dispatch(onUploadImage(image[0], 'externel-panel-images'));
     }
   }

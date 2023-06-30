@@ -252,7 +252,7 @@ export default function Engine({navigation, route}: EngineProps) {
   }
 
   function onSaveImage(image: any) {
-    if (image) {
+    if (image.length !== 0) {
       dispatch(onUploadImage(image[0], 'engine-images'));
     }
   }

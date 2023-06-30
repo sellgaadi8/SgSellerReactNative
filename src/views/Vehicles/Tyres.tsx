@@ -121,7 +121,7 @@ export default function Tyres({navigation, route}: TyresProps) {
   }, []);
 
   function onSaveImage(image: any) {
-    if (image) {
+    if (image.length !== 0) {
       dispatch(onUploadImage(image[0], 'tyres-images'));
     }
   }

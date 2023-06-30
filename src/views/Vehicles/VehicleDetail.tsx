@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {useDispatch} from 'react-redux';
@@ -8,9 +9,11 @@ import {VehicleDetailProps} from '../../types/propsTypes';
 import {container} from '../../utils/styles';
 import {useAppSelector} from '../../utils/hooks';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Dimensions, Image, Pressable, ScrollView, Text} from 'react-native';
+import {Dimensions, Image, Pressable, ScrollView} from 'react-native';
 import colors from '../../utils/colors';
 import {View} from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import {
   heightPercentageToDP,
   widthPercentageToDP,
@@ -21,7 +24,7 @@ import Video from 'react-native-video';
 import Loader from '../../components/Loader';
 import PopulateImageWithData from '../../components/PopulateImageWithData';
 // import {Animated} from 'react-native';
-import Indicator from '../../components/Indicator';
+// import Indicator from '../../components/Indicator';
 const {height, width} = Dimensions.get('window');
 const types = [
   'Documents',
@@ -66,7 +69,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
     [key: string]: string | {value: string; image: string};
   }>();
   const [loading, setLoading] = useState(false);
-  const [scrollIndex, setScrollIndex] = useState(0);
+  // const [scrollIndex, setScrollIndex] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -157,11 +160,11 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
     console.log('ok', okValue);
   }
 
-  function handleOnScroll(event: any) {
-    var abc =
-      event.nativeEvent.contentOffset.x / Dimensions.get('window').width;
-    setScrollIndex(Math.round(abc));
-  }
+  // function handleOnScroll(event: any) {
+  //   var abc =
+  //     event.nativeEvent.contentOffset.x / Dimensions.get('window').width;
+  //   setScrollIndex(Math.round(abc));
+  // }
 
   function onPressImage(index: number) {
     navigation.navigate('ImageViewerCarousel', {
@@ -177,7 +180,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
         <View>
           <ScrollView
             horizontal={true}
-            onScroll={handleOnScroll}
+            // onScroll={handleOnScroll}
             showsHorizontalScrollIndicator={false}>
             {vehicleImage &&
               vehicleImage?.map((el, index) => {
@@ -229,29 +232,43 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
           )} */}
           <Box pv={'5%'} ph={'6%'}>
             <CustomText
-              color="#111111"
-              fontFamily="Roboto-Regular"
               fontSize={22}
-              lineHeight={32}>
-              {vehicleDetails?.display_info.make}(
-              {vehicleDetails?.display_info.mfg_year})
-            </CustomText>
-            <CustomText
+              lineHeight={32}
               color="#111111"
-              fontFamily="Roboto-Regular"
-              fontSize={11}
-              lineHeight={16}>
+              fontFamily="Roboto-Medium">
+              {vehicleDetails?.display_info.make}{' '}
               {vehicleDetails?.display_info.model}
             </CustomText>
-            <Box flexDirection="row" justifyContent="space-between" pv={'4%'}>
+            <Box flexDirection="row">
+              <CustomText
+                fontSize={11}
+                lineHeight={18}
+                color="#111111"
+                fontFamily="Roboto-Medium">
+                {vehicleDetails?.display_info.variant}
+              </CustomText>
+              <CustomText
+                fontSize={12}
+                lineHeight={18}
+                color="#111111"
+                fontFamily="Roboto-Medium"
+                style={{marginLeft: 5}}>
+                ({vehicleDetails?.display_info.color})
+              </CustomText>
+            </Box>
+            <Box flexDirection="row" justifyContent="space-between" pv={'3%'}>
               <Box flexDirection="row">
-                <Ionicons
-                  name="car-outline"
+                <MaterialCommunityIcons
+                  name="gas-station-outline"
                   size={20}
                   color={colors.primary}
                   style={styles.marginRight}
                 />
-                <CustomText style={styles.display}>
+                <CustomText
+                  fontSize={12}
+                  lineHeight={18}
+                  color="#111111"
+                  fontFamily="Roboto-Medium">
                   {vehicleDetails?.display_info.fuel_type}
                 </CustomText>
               </Box>
@@ -262,44 +279,27 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                   color={colors.primary}
                   style={styles.marginRight}
                 />
-                <CustomText style={styles.display}>
+                <CustomText
+                  fontSize={12}
+                  lineHeight={18}
+                  color="#111111"
+                  fontFamily="Roboto-Medium">
                   {vehicleDetails?.display_info.no_of_kms} (Km)
                 </CustomText>
               </Box>
               <Box flexDirection="row">
                 <Ionicons
-                  name="car-outline"
+                  name="people-outline"
                   size={20}
                   color={colors.primary}
                   style={styles.marginRight}
                 />
-                <CustomText style={styles.display}>
-                  {vehicleDetails?.display_info.variant}
-                </CustomText>
-              </Box>
-            </Box>
-            <View style={styles.line} />
-            <Box flexDirection="row">
-              <Box flexDirection="row">
-                <Ionicons
-                  name="car-outline"
-                  size={20}
-                  color={colors.primary}
-                  style={styles.marginRight}
-                />
-                <CustomText style={styles.display}>
+                <CustomText
+                  fontSize={12}
+                  lineHeight={18}
+                  color="#111111"
+                  fontFamily="Roboto-Medium">
                   {vehicleDetails?.display_info.no_of_owners}
-                </CustomText>
-              </Box>
-              <Box flexDirection="row" ph={'20%'}>
-                <Ionicons
-                  name="car-outline"
-                  size={20}
-                  color={colors.primary}
-                  style={styles.marginRight}
-                />
-                <CustomText style={styles.display}>
-                  {vehicleDetails?.display_info.color}
                 </CustomText>
               </Box>
             </Box>
@@ -609,4 +609,5 @@ const styles = EStyleSheet.create({
     height: 50,
     width: 50,
   },
+  marginRight: {marginRight: 5},
 });

@@ -1,4 +1,4 @@
-import {ScrollView, ToastAndroid} from 'react-native';
+import {ScrollView} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
@@ -6,7 +6,6 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import DocumentPicker from 'react-native-document-picker';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {container, contentCenter} from '../../utils/styles';
 import PrimaryButton from '../../components/PrimaryButton';
@@ -92,12 +91,8 @@ export default function Exterior({navigation, route}: ExteriorProps) {
   }, []);
 
   function onSaveImage(image: any) {
-    console.log('image', image);
-
-    if (image) {
+    if (image.length !== 0) {
       dispatch(onUploadImage(image[0], 'exterior-images'));
-    } else {
-      ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
     }
   }
 
@@ -558,10 +553,10 @@ export default function Exterior({navigation, route}: ExteriorProps) {
         multiple={false}
         onSaveImage={onSaveImage}
         title="Select Image"
-        fileTypes={{
-          allowMultiSelection: false,
-          type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
-        }}
+        // fileTypes={{
+        //   allowMultiSelection: false,
+        //   type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
+        // }}
       />
     </Box>
   );

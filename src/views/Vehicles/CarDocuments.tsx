@@ -311,7 +311,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
   }, [selectAddCarDocs, selectUpdateCarDocs, selectGetCarDocs]);
 
   function onSaveImage(image: any) {
-    if (image) {
+    if (image.length !== 0) {
       dispatch(onUploadImage(image[0], 'car-documents'));
     }
   }

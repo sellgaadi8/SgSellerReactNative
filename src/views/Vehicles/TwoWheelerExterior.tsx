@@ -162,10 +162,8 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
   }, []);
 
   function onSaveImage(image: any) {
-    if (image) {
+    if (image.length !== 0) {
       dispatch(onUploadImage(image[0], 'exterior-images'));
-    } else {
-      ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
     }
   }
 
