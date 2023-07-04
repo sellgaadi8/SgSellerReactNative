@@ -21,7 +21,7 @@ import {onGetExteriorData} from '../../redux/ducks/getExterior';
 import {onUpdateExterior} from '../../redux/ducks/updateExterior';
 import Loader from '../../components/Loader';
 import BasePicker from '../../components/BasePicker';
-import {onUploadImage} from '../../redux/ducks/uploadImage';
+import {onUploadImage} from '../../redux/ducks/uploadImage_video';
 import Rating from '../../components/Rating';
 const list = [
   {label: 'Ok', value: 'ok'},

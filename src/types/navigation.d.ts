@@ -31,6 +31,7 @@ type RootStackParamList = {
     data: {key: string; value: string}[];
     index: number;
   };
+  VideoPlayer: {data: string};
 };
 
 type BottomStackParamList = {

@@ -13,14 +13,17 @@ export default function PrimaryButton({
   buttonStyle,
   labelStyle,
   varient = 'Primary',
+  disabled = false,
 }: PrimaryButtonProps) {
   return (
     <Pressable
       style={[
         styles.buttonContainer,
         varient === 'Secondary' && styles.buttonSecondary,
+        disabled && styles.disbaled,
         buttonStyle,
       ]}
+      disabled={disabled}
       onPress={onPress}>
       <CustomText
         fontSize={14}
@@ -48,5 +51,8 @@ const styles = EStyleSheet.create({
   buttonSecondary: {
     backgroundColor: colors.White,
     borderWidth: 1,
+  },
+  disbaled: {
+    backgroundColor: '#ACACAC',
   },
 });

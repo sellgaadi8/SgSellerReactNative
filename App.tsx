@@ -31,6 +31,7 @@ import {deleteUserToken, saveVehicleType} from './src/utils/localStorage';
 import HandlingSuspension from './src/views/Vehicles/HandlingSuspension';
 import TwoWheelerExterior from './src/views/Vehicles/TwoWheelerExterior';
 import TwoWheelerElectrical from './src/views/Vehicles/TwoWheelerElectrical';
+import VideoPlayer from './src/components/VideoPlayer';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
@@ -361,6 +362,17 @@ export default function App() {
                   }}
                   component={ImageViewerCarousel}
                   name="ImageViewerCarousel"
+                />
+                <RootStack.Screen
+                  options={() => {
+                    return {
+                      header: props => (
+                        <Header headerProps={props} title="Images" back />
+                      ),
+                    };
+                  }}
+                  component={VideoPlayer}
+                  name="VideoPlayer"
                 />
               </>
             )}

@@ -10,8 +10,8 @@ export default function PopulateImageWithData({
   title,
   value,
   image,
-  video,
   onPressImage,
+  onPressVideo,
 }: TyresImagesProps) {
   return (
     <Box style={value && styles.title}>
@@ -21,21 +21,24 @@ export default function PopulateImageWithData({
             <CustomText style={styles.dataValue}>{title}</CustomText>
             <CustomText style={styles.value}>{value}</CustomText>
           </Box>
-          {!image?.includes('mp4') ? (
+          {value !== 'MAJOR SOUND' ? (
             <Pressable onPress={onPressImage}>
               {image && <Image source={{uri: image}} style={styles.image} />}
             </Pressable>
           ) : (
-            <Pressable onPress={onPressImage}>
-              <Video
-                source={{
-                  uri: 'https://sellgaadi.s3.ap-south-1.amazonaws.com/engine-images/1687978780SampleVideo_1280x720_1mb.mp4?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAWDZS7NNQ755OGW5Z%2F20230628%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20230628T190005Z&X-Amz-SignedHeaders=host&X-Amz-Expires=172800&X-Amz-Signature=a6f8d3b57f49632f9ac0277b7812a04f2fbb4c9b58b9dc03e0787600d67ac80e',
-                }}
-                style={styles.images}
-                resizeMode="cover"
-                paused={false}
-                repeat={true}
-              />
+            <Pressable onPress={onPressVideo}>
+              {image && (
+                <Video
+                  source={{
+                    uri: image,
+                  }}
+                  style={styles.image}
+                  resizeMode="cover"
+                  paused={false}
+                  repeat={true}
+                  muted
+                />
+              )}
             </Pressable>
           )}
           {/* {video && (

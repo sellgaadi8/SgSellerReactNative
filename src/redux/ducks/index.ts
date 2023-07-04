@@ -13,7 +13,7 @@ import addVehicleForm from './addVehicleForm';
 import createDisplayInfo from './createDisplayInfo';
 import editDisplayInfo from './editDisplayInfo';
 import vehicleList from './vehicleList';
-import uploadImage from './uploadImage';
+import uploadImage from './uploadImage_video';
 import uploadCarImages from './uploadCarImages';
 import getModel from './getModel';
 import getMake from './getMake';
@@ -47,6 +47,7 @@ import updateVehicleForm from './updateVehicleForm';
 import addSuspensionData from './addSuspensionData';
 import updateSuspensionData from './updateSuspensionData';
 import getSuspensionData from './getSuspensionData';
+import updateStatus from './updateStatus';
 
 export default combineReducers({
   login,
@@ -97,4 +98,5 @@ export default combineReducers({
   addSuspensionData,
   updateSuspensionData,
   getSuspensionData,
+  updateStatus,
 });

@@ -22,7 +22,7 @@ import {onUpdateCarDocuments} from '../../redux/ducks/updateCarDocument';
 import Loader from '../../components/Loader';
 import ImagePicker from '../../components/ImagePicker';
 import DocumentPicker from 'react-native-document-picker';
-import {onUploadImage} from '../../redux/ducks/uploadImage';
+import {onUploadImage} from '../../redux/ducks/uploadImage_video';
 import Calendar from '../../components/Calendar';
 import {DateTimePickerEvent} from '@react-native-community/datetimepicker';
 import {formatDate} from '../../utils/helper';

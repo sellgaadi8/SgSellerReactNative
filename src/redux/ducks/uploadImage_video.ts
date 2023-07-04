@@ -44,8 +44,6 @@ export const onUploadImage =
     };
 
     const body = new FormData();
-    console.log('image', image);
-
     body.append('image', image);
     body.append('path', path);
 

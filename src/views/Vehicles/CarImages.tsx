@@ -15,7 +15,7 @@ import PrimaryButton from '../../components/PrimaryButton';
 import {pixelSizeHorizontal, pixelSizeVertical} from '../../utils/responsive';
 import ImagePicker from '../../components/ImagePicker';
 import {useDispatch} from 'react-redux';
-import {onUploadImage} from '../../redux/ducks/uploadImage';
+import {onUploadImage} from '../../redux/ducks/uploadImage_video';
 import {useAppSelector} from '../../utils/hooks';
 import {onUploadCarImages} from '../../redux/ducks/uploadCarImages';
 import GlobalContext from '../../contexts/GlobalContext';
@@ -280,6 +280,7 @@ export default function CarImages({route, navigation}: CarImagesProps) {
                       resizeMode="cover"
                       paused={false}
                       repeat={true}
+                      muted
                     />
                   ) : (
                     <Image

@@ -13,6 +13,7 @@ const UPLOAD_IMAGE = '/uploadImage';
 const MAKE_LIST = '/vehicle/make';
 const MODEL_LIST = '/vehicle/model';
 const VARIANT_LIST = '/vehicle/variant';
+const UPDATE_STATUS_URL = '/vehicle/changeVehicleStatus';
 
 const getVehicleUrl = (
   status: string,
@@ -85,6 +86,7 @@ export {
   MAKE_LIST,
   MODEL_LIST,
   VARIANT_LIST,
+  UPDATE_STATUS_URL,
   getVehicleUrl,
   addVehicleFormurl,
   getDisplayInfoUrl,

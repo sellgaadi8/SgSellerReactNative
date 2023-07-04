@@ -32,13 +32,14 @@ import {getMakeList} from '../../redux/ducks/getMake';
 import PrimaryButton from '../../components/PrimaryButton';
 import CustomDropdown from '../../components/CustomDropDown';
 import {StatusList} from '../../utils/constant';
+import {onUpdateStatus} from '../../redux/ducks/updateStatus';
+import Snackbar from 'react-native-snackbar';
 const {width, height} = Dimensions.get('window');
 
 export default function Vehicles({navigation}: VehiclesProps) {
   const dispatch = useDispatch<any>();
   const selectVehicleList = useAppSelector(state => state.vehicleList);
   const [vehicleData, setVehicleData] = useState<Vehicle[]>();
-  const [loading, setLoading] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const {setVehicleId} = useContext(GlobalContext);
   const [from, setFrom] = useState('');
@@ -54,9 +55,24 @@ export default function Vehicles({navigation}: VehiclesProps) {
   const [showModal, setShowModal] = useState(false);
   const selectModel = useAppSelector(state => state.getModel);
   const [dataType, setDataType] = useState<ModalType>('Make');
+  const [showStatus, setShowStatus] = useState(false);
   const [modalPlaceholder, setModalPlaceholder] = useState('');
   const selectMake = useAppSelector(state => state.getMake);
   const [status, setStatus] = useState('');
+  const [selectedDropDownStatus, setSelectedDropDownStatus] = useState('');
+  const Status = [
+    {
+      label: 'Select Staus',
+      value: '-1',
+    },
+    {label: 'In auction', value: 'in_auction'},
+    {label: 'One click buy', value: 'one_click_buy'},
+  ];
+  const [ocblow, setOcbLow] = useState('');
+  const [ocbhigh, setOcbHigh] = useState('');
+  const [loading, setLoading] = useState(false);
+  const {vehicleId} = useContext(GlobalContext);
+  const selectVehicleStatus = useAppSelector(state => state.updateStatus);
 
   useEffect(() => {
     navigation.addListener('focus', onFocus);
@@ -90,11 +106,29 @@ export default function Vehicles({navigation}: VehiclesProps) {
         setMakeData(data);
       }
     }
-  }, [selectVehicleList, selectModel, selectMake]);
+    if (selectVehicleStatus.called) {
+      setLoading(false);
+      const {error, success, message} = selectVehicleStatus;
+      if (!error && success) {
+        onCloseStatusModal();
+        dispatch(onGetVehicleList(status, model, from, to));
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'green',
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      }
+    }
+  }, [selectVehicleList, selectModel, selectMake, selectVehicleStatus]);
 
   function onClickEdit(id: string) {
     setVehicleId(id);
     navigation.navigate('AddVehicle', {from: 'edit'});
+  }
+
+  function onShowStatus(value: string, id: string) {
+    setShowStatus(true);
+    setVehicleId(id);
   }
 
   function renderItem({item}: ListRenderItemInfo<Vehicle>) {
@@ -108,6 +142,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
             vehicleId: item.uuid,
           })
         }
+        onPressStatus={(value: string) => onShowStatus(value, item.uuid)}
       />
     );
   }
@@ -224,6 +259,17 @@ export default function Vehicles({navigation}: VehiclesProps) {
 
   function onStatusChange(value: string) {
     setStatus(value);
+  }
+
+  function onCloseStatusModal() {
+    setShowStatus(false);
+  }
+
+  function onSubmit() {
+    setLoading(true);
+    dispatch(
+      onUpdateStatus(vehicleId, selectedDropDownStatus, ocblow, ocbhigh),
+    );
   }
 
   return (
@@ -407,6 +453,71 @@ export default function Vehicles({navigation}: VehiclesProps) {
           onPressDone={onPressDone}
         />
       </Modal>
+      <Modal
+        position="top"
+        isOpen={showStatus}
+        onClosed={onCloseStatusModal}
+        style={styles.statusModal}
+        backButtonClose={true}
+        backdrop={true}>
+        <Box ph={'4%'} pv={'5%'}>
+          {loading && <Loader />}
+          <CustomText
+            fontFamily="Roboto-Medium"
+            color="#111111"
+            fontSize={18}
+            lineHeight={30}
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{textAlign: 'center'}}>
+            Status
+          </CustomText>
+          <Box pv={'2%'}>
+            <CustomDropdown
+              values={Status}
+              onValueChange={setSelectedDropDownStatus}
+              selectedValue={selectedDropDownStatus}
+            />
+          </Box>
+          {selectedDropDownStatus === 'in_auction' && (
+            <>
+              <ProfileInput
+                label="Asking Price"
+                value={ocblow}
+                onChangeText={setOcbLow}
+                keyboardType="numeric"
+              />
+            </>
+          )}
+          {selectedDropDownStatus === 'one_click_buy' && (
+            <>
+              <ProfileInput
+                label="OCB High Price"
+                value={ocblow}
+                onChangeText={setOcbLow}
+                keyboardType="numeric"
+              />
+              <ProfileInput
+                label="OCB Low Price"
+                value={ocbhigh}
+                onChangeText={setOcbHigh}
+                keyboardType="numeric"
+              />
+            </>
+          )}
+          <Box>
+            <PrimaryButton
+              label="Submit"
+              onPress={onSubmit}
+              disabled={
+                selectedDropDownStatus !== 'in_auction' &&
+                selectedDropDownStatus !== 'one_click_buy'
+                  ? true
+                  : false
+              }
+            />
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   );
 }
@@ -483,5 +594,11 @@ const styles = EStyleSheet.create({
     marginRight: '2rem',
     marginLeft: '2rem',
     marginBottom: '2rem',
+  },
+  statusModal: {
+    height: 'auto',
+    width: '90%',
+    backgroundColor: '#ffffff',
+    borderRadius: '0.6rem',
   },
 });

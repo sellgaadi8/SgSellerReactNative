@@ -165,6 +165,7 @@ export default function RadioButtons({
                 paused={false}
                 style={{height: 50, width: 105, borderRadius: 8}}
                 repeat={true}
+                muted
               />
             ) : (
               <>

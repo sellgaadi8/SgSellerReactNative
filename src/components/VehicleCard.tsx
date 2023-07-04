@@ -1,5 +1,6 @@
+/* eslint-disable react-native/no-inline-styles */
 import {Image, Pressable, ScrollView, View} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import Box from './Box';
 import CustomText from './CustomText';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -17,21 +18,11 @@ export default function VehicleCard({
   data,
   onPressEdit,
   onPressView,
+  onPressStatus,
 }: VehicleCardProps) {
-  const [scrollIndex, setScrollIndex] = useState(0);
-
-  function handleOnScroll(event: any) {
-    var abc =
-      event.nativeEvent.contentOffset.x / Dimensions.get('window').width;
-    setScrollIndex(Math.round(abc));
-  }
-
   return (
     <Box style={styles.container}>
-      <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        onScroll={handleOnScroll}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {data.images ? (
           data.images.map((el, index) => {
             return (
@@ -42,6 +33,7 @@ export default function VehicleCard({
                     style={styles.image}
                     resizeMode="cover"
                     paused={false}
+                    muted
                   />
                 ) : el !== '' ? (
                   <FastImage
@@ -86,14 +78,14 @@ export default function VehicleCard({
           </CustomText>
           <Box flexDirection="row">
             <CustomText
-              fontSize={11}
+              fontSize={14}
               lineHeight={18}
               color="#111111"
               fontFamily="Roboto-Medium">
               {data.variant}
             </CustomText>
             <CustomText
-              fontSize={12}
+              fontSize={14}
               lineHeight={18}
               color="#111111"
               fontFamily="Roboto-Medium"
@@ -115,7 +107,7 @@ export default function VehicleCard({
               style={styles.marginRight}
             />
             <CustomText
-              fontSize={12}
+              fontSize={14}
               lineHeight={18}
               color="#111111"
               fontFamily="Roboto-Medium">
@@ -130,7 +122,7 @@ export default function VehicleCard({
               style={styles.marginRight}
             />
             <CustomText
-              fontSize={12}
+              fontSize={14}
               lineHeight={18}
               color="#111111"
               fontFamily="Roboto-Medium">
@@ -145,7 +137,7 @@ export default function VehicleCard({
               style={styles.marginRight}
             />
             <CustomText
-              fontSize={12}
+              fontSize={14}
               lineHeight={18}
               color="#111111"
               fontFamily="Roboto-Medium">
@@ -188,15 +180,25 @@ export default function VehicleCard({
         </Box> */}
 
         <Box flexDirection="row" pv={'5%'} justifyContent="space-around">
-          <Box style={styles.statusContain}>
+          <Pressable
+            style={styles.statusContain}
+            onPress={() => onPressStatus(data.vehicle_status)}
+            disabled={
+              data.vehicle_status !== 'in_auction' &&
+              data.vehicle_status !== 'one_click_buy' &&
+              data.vehicle_status !== 'in_valuation'
+                ? false
+                : true
+            }>
             <CustomText
               fontSize={11}
               lineHeight={16}
               color="#111111"
-              fontFamily="Roboto-Medium">
-              Status
+              fontFamily="Roboto-Medium"
+              style={{textTransform: 'capitalize'}}>
+              {data.vehicle_status.replace(/_/g, ' ')}
             </CustomText>
-          </Box>
+          </Pressable>
           <Pressable style={styles.view} onPress={onPressView}>
             <CustomText
               fontSize={11}
@@ -256,10 +258,10 @@ const styles = EStyleSheet.create({
     marginRight: 5,
   },
   statusContain: {
-    padding: '0.3rem',
+    padding: '0.8rem',
     backgroundColor: colors.secondary,
     borderRadius: 15,
-    width: 80,
+    // width: 80,
     ...contentCenter,
     elevation: 2,
   },

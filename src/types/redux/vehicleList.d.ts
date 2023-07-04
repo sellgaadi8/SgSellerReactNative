@@ -13,6 +13,7 @@ type Vehicle = {
   transmission: string;
   uuid: string;
   images: string[];
+  vehicle_status: string;
 };
 
 type VehicleListState = {

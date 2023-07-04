@@ -155,6 +155,7 @@ type PrimaryButtonProps = {
   buttonStyle?: ViewStyle;
   labelStyle?: EStyleSheet.AnyObject;
   varient?: 'Primary' | 'Secondary';
+  disabled?: boolean;
 };
 
 type TabLabelProps = {
@@ -237,6 +238,7 @@ type VehicleCardProps = {
   data: Vehicle;
   onPressEdit: () => void;
   onPressView: () => void;
+  onPressStatus: (status: string) => void;
 };
 
 type ImagePickerProps = {
@@ -437,6 +439,7 @@ type TyresImagesProps = {
   image?: string | null;
   video?: string | null;
   onPressImage?: () => void;
+  onPressVideo?: (value: any) => void;
 };
 
 type HandlingSuspensionProps = {
@@ -447,4 +450,9 @@ type HandlingSuspensionProps = {
 type RatingProps = {
   defaultRating: number;
   onPress: (value: number) => void;
+};
+
+type VideoPlayerProps = {
+  video: string;
+  onPressClose: () => void;
 };

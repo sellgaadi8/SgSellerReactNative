@@ -20,7 +20,7 @@ import {onUpdateElectrical} from '../../redux/ducks/updateElectrical';
 import {onGetElectricalDetails} from '../../redux/ducks/getElectrical';
 import ImagePicker from '../../components/ImagePicker';
 import DocumentPicker from 'react-native-document-picker';
-import {onUploadImage} from '../../redux/ducks/uploadImage';
+import {onUploadImage} from '../../redux/ducks/uploadImage_video';
 import Loader from '../../components/Loader';
 import Rating from '../../components/Rating';
 

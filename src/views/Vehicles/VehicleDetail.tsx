@@ -23,6 +23,8 @@ import Video from 'react-native-video';
 // import DataWithImages from '../../components/DataWithImages';
 import Loader from '../../components/Loader';
 import PopulateImageWithData from '../../components/PopulateImageWithData';
+import Modal from 'react-native-modalbox';
+import VideoPlayer from '../../components/VideoPlayer';
 // import {Animated} from 'react-native';
 // import Indicator from '../../components/Indicator';
 const {height, width} = Dimensions.get('window');
@@ -46,6 +48,8 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
   const [vehicleImage, setVehicleImage] = useState<(string | null)[]>();
   const [images, setImages] = useState<{key: string; value: string}[]>([]);
   const [play, setPlay] = useState(true);
+  const [showVideo, setShowVideo] = useState(false);
+  const [video, setVideo] = useState('');
   // const scrollY = new Animated.Value(0);
   // const [currentIndex, setCurrentIndex] = useState(0);
   // const headerHeight = scrollY.interpolate({
@@ -108,7 +112,8 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               if (
                 typeof subSection === 'object' &&
                 subSection !== null &&
-                'image' in subSection
+                'image' in subSection &&
+                !subSection.image.includes('mp4')
               ) {
                 imageArray.push({key: subKey, value: subSection.image});
               }
@@ -173,6 +178,17 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
     });
   }
 
+  function onClosedVideo() {
+    setShowVideo(false);
+  }
+
+  function onPressVideo(value: string) {
+    if (value) {
+      setVideo(value);
+      setShowVideo(true);
+    }
+  }
+
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
@@ -194,6 +210,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                           resizeMode="cover"
                           paused={!play}
                           repeat={true}
+                          muted
                         />
                         <Pressable
                           style={styles.play}
@@ -334,6 +351,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               {Object.entries(vehicleDetails?.car_docs).map((el, index) => {
                 return (
                   <PopulateImageWithData
+                    key={index.toString()}
                     title={el[0].replace(/_/g, ' ').toUpperCase()}
                     image={
                       typeof el[1] === 'object' && el[1] !== null
@@ -376,6 +394,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                     if (typeof el[1] === 'object') {
                       return (
                         <PopulateImageWithData
+                          key={index.toString()}
                           title={el[0].replace(/_/g, ' ').toUpperCase()}
                           image={el[1] ? el[1].image : ''}
                           value={el[1] ? el[1].value : ''}
@@ -415,6 +434,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                   if (typeof el[1] === 'object') {
                     return (
                       <PopulateImageWithData
+                        key={index.toString()}
                         title={el[0].replace(/_/g, ' ').toUpperCase()}
                         image={el[1] ? el[1].image : ''}
                         value={el[1] ? el[1].value : ''}
@@ -432,6 +452,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               {Object.entries(vehicleDetails.tyres).map((el, index) => {
                 return (
                   <PopulateImageWithData
+                    key={index.toString()}
                     title={el[0].replace(/_/g, ' ').toUpperCase()}
                     image={el[1] ? el[1].image : ''}
                     value={el[1] ? el[1].value : ''}
@@ -447,6 +468,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               {Object.entries(vehicleDetails.engine).map((el, index) => {
                 return (
                   <PopulateImageWithData
+                    key={index.toString()}
                     title={el[0].replace(/_/g, ' ').toUpperCase()}
                     image={
                       typeof el[1] === 'object' && el[1] !== null
@@ -455,12 +477,21 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                     }
                     value={
                       typeof el[1] === 'object' && el[1] !== null
-                        ? el[1].value
+                        ? el[1].value.replace(/_/g, ' ').toUpperCase()
                         : !el[1]?.includes('https')
                         ? el[1]
                         : ''
                     }
                     onPressImage={() => onPressImage(index)}
+                    onPressVideo={() =>
+                      onPressVideo(
+                        typeof el[1] === 'object'
+                          ? el[1]?.image.includes('mp4')
+                            ? el[1].image
+                            : ''
+                          : '',
+                      )
+                    }
                   />
                 );
               })}
@@ -472,6 +503,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               {Object.entries(vehicleDetails.electricals).map((el, index) => {
                 return (
                   <PopulateImageWithData
+                    key={index.toString()}
                     title={el[0].replace(/_/g, ' ').toUpperCase()}
                     image={
                       typeof el[1] === 'object' && el[1] !== null
@@ -498,6 +530,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                 (el, index) => {
                   return (
                     <PopulateImageWithData
+                      key={index.toString()}
                       title={el[0].replace(/_/g, ' ').toUpperCase()}
                       image={el[1] ? el[1].image : ''}
                       value={el[1] ? el[1].value : ''}
@@ -533,6 +566,13 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
           )}
         </Box>
       </ScrollView>
+      <Modal
+        isOpen={showVideo}
+        onClosed={onClosedVideo}
+        style={styles.modal}
+        position="bottom">
+        <VideoPlayer video={video} onPressClose={onClosedVideo} />
+      </Modal>
     </Box>
   );
 }
@@ -610,4 +650,8 @@ const styles = EStyleSheet.create({
     width: 50,
   },
   marginRight: {marginRight: 5},
+  modal: {
+    height: 'auto',
+    width: '100%',
+  },
 });
