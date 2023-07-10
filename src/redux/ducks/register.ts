@@ -1,5 +1,5 @@
 import axiosInstance from '../../axios';
-import {LOGIN_SUBMIT} from '../../utils/api';
+import {REGISTER_USER} from '../../utils/api';
 import {handleError, postAuth} from '../../utils/helper';
 import {AppDispatch} from '../store';
 
@@ -36,7 +36,7 @@ export const onRegister =
     seller_type: string,
   ) =>
   (dispatch: AppDispatch) => {
-    const url = LOGIN_SUBMIT;
+    const url = REGISTER_USER;
 
     const body = JSON.stringify({
       name: name,

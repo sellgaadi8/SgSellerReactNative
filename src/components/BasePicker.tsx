@@ -27,6 +27,7 @@ type BasePickerProps = {
   selectPhoto?: string;
   isMandatory?: boolean;
   error?: string;
+  isRegister?: boolean;
 };
 
 export default function BasePicker({
@@ -39,6 +40,7 @@ export default function BasePicker({
   selectPhoto,
   isMandatory = false,
   error,
+  isRegister = false,
 }: BasePickerProps) {
   function onOpenSheet() {
     ActionSheetIOS.showActionSheetWithOptions(
@@ -64,7 +66,7 @@ export default function BasePicker({
         fontSize={14}
         lineHeight={28}
         fontFamily="Roboto-Medium"
-        color="#111111">
+        color={isRegister ? 'White' : '#111111'}>
         {title}
         {isMandatory && <Text style={{color: 'red'}}>*</Text>}
       </CustomText>
@@ -101,7 +103,10 @@ export default function BasePicker({
               {data.map((el, index) => {
                 return (
                   <Picker.Item
-                    style={styles.item}
+                    style={[
+                      styles.item,
+                      {color: isRegister ? '#FFFFFF' : '#111111'},
+                    ]}
                     key={index}
                     label={el.label}
                     value={el.value}

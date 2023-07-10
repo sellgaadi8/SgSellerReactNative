@@ -31,6 +31,14 @@ import {useAppSelector} from '../../utils/hooks';
 import Snackbar from 'react-native-snackbar';
 import {getCityList} from '../../redux/ducks/getCity';
 import Modal from 'react-native-modalbox';
+import {Picker} from '@react-native-picker/picker';
+import {isEmailValid, isNameValid} from '../../utils/regex';
+const ValuatorType = [
+  {label: 'Select Vehicle Type', value: ''},
+  {label: 'Four Wheeler', value: 'four_wheeler'},
+  {label: 'Three Wheeler', value: 'three_wheeler'},
+  {label: 'Two Wheeler', value: 'two_wheeler'},
+];
 
 export default function Register({navigation}: RegisterProps) {
   const [name, setName] = useState('');
@@ -41,7 +49,9 @@ export default function Register({navigation}: RegisterProps) {
 
   const [loading, setLoading] = useState(false);
   const [cityData, setCityData] = useState<City[]>([]);
+  const [modalData, setModalData] = useState<City[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [cityId, setCityId] = useState('');
   const [errors, setErrors] = useState<RegisterErrors>();
   const selectRegister = useAppSelector(state => state.register);
   const selectCity = useAppSelector(state => state.getCity);
@@ -58,21 +68,23 @@ export default function Register({navigation}: RegisterProps) {
     const isValid = validateInputs();
     if (isValid) {
       setLoading(true);
-      dispatch(onRegister(name, phone, city, email, sellerType));
+      dispatch(onRegister(name, phone, cityId, email, sellerType));
     }
   }
 
   function validateInputs() {
     const tempErrors: RegisterErrors = {};
 
-    if (name.length === 0) {
-      tempErrors.city = 'Enter a valid name';
+    if (name.length < 3) {
+      tempErrors.name = 'Enter a valid full name';
+    } else if (!isNameValid(name)) {
+      tempErrors.name = 'Enter a valid full name';
     }
-    if (email.length === 0) {
-      tempErrors.email = 'Enter a valid email';
+    if (!isEmailValid(email)) {
+      tempErrors.email = 'Enter a valid email address';
     }
     if (phone.length < 10) {
-      tempErrors.email = 'Enter a valid phone';
+      tempErrors.phone = 'Enter a valid phone';
     }
     if (city.length === 0) {
       tempErrors.city = 'Select city';
@@ -86,6 +98,8 @@ export default function Register({navigation}: RegisterProps) {
 
   useEffect(() => {
     if (selectRegister.called) {
+      setLoading(false);
+      navigation.navigate('Login');
       const {message, success} = selectRegister;
       if (success) {
         Snackbar.show({
@@ -99,6 +113,7 @@ export default function Register({navigation}: RegisterProps) {
       const {error, data} = selectCity;
       if (!error && data) {
         setCityData(data);
+        setModalData(data);
       }
     }
   }, [selectRegister]);
@@ -112,16 +127,31 @@ export default function Register({navigation}: RegisterProps) {
   }
 
   function onPressSelecteItem(item: City) {
-    setCity(item.id);
+    setCityId(item.id);
+    setCity(item.city);
     setShowModal(false);
   }
 
   function renderItem({item}: ListRenderItemInfo<City>) {
     return (
-      <Pressable style={styles.body} onPress={() => onPressSelecteItem(item)}>
-        <CustomText color="White">{item.city}</CustomText>
+      <Pressable style={{padding: 10}} onPress={() => onPressSelecteItem(item)}>
+        <CustomText color="#111111">{item.city}</CustomText>
       </Pressable>
     );
+  }
+
+  function onChangeQuery(query: string) {
+    setSearchQuery(query);
+    if (query) {
+      const results = modalData.filter(item => {
+        const itemName = item.city.toLowerCase();
+        const queryLower = query.toLowerCase();
+        return itemName.includes(queryLower);
+      });
+      setModalData(results);
+    } else {
+      setModalData(cityData);
+    }
   }
 
   return (
@@ -155,7 +185,6 @@ export default function Register({navigation}: RegisterProps) {
                 value={name}
                 onChangeText={setName}
                 error={errors?.name}
-                maxLength={10}
                 noMargin
               />
               <Input
@@ -173,6 +202,7 @@ export default function Register({navigation}: RegisterProps) {
                 onChangeText={setPhone}
                 error={errors?.phone}
                 noMargin
+                maxLength={10}
               />
               <Pressable onPress={onOpenModal}>
                 <Input
@@ -185,16 +215,38 @@ export default function Register({navigation}: RegisterProps) {
                   editable={false}
                 />
               </Pressable>
-              <Input
-                label="Seller Type"
-                showTextButton={true}
-                value={sellerType}
-                onChangeText={setSellerType}
-                error={errors?.sellerType}
-                noMargin
-              />
+              <Box
+                style={[
+                  styles.pickerContainer,
+                  {
+                    borderColor: !errors ? '#ACACAC' : '#FF0000',
+                  },
+                ]}>
+                <Picker
+                  style={styles.picker}
+                  onValueChange={setSellerType}
+                  selectedValue={sellerType}
+                  placeholder="Select Vehicle Type">
+                  {/* <Picker.Item value="" label="Select" /> */}
+                  {ValuatorType.map((el, index) => {
+                    return (
+                      <Picker.Item
+                        style={{color: '#000000', fontSize: 12}}
+                        key={index}
+                        label={el.label}
+                        value={el.value}
+                      />
+                    );
+                  })}
+                </Picker>
+              </Box>
+              {errors && (
+                <CustomText fontSize={12} color="#FF0000">
+                  {errors.sellerType}
+                </CustomText>
+              )}
             </Box>
-            <Box width={'40%'} alignSelf="center" mv={10} flexDirection="row">
+            <Box width={'40%'} alignSelf="center" mv={'5%'} flexDirection="row">
               <PrimaryButton label="Submit" onPress={onSubmit} />
             </Box>
             <Box flexDirection="row" justifyContent="center" pv={'2%'}>
@@ -234,12 +286,12 @@ export default function Register({navigation}: RegisterProps) {
         <Input
           placeholder="Search..."
           value={searchQuery}
-          onChangeText={setSearchQuery}
+          onChangeText={onChangeQuery}
         />
         <FlatList
           renderItem={renderItem}
           keyExtractor={(_, index) => index.toString()}
-          data={cityData}
+          data={modalData}
         />
       </Modal>
     </Box>
@@ -269,6 +321,12 @@ const styles = EStyleSheet.create({
   },
   inputContainer: {
     marginTop: '4rem',
+  },
+  picker: {width: '100%', color: '#FFFFFF', fontSize: 12},
+  pickerContainer: {
+    borderWidth: 1,
+    borderRadius: 8,
+    borderColor: '#ACACAC',
   },
 });
 

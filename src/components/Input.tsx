@@ -112,7 +112,7 @@ export default function Input(props: TextInputProps & InputProps) {
             !noMargin && styles.marginBottom,
             highlight && styles.focused,
             error && styles.inputError,
-            editable === false && styles.disabled,
+            // editable === false && styles.disabled,
             input,
           ]}
           onFocus={onFocus}

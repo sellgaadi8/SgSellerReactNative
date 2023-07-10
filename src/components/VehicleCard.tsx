@@ -180,18 +180,36 @@ export default function VehicleCard({
           flexDirection="row"
           justifyContent="space-between"
           alignItems="center">
-          <Box style={styles.time}>
-            <CustomText
-              color="#34A02C"
-              fontSize={18}
-              lineHeight={24}
-              fontFamily="Roboto-Medium">
-              {formatTime}
-            </CustomText>
-          </Box>
+          {data.vehicle_status === 'in_auction' && (
+            <Box style={styles.time}>
+              <MaterialCommunityIcons
+                name="clock-outline"
+                size={20}
+                color="#FF0000"
+                style={{marginRight: 5}}
+              />
+              <CustomText
+                color="#FF0000"
+                fontSize={18}
+                lineHeight={24}
+                fontFamily="Roboto-Medium">
+                {formatTime}
+              </CustomText>
+              <Box ph={'10%'}>
+                <CustomText
+                  color="#34A02C"
+                  fontSize={18}
+                  lineHeight={24}
+                  fontFamily="Roboto-Medium">
+                  Highest Bid: 1000000
+                </CustomText>
+              </Box>
+            </Box>
+          )}
+
           {data.vehicle_status === 'one_click_buy' &&
             data.ocb_value.length !== 0 && (
-              <Box>
+              <Box ph={'5%'}>
                 <CustomText
                   color="#34A02C"
                   fontSize={18}
@@ -287,5 +305,6 @@ const styles = EStyleSheet.create({
     borderRadius: 20,
     // elevation: 1,
     top: 5,
+    flexDirection: 'row',
   },
 });
