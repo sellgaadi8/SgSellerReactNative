@@ -1,5 +1,6 @@
 const LOGIN_SEND_OTP = '/getOtp';
 const LOGIN_SUBMIT = '/login';
+const REGISTER_USER = '/register';
 const GET_PROFILE = '/getProfileDetails';
 const UPDATE_PROFILE = '/updateProfileDetails';
 const RESET_PASSWORD = '/changePassword';
@@ -14,6 +15,7 @@ const MAKE_LIST = '/vehicle/make';
 const MODEL_LIST = '/vehicle/model';
 const VARIANT_LIST = '/vehicle/variant';
 const UPDATE_STATUS_URL = '/vehicle/changeVehicleStatus';
+const CITY_LIST = '/getCityList';
 
 const getVehicleUrl = (
   status: string,
@@ -74,6 +76,7 @@ const getVehicleDetailsUrl = (id: string) => `vehicle/getVehicleDetails/${id}`;
 export {
   LOGIN_SEND_OTP,
   LOGIN_SUBMIT,
+  REGISTER_USER,
   GET_PROFILE,
   UPDATE_PROFILE,
   RESET_PASSWORD,
@@ -87,6 +90,7 @@ export {
   MODEL_LIST,
   VARIANT_LIST,
   UPDATE_STATUS_URL,
+  CITY_LIST,
   getVehicleUrl,
   addVehicleFormurl,
   getDisplayInfoUrl,

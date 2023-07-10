@@ -3,6 +3,14 @@ type LoginErrors = {
   password?: string;
 };
 
+type RegisterErrors = {
+  name?: string;
+  email?: string;
+  phone?: string;
+  city?: string;
+  sellerType?: string;
+};
+
 type PasswordErrors = {
   password?: string;
   confirmPassword?: string;

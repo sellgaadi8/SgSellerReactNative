@@ -8,6 +8,11 @@ type LoginProps = {
   route: RouteProp<RootStackParamList, 'Login'>;
 };
 
+type RegisterProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'Register'>;
+  route: RouteProp<RootStackParamList, 'Register'>;
+};
+
 type CreatePasswordProps = {
   navigation: StackNavigationProp<RootStackParamList, 'CreatePassword'>;
   route: RouteProp<RootStackParamList, 'CreatePassword'>;
@@ -239,6 +244,7 @@ type VehicleCardProps = {
   onPressEdit: () => void;
   onPressView: () => void;
   onPressStatus: (status: string) => void;
+  formatTime: string;
 };
 
 type ImagePickerProps = {

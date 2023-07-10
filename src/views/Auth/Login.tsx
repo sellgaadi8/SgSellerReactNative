@@ -1,5 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {Image, Keyboard, KeyboardAvoidingView, ScrollView} from 'react-native';
+import {
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Pressable,
+  ScrollView,
+} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {
   heightPercentageToDP as hp,
@@ -85,7 +91,7 @@ export default function Login({navigation}: LoginProps) {
     if (selectLogin.called) {
       setLoading(false);
       const {message, success, name, seller_type} = selectLogin;
-      if (success && name && message) {
+      if (success && name && message && seller_type) {
         setAuthenticated(true);
         setName(name);
         setVehicleType(seller_type);
@@ -154,6 +160,26 @@ export default function Login({navigation}: LoginProps) {
             </Box>
             <Box width={'40%'} alignSelf="center" mv={10}>
               <PrimaryButton label="Submit" onPress={onSubmit} />
+            </Box>
+
+            <Box flexDirection="row" justifyContent="center" pv={'2%'}>
+              <CustomText
+                color="White"
+                fontFamily="Roboto-Regular"
+                fontSize={14}
+                lineHeight={22}>
+                Don't Have Accout?{'  '}
+              </CustomText>
+              <Pressable onPress={() => navigation.navigate('Register')}>
+                <CustomText
+                  color="White"
+                  fontFamily="Roboto-Medium"
+                  fontSize={14}
+                  lineHeight={20}
+                  style={{textDecorationLine: 'underline'}}>
+                  Register
+                </CustomText>
+              </Pressable>
             </Box>
           </Box>
           <Box alignItems="center" mv={'7.5%'}>

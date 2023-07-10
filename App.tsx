@@ -32,6 +32,7 @@ import HandlingSuspension from './src/views/Vehicles/HandlingSuspension';
 import TwoWheelerExterior from './src/views/Vehicles/TwoWheelerExterior';
 import TwoWheelerElectrical from './src/views/Vehicles/TwoWheelerElectrical';
 import VideoPlayer from './src/components/VideoPlayer';
+import Register from './src/views/Auth/Register';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
@@ -86,6 +87,11 @@ export default function App() {
                   options={{headerShown: false}}
                   component={Login}
                   name="Login"
+                />
+                <RootStack.Screen
+                  options={{headerShown: false}}
+                  component={Register}
+                  name="Register"
                 />
 
                 <RootStack.Screen

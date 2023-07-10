@@ -304,7 +304,9 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
 
   function onSaveImage(image: any) {
     if (image.length !== 0) {
-      dispatch(onUploadImage(image[0], 'externel-panel-images'));
+      setTimeout(() => {
+        dispatch(onUploadImage(image[0], 'externel-panel-images'));
+      }, 5000);
     }
   }
 

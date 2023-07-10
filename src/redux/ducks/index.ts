@@ -48,6 +48,8 @@ import addSuspensionData from './addSuspensionData';
 import updateSuspensionData from './updateSuspensionData';
 import getSuspensionData from './getSuspensionData';
 import updateStatus from './updateStatus';
+import register from './register';
+import getCity from './getCity';
 
 export default combineReducers({
   login,
@@ -99,4 +101,6 @@ export default combineReducers({
   updateSuspensionData,
   getSuspensionData,
   updateStatus,
+  register,
+  getCity,
 });

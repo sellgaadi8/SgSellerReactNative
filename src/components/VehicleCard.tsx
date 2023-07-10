@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Image, Pressable, ScrollView, View} from 'react-native';
+import {Image, Pressable, ScrollView, Text, View} from 'react-native';
 import React from 'react';
 import Box from './Box';
 import CustomText from './CustomText';
@@ -19,6 +19,7 @@ export default function VehicleCard({
   onPressEdit,
   onPressView,
   onPressStatus,
+  formatTime,
 }: VehicleCardProps) {
   return (
     <Box style={styles.container}>
@@ -55,17 +56,6 @@ export default function VehicleCard({
           />
         )}
       </ScrollView>
-      {/* {data.images && (
-        <View
-          // eslint-disable-next-line react-native/no-inline-styles
-          style={{
-            position: 'absolute',
-            padding: 10,
-            right: 10,
-          }}>
-          <Indicator index={scrollIndex} length={data.images.length} />
-        </View>
-      )} */}
 
       <Box style={styles.body}>
         <Box ph={'6%'}>
@@ -146,38 +136,6 @@ export default function VehicleCard({
           </Box>
         </Box>
         <View style={styles.line} />
-        {/* <Box flexDirection="row" ph={'8%'}>
-          <Box flexDirection="row">
-            <Ionicons
-              name="car-outline"
-              size={20}
-              color={colors.primary}
-              style={styles.marginRight}
-            />
-            <CustomText
-              fontSize={12}
-              lineHeight={18}
-              color="#111111"
-              fontFamily="Roboto-Medium">
-              {data.no_of_owners}
-            </CustomText>
-          </Box>
-          <Box flexDirection="row" ph={'25%'}>
-            <Ionicons
-              name="car-outline"
-              size={20}
-              color={colors.primary}
-              style={styles.marginRight}
-            />
-            <CustomText
-              fontSize={12}
-              lineHeight={18}
-              color="#111111"
-              fontFamily="Roboto-Medium">
-              {data.color}
-            </CustomText>
-          </Box>
-        </Box> */}
 
         <Box flexDirection="row" pv={'5%'} justifyContent="space-around">
           <Pressable
@@ -217,6 +175,32 @@ export default function VehicleCard({
               Edit
             </CustomText>
           </Pressable>
+        </Box>
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center">
+          <Box style={styles.time}>
+            <CustomText
+              color="#34A02C"
+              fontSize={18}
+              lineHeight={24}
+              fontFamily="Roboto-Medium">
+              {formatTime}
+            </CustomText>
+          </Box>
+          {data.vehicle_status === 'one_click_buy' &&
+            data.ocb_value.length !== 0 && (
+              <Box>
+                <CustomText
+                  color="#34A02C"
+                  fontSize={18}
+                  lineHeight={24}
+                  fontFamily="Roboto-Medium">
+                  OCB Value: {data.ocb_value}
+                </CustomText>
+              </Box>
+            )}
         </Box>
       </Box>
     </Box>
@@ -291,5 +275,17 @@ const styles = EStyleSheet.create({
     left: 0,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  time: {
+    padding: '0.6rem',
+    marginBottom: '1rem',
+    // backgroundColor: '#ECECEC',
+    ...contentCenter,
+    left: 15,
+    // borderTopRightRadius: 10,
+    // borderBottomRightRadius: 10,
+    borderRadius: 20,
+    // elevation: 1,
+    top: 5,
   },
 });

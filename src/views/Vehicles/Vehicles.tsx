@@ -71,12 +71,33 @@ export default function Vehicles({navigation}: VehiclesProps) {
   const [ocblow, setOcbLow] = useState('');
   const [ocbhigh, setOcbHigh] = useState('');
   const [loading, setLoading] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(7200); // 2 hours in seconds
   const {vehicleId} = useContext(GlobalContext);
   const selectVehicleStatus = useAppSelector(state => state.updateStatus);
 
   useEffect(() => {
     navigation.addListener('focus', onFocus);
   }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setRemainingTime(prevTime => prevTime - 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  const formatTime = (timeInSeconds: number) => {
+    const hours = Math.floor(timeInSeconds / 3600);
+    const minutes = Math.floor((timeInSeconds % 3600) / 60);
+    const seconds = timeInSeconds % 60;
+
+    return `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
 
   function onFocus() {
     setLoading(true);
@@ -143,6 +164,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
           })
         }
         onPressStatus={(value: string) => onShowStatus(value, item.uuid)}
+        formatTime={formatTime(remainingTime)}
       />
     );
   }

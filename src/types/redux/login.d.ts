@@ -9,7 +9,7 @@ type LoginState = {
   error: boolean;
   name: string | null;
   token: string | null;
-  seller_type: VehicleType;
+  seller_type: VehicleType | null;
 };
 
 type LoginAction = {

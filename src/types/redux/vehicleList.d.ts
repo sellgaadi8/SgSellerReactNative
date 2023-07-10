@@ -14,6 +14,7 @@ type Vehicle = {
   uuid: string;
   images: string[];
   vehicle_status: string;
+  ocb_value: string;
 };
 
 type VehicleListState = {
