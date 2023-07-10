@@ -110,6 +110,7 @@ export default function Tyres({navigation, route}: TyresProps) {
   const [tyreType, setTyreType] = useState<TyresType>('lhs_front_type');
   const [openImagePicker, setOpenImagePicker] = useState(false);
   const selectUploadImage = useAppSelector(state => state.uploadImage);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [errors, setErrors] = useState<TyresImageError>();
 
   useEffect(() => {
@@ -341,11 +342,16 @@ export default function Tyres({navigation, route}: TyresProps) {
       if (!error && success && data) {
         let temp = [...tyresImage];
         if (vehicleType === 'two_wheeler') {
-          setFrontWheelImage(data.front_wheel_condition_image.file);
-          temp[0].url = data.front_wheel_condition_image.url;
-
-          setRearWheelImage(data.rear_wheel_condition_image.file);
-          temp[1].url = data.rear_wheel_condition_image.url;
+          temp[0].selectedValue = data.front_wheel_condition;
+          if (data.front_wheel_condition_image) {
+            setFrontWheelImage(data.front_wheel_condition_image.file);
+            temp[0].url = data.front_wheel_condition_image.url;
+          }
+          temp[1].selectedValue = data.rear_wheel_condition;
+          if (data.rear_wheel_condition_image) {
+            setRearWheelImage(data.rear_wheel_condition_image.file);
+            temp[1].url = data.rear_wheel_condition_image.url;
+          }
         } else {
           setLhsFront(data.lhs_front_type);
           setRhsFront(data.rhs_front_type);
