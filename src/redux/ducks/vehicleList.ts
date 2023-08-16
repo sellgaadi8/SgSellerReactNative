@@ -9,7 +9,7 @@ const VEHICLE_LIST: VEHICLE_LIST = 'sgSeller/vehicleList';
 const initialState: VehicleListState = {
   called: false,
   success: false,
-  data: null,
+  data: [],
   error: false,
 };
 

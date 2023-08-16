@@ -27,19 +27,25 @@ import Loader from '../../components/Loader';
 import Video from 'react-native-video';
 
 export default function CarImages({route, navigation}: CarImagesProps) {
+  const {vehicleId, setVehicleId, vehicleType} = useContext(GlobalContext);
   const [carImageType, setCarImageType] = useState([
     {id: 'left_wheel_corner_front', name: 'LEFT WHEEL CORNER -FRONT', url: ''},
     {id: 'centre_front', name: 'CENTRE FRONT', url: ''},
     {id: 'right_corner_back', name: 'RIGHT CORNER -BACK', url: ''},
     {id: 'centre_back', name: 'CENTRE BACK', url: ''},
-    {id: 'engine_hood_open', name: 'ENGINE HOOD OPEN', url: ''},
+    {
+      id: 'engine_hood_open',
+      name:
+        vehicleType === 'two_wheeler' ? 'ENGINE SECTION' : 'ENGINE HOOD OPEN',
+      url: '',
+    },
     {
       id: 'interior_dashboard',
-      name: 'INTERIOR DASHBOARD ( view from back seat)',
+      name: 'INTERIOR DASHBOARD (seat top view)',
       url: '',
     },
     {id: 'meter_console', name: 'METER CONSOLE', url: ''},
-    {id: 'video', name: 'Video  single ( car 360)', url: ''},
+    {id: 'video', name: 'Video  single (car 360)', url: ''},
   ]);
   const [openImagePicker, setOpenImagePicker] = useState(false);
   const dispatch = useDispatch<any>();
@@ -58,8 +64,6 @@ export default function CarImages({route, navigation}: CarImagesProps) {
   const [video, setVideo] = useState('');
   const [loading, setLoading] = useState(false);
   const [mediaType, setMediaType] = useState<'photo' | 'video'>('photo');
-
-  const {vehicleId, setVehicleId} = useContext(GlobalContext);
 
   useEffect(() => {
     if (route.params.from === 'edit') {

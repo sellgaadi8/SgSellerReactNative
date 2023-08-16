@@ -386,8 +386,8 @@ export default function Engine({navigation, route}: EngineProps) {
             <RadioButtons
               label="Chain & Belt Assembly"
               data={[
-                {label: 'YES', value: 'yes'},
-                {label: 'NO', value: 'no'},
+                {label: 'OK', value: 'yes'},
+                {label: 'NOT OK', value: 'no'},
               ]}
               onSelect={(label, value) => setChain(value)}
               selectValue={chain}

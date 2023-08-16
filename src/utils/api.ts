@@ -18,11 +18,12 @@ const UPDATE_STATUS_URL = '/vehicle/changeVehicleStatus';
 const CITY_LIST = '/getCityList';
 
 const getVehicleUrl = (
-  status: string,
+  vehicle_status: string,
   model: string,
   from: string,
   to: string,
-) => `/vehicle/list?status=${status}&model=${model}&from=${from}&to=${to}`;
+) =>
+  `/vehicle/list?status=${vehicle_status}&model=${model}&from=${from}&to=${to}`;
 const addVehicleFormurl = (id: string) =>
   id ? `/vehicle/createForm/${id}` : '/vehicle/createForm';
 const getDisplayInfoUrl = (id: string) => `/vehicle/display-info/edit/${id}`;

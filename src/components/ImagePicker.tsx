@@ -30,7 +30,7 @@ export default function ImagePicker(props: ImagePickerProps) {
     // videoTypes = {
     //   type: [DocumentPicker.types.video],
     // },
-    size = 10000000,
+    size = 20000000,
     position = 'bottom',
   } = props;
 
