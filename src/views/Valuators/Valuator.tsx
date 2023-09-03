@@ -79,7 +79,7 @@ export default function Valuator({navigation}: ValuatorProps) {
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
-      {list &&
+      {list.length !== 0 ? (
         list.map((el, index) => {
           return (
             <Box key={index.toString()} style={styles.detail}>
@@ -161,7 +161,18 @@ export default function Valuator({navigation}: ValuatorProps) {
               )}
             </Box>
           );
-        })}
+        })
+      ) : (
+        <Box style={styles.noData}>
+          <CustomText
+            fontFamily="Roboto-Medium"
+            color="#111111"
+            fontSize={20}
+            lineHeight={28}>
+            No Valuator Found!
+          </CustomText>
+        </Box>
+      )}
     </Box>
   );
 }
@@ -226,5 +237,10 @@ const styles = EStyleSheet.create({
     width: 4,
     backgroundColor: '#F8B50A',
     position: 'absolute',
+  },
+  noData: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

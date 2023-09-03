@@ -62,6 +62,18 @@ export const onLogin =
               error: true,
             }),
           );
+        } else if (error?.message) {
+          dispatch(
+            loginAction({
+              error: true,
+              called: true,
+              success: false,
+              message: error.message,
+              name: null,
+              seller_type: null,
+              token: null,
+            }),
+          );
         }
       });
   };

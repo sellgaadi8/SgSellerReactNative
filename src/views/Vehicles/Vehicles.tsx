@@ -5,6 +5,7 @@ import {
   FlatList,
   ListRenderItemInfo,
   Pressable,
+  RefreshControl,
   ToastAndroid,
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -59,6 +60,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
   const [modalPlaceholder, setModalPlaceholder] = useState('');
   const selectMake = useAppSelector(state => state.getMake);
   const [status, setStatus] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
   const [selectedDropDownStatus, setSelectedDropDownStatus] = useState('');
   const Status = [
     {
@@ -71,33 +73,12 @@ export default function Vehicles({navigation}: VehiclesProps) {
   const [ocblow, setOcbLow] = useState('');
   const [ocbhigh, setOcbHigh] = useState('');
   const [loading, setLoading] = useState(false);
-  const [remainingTime, setRemainingTime] = useState(7200); // 2 hours in seconds
   const {vehicleId} = useContext(GlobalContext);
   const selectVehicleStatus = useAppSelector(state => state.updateStatus);
 
   useEffect(() => {
     navigation.addListener('focus', onFocus);
   }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setRemainingTime(prevTime => prevTime - 1);
-    }, 1000);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
-  const formatTime = (timeInSeconds: number) => {
-    const hours = Math.floor(timeInSeconds / 3600);
-    const minutes = Math.floor((timeInSeconds % 3600) / 60);
-    const seconds = timeInSeconds % 60;
-
-    return `${hours.toString().padStart(2, '0')}:${minutes
-      .toString()
-      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  };
 
   function onFocus() {
     setLoading(true);
@@ -108,6 +89,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
   useEffect(() => {
     if (selectVehicleList.called) {
       setLoading(false);
+      setRefreshing(false);
       const {data, error} = selectVehicleList;
       if (!error && data && data.vehicle_list) {
         setVehicleData(data.vehicle_list);
@@ -164,7 +146,6 @@ export default function Vehicles({navigation}: VehiclesProps) {
           })
         }
         onPressStatus={(value: string) => onShowStatus(value, item.uuid)}
-        formatTime={formatTime(remainingTime)}
       />
     );
   }
@@ -294,6 +275,11 @@ export default function Vehicles({navigation}: VehiclesProps) {
     );
   }
 
+  function onRefresh() {
+    setRefreshing(true);
+    dispatch(onGetVehicleList(status, model, from, to));
+  }
+
   return (
     <Box style={styles.container}>
       <Pressable
@@ -323,6 +309,9 @@ export default function Vehicles({navigation}: VehiclesProps) {
               data={vehicleData}
               renderItem={renderItem}
               contentContainerStyle={styles.flatList}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
             />
           </Box>
         </>
@@ -333,7 +322,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
             color="#111111"
             fontSize={20}
             lineHeight={28}>
-            No Vehicle Found
+            No Vehicle Found!
           </CustomText>
         </Box>
       )}

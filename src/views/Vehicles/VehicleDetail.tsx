@@ -25,6 +25,7 @@ import {onGetVehicleDetails} from '../../redux/ducks/getVehicleDetails';
 import {useAppSelector} from '../../utils/hooks';
 import {VehicleDetailProps} from '../../types/propsTypes';
 import RectButtonCustom from '../../components/RectButtonCustom';
+import Indicator from '../../components/Indicator';
 const {height, width} = Dimensions.get('window');
 
 export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
@@ -32,11 +33,15 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
   const selectVehicleDetails = useAppSelector(state => state.getVehicleDetails);
   const [vehicleDetails, setVehicleDetails] = useState<VehicleDetail | null>();
   const [vehicleImage, setVehicleImage] = useState<(string | null)[]>();
-  const [images, setImages] = useState<{key: string; value: string}[]>([]);
+  const [images, setImages] = useState<
+    {index: number; key: string; value: string}[]
+  >([]);
   const [play, setPlay] = useState(true);
   const [showVideo, setShowVideo] = useState(false);
   const [video, setVideo] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const tabs = [
     {title: 'Documents', onPress: () => onChangeTab(0)},
@@ -101,9 +106,12 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
           getExternelData();
         }
 
-        const imageArray: {key: string; value: string}[] = [];
+        const imageArray: {key: string; value: string; index: number}[] = [];
 
-        // Push image values with keys into the array
+        // Initialize an index variable
+        let index = 0;
+
+        // Push image values with keys and index into the array
         for (const key in vehicleDetails) {
           const section = vehicleDetails[key];
           if (typeof section === 'object' && section !== null) {
@@ -115,7 +123,9 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                 'image' in subSection &&
                 !subSection.image.includes('mp4')
               ) {
-                imageArray.push({key: subKey, value: subSection.image});
+                imageArray.push({key: subKey, value: subSection.image, index});
+                // Increment the index for the next element
+                index++;
               }
             }
           }
@@ -165,10 +175,10 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
     console.log('ok', okValue);
   }
 
-  function onPressImage(index: number) {
+  function onPressImage(title: string) {
     navigation.navigate('ImageViewerCarousel', {
       data: images,
-      index: index,
+      title: title,
     });
   }
 
@@ -183,6 +193,16 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
     }
   }
 
+  function onClosedModalImage() {
+    setShowImageModal(false);
+  }
+
+  function handleOnScroll(event: any) {
+    var abc =
+      event.nativeEvent.contentOffset.x / Dimensions.get('window').width;
+    setCurrentIndex(Math.round(abc));
+  }
+
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
@@ -194,7 +214,9 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
           {vehicleImage &&
             vehicleImage?.map((el, index) => {
               return (
-                <Box key={index.toString()}>
+                <Pressable
+                  key={index.toString()}
+                  onPress={() => setShowImageModal(true)}>
                   {el && el?.includes('mp4') ? (
                     <Box>
                       <Video
@@ -224,7 +246,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                       />
                     )
                   )}
-                </Box>
+                </Pressable>
               );
             })}
         </ScrollView>
@@ -348,7 +370,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                           ? el[1].value
                           : el[1]
                       }
-                      onPressImage={() => onPressImage(index)}
+                      onPressImage={() => onPressImage(el[0])}
                     />
                   );
                 })}
@@ -383,7 +405,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                             title={el[0].replace(/_/g, ' ').toUpperCase()}
                             image={el[1] ? el[1].image : ''}
                             value={el[1] ? el[1].value : ''}
-                            onPressImage={() => onPressImage(index)}
+                            onPressImage={() => onPressImage(el[0])}
                           />
                         );
                       }
@@ -423,7 +445,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                           title={el[0].replace(/_/g, ' ').toUpperCase()}
                           image={el[1] ? el[1].image : ''}
                           value={el[1] ? el[1].value : ''}
-                          onPressImage={() => onPressImage(index)}
+                          onPressImage={() => onPressImage(el[0])}
                         />
                       );
                     }
@@ -441,7 +463,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                       title={el[0].replace(/_/g, ' ').toUpperCase()}
                       image={el[1] ? el[1].image : ''}
                       value={el[1] ? el[1].value : ''}
-                      onPressImage={() => onPressImage(index)}
+                      onPressImage={() => onPressImage(el[0])}
                     />
                   );
                 })}
@@ -467,7 +489,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                           ? el[1]
                           : ''
                       }
-                      onPressImage={() => onPressImage(index)}
+                      onPressImage={() => onPressImage(el[0])}
                       onPressVideo={() =>
                         onPressVideo(
                           typeof el[1] === 'object'
@@ -502,7 +524,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                           ? el[1].value
                           : el[1]
                       }
-                      onPressImage={() => onPressImage(index)}
+                      onPressImage={() => onPressImage(el[0])}
                     />
                   );
                 })}
@@ -521,7 +543,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                         title={el[0].replace(/_/g, ' ').toUpperCase()}
                         image={el[1] ? el[1].image : ''}
                         value={el[1] ? el[1].value : ''}
-                        onPressImage={() => onPressImage(index)}
+                        onPressImage={() => onPressImage(el[0])}
                       />
                     );
                   },
@@ -560,6 +582,68 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
         style={styles.modal}
         position="bottom">
         <VideoPlayer video={video} onPressClose={onClosedVideo} />
+      </Modal>
+      <Modal
+        isOpen={showImageModal}
+        onClosed={onClosedModalImage}
+        style={styles.imageModal}
+        backdrop={true}
+        backButtonClose={true}>
+        <Box style={styles.modalContainer}>
+          <Pressable style={styles.closeButton} onPress={onClosedModalImage}>
+            <MaterialCommunityIcons name="close" size={25} color={'#FFFFFF'} />
+          </Pressable>
+
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            onScroll={handleOnScroll}>
+            {vehicleImage &&
+              vehicleImage?.map((el, index) => {
+                return (
+                  <Pressable
+                    key={index.toString()}
+                    onPress={() => setShowImageModal(true)}
+                    style={styles.imageBg}>
+                    {el && el?.includes('mp4') ? (
+                      <Box>
+                        <Video
+                          source={{uri: el}}
+                          style={styles.images}
+                          resizeMode="cover"
+                          paused={!play}
+                          repeat={true}
+                          muted
+                        />
+                        <Pressable
+                          style={styles.play}
+                          onPress={() => setPlay(!play)}>
+                          <Ionicons
+                            name={!play ? 'play' : 'pause'}
+                            color="#FFFFFF"
+                            size={30}
+                          />
+                        </Pressable>
+                      </Box>
+                    ) : (
+                      el && (
+                        <Image
+                          source={{uri: el}}
+                          style={[styles.images]}
+                          resizeMode="contain"
+                        />
+                      )
+                    )}
+                  </Pressable>
+                );
+              })}
+          </ScrollView>
+          {vehicleImage && (
+            <Box pv={'5%'}>
+              <Indicator index={currentIndex} length={vehicleImage?.length} />
+            </Box>
+          )}
+        </Box>
       </Modal>
     </Box>
   );
@@ -654,5 +738,19 @@ const styles = EStyleSheet.create({
   },
   tabBg: {
     backgroundColor: '#111111',
+  },
+  imageModal: {
+    backgroundColor: 'transparent',
+  },
+  modalContainer: {},
+  closeButton: {
+    marginLeft: 'auto',
+    marginRight: 10,
+    paddingVertical: 20,
+  },
+  imageBg: {
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    marginTop: '1rem',
   },
 });

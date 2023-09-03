@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import {Image, Pressable, ScrollView, View} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Box from './Box';
 import CustomText from './CustomText';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -19,8 +20,49 @@ export default function VehicleCard({
   onPressEdit,
   onPressView,
   onPressStatus,
-  formatTime,
 }: VehicleCardProps) {
+  const calculateRemainingTime = (timeDiff: number) => {
+    if (timeDiff <= 0) {
+      return '00:00:00';
+    }
+
+    const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+    return `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const targetDateString = data.auction_ends_at || ''; // Handle null or undefined target date
+  const targetDate = new Date(targetDateString);
+  const currentTime = new Date();
+
+  const [remainingTime, setRemainingTime] = useState(
+    targetDateString
+      ? calculateRemainingTime(targetDate.getTime() - currentTime.getTime())
+      : '00:00:00',
+  );
+
+  useEffect(() => {
+    if (!targetDateString) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      const updatedNow = new Date();
+      const updatedTimeDifference = targetDate.getTime() - updatedNow.getTime();
+      setRemainingTime(calculateRemainingTime(updatedTimeDifference));
+
+      if (updatedTimeDifference <= 0) {
+        clearInterval(interval);
+        setRemainingTime('00:00:00');
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [targetDateString]);
+
   return (
     <Box style={styles.container}>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -193,7 +235,7 @@ export default function VehicleCard({
                 fontSize={18}
                 lineHeight={24}
                 fontFamily="Roboto-Medium">
-                {formatTime}
+                {remainingTime}
               </CustomText>
               <Box ph={'10%'}>
                 <CustomText
@@ -201,7 +243,7 @@ export default function VehicleCard({
                   fontSize={18}
                   lineHeight={24}
                   fontFamily="Roboto-Medium">
-                  Highest Bid: 1000000
+                  Highest Bid: {data.highest_bid}
                 </CustomText>
               </Box>
             </Box>

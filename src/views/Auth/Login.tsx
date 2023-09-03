@@ -92,7 +92,7 @@ export default function Login({navigation}: LoginProps) {
     if (selectLogin.called) {
       setLoading(false);
       const {message, success, name, seller_type} = selectLogin;
-      if (success && name && message && seller_type) {
+      if (success && name && seller_type) {
         setAuthenticated(true);
         setName(name);
         setVehicleType(seller_type);
@@ -100,6 +100,12 @@ export default function Login({navigation}: LoginProps) {
         Snackbar.show({
           text: message,
           backgroundColor: 'green',
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      } else {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'red',
           duration: Snackbar.LENGTH_SHORT,
         });
       }

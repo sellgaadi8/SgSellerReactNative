@@ -7,6 +7,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+
 import colors from './../utils/colors';
 
 type IndicatorProps = {
@@ -18,7 +19,7 @@ export default function Indicator({index, length}: IndicatorProps) {
   const translateX = useSharedValue(0);
 
   useEffect(() => {
-    translateX.value = withSpring(wp('2%') * index);
+    translateX.value = withSpring(wp('4.5%') * index);
   }, [translateX, index]);
 
   const animatedStyles = useAnimatedStyle(() => {
@@ -48,8 +49,8 @@ const styles = EStyleSheet.create({
   },
   dot: {
     height: '0.7rem',
-    width: '3rem',
-    backgroundColor: '#FFFFFF',
+    width: '0.7rem',
+    backgroundColor: '#DCDCDC',
     marginEnd: '1rem',
     borderRadius: '3rem',
   },
@@ -57,7 +58,7 @@ const styles = EStyleSheet.create({
     position: 'absolute',
     left: -5,
     backgroundColor: colors.secondary,
-    width: '3.5rem',
+    width: '1.6rem',
   },
   noMargin: {margin: 0},
 });

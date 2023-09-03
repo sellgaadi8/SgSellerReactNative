@@ -27,10 +27,8 @@ type RootStackParamList = {
   VehicleDetail: {title: string; vehicleId: string};
   DetailsViewPage: undefined;
   ImageViewerCarousel: {
-    onRemoveImage?: (index: number) => void;
-    updateImages?: (data: string) => void;
-    data: {key: string; value: string}[];
-    index: number;
+    data: {index: number; key: string; value: string}[];
+    title: string;
   };
   VideoPlayer: {data: string};
 };

@@ -32,6 +32,7 @@ import {getCityList} from '../../redux/ducks/getCity';
 import Modal from 'react-native-modalbox';
 import {Picker} from '@react-native-picker/picker';
 import {isEmailValid, isNameValid} from '../../utils/regex';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const ValuatorType = [
   {label: 'Select Vehicle Type', value: ''},
   {label: 'Four Wheeler', value: 'four_wheeler'},
@@ -134,7 +135,13 @@ export default function Register({navigation}: RegisterProps) {
   function renderItem({item}: ListRenderItemInfo<City>) {
     return (
       <Pressable style={{padding: 10}} onPress={() => onPressSelecteItem(item)}>
-        <CustomText color="#111111">{item.city}</CustomText>
+        <CustomText
+          color="#FFFFFF"
+          fontFamily="Roboto-Medium"
+          fontSize={16}
+          lineHeight={24}>
+          {item.city}
+        </CustomText>
       </Pressable>
     );
   }
@@ -226,7 +233,6 @@ export default function Register({navigation}: RegisterProps) {
                   onValueChange={setSellerType}
                   selectedValue={sellerType}
                   placeholder="Select Vehicle Type">
-                  {/* <Picker.Item value="" label="Select" /> */}
                   {ValuatorType.map((el, index) => {
                     return (
                       <Picker.Item
@@ -282,16 +288,34 @@ export default function Register({navigation}: RegisterProps) {
         style={styles.modal}
         backButtonClose={true}
         backdrop={true}>
-        <Input
-          placeholder="Search..."
-          value={searchQuery}
-          onChangeText={onChangeQuery}
-        />
-        <FlatList
-          renderItem={renderItem}
-          keyExtractor={(_, index) => index.toString()}
-          data={modalData}
-        />
+        <Box ph={'5%'}>
+          <Box
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center">
+            <Box
+              style={{
+                width: '90%',
+                marginTop: 10,
+              }}>
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChangeText={onChangeQuery}
+              />
+            </Box>
+            <Pressable style={{bottom: 10}} onPress={onCloseModal}>
+              <Icon name="close" size={25} color={'#FFFFFF'} />
+            </Pressable>
+          </Box>
+
+          <FlatList
+            renderItem={renderItem}
+            keyExtractor={(_, index) => index.toString()}
+            data={modalData}
+            contentContainerStyle={{marginTop: -10}}
+          />
+        </Box>
       </Modal>
     </Box>
   );
@@ -326,6 +350,9 @@ const styles = EStyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     borderColor: '#ACACAC',
+  },
+  modal: {
+    backgroundColor: colors.primary,
   },
 });
 

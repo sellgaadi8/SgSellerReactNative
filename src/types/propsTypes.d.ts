@@ -245,7 +245,6 @@ type VehicleCardProps = {
   onPressEdit: () => void;
   onPressView: () => void;
   onPressStatus: (status: string) => void;
-  formatTime: string;
 };
 
 type ImagePickerProps = {
