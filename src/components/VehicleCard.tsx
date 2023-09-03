@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Image, Pressable, ScrollView, Text, View} from 'react-native';
+import {Image, Pressable, ScrollView, View} from 'react-native';
 import React from 'react';
 import Box from './Box';
 import CustomText from './CustomText';

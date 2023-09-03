@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Image,
@@ -184,7 +185,7 @@ export default function Login({navigation}: LoginProps) {
                 fontFamily="Roboto-Regular"
                 fontSize={14}
                 lineHeight={22}>
-                Don't Have Accout?{'  '}
+                Don't Have Account?{'  '}
               </CustomText>
               <Pressable onPress={() => navigation.navigate('Register')}>
                 <CustomText

@@ -49,10 +49,10 @@ export const onGetEngineDetails =
       })
       .catch(err => {
         handleError(err, dispatch);
-        if (err?.request?._repsonse) {
+        if (err?.request?._response) {
           dispatch(
             getEngineDetailsAction({
-              ...JSON.parse(err.request._repsonse),
+              ...JSON.parse(err.request._response),
               error: true,
             }),
           );
