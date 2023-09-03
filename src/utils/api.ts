@@ -23,7 +23,7 @@ const getVehicleUrl = (
   from: string,
   to: string,
 ) =>
-  `/vehicle/list?status=${vehicle_status}&model=${model}&from=${from}&to=${to}`;
+  `/vehicle/list?vehicle_status=${vehicle_status}&model=${model}&from=${from}&to=${to}`;
 const addVehicleFormurl = (id: string) =>
   id ? `/vehicle/createForm/${id}` : '/vehicle/createForm';
 const getDisplayInfoUrl = (id: string) => `/vehicle/display-info/edit/${id}`;
@@ -72,7 +72,7 @@ const getSuspension = (id: string) =>
 const updateSuspensionUrl = (id: string) =>
   `/vehicle/handling-and-suspension/update/${id}`;
 
-const getVehicleDetailsUrl = (id: string) => `vehicle/getVehicleDetails/${id}`;
+const getVehicleDetailsUrl = (id: string) => `/vehicle/getVehicleDetails/${id}`;
 
 export {
   LOGIN_SEND_OTP,

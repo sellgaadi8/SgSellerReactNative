@@ -20,7 +20,10 @@ type Vehicle = {
 type VehicleListState = {
   called: boolean;
   success: boolean;
-  data: Vehicle[];
+  data: {
+    vehicle_list: Vehicle[];
+    count: number;
+  };
   error: boolean;
 };
 

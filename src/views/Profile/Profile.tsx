@@ -25,7 +25,6 @@ import Globals from '../../utils/globals';
 
 const Button = [
   {name: 'Personal details', detail: 'Edit & review personal details'},
-  {name: 'Change password', detail: 'Reset password details'},
   {name: 'Company details', detail: ''},
   {name: 'Support', detail: ''},
 ];
@@ -45,8 +44,6 @@ export default function Profile({navigation}: ProfileProps) {
           return navigation.navigate('ProfileDetails', {
             title: profileDetail?.dealership_name,
           });
-        case 1:
-          return navigation.navigate('CreatePassword');
         default:
           break;
       }

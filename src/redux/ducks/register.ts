@@ -1,3 +1,4 @@
+import {AxiosError} from 'axios';
 import axiosInstance from '../../axios';
 import {REGISTER_USER} from '../../utils/api';
 import {handleError, postAuth} from '../../utils/helper';
@@ -60,21 +61,13 @@ export const onRegister =
           postAuth(res.data.token);
         }
       })
-      .catch(err => {
-        handleError(err, dispatch);
-        if (err?.request?._repsonse) {
+      .catch((error: AxiosError) => {
+        handleError(error, dispatch);
+        if (error.request._response) {
           dispatch(
             registerAction({
-              ...JSON.parse(err.request._repsonse),
+              ...JSON.parse(error.request._response),
               error: true,
-            }),
-          );
-        } else if (err?.msg || err?.message) {
-          dispatch(
-            registerAction({
-              called: true,
-              success: false,
-              message: err.message,
             }),
           );
         }

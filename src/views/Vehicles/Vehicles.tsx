@@ -109,8 +109,8 @@ export default function Vehicles({navigation}: VehiclesProps) {
     if (selectVehicleList.called) {
       setLoading(false);
       const {data, error} = selectVehicleList;
-      if (!error && data) {
-        setVehicleData(data);
+      if (!error && data && data.vehicle_list) {
+        setVehicleData(data.vehicle_list);
       }
     }
     if (selectModel.called) {

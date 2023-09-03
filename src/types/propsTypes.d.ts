@@ -107,7 +107,8 @@ type AppColors =
   | '#111111'
   | '#EFC24F'
   | '#5D5D5D'
-  | '#34A02C';
+  | '#34A02C'
+  | '#FFFFFF';
 
 type InputProps = {
   disableCopyPaste?: boolean;

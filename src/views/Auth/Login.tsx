@@ -19,7 +19,6 @@ import Input from '../../components/Input';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import PrimaryButton from '../../components/PrimaryButton';
 import {LoginProps} from '../../types/propsTypes';
-import TextButton from '../../components/TextButton';
 import {useDispatch} from 'react-redux';
 import {onSendOtp} from '../../redux/ducks/sendOtp';
 import Snackbar from 'react-native-snackbar';
@@ -28,6 +27,7 @@ import {onLogin} from '../../redux/ducks/login';
 import GlobalContext from '../../contexts/GlobalContext';
 import Loader from '../../components/Loader';
 import {saveVehicleType} from '../../utils/localStorage';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function Login({navigation}: LoginProps) {
   const [mobile, setMobile] = useState('');
@@ -105,6 +105,11 @@ export default function Login({navigation}: LoginProps) {
     }
   }, [selectOtp, selectLogin]);
 
+  function onEdit() {
+    setShowOtp(false);
+    setPassword('');
+  }
+
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
@@ -140,6 +145,17 @@ export default function Login({navigation}: LoginProps) {
                 maxLength={10}
                 noMargin
                 editable={!showOtp}
+                renderEndIcon={
+                  showOtp
+                    ? () => {
+                        return (
+                          <Pressable onPress={onEdit} style={styles.eye}>
+                            <Icon name="pencil" size={18} color="#FFFFFF" />
+                          </Pressable>
+                        );
+                      }
+                    : undefined
+                }
               />
               {showOtp && (
                 <Input
@@ -158,7 +174,7 @@ export default function Login({navigation}: LoginProps) {
                 />
               )}
             </Box>
-            <Box width={'40%'} alignSelf="center" mv={10}>
+            <Box alignSelf="center" pv={'5%'}>
               <PrimaryButton label="Submit" onPress={onSubmit} />
             </Box>
 
@@ -182,12 +198,12 @@ export default function Login({navigation}: LoginProps) {
               </Pressable>
             </Box>
           </Box>
-          <Box alignItems="center" mv={'7.5%'}>
+          {/* <Box alignItems="center" mv={'7.5%'}>
             <TextButton
               label="Forgot password?"
               onPress={() => navigation.navigate('ForgotPassword')}
             />
-          </Box>
+          </Box> */}
         </ScrollView>
       </KeyboardAvoidingView>
     </Box>
@@ -201,14 +217,14 @@ const styles = EStyleSheet.create({
     position: 'relative',
   },
   headerBg: {
-    height: pixelSizeVertical(316),
-    width: pixelSizeHorizontal(352),
+    height: pixelSizeVertical(335),
+    width: pixelSizeHorizontal(375),
   },
   logo: {
-    height: pixelSizeVertical(130),
-    width: pixelSizeHorizontal(120),
+    height: pixelSizeVertical(135),
+    width: pixelSizeHorizontal(125),
     position: 'absolute',
-    bottom: 50,
+    bottom: 40,
     right: 20,
   },
   body: {
@@ -217,5 +233,10 @@ const styles = EStyleSheet.create({
   },
   inputContainer: {
     marginTop: '4rem',
+  },
+  eye: {
+    position: 'absolute',
+    right: 20,
+    top: 18,
   },
 });

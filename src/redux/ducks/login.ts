@@ -1,3 +1,4 @@
+import {AxiosError} from 'axios';
 import axiosInstance from '../../axios';
 import {LOGIN_SUBMIT} from '../../utils/api';
 import {handleError, postAuth} from '../../utils/helper';
@@ -52,25 +53,13 @@ export const onLogin =
           postAuth(res.data.token);
         }
       })
-      .catch(err => {
-        handleError(err, dispatch);
-        if (err?.request?._repsonse) {
+      .catch((error: AxiosError) => {
+        handleError(error, dispatch);
+        if (error.request._response) {
           dispatch(
             loginAction({
-              ...JSON.parse(err.request._repsonse),
+              ...JSON.parse(error.request._response),
               error: true,
-            }),
-          );
-        } else if (err?.msg || err?.message) {
-          dispatch(
-            loginAction({
-              error: true,
-              called: true,
-              success: false,
-              message: err.message,
-              name: null,
-              token: null,
-              seller_type: null,
             }),
           );
         }

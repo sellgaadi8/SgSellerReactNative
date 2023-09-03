@@ -44,6 +44,8 @@ export const onSendOtp = (phone: string) => (dispatch: AppDispatch) => {
       dispatch(sendOtpAction({...res.data, error: false}));
     })
     .catch(err => {
+      console.log(err, 'err');
+
       if (err?.request?._repsonse) {
         handleError(err, dispatch);
         dispatch(
@@ -52,7 +54,7 @@ export const onSendOtp = (phone: string) => (dispatch: AppDispatch) => {
             error: true,
           }),
         );
-      } else if (err) {
+      } else if (err?.message) {
         dispatch(
           sendOtpAction({
             error: true,

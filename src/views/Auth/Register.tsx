@@ -22,7 +22,6 @@ import Input from '../../components/Input';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import PrimaryButton from '../../components/PrimaryButton';
 import {RegisterProps} from '../../types/propsTypes';
-import TextButton from '../../components/TextButton';
 import {useDispatch} from 'react-redux';
 // import Snackbar from 'react-native-snackbar';
 import Loader from '../../components/Loader';
@@ -246,7 +245,7 @@ export default function Register({navigation}: RegisterProps) {
                 </CustomText>
               )}
             </Box>
-            <Box width={'40%'} alignSelf="center" mv={'5%'} flexDirection="row">
+            <Box alignSelf="center" pv={'5%'}>
               <PrimaryButton label="Submit" onPress={onSubmit} />
             </Box>
             <Box flexDirection="row" justifyContent="center" pv={'2%'}>
@@ -269,12 +268,12 @@ export default function Register({navigation}: RegisterProps) {
               </Pressable>
             </Box>
           </Box>
-          <Box alignItems="center" mv={'7.5%'}>
+          {/* <Box alignItems="center" mv={'7.5%'}>
             <TextButton
               label="Forgot password?"
               onPress={() => navigation.navigate('ForgotPassword')}
             />
-          </Box>
+          </Box> */}
         </ScrollView>
       </KeyboardAvoidingView>
       <Modal
@@ -305,14 +304,14 @@ const styles = EStyleSheet.create({
     position: 'relative',
   },
   headerBg: {
-    height: pixelSizeVertical(316),
-    width: pixelSizeHorizontal(380),
+    height: pixelSizeVertical(335),
+    width: pixelSizeHorizontal(375),
   },
   logo: {
-    height: pixelSizeVertical(130),
-    width: pixelSizeHorizontal(120),
+    height: pixelSizeVertical(135),
+    width: pixelSizeHorizontal(125),
     position: 'absolute',
-    bottom: 50,
+    bottom: 40,
     right: 20,
   },
   body: {
