@@ -11,6 +11,7 @@ import store from './src/redux/store';
 import React from 'react';
 import {Provider} from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import {NetworkLogDebugModal} from './src/components/NetworkLogDebugModal';
 
 const {width} = Dimensions.get('screen');
 
@@ -23,6 +24,7 @@ function Main() {
     <Provider store={store}>
       <GestureHandlerRootView style={styles.container}>
         <App />
+        <NetworkLogDebugModal />
       </GestureHandlerRootView>
     </Provider>
   );

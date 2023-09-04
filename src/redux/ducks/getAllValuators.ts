@@ -48,10 +48,10 @@ export const onGetAllValuator = () => async (dispatch: AppDispatch) => {
     })
     .catch(err => {
       handleError(err, dispatch);
-      if (err?.request?._response) {
+      if (err?.request?._repsonse) {
         dispatch(
           getAllValuatorAction({
-            ...JSON.parse(err.request._response),
+            ...JSON.parse(err.request._repsonse),
             error: true,
           }),
         );

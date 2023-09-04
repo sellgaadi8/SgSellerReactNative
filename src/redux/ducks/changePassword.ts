@@ -52,10 +52,10 @@ export const onChangePassword =
         dispatch(changePasswordAction({...res.data, error: false}));
       })
       .catch(err => {
-        if (err?.request?._response) {
+        if (err?.request?._repsonse) {
           dispatch(
             changePasswordAction({
-              ...JSON.parse(err.request._response),
+              ...JSON.parse(err.request._repsonse),
               error: true,
             }),
           );

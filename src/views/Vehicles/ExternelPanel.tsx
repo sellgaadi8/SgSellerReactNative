@@ -21,7 +21,7 @@ import Loader from '../../components/Loader';
 import BasePicker from '../../components/BasePicker';
 import ImagePicker from '../../components/ImagePicker';
 import DocumentPicker from 'react-native-document-picker';
-import {onUploadImage} from '../../redux/ducks/uploadImage_video';
+import {onUploadImage} from '../../redux/ducks/uploadImage';
 import Rating from '../../components/Rating';
 const list = [
   {label: 'Ok', value: 'ok'},

@@ -17,7 +17,7 @@ import DocumentPicker from 'react-native-document-picker';
 import {HandlingSuspensionProps} from '../../types/propsTypes';
 import {useAppSelector} from '../../utils/hooks';
 import {useDispatch} from 'react-redux';
-import {onUploadImage} from '../../redux/ducks/uploadImage_video';
+import {onUploadImage} from '../../redux/ducks/uploadImage';
 import {onAddSuspension} from '../../redux/ducks/addSuspensionData';
 import {onUpdateSuspension} from '../../redux/ducks/updateSuspensionData';
 import GlobalContext from '../../contexts/GlobalContext';

@@ -21,7 +21,7 @@ import Loader from '../../components/Loader';
 import BasePicker from '../../components/BasePicker';
 import ImagePicker from '../../components/ImagePicker';
 import DocumentPicker from 'react-native-document-picker';
-import {onUploadImage} from '../../redux/ducks/uploadImage_video';
+import {onUploadImage} from '../../redux/ducks/uploadImage';
 import Rating from '../../components/Rating';
 
 const list = [
@@ -128,86 +128,46 @@ export default function Tyres({navigation, route}: TyresProps) {
   }
 
   function validateInputs() {
-    const tempErrors: TyresImageError = {};
-    if (vehicleType === 'two_wheeler') {
-      if (frontWheel.length === 0) {
-        tempErrors.frontWheel = 'Front Wheel Condition field required';
-        Snackbar.show({
-          text: 'Front Wheel Condition field required',
-          backgroundColor: 'red',
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      }
-      if (rearWheel.length === 0) {
-        tempErrors.rearWheel = 'Rear Wheel Condition field required';
-        Snackbar.show({
-          text: 'Rear Wheel Condition field required',
-          backgroundColor: 'red',
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      }
+    const tempErrors = {};
+    const showErrorSnackbar = (field: string | any[], message: any) => {
+      tempErrors[field] = message;
+      Snackbar.show({
+        text: message,
+        backgroundColor: 'red',
+        duration: Snackbar.LENGTH_SHORT,
+      });
+    };
 
-      if (frontWheelImage.length === 0 || rearWheelImage.length === 0) {
-        Snackbar.show({
-          text: 'Kindly upload all images and select all fields',
-          backgroundColor: 'red',
-          duration: Snackbar.LENGTH_SHORT,
-        });
+    const checkField = (field: string | any[], message: string) => {
+      if (field.length === 0) {
+        showErrorSnackbar(field, message);
       }
+    };
+
+    const checkImageFields = (fields: any[], message: string) => {
+      if (fields.some((field: string | any[]) => field.length === 0)) {
+        showErrorSnackbar('allImages', message);
+      }
+    };
+
+    if (vehicleType === 'two_wheeler') {
+      checkField(frontWheel, 'Front Wheel Condition field required');
+      checkField(rearWheel, 'Rear Wheel Condition field required');
+      checkImageFields(
+        [frontWheelImage, rearWheelImage],
+        'Kindly upload all images and select all fields',
+      );
     } else {
-      if (lhsfront.length === 0) {
-        tempErrors.lhsfront = 'LHS front tyre ( % / damaged ) required';
-        Snackbar.show({
-          text: 'LHS front tyre ( % / damaged ) required',
-          backgroundColor: 'red',
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      }
-      if (rhsfront.length === 0) {
-        tempErrors.rhsfront = 'RHS front tyre ( % / damaged ) required';
-        Snackbar.show({
-          text: 'RHS front tyre ( % / damaged ) required',
-          backgroundColor: 'red',
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      }
-      if (lhsback.length === 0) {
-        tempErrors.lhsback = 'LHS Back tyre ( % / damaged ) required';
-        Snackbar.show({
-          text: 'LHS Back tyre ( % / damaged ) required',
-          backgroundColor: 'red',
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      }
-      if (rhsback.length === 0) {
-        tempErrors.rhsback = 'RHS Back tyre ( % / damaged ) required';
-        Snackbar.show({
-          text: 'RHS Back tyre ( % / damaged ) required',
-          backgroundColor: 'red',
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      }
-      if (spare.length === 0) {
-        tempErrors.spare = 'Spare tyre (%, damaged ) required';
-        Snackbar.show({
-          text: 'Spare tyre (%, damaged ) required',
-          backgroundColor: 'red',
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      }
-      if (
-        lhsfrontImage.length === 0 ||
-        rhsfrontImage.length === 0 ||
-        lhsbackImage.length === 0 ||
-        rhsbackImage.length === 0 ||
-        spareImage.length === 0
-      ) {
-        Snackbar.show({
-          text: 'Kindly upload all images and select all fields',
-          backgroundColor: 'red',
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      }
+      checkField(lhsfront, 'LHS front tyre ( % / damaged ) required');
+      checkField(rhsfront, 'RHS front tyre ( % / damaged ) required');
+      checkField(lhsback, 'LHS Back tyre ( % / damaged ) required');
+      checkField(rhsback, 'RHS Back tyre ( % / damaged ) required');
+      checkField(spare, 'Spare tyre (%, damaged ) required');
+
+      checkImageFields(
+        [lhsfrontImage, rhsfrontImage, lhsbackImage, rhsbackImage, spareImage],
+        'Kindly upload all images and select all fields',
+      );
     }
 
     setErrors(tempErrors);
@@ -217,6 +177,8 @@ export default function Tyres({navigation, route}: TyresProps) {
   function submit() {
     const isValid = validateInputs();
     if (isValid) {
+      console.log('called');
+
       setLoading(true);
       if (route.params.from === 'add') {
         dispatch(
@@ -494,46 +456,6 @@ export default function Tyres({navigation, route}: TyresProps) {
               />
             );
           })}
-          {/* <BasePicker
-            data={list}
-            title="RHS front tyre ( % / damaged )"
-            onValueChange={setRhsFront}
-            selectedValue={rhsfront}
-            onPressCamera={() => onCameraAction('rhs_front_type')}
-            selectPhoto={tyresImage[1].url}
-            isMandatory
-            error={errors?.rhsfront}
-          />
-          <BasePicker
-            data={list}
-            title="LHS Back tyre ( % / damaged )"
-            onValueChange={setLhsBack}
-            selectedValue={lhsback}
-            onPressCamera={() => onCameraAction('lhs_back_type')}
-            selectPhoto={tyresImage[2].url}
-            isMandatory
-            error={errors?.lhsback}
-          />
-          <BasePicker
-            data={list}
-            title="RHS Back tyre ( % / damaged )"
-            onValueChange={setRhsBack}
-            selectedValue={rhsback}
-            onPressCamera={() => onCameraAction('rhs_back_type')}
-            selectPhoto={tyresImage[3].url}
-            isMandatory
-            error={errors?.rhsback}
-          />
-          <BasePicker
-            data={list}
-            title="Spare tyre (%, damaged )"
-            onValueChange={setSpare}
-            selectedValue={spare}
-            onPressCamera={() => onCameraAction('spare_type')}
-            selectPhoto={tyresImage[4].url}
-            isMandatory
-            error={errors?.spare}
-          /> */}
         </Box>
         <Box pv={'2%'}>
           <Rating

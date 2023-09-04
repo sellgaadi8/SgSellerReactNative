@@ -13,7 +13,7 @@ import addVehicleForm from './addVehicleForm';
 import createDisplayInfo from './createDisplayInfo';
 import editDisplayInfo from './editDisplayInfo';
 import vehicleList from './vehicleList';
-import uploadImage from './uploadImage_video';
+import uploadImage from './uploadImage';
 import uploadCarImages from './uploadCarImages';
 import getModel from './getModel';
 import getMake from './getMake';

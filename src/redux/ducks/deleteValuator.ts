@@ -54,10 +54,10 @@ export const onDeleteValuator =
       })
       .catch(err => {
         handleError(err, dispatch);
-        if (err?.request?._response) {
+        if (err?.request?._repsonse) {
           dispatch(
             deleteValuatorAction({
-              ...JSON.parse(err.request._response),
+              ...JSON.parse(err.request._repsonse),
               error: true,
             }),
           );

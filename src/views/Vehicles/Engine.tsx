@@ -21,7 +21,7 @@ import {onGetEngineDetails} from '../../redux/ducks/getEngine';
 import Loader from '../../components/Loader';
 import ImagePicker from '../../components/ImagePicker';
 import DocumentPicker from 'react-native-document-picker';
-import {onUploadImage} from '../../redux/ducks/uploadImage_video';
+import {onUploadImage} from '../../redux/ducks/uploadImage';
 import Rating from '../../components/Rating';
 
 export default function Engine({navigation, route}: EngineProps) {

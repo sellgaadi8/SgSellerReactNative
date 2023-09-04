@@ -22,7 +22,7 @@ import {onUpdateCarDocuments} from '../../redux/ducks/updateCarDocument';
 import Loader from '../../components/Loader';
 import ImagePicker from '../../components/ImagePicker';
 import DocumentPicker from 'react-native-document-picker';
-import {onUploadImage} from '../../redux/ducks/uploadImage_video';
+import {onUploadImage} from '../../redux/ducks/uploadImage';
 import Calendar from '../../components/Calendar';
 import {DateTimePickerEvent} from '@react-native-community/datetimepicker';
 import {formatDate} from '../../utils/helper';
@@ -114,10 +114,10 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
       tempErrors.permit = 'The Permit field is required';
     }
     if (rcAvail.length === 0) {
-      tempErrors.rcAvail = 'The Rc availability field is required';
+      tempErrors.rcAvail = 'The RC availability field is required';
     }
     if (rcAvail === 'yes' && rcAvailImage.length === 0) {
-      tempErrors.rcAvailImage = 'The Rc availability image field is required';
+      tempErrors.rcAvailImage = 'The RC availability image field is required';
     }
     if (insurance.length === 0) {
       tempErrors.insurance = 'The Insurance - type field is required';

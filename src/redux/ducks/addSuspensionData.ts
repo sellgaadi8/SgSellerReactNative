@@ -77,10 +77,10 @@ export const onAddSuspension =
       })
       .catch(err => {
         handleError(err, dispatch);
-        if (err?.request?._response) {
+        if (err?.request?._repsonse) {
           dispatch(
             addSuspensionAction({
-              ...JSON.parse(err.request._response),
+              ...JSON.parse(err.request._repsonse),
               error: true,
             }),
           );

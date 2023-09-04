@@ -69,10 +69,10 @@ export const onUpdateValuator =
       })
       .catch(err => {
         handleError(err, dispatch);
-        if (err?.request?._response) {
+        if (err?.request?._repsonse) {
           dispatch(
             updateValuatorAction({
-              ...JSON.parse(err.request._response),
+              ...JSON.parse(err.request._repsonse),
               error: true,
             }),
           );

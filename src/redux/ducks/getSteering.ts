@@ -47,10 +47,10 @@ export const onGetSteeringDetails =
       })
       .catch(err => {
         handleError(err, dispatch);
-        if (err?.request?._response) {
+        if (err?.request?._repsonse) {
           dispatch(
             getSteeringAction({
-              ...JSON.parse(err.request._response),
+              ...JSON.parse(err.request._repsonse),
               error: true,
             }),
           );
