@@ -184,6 +184,7 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
             <Box width={'50%'} alignSelf="center" pv={'5%'}>
               <PrimaryButton
                 label="Submit form"
+                disabled={!isStep1Completed}
                 onPress={() => navigation.navigate('Vehicles')}
               />
             </Box>

@@ -41,7 +41,7 @@ export default function AddVehicleCard({
             fontFamily="Roboto-Medium"
             fontSize={14}
             lineHeight={20}
-            color="#EFC24F">
+            color={!isStep1Complete ? '#EFC24F' : '#ACACAC'}>
             Complete now
           </CustomText>
         </Pressable>

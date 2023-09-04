@@ -29,10 +29,12 @@ import GlobalContext from '../../contexts/GlobalContext';
 import Loader from '../../components/Loader';
 import {saveVehicleType} from '../../utils/localStorage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import TextButton from '../../components/TextButton';
+import OTPTimer from '../../components/OTPTimer';
 
 export default function Login({navigation}: LoginProps) {
   const [mobile, setMobile] = useState('');
-  const [password, setPassword] = useState('123456');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const [errors, setErrors] = useState<LoginErrors>();
@@ -40,6 +42,8 @@ export default function Login({navigation}: LoginProps) {
 
   const selectOtp = useAppSelector(state => state.sendOtp);
   const selectLogin = useAppSelector(state => state.login);
+  const [canRequestOtp, setCanRequestOtp] = useState(true);
+  const [seconds, setSeconds] = useState('30');
   const dispatch = useDispatch<any>();
   const {setAuthenticated, setName, setVehicleType} = useContext(GlobalContext);
 
@@ -48,13 +52,18 @@ export default function Login({navigation}: LoginProps) {
     const isValid = validateInputs();
     if (isValid) {
       if (!showOtp) {
-        setLoading(true);
-        dispatch(onSendOtp(mobile));
+        sendOtp();
       } else {
         setLoading(true);
         dispatch(onLogin(mobile, true, password));
       }
     }
+  }
+
+  function sendOtp() {
+    setLoading(true);
+    dispatch(onSendOtp(mobile));
+    setPassword('');
   }
 
   function validateInputs() {
@@ -75,6 +84,7 @@ export default function Login({navigation}: LoginProps) {
       setLoading(false);
       const {success, message} = selectOtp;
       if (success) {
+        setCanRequestOtp(false);
         Snackbar.show({
           text: message,
           backgroundColor: 'green',
@@ -115,6 +125,8 @@ export default function Login({navigation}: LoginProps) {
   function onEdit() {
     setShowOtp(false);
     setPassword('');
+    setCanRequestOtp(true);
+    setSeconds('');
   }
 
   return (
@@ -172,6 +184,8 @@ export default function Login({navigation}: LoginProps) {
                   onChangeText={setPassword}
                   error={errors?.password}
                   noMargin
+                  maxLength={6}
+                  keyboardType="numeric"
                   // textButton={{
                   //   label: 'Login with OTP',
                   //   containerStyles: styles.link,
@@ -181,6 +195,44 @@ export default function Login({navigation}: LoginProps) {
                 />
               )}
             </Box>
+            {showOtp && (
+              <Box alignItems="center">
+                <Box flexDirection="row">
+                  <CustomText
+                    style={styles.resendOtpView}
+                    fontSize={14}
+                    lineHeight={19}
+                    fontFamily="Roboto-Regular"
+                    color="#FFFFFF">
+                    Didn’t Get OTP?
+                  </CustomText>
+                  {!canRequestOtp && (
+                    <CustomText
+                      style={[styles.resendOtpView, {left: 5}]}
+                      fontSize={14}
+                      lineHeight={19}
+                      fontFamily="Roboto-Regular"
+                      color="#39A1EA">
+                      {seconds} seconds
+                    </CustomText>
+                  )}
+                </Box>
+                {canRequestOtp && (
+                  <TextButton
+                    label={'Resend OTP'}
+                    containerStyles={[styles.resendOtpView, {marginTop: 12}]}
+                    labelStyles={styles.resendText}
+                    onPress={canRequestOtp ? sendOtp : undefined}
+                  />
+                )}
+              </Box>
+            )}
+            {!canRequestOtp && (
+              <OTPTimer
+                setSeconds={setSeconds}
+                setCanRequestOtp={setCanRequestOtp}
+              />
+            )}
             <Box alignSelf="center" pv={'5%'}>
               <PrimaryButton label="Submit" onPress={onSubmit} />
             </Box>

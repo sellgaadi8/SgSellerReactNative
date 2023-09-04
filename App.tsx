@@ -167,11 +167,7 @@ export default function App() {
                   options={() => {
                     return {
                       header: props => (
-                        <Header
-                          headerProps={props}
-                          title="Add new vehicle"
-                          back
-                        />
+                        <Header headerProps={props} title="Add new vehicle" />
                       ),
                     };
                   }}
