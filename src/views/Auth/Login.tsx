@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
+  ActivityIndicator,
   Image,
   Keyboard,
   KeyboardAvoidingView,
@@ -31,6 +32,7 @@ import {saveVehicleType} from '../../utils/localStorage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import TextButton from '../../components/TextButton';
 import OTPTimer from '../../components/OTPTimer';
+import SmsRetriever from 'react-native-sms-retriever';
 
 export default function Login({navigation}: LoginProps) {
   const [mobile, setMobile] = useState('');
@@ -39,7 +41,7 @@ export default function Login({navigation}: LoginProps) {
 
   const [errors, setErrors] = useState<LoginErrors>();
   const [showOtp, setShowOtp] = useState(false);
-
+  const [isAuto, setIsAuto] = useState(false);
   const selectOtp = useAppSelector(state => state.sendOtp);
   const selectLogin = useAppSelector(state => state.login);
   const [canRequestOtp, setCanRequestOtp] = useState(true);
@@ -64,6 +66,7 @@ export default function Login({navigation}: LoginProps) {
     setLoading(true);
     dispatch(onSendOtp(mobile));
     setPassword('');
+    onSmsListenerPressed();
   }
 
   function validateInputs() {
@@ -129,6 +132,36 @@ export default function Login({navigation}: LoginProps) {
     setSeconds('');
   }
 
+  async function onSmsListenerPressed() {
+    try {
+      const registered = await SmsRetriever.startSmsRetriever();
+
+      if (registered) {
+        setIsAuto(true);
+        SmsRetriever.addSmsListener(_onReceiveSms);
+      }
+    } catch (error) {}
+  }
+
+  function _onReceiveSms(event: {message: string}) {
+    const regex = /\b(\d{6}\s[A-Za-z0-9]{10,})\b/;
+    const match = event.message.match(regex);
+
+    if (match) {
+      const otpWithLetters = match[1];
+      const numericOTP = otpWithLetters.split(' ')[0];
+      setPassword(numericOTP);
+      setIsAuto(false);
+    }
+    SmsRetriever.removeSmsListener();
+  }
+
+  function onChangeT(text: string) {
+    SmsRetriever.removeSmsListener();
+    setIsAuto(false);
+    setPassword(text);
+  }
+
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
@@ -181,17 +214,25 @@ export default function Login({navigation}: LoginProps) {
                   label="Otp"
                   showTextButton={true}
                   value={password}
-                  onChangeText={setPassword}
+                  onChangeText={onChangeT}
                   error={errors?.password}
                   noMargin
                   maxLength={6}
                   keyboardType="numeric"
-                  // textButton={{
-                  //   label: 'Login with OTP',
-                  //   containerStyles: styles.link,
-                  //   onPress: () => console.log('test'),
-                  //   labelStyles: styles.labelButton,
-                  // }}
+                  renderEndIcon={
+                    isAuto
+                      ? () => {
+                          return (
+                            <Box style={styles.eye}>
+                              <ActivityIndicator
+                                size={'small'}
+                                color={colors.secondary}
+                              />
+                            </Box>
+                          );
+                        }
+                      : undefined
+                  }
                 />
               )}
             </Box>

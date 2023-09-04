@@ -43,6 +43,7 @@
     "react-native-screens": "^3.20.0",
     "react-native-sensitive-info": "^6.0.0-alpha.9",
     "react-native-size-matters": "^0.4.0",
+    "react-native-sms-retriever": "^1.1.1",
     "react-native-snackbar": "^2.4.0",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "^13.9.0",

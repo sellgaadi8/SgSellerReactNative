@@ -5,6 +5,8 @@ import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import android.os.Bundle;
+import android.util.Log;
+import java.util.List;
 
 public class MainActivity extends ReactActivity {
 
@@ -21,6 +23,12 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(null);
+    // Generate and log the hash strings
+    AppSignatureHelper appSignatureHelper = new AppSignatureHelper(this);
+    List<String> appSignatures = appSignatureHelper.getAppSignatures();
+    for (String signature : appSignatures) {
+      Log.d("AppSignature", signature);
+    }
   }
 
   /**
