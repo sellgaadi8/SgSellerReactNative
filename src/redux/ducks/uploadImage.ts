@@ -33,7 +33,7 @@ const uploadImageAction = (res: UploadImageState): UploadImageAction => {
 };
 
 export const onUploadImage =
-  (image: ImageType[], path: string) => async (dispatch: AppDispatch) => {
+  (image: ImageType, path: string) => async (dispatch: AppDispatch) => {
     const url = UPLOAD_IMAGE;
     const token = await getUserToken();
 

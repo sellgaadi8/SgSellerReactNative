@@ -110,7 +110,8 @@ type AppColors =
   | '#34A02C'
   | '#FFFFFF'
   | '#39A1EA'
-  | '#ACACAC';
+  | '#ACACAC'
+  | '#33A02C';
 
 type InputProps = {
   disableCopyPaste?: boolean;
@@ -470,4 +471,9 @@ type DownloadCardProps = {
   onPress: () => void;
   count: number;
   backgroundColor: string;
+};
+
+type ImageSectionProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'ImageSection'>;
+  route: RouteProp<RootStackParamList, 'ImageSection'>;
 };

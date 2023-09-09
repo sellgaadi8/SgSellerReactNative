@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {useDispatch} from 'react-redux';
 import Box from '../../components/Box';
@@ -21,12 +21,10 @@ import PopulateImageWithData from '../../components/PopulateImageWithData';
 import Modal from 'react-native-modalbox';
 import VideoPlayer from '../../components/VideoPlayer';
 import {onGetVehicleDetails} from '../../redux/ducks/getVehicleDetails';
-
-import {useAppSelector} from '../../utils/hooks';
-import {VehicleDetailProps} from '../../types/propsTypes';
 import RectButtonCustom from '../../components/RectButtonCustom';
 import Indicator from '../../components/Indicator';
-import GlobalContext from '../../contexts/GlobalContext';
+import {useAppSelector} from '../../utils/hooks';
+import {VehicleDetailProps} from '../../types/propsTypes';
 const {height, width} = Dimensions.get('window');
 
 export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
@@ -34,48 +32,105 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
   const selectVehicleDetails = useAppSelector(state => state.getVehicleDetails);
   const [vehicleDetails, setVehicleDetails] = useState<VehicleDetail | null>();
   const [vehicleImage, setVehicleImage] = useState<(string | null)[]>();
-  const [images, setImages] = useState<
-    {index: number; key: string; value: string}[]
-  >([]);
   const [play, setPlay] = useState(true);
   const [showVideo, setShowVideo] = useState(false);
   const [video, setVideo] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const {vehicleType} = useContext(GlobalContext);
 
-  const tabs = [
-    {title: 'Documents', onPress: () => onChangeTab(0)},
-    {title: 'Exterior', onPress: () => onChangeTab(1)},
-    {title: 'Externel panel', onPress: () => onChangeTab(2)},
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [damagesImage, setDamagesImage] = useState<
+    | string
+    | {
+        value: string;
+        image: string;
+      }
+  >();
+
+  const [tabs, setTabs] = useState([
+    {
+      title: 'Documents',
+      onPress: () => onChangeTab(0),
+      type: 'car_docs',
+      ratings: '',
+    },
+    {
+      title: 'Exterior',
+      onPress: () => onChangeTab(1),
+      type: 'exterior_img',
+      ratings: '',
+    },
+    {
+      title: 'Externel panel',
+      onPress: () => onChangeTab(2),
+      type: 'external_panel',
+      ratings: '',
+    },
     {
       title: 'Tyres',
       onPress: () => onChangeTab(3),
+      type: 'tyres',
+      ratings: '',
     },
-    {title: 'Engine', onPress: () => onChangeTab(4)},
-    {title: 'Electricals', onPress: () => onChangeTab(5)},
+    {
+      title: 'Engine',
+      onPress: () => onChangeTab(4),
+      type: 'engine',
+      ratings: '',
+    },
+    {
+      title: 'Electricals',
+      onPress: () => onChangeTab(5),
+      type: 'electricals',
+      ratings: '',
+    },
     {
       title: 'Steering',
       onPress: () => onChangeTab(6),
+      type: 'steering',
+      ratings: '',
     },
-  ];
+  ]);
 
-  const twoWheelerTab = [
-    {title: 'Documents', onPress: () => onChangeTab(0)},
-    {title: 'Exterior', onPress: () => onChangeTab(1)},
+  const [twoWheelerTab, setTwoWheelerTab] = useState([
+    {
+      title: 'Documents',
+      onPress: () => onChangeTab(0),
+      type: 'car_docs',
+      ratings: '',
+    },
+    {
+      title: 'Exterior',
+      onPress: () => onChangeTab(1),
+      type: 'exterior_img',
+      ratings: '',
+    },
     {
       title: 'Tyres',
       onPress: () => onChangeTab(2),
+      type: 'tyres',
+      ratings: '',
     },
-    {title: 'Engine', onPress: () => onChangeTab(3)},
-    {title: 'Electricals', onPress: () => onChangeTab(4)},
+    {
+      title: 'Engine',
+      onPress: () => onChangeTab(3),
+      type: 'engine',
+      ratings: '',
+    },
+    {
+      title: 'Electricals',
+      onPress: () => onChangeTab(4),
+      type: 'electricals',
+      ratings: '',
+    },
 
     {
       title: 'Handling',
       onPress: () => onChangeTab(5),
+      type: 'handling_and_suspension',
+      ratings: '',
     },
-  ];
+  ]);
 
   const [okValues, setOkValues] = useState<{
     [key: string]: string | {value: string; image: string};
@@ -98,9 +153,53 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
     setActiveIndex(index);
   }
 
+  const calculateRemainingTime = (timeDiff: number) => {
+    if (timeDiff <= 0) {
+      return '00:00:00';
+    }
+
+    const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+    return `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const targetDateString = vehicleDetails?.vehicle.auction_ends_at || ''; // Handle null or undefined target date
+  const targetDate = new Date(targetDateString);
+  const currentTime = new Date();
+
+  const [remainingTime, setRemainingTime] = useState(
+    targetDateString
+      ? calculateRemainingTime(targetDate.getTime() - currentTime.getTime())
+      : '00:00:00',
+  );
+
+  useEffect(() => {
+    if (!targetDateString) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      const updatedNow = new Date();
+      const updatedTimeDifference = targetDate.getTime() - updatedNow.getTime();
+      setRemainingTime(calculateRemainingTime(updatedTimeDifference));
+
+      if (updatedTimeDifference <= 0) {
+        clearInterval(interval);
+        setRemainingTime('00:00:00');
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [targetDateString]);
+
   useEffect(() => {
     setLoading(true);
     dispatch(onGetVehicleDetails(route.params.vehicleId));
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -110,6 +209,36 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
       const {data, success, error} = selectVehicleDetails;
 
       if (success && !error && data) {
+        if (data.damages_images_section) {
+          let obj = Object.keys(data.damages_images_section)[0];
+          console.log('====?>', data.damages_images_section[obj]);
+          setDamagesImage(data.damages_images_section[obj]);
+        }
+
+        const updatedTabs = [...tabs];
+        const updatedTwoWheelerTab = [...twoWheelerTab];
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            const overallRating = data[key].overall_rating;
+
+            // Update the tabs array for the current key
+            const updatedTab = tabs.find(tab => tab.type === key);
+            if (updatedTab) {
+              updatedTab.ratings = overallRating;
+            }
+
+            // Update the twoWheelerTab array for the current key
+            const updatedTwoWheeler = twoWheelerTab.find(
+              tab => tab.type === key,
+            );
+            if (updatedTwoWheeler) {
+              updatedTwoWheeler.ratings = overallRating;
+            }
+          }
+        }
+        setTwoWheelerTab([...updatedTwoWheelerTab]);
+        setTabs([...updatedTabs]);
+
         setVehicleDetails(data);
         if (data.car_images) {
           setVehicleImage(Object.values(data.car_images));
@@ -123,34 +252,9 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
           setExternel(data.external_panel);
           getExternelData();
         }
-
-        const imageArray: {key: string; value: string; index: number}[] = [];
-
-        // Initialize an index variable
-        let index = 0;
-
-        // Push image values with keys and index into the array
-        for (const key in vehicleDetails) {
-          const section = vehicleDetails[key];
-          if (typeof section === 'object' && section !== null) {
-            for (const subKey in section) {
-              const subSection = section[subKey];
-              if (
-                typeof subSection === 'object' &&
-                subSection !== null &&
-                'image' in subSection &&
-                !subSection.image.includes('mp4')
-              ) {
-                imageArray.push({key: subKey, value: subSection.image, index});
-                // Increment the index for the next element
-                index++;
-              }
-            }
-          }
-        }
-        setImages(imageArray);
       }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectVehicleDetails, vehicleDetails]);
 
@@ -190,14 +294,6 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
       }
     }
     setOkValuesExternel(okValue);
-    console.log('ok', okValue);
-  }
-
-  function onPressImage(title: string) {
-    navigation.navigate('ImageViewerCarousel', {
-      data: images,
-      title: title,
-    });
   }
 
   function onClosedVideo() {
@@ -221,53 +317,107 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
     setCurrentIndex(Math.round(abc));
   }
 
+  function handleOnScrollMainImage(event: any) {
+    var abc =
+      event.nativeEvent.contentOffset.x / Dimensions.get('window').width;
+    setCurrentIndex(Math.round(abc));
+  }
+
+  function onShowImage(key: string, selectedImage: string) {
+    let _currentIndex = 0;
+    let temp: {
+      value: string;
+      image: string;
+      key: string;
+      index: number;
+    }[] = [];
+
+    if (vehicleDetails) {
+      Object.entries(vehicleDetails).map(el => {
+        if (key === el[0]) {
+          Object.entries(el[1]).map(al => {
+            if (typeof al[1] === 'object' && al[1] !== null) {
+              temp.push({...al[1], key: al[0], index: _currentIndex});
+              _currentIndex++;
+            }
+          });
+        }
+      });
+    }
+
+    let _activeIndex = 0;
+    const items = temp.filter(item => item.key.indexOf(selectedImage) !== -1);
+    _activeIndex = items[0].index;
+
+    navigation.navigate('ImageViewerCarousel', {
+      data: temp,
+      index: _activeIndex,
+    });
+  }
+
+  function onViewImageSection(index: number) {
+    navigation.navigate('ImageSection', {
+      exterior: vehicleDetails?.exterior_images_section,
+      interior: vehicleDetails?.interior_images_section,
+      damages: vehicleDetails?.damages_images_section,
+      selectedIndex: index,
+    });
+  }
+
   return (
     <Box style={styles.container}>
       {loading && <Loader />}
       <ScrollView>
-        <ScrollView
-          horizontal={true}
-          // onScroll={handleOnScroll}
-          showsHorizontalScrollIndicator={false}>
-          {vehicleImage &&
-            vehicleImage?.map((el, index) => {
-              return (
-                <Pressable
-                  key={index.toString()}
-                  onPress={() => setShowImageModal(true)}>
-                  {el && el?.includes('mp4') ? (
-                    <Box>
-                      <Video
-                        source={{uri: el}}
-                        style={styles.images}
-                        resizeMode="cover"
-                        paused={!play}
-                        repeat={true}
-                        muted
-                      />
-                      <Pressable
-                        style={styles.play}
-                        onPress={() => setPlay(!play)}>
-                        <Ionicons
-                          name={!play ? 'play' : 'pause'}
-                          color="#FFFFFF"
-                          size={30}
+        <Box>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            onScroll={handleOnScrollMainImage}>
+            {vehicleImage &&
+              vehicleImage?.map((el, index) => {
+                return (
+                  <Pressable
+                    key={index.toString()}
+                    onPress={() => setShowImageModal(true)}>
+                    {el && el?.includes('mp4') ? (
+                      <Box>
+                        <Video
+                          source={{uri: el}}
+                          style={styles.images}
+                          resizeMode="cover"
+                          repeat={true}
+                          muted
                         />
-                      </Pressable>
-                    </Box>
-                  ) : (
-                    el && (
-                      <Image
-                        source={{uri: el}}
-                        style={styles.images}
-                        resizeMode="cover"
-                      />
-                    )
-                  )}
-                </Pressable>
-              );
-            })}
-        </ScrollView>
+                        {/* <Pressable
+                          style={styles.play}
+                          onPress={() => setPlay(!play)}>
+                          <Ionicons
+                            name={!play ? 'play' : 'pause'}
+                            color="#FFFFFF"
+                            size={30}
+                          />
+                        </Pressable> */}
+                      </Box>
+                    ) : (
+                      el && (
+                        <Image
+                          source={{uri: el}}
+                          style={styles.images}
+                          resizeMode="cover"
+                        />
+                      )
+                    )}
+                  </Pressable>
+                );
+              })}
+          </ScrollView>
+          {vehicleImage && (
+            <Box style={styles.indicator}>
+              <Indicator index={currentIndex} length={vehicleImage?.length} />
+            </Box>
+          )}
+        </Box>
+
         <Box pv={'5%'} ph={'6%'}>
           <CustomText
             fontSize={22}
@@ -341,32 +491,166 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               </CustomText>
             </Box>
           </Box>
+          <View style={styles.line} />
+          <Box>
+            {/* <Box style={styles.customerexpected}>
+              <CustomText
+                color="#111111"
+                fontSize={14}
+                lineHeight={22}
+                fontFamily="Roboto-Medium">
+                Customer expected price: Rs.
+                {vehicleDetails?.vehicle.auction_value}
+              </CustomText>
+            </Box> */}
 
+            {/* {vehicleDetails?.vehicle.highest_bid && (
+              <Box style={styles.highestbid}>
+                <CustomText
+                  color="#FFFFFF"
+                  fontSize={16}
+                  lineHeight={22}
+                  fontFamily="Roboto-Medium">
+                  Highest Bid: {vehicleDetails?.vehicle.highest_bid}
+                </CustomText>
+              </Box>
+            )} */}
+          </Box>
+          <Box style={{marginTop: 10}}>
+            <CustomText
+              color="#111111"
+              fontSize={16}
+              lineHeight={22}
+              fontFamily="Roboto-Medium">
+              Important Images
+            </CustomText>
+
+            <Box flexDirection="row">
+              {vehicleDetails?.interior_images_section &&
+                typeof vehicleDetails.interior_images_section
+                  .interior_dashboard === 'string' && (
+                  <Pressable
+                    style={{
+                      marginTop: 10,
+                    }}
+                    onPress={() => onViewImageSection(0)}>
+                    <Image
+                      source={{
+                        uri: vehicleDetails.interior_images_section
+                          .interior_dashboard,
+                      }}
+                      style={{height: 60, width: 60, borderRadius: 8}}
+                      resizeMode="cover"
+                    />
+                    <CustomText
+                      color="#111111"
+                      fontSize={12}
+                      lineHeight={16}
+                      fontFamily="Roboto-Medium"
+                      style={{left: 10}}>
+                      Interior
+                    </CustomText>
+                  </Pressable>
+                )}
+              {vehicleDetails?.exterior_images_section &&
+                typeof vehicleDetails.exterior_images_section.centre_back ===
+                  'string' && (
+                  <Pressable
+                    style={{
+                      marginTop: 10,
+                      marginLeft: 20,
+                    }}
+                    onPress={() => onViewImageSection(1)}>
+                    <Image
+                      source={{
+                        uri: vehicleDetails.exterior_images_section.centre_back,
+                      }}
+                      style={{height: 60, width: 60, borderRadius: 8}}
+                      resizeMode="cover"
+                    />
+                    <CustomText
+                      color="#111111"
+                      fontSize={12}
+                      lineHeight={16}
+                      fontFamily="Roboto-Medium"
+                      style={{left: 10}}>
+                      Exterior
+                    </CustomText>
+                  </Pressable>
+                )}
+              {vehicleDetails?.damages_images_section &&
+                damagesImage &&
+                typeof damagesImage === 'object' && (
+                  <Pressable
+                    style={{
+                      marginTop: 10,
+                      marginLeft: 20,
+                    }}
+                    onPress={() => onViewImageSection(2)}>
+                    <Image
+                      source={{
+                        uri: damagesImage.image,
+                      }}
+                      style={{height: 60, width: 60, borderRadius: 8}}
+                      resizeMode="cover"
+                    />
+                    <CustomText
+                      color="#111111"
+                      fontSize={12}
+                      lineHeight={16}
+                      fontFamily="Roboto-Medium"
+                      style={{left: 5}}>
+                      Damages
+                    </CustomText>
+                  </Pressable>
+                )}
+            </Box>
+          </Box>
           <Box style={styles.tabBg}>
             <ScrollView horizontal showsHorizontalScrollIndicator={true}>
-              {(vehicleType === 'two_wheeler' ? twoWheelerTab : tabs).map(
-                (el, idx) => {
-                  return (
-                    <View key={idx} style={styles.tab}>
-                      <RectButtonCustom
-                        key={idx}
-                        onPress={el.onPress}
-                        style={styles.touchable}>
-                        <CustomText
-                          color={idx === activeIndex ? '#FFFFFF' : '#5D5D5D'}
-                          fontFamily={
-                            idx === activeIndex
-                              ? 'Roboto-Bold'
-                              : 'Roboto-Medium'
-                          }
-                          fontSize={15}>
-                          {el.title}
-                        </CustomText>
-                      </RectButtonCustom>
-                    </View>
-                  );
-                },
-              )}
+              {(vehicleDetails?.vehicle.vehicle_type === 'two_wheeler'
+                ? twoWheelerTab
+                : tabs
+              ).map((el, idx) => {
+                return (
+                  <View key={idx} style={styles.tab}>
+                    <RectButtonCustom
+                      key={idx}
+                      onPress={el.onPress}
+                      style={[
+                        styles.touchable,
+                        {paddingVertical: idx === 0 ? 15 : 10},
+                      ]}>
+                      <CustomText
+                        color={idx === activeIndex ? '#FFFFFF' : '#5D5D5D'}
+                        fontFamily={
+                          idx === activeIndex ? 'Roboto-Bold' : 'Roboto-Medium'
+                        }
+                        fontSize={15}
+                        style={{top: idx === 0 ? 5 : 0}}>
+                        {el.title}
+                      </CustomText>
+                      {el.ratings !== undefined && (
+                        <Box
+                          style={[
+                            styles.ratingBox,
+                            {
+                              backgroundColor:
+                                +el.ratings < 4 ? '#FE6C37' : 'green',
+                            },
+                          ]}>
+                          <CustomText
+                            color="#FFFFFF"
+                            fontFamily="Roboto-Bold"
+                            fontSize={12}>
+                            {el.ratings}
+                          </CustomText>
+                        </Box>
+                      )}
+                    </RectButtonCustom>
+                  </View>
+                );
+              })}
             </ScrollView>
             {/* <View style={styles.lineContainer}>
               <Animated.View style={[styles.dash, animatedStyles]} />
@@ -381,7 +665,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                   return (
                     <PopulateImageWithData
                       key={index.toString()}
-                      title={el[0].replace(/_/g, ' ').toUpperCase()}
+                      title={el[0]}
                       image={
                         typeof el[1] === 'object' && el[1] !== null
                           ? el[1].image
@@ -392,7 +676,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                           ? el[1].value
                           : el[1]
                       }
-                      onPressImage={() => onPressImage(el[0])}
+                      onPressImage={() => onShowImage('car_docs', el[0])}
                     />
                   );
                 })}
@@ -402,7 +686,11 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
             {activeIndex === 1 && vehicleDetails?.exterior_img && (
               <Box>
                 <CustomText style={styles.vehicleHeading}>Exterior</CustomText>
-                <Box pv={'3%'}>
+                <Box
+                  style={{
+                    marginTop:
+                      okValues && Object.keys(okValues).length !== 0 ? 10 : -20,
+                  }}>
                   <CustomText style={styles.value}>
                     {okValues &&
                       Object.keys(okValues)
@@ -424,10 +712,12 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                         return (
                           <PopulateImageWithData
                             key={index.toString()}
-                            title={el[0].replace(/_/g, ' ').toUpperCase()}
+                            title={el[0]}
                             image={el[1] ? el[1].image : ''}
                             value={el[1] ? el[1].value : ''}
-                            onPressImage={() => onPressImage(el[0])}
+                            onPressImage={() =>
+                              onShowImage('exterior_img', el[0])
+                            }
                           />
                         );
                       }
@@ -437,164 +727,200 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
               </Box>
             )}
 
-            {activeIndex === 2 && vehicleDetails?.external_panel && (
-              <Box>
-                <CustomText style={styles.vehicleHeading}>
-                  Externel Panel
-                </CustomText>
-                <Box pv={'3%'}>
-                  <CustomText style={styles.value}>
-                    {okValuesExternel &&
-                      Object.keys(okValuesExternel)
-                        .map(el => {
-                          return el
-                            .split('_')
-                            .map(
-                              word =>
-                                word.charAt(0).toUpperCase() + word.slice(1),
-                            )
-                            .join(' ');
-                        })
-                        .join(', ')}
+            {vehicleDetails?.vehicle.vehicle_type !== 'two_wheeler' &&
+              activeIndex === 2 &&
+              vehicleDetails?.external_panel && (
+                <Box>
+                  <CustomText style={styles.vehicleHeading}>
+                    Externel Panel
                   </CustomText>
+                  <Box
+                    style={{
+                      marginTop:
+                        okValuesExternel &&
+                        Object.keys(okValuesExternel).length !== 0
+                          ? 10
+                          : -20,
+                    }}>
+                    <CustomText style={styles.value}>
+                      {okValuesExternel &&
+                        Object.keys(okValuesExternel)
+                          .map(el => {
+                            return el
+                              .split('_')
+                              .map(
+                                word =>
+                                  word.charAt(0).toUpperCase() + word.slice(1),
+                              )
+                              .join(' ');
+                          })
+                          .join(', ')}
+                    </CustomText>
+                  </Box>
+                  {Object.entries(vehicleDetails.external_panel).map(
+                    (el, index) => {
+                      if (typeof el[1] === 'object') {
+                        return (
+                          <PopulateImageWithData
+                            key={index.toString()}
+                            title={el[0]}
+                            image={el[1] ? el[1].image : ''}
+                            value={el[1] ? el[1].value : ''}
+                            onPressImage={() =>
+                              onShowImage('external_panel', el[0])
+                            }
+                          />
+                        );
+                      }
+                    },
+                  )}
                 </Box>
-                {Object.entries(vehicleDetails.external_panel).map(
-                  (el, index) => {
-                    if (typeof el[1] === 'object') {
-                      return (
-                        <PopulateImageWithData
-                          key={index.toString()}
-                          title={el[0].replace(/_/g, ' ').toUpperCase()}
-                          image={el[1] ? el[1].image : ''}
-                          value={el[1] ? el[1].value : ''}
-                          onPressImage={() => onPressImage(el[0])}
-                        />
-                      );
-                    }
-                  },
-                )}
-              </Box>
-            )}
-            {activeIndex === 3 && vehicleDetails?.tyres && (
-              <Box>
-                <CustomText style={styles.vehicleHeading}>Tyres</CustomText>
-                {Object.entries(vehicleDetails.tyres).map((el, index) => {
-                  return (
-                    <PopulateImageWithData
-                      key={index.toString()}
-                      title={el[0].replace(/_/g, ' ').toUpperCase()}
-                      image={el[1] ? el[1].image : ''}
-                      value={el[1] ? el[1].value : ''}
-                      onPressImage={() => onPressImage(el[0])}
-                    />
-                  );
-                })}
-              </Box>
-            )}
-            {activeIndex === 4 && vehicleDetails?.engine && (
-              <Box>
-                <CustomText style={styles.vehicleHeading}>Engine</CustomText>
-                {Object.entries(vehicleDetails.engine).map((el, index) => {
-                  return (
-                    <PopulateImageWithData
-                      key={index.toString()}
-                      title={el[0].replace(/_/g, ' ').toUpperCase()}
-                      image={
-                        typeof el[1] === 'object' && el[1] !== null
-                          ? el[1].image
-                          : ''
-                      }
-                      value={
-                        typeof el[1] === 'object' && el[1] !== null
-                          ? el[1].value.replace(/_/g, ' ').toUpperCase()
-                          : !el[1]?.includes('https')
-                          ? el[1]
-                          : ''
-                      }
-                      onPressImage={() => onPressImage(el[0])}
-                      onPressVideo={() =>
-                        onPressVideo(
-                          typeof el[1] === 'object'
-                            ? el[1]?.image.includes('mp4')
-                              ? el[1].image
-                              : ''
-                            : '',
-                        )
-                      }
-                    />
-                  );
-                })}
-              </Box>
-            )}
-            {activeIndex === 5 && vehicleDetails?.electricals && (
-              <Box>
-                <CustomText style={styles.vehicleHeading}>
-                  Electricals
-                </CustomText>
-                {Object.entries(vehicleDetails.electricals).map((el, index) => {
-                  return (
-                    <PopulateImageWithData
-                      key={index.toString()}
-                      title={el[0].replace(/_/g, ' ').toUpperCase()}
-                      image={
-                        typeof el[1] === 'object' && el[1] !== null
-                          ? el[1].image
-                          : ''
-                      }
-                      value={
-                        typeof el[1] === 'object' && el[1] !== null
-                          ? el[1].value
-                          : el[1]
-                      }
-                      onPressImage={() => onPressImage(el[0])}
-                    />
-                  );
-                })}
-              </Box>
-            )}
-            {activeIndex === 6 && vehicleDetails?.handling_and_suspension && (
-              <Box>
-                <CustomText style={styles.vehicleHeading}>
-                  Handling and Suspension
-                </CustomText>
-                {Object.entries(vehicleDetails.handling_and_suspension).map(
-                  (el, index) => {
+              )}
+            {activeIndex ===
+              (vehicleDetails?.vehicle.vehicle_type === 'two_wheeler'
+                ? 2
+                : 3) &&
+              vehicleDetails?.tyres && (
+                <Box>
+                  <CustomText style={styles.vehicleHeading}>Tyres</CustomText>
+                  {Object.entries(vehicleDetails.tyres).map((el, index) => {
                     return (
                       <PopulateImageWithData
                         key={index.toString()}
-                        title={el[0].replace(/_/g, ' ').toUpperCase()}
+                        title={el[0]}
                         image={el[1] ? el[1].image : ''}
                         value={el[1] ? el[1].value : ''}
-                        onPressImage={() => onPressImage(el[0])}
+                        onPressImage={() => onShowImage('tyres', el[0])}
                       />
                     );
-                  },
-                )}
-              </Box>
-            )}
-            {activeIndex === 6 && vehicleDetails?.steering && (
-              <Box>
-                <CustomText style={styles.vehicleHeading}>Steering</CustomText>
-                {Object.entries(vehicleDetails.steering).map((el, index) => {
-                  if (typeof el[1] !== 'object') {
+                  })}
+                </Box>
+              )}
+            {activeIndex ===
+              (vehicleDetails?.vehicle.vehicle_type === 'two_wheeler'
+                ? 3
+                : 4) &&
+              vehicleDetails?.engine && (
+                <Box>
+                  <CustomText style={styles.vehicleHeading}>Engine</CustomText>
+                  {Object.entries(vehicleDetails.engine).map((el, index) => {
                     return (
-                      <Box
+                      <PopulateImageWithData
                         key={index.toString()}
-                        flexDirection="row"
-                        justifyContent="space-between"
-                        pv={'3%'}
-                        alignItems="center"
-                        width={'90%'}>
-                        <CustomText style={styles.dataValue}>
-                          {el[0].replace(/_/g, ' ').toUpperCase()}
-                        </CustomText>
-                        <CustomText style={styles.value}>{el[1]}</CustomText>
-                      </Box>
+                        title={el[0]}
+                        image={
+                          typeof el[1] === 'object' && el[1] !== null
+                            ? el[1].image
+                            : ''
+                        }
+                        value={
+                          typeof el[1] === 'object' && el[1] !== null
+                            ? el[1].value
+                            : !el[1]?.includes('https')
+                            ? el[1]
+                            : ''
+                        }
+                        onPressImage={() => onShowImage('engine', el[0])}
+                        onPressVideo={() =>
+                          onPressVideo(
+                            typeof el[1] === 'object'
+                              ? el[1]?.image.includes('mp4')
+                                ? el[1].image
+                                : ''
+                              : '',
+                          )
+                        }
+                      />
                     );
-                  }
-                })}
-              </Box>
-            )}
+                  })}
+                </Box>
+              )}
+            {activeIndex ===
+              (vehicleDetails?.vehicle.vehicle_type === 'two_wheeler'
+                ? 4
+                : 5) &&
+              vehicleDetails?.electricals && (
+                <Box>
+                  <CustomText style={styles.vehicleHeading}>
+                    Electricals
+                  </CustomText>
+                  {Object.entries(vehicleDetails.electricals).map(
+                    (el, index) => {
+                      return (
+                        <PopulateImageWithData
+                          key={index.toString()}
+                          title={el[0]}
+                          image={
+                            typeof el[1] === 'object' && el[1] !== null
+                              ? el[1].image
+                              : ''
+                          }
+                          value={
+                            typeof el[1] === 'object' && el[1] !== null
+                              ? el[1].value
+                              : el[1]
+                          }
+                          onPressImage={() => onShowImage('electricals', el[0])}
+                        />
+                      );
+                    },
+                  )}
+                </Box>
+              )}
+            {activeIndex ===
+              (vehicleDetails?.vehicle.vehicle_type === 'two_wheeler' && 5) &&
+              vehicleDetails?.handling_and_suspension && (
+                <Box>
+                  <CustomText style={styles.vehicleHeading}>
+                    Handling and Suspension
+                  </CustomText>
+                  {Object.entries(vehicleDetails.handling_and_suspension).map(
+                    (el, index) => {
+                      return (
+                        <PopulateImageWithData
+                          key={index.toString()}
+                          title={el[0]}
+                          image={el[1] ? el[1].image : ''}
+                          value={el[1] ? el[1].value : ''}
+                          onPressImage={() =>
+                            onShowImage('handling_and_suspension', el[0])
+                          }
+                        />
+                      );
+                    },
+                  )}
+                </Box>
+              )}
+            {activeIndex ===
+              (vehicleDetails?.vehicle.vehicle_type !== 'two_wheeler' && 6) &&
+              vehicleDetails?.steering && (
+                <Box>
+                  <CustomText style={styles.vehicleHeading}>
+                    Steering
+                  </CustomText>
+                  {Object.entries(vehicleDetails.steering).map((el, index) => {
+                    if (
+                      typeof el[1] !== 'object' &&
+                      el[0] !== 'overall_rating'
+                    ) {
+                      return (
+                        <Box
+                          key={index.toString()}
+                          flexDirection="row"
+                          justifyContent="space-between"
+                          pv={'3%'}
+                          alignItems="center"
+                          width={'90%'}>
+                          <CustomText style={styles.dataValue}>
+                            {el[0].replace(/_/g, ' ').toUpperCase()}
+                          </CustomText>
+                          <CustomText style={styles.value}>{el[1]}</CustomText>
+                        </Box>
+                      );
+                    }
+                  })}
+                </Box>
+              )}
           </Box>
         </Box>
       </ScrollView>
@@ -610,7 +936,8 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
         onClosed={onClosedModalImage}
         style={styles.imageModal}
         backdrop={true}
-        backButtonClose={true}>
+        backButtonClose={true}
+        backdropColor="#111111">
         <Box style={styles.modalContainer}>
           <Pressable style={styles.closeButton} onPress={onClosedModalImage}>
             <MaterialCommunityIcons name="close" size={25} color={'#FFFFFF'} />
@@ -623,10 +950,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
             {vehicleImage &&
               vehicleImage?.map((el, index) => {
                 return (
-                  <Pressable
-                    key={index.toString()}
-                    onPress={() => setShowImageModal(true)}
-                    style={styles.imageBg}>
+                  <Pressable key={index.toString()} style={styles.imageBg}>
                     {el && el?.includes('mp4') ? (
                       <Box>
                         <Video
@@ -651,7 +975,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                       el && (
                         <Image
                           source={{uri: el}}
-                          style={[styles.images]}
+                          style={{height: height * 0.48, width: width}}
                           resizeMode="contain"
                         />
                       )
@@ -667,6 +991,42 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
           )}
         </Box>
       </Modal>
+
+      {/* <Box style={styles.bottom}>
+        <Box
+          flexDirection="row"
+          justifyContent="space-evenly"
+          alignItems="center">
+          {vehicleDetails?.vehicle.vehicle_status === 'in_auction' ? (
+            <Box style={styles.time}>
+              <MaterialCommunityIcons
+                name="clock-outline"
+                size={20}
+                color="#FF0000"
+                style={{marginRight: 5}}
+              />
+              <CustomText
+                color="#FF0000"
+                fontSize={16}
+                lineHeight={24}
+                fontFamily="Roboto-Medium">
+                {remainingTime}
+              </CustomText>
+            </Box>
+          ) : (
+            <CustomText
+              color="#33A02C"
+              fontSize={14}
+              lineHeight={20}
+              fontFamily="Roboto-Medium">
+              Closing Price - Rs.
+              {vehicleDetails?.vehicle.auction_value
+                ? vehicleDetails?.vehicle.auction_value
+                : vehicleDetails?.vehicle.ocb_value}
+            </CustomText>
+          )}
+        </Box>
+      </Box> */}
     </Box>
   );
 }
@@ -676,7 +1036,7 @@ const styles = EStyleSheet.create({
     ...container,
   },
   images: {
-    height: height * 0.38,
+    height: height * 0.35,
     width: width,
   },
   line: {
@@ -684,9 +1044,8 @@ const styles = EStyleSheet.create({
     height: '0.1rem',
     width: '100%',
     alignSelf: 'center',
-    marginBottom: '1rem',
+    // marginBottom: '1rem',
   },
-  tabel: {},
   headers: {
     backgroundColor: '#000000',
     paddingHorizontal: 20,
@@ -760,19 +1119,67 @@ const styles = EStyleSheet.create({
   },
   tabBg: {
     backgroundColor: '#111111',
+    marginTop: '2rem',
   },
-  imageModal: {
-    backgroundColor: 'transparent',
+  highestbid: {
+    marginTop: '1rem',
+    backgroundColor: '#34A02C',
+    padding: '0.2rem',
+    paddingLeft: '1.5rem',
   },
-  modalContainer: {},
-  closeButton: {
-    marginLeft: 'auto',
-    marginRight: 10,
-    paddingVertical: 20,
+  customerexpected: {
+    marginTop: '1.5rem',
+    backgroundColor: colors.secondaryLight,
+    padding: '0.2rem',
+    paddingLeft: '1.5rem',
+  },
+  bottom: {
+    padding: '2.5rem',
+    backgroundColor: '#EAEAEA',
+  },
+  dash: {
+    width: width / 3,
+    backgroundColor: colors.secondary,
+    height: 3,
+  },
+  placebid: {
+    padding: '0.5rem',
+    backgroundColor: colors.secondary,
+    borderRadius: 15,
+    width: 100,
+    ...contentCenter,
+  },
+  bidModal: {
+    height: 'auto',
+    backgroundColor: '#FFFFFF',
+    width: width * 0.9,
+    borderRadius: 8,
+  },
+  time: {
+    padding: '0.6rem',
+    ...contentCenter,
+    flexDirection: 'row',
   },
   imageBg: {
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     marginTop: '1rem',
+  },
+  imageModal: {
+    backgroundColor: 'transparent',
+  },
+  closeButton: {
+    marginLeft: 'auto',
+    marginRight: 10,
+    paddingVertical: 20,
+  },
+  indicator: {
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: 10,
+  },
+  ratingBox: {
+    paddingHorizontal: '1rem',
+    top: '0.7rem',
   },
 });

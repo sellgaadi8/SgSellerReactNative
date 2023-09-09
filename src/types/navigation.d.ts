@@ -27,10 +27,27 @@ type RootStackParamList = {
   VehicleDetail: {title: string; vehicleId: string};
   DetailsViewPage: undefined;
   ImageViewerCarousel: {
-    data: {index: number; key: string; value: string}[];
-    title: string;
+    data: {
+      value: string;
+      image: string;
+      key: string;
+      index: number;
+    }[];
+    index: number;
   };
   VideoPlayer: {data: string};
+  ImageSection: {
+    exterior:
+      | {[key: string]: {value: string; image: string} | string}
+      | undefined;
+    interior:
+      | {[key: string]: {value: string; image: string} | string}
+      | undefined;
+    damages:
+      | {[key: string]: {value: string; image: string} | string}
+      | undefined;
+    selectedIndex: number;
+  };
 };
 
 type BottomStackParamList = {

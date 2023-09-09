@@ -70,7 +70,7 @@ export default function VehicleCard({
           data.images.map((el, index) => {
             return (
               <Box key={index.toString()}>
-                {index === 0 && el !== '' ? (
+                {index === data.images.length - 1 && el !== '' ? (
                   <Video
                     source={{uri: el}}
                     style={styles.image}

@@ -90,9 +90,11 @@ export default function Exterior({navigation, route}: ExteriorProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function onSaveImage(image: ImageType[] | null) {
+  function onSaveImage(image: ImageType[]) {
+    console.log(image[0]);
+
     if (image) {
-      dispatch(onUploadImage(image, 'exterior-images'));
+      dispatch(onUploadImage(image[0], 'exterior-images'));
     }
   }
 

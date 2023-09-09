@@ -33,6 +33,7 @@ import TwoWheelerExterior from './src/views/Vehicles/TwoWheelerExterior';
 import TwoWheelerElectrical from './src/views/Vehicles/TwoWheelerElectrical';
 import VideoPlayer from './src/components/VideoPlayer';
 import Register from './src/views/Auth/Register';
+import ImageSection from './src/views/Vehicles/ImageSection';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
@@ -167,7 +168,11 @@ export default function App() {
                   options={() => {
                     return {
                       header: props => (
-                        <Header headerProps={props} title="Add new vehicle" />
+                        <Header
+                          headerProps={props}
+                          title="Add new vehicle"
+                          back
+                        />
                       ),
                     };
                   }}
@@ -375,6 +380,11 @@ export default function App() {
                   }}
                   component={VideoPlayer}
                   name="VideoPlayer"
+                />
+                <RootStack.Screen
+                  options={{headerShown: false}}
+                  component={ImageSection}
+                  name="ImageSection"
                 />
               </>
             )}
