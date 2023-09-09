@@ -170,6 +170,7 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
                 ) {
                   return (
                     <AddVehicleCard
+                      key={index.toString()}
                       fill={el[1].percentage}
                       title={el[1].heading}
                       desc={el[1].sub_heading}

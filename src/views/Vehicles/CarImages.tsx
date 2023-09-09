@@ -83,8 +83,8 @@ export default function CarImages({route, navigation}: CarImagesProps) {
   }
 
   function onSaveImage(image: ImageType[]) {
-    if (image.length !== 0) {
-      dispatch(onUploadImage(image[0], 'car-images'));
+    if (image) {
+      dispatch(onUploadImage(image, 'car-images'));
     }
   }
 

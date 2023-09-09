@@ -16,7 +16,7 @@ import ImagePicker from '../../components/ImagePicker';
 import {onAddExterior} from '../../redux/ducks/addExterior';
 import GlobalContext from '../../contexts/GlobalContext';
 import Snackbar from 'react-native-snackbar';
-import {ExteriorProps} from '../../types/propsTypes';
+import {ExteriorProps, ImageType} from '../../types/propsTypes';
 import {onGetExteriorData} from '../../redux/ducks/getExterior';
 import {onUpdateExterior} from '../../redux/ducks/updateExterior';
 import Loader from '../../components/Loader';
@@ -90,19 +90,19 @@ export default function Exterior({navigation, route}: ExteriorProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function onSaveImage(image: any) {
-    if (image.length !== 0) {
-      dispatch(onUploadImage(image[0], 'exterior-images'));
+  function onSaveImage(image: ImageType[] | null) {
+    if (image) {
+      dispatch(onUploadImage(image, 'exterior-images'));
     }
   }
 
   useEffect(() => {
     if (selectUploadImage.called) {
       setLoading(false);
-      const {error, image} = selectUploadImage;
+      const {success, image, message} = selectUploadImage;
       let temp = [...exteriorType];
 
-      if (!error && image) {
+      if (success && image) {
         switch (uploadType) {
           case 'left_pillarA':
             setImage1(image.file);
@@ -151,6 +151,12 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           default:
             break;
         }
+      } else {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'red',
+          duration: Snackbar.LENGTH_SHORT,
+        });
       }
 
       setExteriorType([...temp]);

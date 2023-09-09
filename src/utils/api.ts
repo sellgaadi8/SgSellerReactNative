@@ -16,6 +16,11 @@ const MODEL_LIST = '/vehicle/model';
 const VARIANT_LIST = '/vehicle/variant';
 const UPDATE_STATUS_URL = '/vehicle/changeVehicleStatus';
 const CITY_LIST = '/getCityList';
+const getChartList = (from: string, to: string) =>
+  `/get_chart_data?from=${from}&to=${to}`;
+
+const getCsvFiles = (from: string, to: string, type: string) =>
+  `/get_chart_data_csv?from=${from}&to=${to}&type=${type}`;
 
 const getVehicleUrl = (
   vehicle_status: string,
@@ -92,6 +97,8 @@ export {
   VARIANT_LIST,
   UPDATE_STATUS_URL,
   CITY_LIST,
+  getChartList,
+  getCsvFiles,
   getVehicleUrl,
   addVehicleFormurl,
   getDisplayInfoUrl,

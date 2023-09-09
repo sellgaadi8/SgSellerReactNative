@@ -17,7 +17,7 @@ import ImagePicker from '../../components/ImagePicker';
 import {onAddExterior} from '../../redux/ducks/addExterior';
 import GlobalContext from '../../contexts/GlobalContext';
 import Snackbar from 'react-native-snackbar';
-import {ExteriorProps} from '../../types/propsTypes';
+import {ExteriorProps, ImageType} from '../../types/propsTypes';
 import {onGetExteriorData} from '../../redux/ducks/getExterior';
 import {onUpdateExterior} from '../../redux/ducks/updateExterior';
 import Loader from '../../components/Loader';
@@ -161,19 +161,19 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function onSaveImage(image: any) {
-    if (image.length !== 0) {
-      dispatch(onUploadImage(image[0], 'exterior-images'));
+  function onSaveImage(image: ImageType[]) {
+    if (image) {
+      dispatch(onUploadImage(image, 'exterior-images'));
     }
   }
 
   useEffect(() => {
     if (selectUploadImage.called) {
       setLoading(false);
-      const {error, image} = selectUploadImage;
+      const {success, message, image} = selectUploadImage;
       let temp = [...twoWheelerType];
 
-      if (!error && image) {
+      if (success && image) {
         switch (uploadType) {
           case 'headlight_visor':
             setImage1(image.file);
@@ -242,6 +242,12 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
           default:
             break;
         }
+      } else {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'red',
+          duration: Snackbar.LENGTH_SHORT,
+        });
       }
 
       setTwoWheelerType([...temp]);
@@ -528,6 +534,9 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
         break;
       case 'engine_guard_right':
         setUploadType('engine_guard_right');
+        break;
+      case 'front_panel_left':
+        setUploadType('front_panel_left');
         break;
       case 'front_panel':
         setUploadType('front_panel');

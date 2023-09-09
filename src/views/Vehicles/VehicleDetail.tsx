@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {useDispatch} from 'react-redux';
 import Box from '../../components/Box';
@@ -26,6 +26,7 @@ import {useAppSelector} from '../../utils/hooks';
 import {VehicleDetailProps} from '../../types/propsTypes';
 import RectButtonCustom from '../../components/RectButtonCustom';
 import Indicator from '../../components/Indicator';
+import GlobalContext from '../../contexts/GlobalContext';
 const {height, width} = Dimensions.get('window');
 
 export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
@@ -42,6 +43,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const {vehicleType} = useContext(GlobalContext);
 
   const tabs = [
     {title: 'Documents', onPress: () => onChangeTab(0)},
@@ -56,6 +58,22 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
     {
       title: 'Steering',
       onPress: () => onChangeTab(6),
+    },
+  ];
+
+  const twoWheelerTab = [
+    {title: 'Documents', onPress: () => onChangeTab(0)},
+    {title: 'Exterior', onPress: () => onChangeTab(1)},
+    {
+      title: 'Tyres',
+      onPress: () => onChangeTab(2),
+    },
+    {title: 'Engine', onPress: () => onChangeTab(3)},
+    {title: 'Electricals', onPress: () => onChangeTab(4)},
+
+    {
+      title: 'Handling',
+      onPress: () => onChangeTab(5),
     },
   ];
 
@@ -326,25 +344,29 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
 
           <Box style={styles.tabBg}>
             <ScrollView horizontal showsHorizontalScrollIndicator={true}>
-              {tabs.map((el, idx) => {
-                return (
-                  <View key={idx} style={styles.tab}>
-                    <RectButtonCustom
-                      key={idx}
-                      onPress={el.onPress}
-                      style={styles.touchable}>
-                      <CustomText
-                        color={idx === activeIndex ? '#FFFFFF' : '#5D5D5D'}
-                        fontFamily={
-                          idx === activeIndex ? 'Roboto-Bold' : 'Roboto-Medium'
-                        }
-                        fontSize={15}>
-                        {el.title}
-                      </CustomText>
-                    </RectButtonCustom>
-                  </View>
-                );
-              })}
+              {(vehicleType === 'two_wheeler' ? twoWheelerTab : tabs).map(
+                (el, idx) => {
+                  return (
+                    <View key={idx} style={styles.tab}>
+                      <RectButtonCustom
+                        key={idx}
+                        onPress={el.onPress}
+                        style={styles.touchable}>
+                        <CustomText
+                          color={idx === activeIndex ? '#FFFFFF' : '#5D5D5D'}
+                          fontFamily={
+                            idx === activeIndex
+                              ? 'Roboto-Bold'
+                              : 'Roboto-Medium'
+                          }
+                          fontSize={15}>
+                          {el.title}
+                        </CustomText>
+                      </RectButtonCustom>
+                    </View>
+                  );
+                },
+              )}
             </ScrollView>
             {/* <View style={styles.lineContainer}>
               <Animated.View style={[styles.dash, animatedStyles]} />

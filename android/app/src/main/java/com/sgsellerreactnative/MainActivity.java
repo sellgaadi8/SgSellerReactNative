@@ -23,12 +23,7 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(null);
-    // Generate and log the hash strings
-    AppSignatureHelper appSignatureHelper = new AppSignatureHelper(this);
-    List<String> appSignatures = appSignatureHelper.getAppSignatures();
-    for (String signature : appSignatures) {
-      Log.d("AppSignature", signature);
-    }
+
   }
 
   /**

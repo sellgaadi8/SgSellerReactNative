@@ -50,10 +50,10 @@ export const onGetElectricalDetails =
       })
       .catch(err => {
         handleError(err, dispatch);
-        if (err?.request?._repsonse) {
+        if (err?.request?._response) {
           dispatch(
             getElectricalDetailsAction({
-              ...JSON.parse(err.request._repsonse),
+              ...JSON.parse(err.request._response),
               error: true,
             }),
           );

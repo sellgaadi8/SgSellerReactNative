@@ -70,8 +70,6 @@ export default function ImagePicker(props: ImagePickerProps) {
       let res: any = null;
       let fileError: string | undefined;
       res = await openPicker(gallery, false, multiple, false, type);
-      console.log('res', res);
-
       if (res) {
         if (
           !validatateExtension(res.filename || extractFileNameFromUri(res.path))

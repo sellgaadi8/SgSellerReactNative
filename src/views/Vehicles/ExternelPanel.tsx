@@ -14,7 +14,7 @@ import {onAddExternal} from '../../redux/ducks/addExternal';
 import GlobalContext from '../../contexts/GlobalContext';
 import {useAppSelector} from '../../utils/hooks';
 import Snackbar from 'react-native-snackbar';
-import {ExternelPanelProps} from '../../types/propsTypes';
+import {ExternelPanelProps, ImageType} from '../../types/propsTypes';
 import {onUpdateExternal} from '../../redux/ducks/updateExternal';
 import {onGetExternelDetails} from '../../redux/ducks/getExternal';
 import Loader from '../../components/Loader';
@@ -153,10 +153,10 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
   useEffect(() => {
     if (selectUploadImage.called) {
       setLoading(false);
-      const {error, image} = selectUploadImage;
+      const {success, image, message} = selectUploadImage;
       let temp = [...externelType];
 
-      if (!error && image) {
+      if (success && image) {
         switch (uploadType) {
           case 'bonnet_head':
             setHoodImage(image.file);
@@ -205,6 +205,12 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
           default:
             break;
         }
+      } else {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'red',
+          duration: Snackbar.LENGTH_SHORT,
+        });
       }
 
       setExternelType([...temp]);
@@ -302,11 +308,9 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectAdd, selectUpdate]);
 
-  function onSaveImage(image: any) {
-    if (image.length !== 0) {
-      setTimeout(() => {
-        dispatch(onUploadImage(image[0], 'externel-panel-images'));
-      }, 5000);
+  function onSaveImage(image: ImageType[]) {
+    if (image) {
+      dispatch(onUploadImage(image, 'externel-panel-images'));
     }
   }
 

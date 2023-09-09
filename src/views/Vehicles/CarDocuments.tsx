@@ -16,7 +16,7 @@ import {onAddCarDocuments} from '../../redux/ducks/addCarDocument';
 import GlobalContext from '../../contexts/GlobalContext';
 import {useAppSelector} from '../../utils/hooks';
 import Snackbar from 'react-native-snackbar';
-import {CarDocumentsProps} from '../../types/propsTypes';
+import {CarDocumentsProps, ImageType} from '../../types/propsTypes';
 import {onGetCarDocuments} from '../../redux/ducks/getCarDocuments';
 import {onUpdateCarDocuments} from '../../redux/ducks/updateCarDocument';
 import Loader from '../../components/Loader';
@@ -268,9 +268,9 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
     }
     if (selectUploadImage.called) {
       setLoading(false);
-      const {error, image} = selectUploadImage;
+      const {success, image, message} = selectUploadImage;
       let temp = [...carDocsType];
-      if (!error && image) {
+      if (success && image) {
         switch (uploadType) {
           case 'rc':
             setRcAvailImage(image.file);
@@ -296,6 +296,12 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
           default:
             break;
         }
+      } else {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'red',
+          duration: Snackbar.LENGTH_SHORT,
+        });
       }
       setCarDocsType([...temp]);
       // else if (error) {
@@ -310,9 +316,9 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectAddCarDocs, selectUpdateCarDocs, selectGetCarDocs]);
 
-  function onSaveImage(image: any) {
+  function onSaveImage(image: ImageType[]) {
     if (image.length !== 0) {
-      dispatch(onUploadImage(image[0], 'car-documents'));
+      dispatch(onUploadImage(image, 'car-documents'));
     }
   }
 

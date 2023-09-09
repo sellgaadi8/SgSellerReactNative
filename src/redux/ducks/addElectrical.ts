@@ -145,10 +145,10 @@ export const onAddElectrical =
       })
       .catch(err => {
         handleError(err, dispatch);
-        if (err?.request?._repsonse) {
+        if (err?.request?._response) {
           dispatch(
             addElectricalAction({
-              ...JSON.parse(err.request._repsonse),
+              ...JSON.parse(err.request._response),
               error: true,
             }),
           );

@@ -50,6 +50,8 @@ import getSuspensionData from './getSuspensionData';
 import updateStatus from './updateStatus';
 import register from './register';
 import getCity from './getCity';
+import getChartData from './getChartData';
+import getCsvFile from './getCsvFile';
 
 export default combineReducers({
   login,
@@ -103,4 +105,6 @@ export default combineReducers({
   updateStatus,
   register,
   getCity,
+  getChartData,
+  getCsvFile,
 });

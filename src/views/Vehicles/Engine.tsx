@@ -10,7 +10,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {container} from '../../utils/styles';
 import RadioButtons from '../../components/RadioButtons';
 import PrimaryButton from '../../components/PrimaryButton';
-import {EngineProps, EngineType} from '../../types/propsTypes';
+import {EngineProps, EngineType, ImageType} from '../../types/propsTypes';
 import {useDispatch} from 'react-redux';
 import {onAddEngine} from '../../redux/ducks/addEngine';
 import GlobalContext from '../../contexts/GlobalContext';
@@ -151,10 +151,10 @@ export default function Engine({navigation, route}: EngineProps) {
   useEffect(() => {
     if (selectUploadImage.called) {
       setLoading(false);
-      const {error, image} = selectUploadImage;
+      const {success, image, message} = selectUploadImage;
       let temp = [...engineImageTypes];
 
-      if (!error && image) {
+      if (success && image) {
         switch (engineType) {
           case 'gear_oil':
             setOilLeakImage(image.file);
@@ -172,6 +172,12 @@ export default function Engine({navigation, route}: EngineProps) {
           default:
             break;
         }
+      } else {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'red',
+          duration: Snackbar.LENGTH_SHORT,
+        });
       }
       setEngineImageTypes([...temp]);
     }
@@ -251,9 +257,9 @@ export default function Engine({navigation, route}: EngineProps) {
     }
   }
 
-  function onSaveImage(image: any) {
-    if (image.length !== 0) {
-      dispatch(onUploadImage(image[0], 'engine-images'));
+  function onSaveImage(image: ImageType[]) {
+    if (image) {
+      dispatch(onUploadImage(image, 'engine-images'));
     }
   }
 

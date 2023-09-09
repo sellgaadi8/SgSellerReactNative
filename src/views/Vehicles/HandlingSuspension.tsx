@@ -14,7 +14,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {pixelSizeVertical, pixelSizeHorizontal} from '../../utils/responsive';
 import {container, contentCenter} from '../../utils/styles';
 import DocumentPicker from 'react-native-document-picker';
-import {HandlingSuspensionProps} from '../../types/propsTypes';
+import {HandlingSuspensionProps, ImageType} from '../../types/propsTypes';
 import {useAppSelector} from '../../utils/hooks';
 import {useDispatch} from 'react-redux';
 import {onUploadImage} from '../../redux/ducks/uploadImage';
@@ -139,9 +139,9 @@ export default function HandlingSuspension({
     setHandlingSusp([...temp]);
   }
 
-  function onSaveImage(image: any) {
-    if (image.length !== 0) {
-      dispatch(onUploadImage(image[0], 'exterior-images'));
+  function onSaveImage(image: ImageType[]) {
+    if (image) {
+      dispatch(onUploadImage(image, 'exterior-images'));
     }
   }
 
@@ -189,10 +189,10 @@ export default function HandlingSuspension({
   useEffect(() => {
     if (selectUploadImage.called) {
       setLoading(false);
-      const {error, image} = selectUploadImage;
+      const {success, image, message} = selectUploadImage;
       let temp = [...handlingSusp];
 
-      if (!error && image) {
+      if (success && image) {
         switch (uploadType) {
           case 'handle':
             setImage1(image.file);
@@ -217,6 +217,12 @@ export default function HandlingSuspension({
           default:
             break;
         }
+      } else {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'red',
+          duration: Snackbar.LENGTH_SHORT,
+        });
       }
 
       setHandlingSusp([...temp]);

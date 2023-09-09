@@ -8,6 +8,7 @@ type UploadImageState = {
     file: string;
   } | null;
   error: boolean;
+  message: string;
 };
 
 type UploadImageAction = {

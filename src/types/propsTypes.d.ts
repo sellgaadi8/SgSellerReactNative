@@ -267,7 +267,7 @@ type ImageType = {
   size: number;
   type: string;
   uri: string;
-}[];
+};
 
 type SearchModalProps = {
   placeholder: string;
@@ -463,4 +463,11 @@ type RatingProps = {
 type VideoPlayerProps = {
   video: string;
   onPressClose: () => void;
+};
+
+type DownloadCardProps = {
+  title: string;
+  onPress: () => void;
+  count: number;
+  backgroundColor: string;
 };

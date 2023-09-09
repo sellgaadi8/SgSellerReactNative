@@ -9,7 +9,7 @@ import {
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {container} from '../../utils/styles';
 import PrimaryButton from '../../components/PrimaryButton';
-import {TyresProps, TyresType} from '../../types/propsTypes';
+import {ImageType, TyresProps, TyresType} from '../../types/propsTypes';
 import {useDispatch} from 'react-redux';
 import {onAddTyres} from '../../redux/ducks/addTyres';
 import GlobalContext from '../../contexts/GlobalContext';
@@ -121,9 +121,9 @@ export default function Tyres({navigation, route}: TyresProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function onSaveImage(image: any) {
-    if (image.length !== 0) {
-      dispatch(onUploadImage(image[0], 'tyres-images'));
+  function onSaveImage(image: ImageType[]) {
+    if (image) {
+      dispatch(onUploadImage(image, 'tyres-images'));
     }
   }
 
@@ -229,10 +229,10 @@ export default function Tyres({navigation, route}: TyresProps) {
   useEffect(() => {
     if (selectUploadImage.called) {
       setLoading(false);
-      const {error, image} = selectUploadImage;
+      const {success, message, image} = selectUploadImage;
       let temp = [...tyresImage];
 
-      if (!error && image) {
+      if (success && image) {
         if (vehicleType === 'two_wheeler') {
           switch (tyreType) {
             case 'front_wheel_condition':
@@ -270,6 +270,12 @@ export default function Tyres({navigation, route}: TyresProps) {
               break;
           }
         }
+      } else {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'red',
+          duration: Snackbar.LENGTH_SHORT,
+        });
       }
 
       setTyresImage([...temp]);

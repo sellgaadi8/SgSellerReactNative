@@ -10,7 +10,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {container} from '../../utils/styles';
 import RadioButtons from '../../components/RadioButtons';
 import PrimaryButton from '../../components/PrimaryButton';
-import {TwoWheelerElectricalsProps} from '../../types/propsTypes';
+import {ImageType, TwoWheelerElectricalsProps} from '../../types/propsTypes';
 import {useDispatch} from 'react-redux';
 import {onAddElectrical} from '../../redux/ducks/addElectrical';
 import GlobalContext from '../../contexts/GlobalContext';
@@ -195,9 +195,9 @@ export default function TwoWheelerElectrical({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function onSaveImage(image: any) {
-    if (image.length !== 0) {
-      dispatch(onUploadImage(image[0], 'electricals-images'));
+  function onSaveImage(image: ImageType[]) {
+    if (image) {
+      dispatch(onUploadImage(image, 'electricals-images'));
     }
   }
 
@@ -520,8 +520,8 @@ export default function TwoWheelerElectrical({
       }
     }
     if (selectUploadImage.called) {
-      const {error, image, success} = selectUploadImage;
-      if (!error && success && image) {
+      const {image, success, message} = selectUploadImage;
+      if (success && image) {
         let temp = [...electricalType];
         switch (type) {
           case 'headlight':
@@ -586,6 +586,12 @@ export default function TwoWheelerElectrical({
             break;
         }
         setElectricalType([...temp]);
+      } else {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'red',
+          duration: Snackbar.LENGTH_SHORT,
+        });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -13,6 +13,7 @@ const initialState: UploadImageState = {
   success: false,
   error: false,
   image: null,
+  message: '',
 };
 
 export default (
@@ -32,7 +33,7 @@ const uploadImageAction = (res: UploadImageState): UploadImageAction => {
 };
 
 export const onUploadImage =
-  (image: ImageType, path: string) => async (dispatch: AppDispatch) => {
+  (image: ImageType[], path: string) => async (dispatch: AppDispatch) => {
     const url = UPLOAD_IMAGE;
     const token = await getUserToken();
 
@@ -54,10 +55,10 @@ export const onUploadImage =
       })
       .catch(err => {
         handleError(err, dispatch);
-        if (err?.request?._repsonse) {
+        if (err?.request?._response) {
           dispatch(
             uploadImageAction({
-              ...JSON.parse(err.request._repsonse),
+              ...JSON.parse(err.request._response),
               error: true,
             }),
           );
