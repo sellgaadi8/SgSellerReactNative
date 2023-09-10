@@ -58,7 +58,7 @@ export default function Home() {
       color: 'rgba(178, 223, 138, 1)',
       name: 'Cars auctioned',
       count: 0,
-      key: 'cars_auctioned',
+      key: 'cars_in_auction',
     },
     {
       color: 'rgba(31, 120, 180, 1)',
@@ -70,7 +70,7 @@ export default function Home() {
       color: 'rgba(51, 160, 44, 1)',
       name: 'Sold in auction',
       count: 0,
-      key: 'cars_in_auction',
+      key: 'cars_auctioned',
     },
     {
       color: 'rgba(166, 206, 227, 1)',
@@ -171,8 +171,8 @@ export default function Home() {
     }
     if (selectCsvDownload.called) {
       setLoading(false);
-      const {file, success} = selectCsvDownload;
-      if (success && file) {
+      const {file} = selectCsvDownload;
+      if (file) {
         openFileDownloadLink(file);
       }
     }
@@ -218,19 +218,19 @@ export default function Home() {
         />
         <Box style={styles.title}>
           <CustomText
-            fontFamily="Roboto-Regular"
+            fontFamily="Roboto-Medium"
             fontSize={16}
             lineHeight={20}
             color="#111111">
             Welcome {name}!
           </CustomText>
-          <CustomText
+          {/* <CustomText
             fontFamily="Roboto-Bold"
             fontSize={16}
             lineHeight={24}
             color="#111111">
             Company Name
-          </CustomText>
+          </CustomText> */}
         </Box>
       </Box>
       {loading && <Loader />}
@@ -384,10 +384,11 @@ export default function Home() {
                 key={index.toString()}
                 count={el.count}
                 onPress={() =>
-                  getLink(index === 0 ? 'cars_auctioned' : 'cars_sold')
+                  getLink(index === 0 ? 'cars_in_auction' : 'cars_sold')
                 }
                 title={el.name}
                 backgroundColor={index === 0 ? '#F0F9E8' : '#D2E4F0'}
+                disabled={el.count === 0 ? true : false}
               />
             );
           })}
@@ -400,11 +401,12 @@ export default function Home() {
                 count={el.count}
                 onPress={() =>
                   getLink(
-                    index === 0 ? 'cars_in_auction' : 'cars_in_one_click_buy',
+                    index === 0 ? 'cars_auctioned' : 'cars_in_one_click_buy',
                   )
                 }
                 title={el.name}
                 backgroundColor={index === 0 ? '#D5EDD5' : '#EDF5F9'}
+                disabled={el.count === 0 ? true : false}
               />
             );
           })}

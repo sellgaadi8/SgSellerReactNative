@@ -78,3 +78,8 @@ type EngineError = {
   heater?: string;
   condensor?: string;
 };
+
+type EditProfileErrors = {
+  name?: string;
+  email?: string;
+};

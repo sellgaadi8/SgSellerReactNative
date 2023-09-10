@@ -18,7 +18,7 @@ import {useAppSelector} from '../../utils/hooks';
 import Loader from '../../components/Loader';
 import GlobalContext from '../../contexts/GlobalContext';
 
-export default function AddVehicle({navigation}: AddVehicleProps) {
+export default function AddVehicle({navigation, route}: AddVehicleProps) {
   const dispatch = useDispatch<any>();
   const [form, setForm] = useState<{
     [key: string]: {heading: string; percentage: number; sub_heading: string};
@@ -34,7 +34,9 @@ export default function AddVehicle({navigation}: AddVehicleProps) {
 
   useEffect(() => {
     navigation.addListener('focus', onFocus);
-
+    navigation.setParams({
+      title: route.params.from === 'add' ? 'Add Vehicle' : 'Edit Vehicle',
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vehicleId, navigation]);
 

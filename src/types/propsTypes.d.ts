@@ -471,6 +471,7 @@ type DownloadCardProps = {
   onPress: () => void;
   count: number;
   backgroundColor: string;
+  disabled: boolean;
 };
 
 type ImageSectionProps = {

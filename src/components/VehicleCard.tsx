@@ -184,11 +184,7 @@ export default function VehicleCard({
             style={styles.statusContain}
             onPress={() => onPressStatus(data.vehicle_status)}
             disabled={
-              data.vehicle_status !== 'in_auction' &&
-              data.vehicle_status !== 'one_click_buy' &&
-              data.vehicle_status !== 'in_valuation'
-                ? false
-                : true
+              data.vehicle_status === 'ready_for_auction' ? false : true
             }>
             <CustomText
               fontSize={11}

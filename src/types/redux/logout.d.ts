@@ -3,7 +3,7 @@ type LOGOUT = 'sgSeller/logout';
 type LogoutState = {
   success: boolean;
   called: boolean;
-  message: string | null;
+  message: string;
   error: boolean;
 };
 

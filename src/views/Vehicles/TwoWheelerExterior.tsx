@@ -1,4 +1,4 @@
-import {ScrollView, ToastAndroid} from 'react-native';
+import {ScrollView} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
@@ -163,7 +163,7 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
 
   function onSaveImage(image: ImageType[]) {
     if (image) {
-      dispatch(onUploadImage(image, 'exterior-images'));
+      dispatch(onUploadImage(image[0], 'exterior-images'));
     }
   }
 

@@ -197,7 +197,7 @@ export default function TwoWheelerElectrical({
 
   function onSaveImage(image: ImageType[]) {
     if (image) {
-      dispatch(onUploadImage(image, 'electricals-images'));
+      dispatch(onUploadImage(image[0], 'electricals-images'));
     }
   }
 

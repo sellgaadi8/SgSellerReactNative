@@ -3,12 +3,13 @@ import axiosInstance from '../../axios';
 import {LOGIN_SUBMIT} from '../../utils/api';
 import {handleError, postAuth} from '../../utils/helper';
 import {AppDispatch} from '../store';
+import messaging from '@react-native-firebase/messaging';
 
 const LOGIN: LOGIN = 'sgSeller/login';
 
 const initialState: LoginState = {
   success: false,
-  message: null,
+  message: '',
   error: false,
   called: false,
   name: null,
@@ -30,14 +31,19 @@ const loginAction = (res: LoginState): LoginAction => {
 };
 
 export const onLogin =
-  (phone: string, isOtp: boolean, otp: string) => (dispatch: AppDispatch) => {
+  (phone: string, isOtp: boolean, otp: string) =>
+  async (dispatch: AppDispatch) => {
     const url = LOGIN_SUBMIT;
+
+    const token = await messaging().getToken();
+    console.log('token=>>>>>', token);
 
     const body = new FormData();
 
     body.append('phone', phone);
     body.append('isOtp', isOtp);
     body.append('otp', otp);
+    body.append('device_token', token);
 
     const config = {
       headers: {

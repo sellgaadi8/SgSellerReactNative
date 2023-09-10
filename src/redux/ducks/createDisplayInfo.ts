@@ -64,7 +64,10 @@ export const createDisplayForm =
     body.append('variant', variant);
     body.append('mfg_year', mfg_year);
     body.append('reg_date', reg_date);
-    body.append('transmission', transmission);
+    if (transmission.length !== 0) {
+      body.append('transmission', transmission);
+    }
+
     body.append('color', color);
     body.append('fuel_type', fuel_type);
     body.append('no_of_kms', no_of_kms);

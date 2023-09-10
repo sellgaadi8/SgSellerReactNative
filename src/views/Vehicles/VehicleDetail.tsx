@@ -643,7 +643,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                             color="#FFFFFF"
                             fontFamily="Roboto-Bold"
                             fontSize={12}>
-                            {el.ratings}
+                            {el.ratings ? el.ratings : 0}
                           </CustomText>
                         </Box>
                       )}

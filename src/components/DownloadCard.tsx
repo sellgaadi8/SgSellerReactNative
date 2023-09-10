@@ -13,6 +13,7 @@ export default function DownloadCard({
   onPress,
   title,
   backgroundColor,
+  disabled,
 }: DownloadCardProps) {
   return (
     <Box ph={'4%'} pv={'5%'}>
@@ -31,7 +32,7 @@ export default function DownloadCard({
           color="#111111">
           {title}
         </CustomText>
-        <Pressable style={styles.button} onPress={onPress}>
+        <Pressable style={styles.button} onPress={onPress} disabled={disabled}>
           <Icon name="download" color={'#111111'} size={16} />
           <CustomText
             fontSize={13}

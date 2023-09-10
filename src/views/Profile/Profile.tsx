@@ -35,7 +35,7 @@ export default function Profile({navigation}: ProfileProps) {
   const [profileDetail, setProfleDetail] = useState<Profile>();
   const [loading, setLoading] = useState(false);
   const selectLogout = useAppSelector(state => state.logout);
-  const {setAuthenticated} = useContext(GlobalContext);
+  const {setAuthenticated, setName} = useContext(GlobalContext);
 
   function details(index: number) {
     if (profileDetail?.dealership_name) {
@@ -59,6 +59,7 @@ export default function Profile({navigation}: ProfileProps) {
       const {data, success} = selectGetProfile;
       if (success && data) {
         setProfleDetail(data);
+        setName(data.dealership_name);
       }
     }
     if (selectLogout.called) {

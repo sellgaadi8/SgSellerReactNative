@@ -318,7 +318,7 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
 
   function onSaveImage(image: ImageType[]) {
     if (image) {
-      dispatch(onUploadImage(image, 'externel-panel-images'));
+      dispatch(onUploadImage(image[0], 'externel-panel-images'));
     }
   }
 

@@ -30,7 +30,15 @@ const updateProfileAction = (res: UpdateProfileState): UpdateProfileAction => {
 };
 
 export const onUpdateProfile =
-  (address: string) => async (dispatch: AppDispatch) => {
+  (
+    name: string,
+    gst_no: string,
+    pan_no: string,
+    aadhar_no: string,
+    email: string,
+    address: string,
+  ) =>
+  async (dispatch: AppDispatch) => {
     const url = UPDATE_PROFILE;
     const token = await getUserToken();
 
@@ -43,6 +51,11 @@ export const onUpdateProfile =
 
     const body = new FormData();
     body.append('address', address);
+    body.append('name', name);
+    body.append('gst_no', gst_no);
+    body.append('pan_no', pan_no);
+    body.append('aadhar_no', aadhar_no);
+    body.append('email', email);
 
     axiosInstance
       .post(url, body, config)

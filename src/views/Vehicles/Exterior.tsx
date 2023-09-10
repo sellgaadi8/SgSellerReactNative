@@ -91,8 +91,6 @@ export default function Exterior({navigation, route}: ExteriorProps) {
   }, []);
 
   function onSaveImage(image: ImageType[]) {
-    console.log(image[0]);
-
     if (image) {
       dispatch(onUploadImage(image[0], 'exterior-images'));
     }

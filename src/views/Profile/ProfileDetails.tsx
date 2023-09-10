@@ -17,13 +17,13 @@ import {onGetProfile} from '../../redux/ducks/getProfile';
 import {useAppSelector} from '../../utils/hooks';
 import Loader from '../../components/Loader';
 import Snackbar from 'react-native-snackbar';
+import {isEmailValid, isNameValid} from '../../utils/regex';
 
 export default function ProfileDetails({navigation}: ProfileDetailsProps) {
   const [name, setName] = useState('');
   const [address1, setAddress1] = useState('');
-  const [address2, setAddress2] = useState('');
+  const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
-  const [altMobile, setAltmobile] = useState('');
   const [gst, setGst] = useState('');
   const [pan, setPan] = useState('');
   const [adhar, setAdhar] = useState('');
@@ -31,16 +31,35 @@ export default function ProfileDetails({navigation}: ProfileDetailsProps) {
   const dispatch = useDispatch<any>();
   const selectGetProfile = useAppSelector(state => state.getProfile);
   const selectUpdateProfile = useAppSelector(state => state.updateProfile);
+  const [errors, setErrors] = useState<EditProfileErrors>();
 
   useEffect(() => {
     setLoading(true);
     dispatch(onGetProfile());
   }, []);
 
+  function validateInputs() {
+    const tempErrors: EditProfileErrors = {};
+
+    if (name.length < 3) {
+      tempErrors.name = 'Enter a valid full name';
+    } else if (!isNameValid(name)) {
+      tempErrors.name = 'Enter a valid full name';
+    }
+    if (!isEmailValid(email)) {
+      tempErrors.email = 'Enter a valid email address';
+    }
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  }
+
   function update() {
+    const isValid = validateInputs();
     Keyboard.dismiss();
-    setLoading(true);
-    dispatch(onUpdateProfile(address1));
+    if (isValid) {
+      setLoading(true);
+      dispatch(onUpdateProfile(name, gst, pan, adhar, email, address1));
+    }
   }
 
   useEffect(() => {
@@ -51,7 +70,6 @@ export default function ProfileDetails({navigation}: ProfileDetailsProps) {
         setName(data.dealership_name);
         setAddress1(data.dealership_address);
         setMobile(data.mobile);
-        setAltmobile(data.alternate_mobile);
         if (data.gst_no) {
           setGst(data?.gst_no);
         }
@@ -86,36 +104,51 @@ export default function ProfileDetails({navigation}: ProfileDetailsProps) {
           label="Dealership name"
           value={name}
           onChangeText={setName}
+          error={errors?.name}
+          noMargin
         />
 
         <ProfileInput
-          label="Dealership address Line 1"
+          label="Dealership address"
           value={address1}
           onChangeText={setAddress1}
         />
 
         <ProfileInput
-          label="Dealership address line 2"
-          value={address2}
-          onChangeText={setAddress2}
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          error={errors?.email}
+          noMargin
         />
-
-        <ProfileInput label="Mobile" value={mobile} onChangeText={setMobile} />
 
         <ProfileInput
-          label="Alternate mobile"
-          value={altMobile}
-          onChangeText={setAltmobile}
+          label="Mobile"
+          value={mobile}
+          onChangeText={setMobile}
+          editable={false}
         />
 
-        <ProfileInput label="GST number" value={gst} onChangeText={setGst} />
+        <ProfileInput
+          label="GST number"
+          value={gst}
+          onChangeText={setGst}
+          maxLength={15}
+        />
 
-        <ProfileInput label="Business pan" value={pan} onChangeText={setPan} />
+        <ProfileInput
+          label="Business pan"
+          value={pan}
+          onChangeText={setPan}
+          maxLength={10}
+        />
 
         <ProfileInput
           label="Aadhar number"
           value={adhar}
           onChangeText={setAdhar}
+          maxLength={12}
+          keyboardType="numeric"
         />
 
         <PrimaryButton label="Update" onPress={update} />

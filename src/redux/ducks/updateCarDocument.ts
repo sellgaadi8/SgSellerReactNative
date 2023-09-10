@@ -68,28 +68,79 @@ export const onUpdateCarDocuments =
 
     const body = new FormData();
 
-    body.append('rc_availability', rc_availability);
-    body.append('rc_availability_image', rc_availability_image);
-    body.append('rc_noc_issued', rc_noc_issued);
-    body.append('mismatch_in_rc', mismatch_in_rc);
-    body.append('insurance', insurance);
-    body.append('under_hypothication', under_hypothication);
-    body.append('rto', rto);
-    body.append('fitness_upto', fitness_upto);
-    body.append('permit_upto', permit_upto);
-    body.append('cng_lpg_fitment', cng_lpg_fitment);
-    body.append(
-      'cng_lpg_fitment_endorsed_on_rc',
-      cng_lpg_fitment_endorsed_on_rc,
-    );
-    body.append('road_tax_paid', road_tax_paid);
-    body.append('partipeshi_request', partipeshi_request);
-    body.append('duplicate_key', duplicate_key);
-    body.append('chasis_no', chasis_no);
-    body.append('road_tax_paid_image', road_tax_paid_image);
-    body.append('partipeshi_request_image', partipeshi_request_image);
-    body.append('duplicate_key_image', duplicate_key_image);
-    body.append('chasis_no_image', chasis_no_image);
+    if (rc_availability && rc_availability.length !== 0) {
+      body.append('rc_availability', rc_availability);
+    }
+
+    if (rc_availability_image && rc_availability_image.length !== 0) {
+      body.append('rc_availability_image', rc_availability_image);
+    }
+
+    if (rc_noc_issued && rc_noc_issued.length !== 0) {
+      body.append('rc_noc_issued', rc_noc_issued);
+    }
+
+    if (mismatch_in_rc.length !== 0) {
+      body.append('mismatch_in_rc', mismatch_in_rc);
+    }
+    if (insurance && insurance.length !== 0) {
+      body.append('insurance', insurance);
+    }
+
+    if (under_hypothication && under_hypothication.length !== 0) {
+      body.append('under_hypothication', under_hypothication);
+    }
+
+    if (rto && rto.length !== 0) {
+      body.append('rto', rto);
+    }
+
+    if (fitness_upto.length !== 0) {
+      body.append('fitness_upto', fitness_upto);
+    }
+    if (permit_upto.length !== 0) {
+      body.append('permit_upto', permit_upto);
+    }
+    if (cng_lpg_fitment.length !== 0) {
+      body.append('cng_lpg_fitment', cng_lpg_fitment);
+    }
+    if (cng_lpg_fitment_endorsed_on_rc.length !== 0) {
+      body.append(
+        'cng_lpg_fitment_endorsed_on_rc',
+        cng_lpg_fitment_endorsed_on_rc,
+      );
+    }
+
+    if (road_tax_paid.length !== 0) {
+      body.append('road_tax_paid', road_tax_paid);
+    }
+    if (partipeshi_request && partipeshi_request.length !== 0) {
+      body.append('partipeshi_request', partipeshi_request);
+    }
+
+    if (duplicate_key && duplicate_key.length !== 0) {
+      body.append('duplicate_key', duplicate_key);
+    }
+
+    if (chasis_no && chasis_no.length !== 0) {
+      body.append('chasis_no', chasis_no);
+    }
+
+    if (road_tax_paid_image && road_tax_paid_image.length !== 0) {
+      body.append('road_tax_paid_image', road_tax_paid_image);
+    }
+
+    if (partipeshi_request_image && partipeshi_request_image.length !== 0) {
+      body.append('partipeshi_request_image', partipeshi_request_image);
+    }
+
+    if (duplicate_key_image && duplicate_key_image.length !== 0) {
+      body.append('duplicate_key_image', duplicate_key_image);
+    }
+
+    if (chasis_no_image && chasis_no_image.length !== 0) {
+      body.append('chasis_no_image', chasis_no_image);
+    }
 
     axiosInstance
       .post(url, body, config)

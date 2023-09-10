@@ -52,11 +52,25 @@ export const onAddSteering =
 
     const body = new FormData();
 
-    body.append('suspension', suspension);
-    body.append('steering', steering);
-    body.append('brake', brake);
-    body.append('wheel_bearing_noise', wheel_bearing_noise);
-    body.append('overall_rating', overall_rating);
+    if (suspension && suspension.length) {
+      body.append('suspension', suspension);
+    }
+
+    if (steering && steering.length) {
+      body.append('steering', steering);
+    }
+
+    if (brake && brake.length) {
+      body.append('brake', brake);
+    }
+
+    if (wheel_bearing_noise && wheel_bearing_noise.length) {
+      body.append('wheel_bearing_noise', wheel_bearing_noise);
+    }
+
+    if (overall_rating) {
+      body.append('overall_rating', overall_rating);
+    }
 
     axiosInstance
       .post(url, body, config)

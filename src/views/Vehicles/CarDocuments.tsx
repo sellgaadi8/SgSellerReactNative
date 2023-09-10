@@ -104,7 +104,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
 
   function validateInputs() {
     const tempErrors: CarDocumentsError = {};
-    if (rto.length === 0) {
+    if (rto.trim().length === 0) {
       tempErrors.rto = 'The Rto field is required';
     }
     if (vehicleType !== 'two_wheeler' && fitness.length === 0) {
@@ -155,7 +155,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
             mismatch.toLowerCase(),
             insurance,
             hypo.toLowerCase(),
-            rto,
+            rto.trim(),
             fitness,
             permit,
             fitment.toLowerCase(),
@@ -318,7 +318,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
 
   function onSaveImage(image: ImageType[]) {
     if (image.length !== 0) {
-      dispatch(onUploadImage(image, 'car-documents'));
+      dispatch(onUploadImage(image[0], 'car-documents'));
     }
   }
 
@@ -366,7 +366,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
         <Box pv={'3%'}>
           <ProfileInput
             label="RTO"
-            value={rto.toUpperCase()}
+            value={rto}
             onChangeText={setRto}
             isMandatory
             placeholder="( Ex MH02 )"

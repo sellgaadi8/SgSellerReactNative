@@ -34,6 +34,7 @@ import TwoWheelerElectrical from './src/views/Vehicles/TwoWheelerElectrical';
 import VideoPlayer from './src/components/VideoPlayer';
 import Register from './src/views/Auth/Register';
 import ImageSection from './src/views/Vehicles/ImageSection';
+import messaging from '@react-native-firebase/messaging';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
@@ -61,6 +62,21 @@ export default function App() {
       }
     }
   }, [selectLogoutState]);
+
+  const getFirebaseToken = async () => {
+    const token = await messaging().getToken();
+    console.log('token=>>>>>', token);
+  };
+
+  useEffect(() => {
+    getFirebaseToken();
+  }, []);
+
+  useEffect(() => {
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+    });
+  }, []);
 
   return (
     <GlobalContext.Provider
@@ -165,12 +181,15 @@ export default function App() {
                   name="ValuatorForm"
                 />
                 <RootStack.Screen
-                  options={() => {
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
                     return {
                       header: props => (
                         <Header
+                          title={param.route.params?.title}
                           headerProps={props}
-                          title="Add new vehicle"
                           back
                         />
                       ),

@@ -14,7 +14,7 @@ const LOGOUT: LOGOUT = 'sgSeller/logout';
 
 const initialState: LogoutState = {
   success: false,
-  message: null,
+  message: '',
   error: false,
   called: false,
 };

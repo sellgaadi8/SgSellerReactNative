@@ -87,7 +87,10 @@ export default function HandlingSuspension({
   const {vehicleId} = useContext(GlobalContext);
 
   useEffect(() => {
-    dispatch(onGetSuspensionDetails(vehicleId));
+    if (route.params.from === 'edit') {
+      setLoading(true);
+      dispatch(onGetSuspensionDetails(vehicleId));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -141,7 +144,7 @@ export default function HandlingSuspension({
 
   function onSaveImage(image: ImageType[]) {
     if (image) {
-      dispatch(onUploadImage(image, 'exterior-images'));
+      dispatch(onUploadImage(image[0], 'exterior-images'));
     }
   }
 
