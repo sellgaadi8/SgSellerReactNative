@@ -25,7 +25,7 @@ type VehicleListState = {
   data: {
     vehicle_list: Vehicle[];
     count: number;
-  };
+  } | null;
   error: boolean;
 };
 

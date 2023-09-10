@@ -88,65 +88,73 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
   }, []);
 
   function onSave() {
-    setLoading(true);
-    if (route.params.from === 'add') {
-      dispatch(
-        onAddExternal(
-          vehicleId,
-          hood,
-          roof,
-          dicky,
-          ldoorf,
-          ldoorb,
-          rdoorf,
-          rdoorb,
-          lfender,
-          rfender,
-          lQPanel,
-          rQPanel,
-          hoodImage,
-          roofImage,
-          dickyImage,
-          ldoorfImage,
-          ldoorbImage,
-          rdoorfImage,
-          rdoorbImage,
-          lfenderImage,
-          rfenderImage,
-          lQPanelImage,
-          rQPanelImage,
-          rating,
-        ),
-      );
+    if (rating !== 0) {
+      setLoading(true);
+      if (route.params.from === 'add') {
+        dispatch(
+          onAddExternal(
+            vehicleId,
+            hood,
+            roof,
+            dicky,
+            ldoorf,
+            ldoorb,
+            rdoorf,
+            rdoorb,
+            lfender,
+            rfender,
+            lQPanel,
+            rQPanel,
+            hoodImage,
+            roofImage,
+            dickyImage,
+            ldoorfImage,
+            ldoorbImage,
+            rdoorfImage,
+            rdoorbImage,
+            lfenderImage,
+            rfenderImage,
+            lQPanelImage,
+            rQPanelImage,
+            rating,
+          ),
+        );
+      } else {
+        dispatch(
+          onUpdateExternal(
+            vehicleId,
+            hood,
+            roof,
+            dicky,
+            ldoorf,
+            ldoorb,
+            rdoorf,
+            rdoorb,
+            lfender,
+            rfender,
+            lQPanel,
+            rQPanel,
+            hoodImage,
+            roofImage,
+            dickyImage,
+            ldoorfImage,
+            ldoorbImage,
+            rdoorfImage,
+            rdoorbImage,
+            lfenderImage,
+            rfenderImage,
+            lQPanelImage,
+            rQPanelImage,
+            rating,
+          ),
+        );
+      }
     } else {
-      dispatch(
-        onUpdateExternal(
-          vehicleId,
-          hood,
-          roof,
-          dicky,
-          ldoorf,
-          ldoorb,
-          rdoorf,
-          rdoorb,
-          lfender,
-          rfender,
-          lQPanel,
-          rQPanel,
-          hoodImage,
-          roofImage,
-          dickyImage,
-          ldoorfImage,
-          ldoorbImage,
-          rdoorfImage,
-          rdoorbImage,
-          lfenderImage,
-          rfenderImage,
-          lQPanelImage,
-          rQPanelImage,
-          rating,
-        ),
-      );
+      Snackbar.show({
+        text: 'Overall Rating is Mandatory',
+        backgroundColor: 'red',
+        duration: Snackbar.LENGTH_SHORT,
+      });
     }
   }
 

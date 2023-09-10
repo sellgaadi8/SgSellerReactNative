@@ -82,7 +82,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
 
   function onFocus() {
     setLoading(true);
-    dispatch(onGetVehicleList(status, model, from, to));
+    dispatch(onGetVehicleList(status, model, from, to, make));
     dispatch(getMakeList());
   }
 
@@ -91,8 +91,12 @@ export default function Vehicles({navigation}: VehiclesProps) {
       setLoading(false);
       setRefreshing(false);
       const {data, error} = selectVehicleList;
-      if (!error && data && data.vehicle_list) {
-        setVehicleData(data.vehicle_list);
+      if (!error && data) {
+        if (data.vehicle_list) {
+          setVehicleData(data.vehicle_list);
+        } else {
+          setVehicleData([]);
+        }
       }
     }
     if (selectModel.called) {
@@ -114,7 +118,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
       const {error, success, message} = selectVehicleStatus;
       if (!error && success) {
         onCloseStatusModal();
-        dispatch(onGetVehicleList(status, model, from, to));
+        dispatch(onGetVehicleList(status, model, from, to, make));
         Snackbar.show({
           text: message,
           backgroundColor: 'green',
@@ -246,7 +250,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
   function submit() {
     setLoading(true);
     setShowFilter(false);
-    dispatch(onGetVehicleList(status, model, from, to));
+    dispatch(onGetVehicleList(status, model, from, to, make));
   }
 
   function discardFilter() {
@@ -257,7 +261,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
     setTo('');
     setStatus('');
     setLoading(true);
-    dispatch(onGetVehicleList('', '', '', ''));
+    dispatch(onGetVehicleList('', '', '', '', ''));
   }
 
   function onStatusChange(value: string) {
@@ -277,7 +281,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
 
   function onRefresh() {
     setRefreshing(true);
-    dispatch(onGetVehicleList(status, model, from, to));
+    dispatch(onGetVehicleList(status, model, from, to, make));
   }
 
   return (
@@ -414,17 +418,19 @@ export default function Vehicles({navigation}: VehiclesProps) {
                 editable={false}
               />
             </Pressable>
-            <Pressable
-              onPress={() => onOpenModal('Model')}
-              style={styles.makeInput}>
-              <ProfileInput
-                label="Model"
-                value={model}
-                onChangeText={setModel}
-                noMargin
-                editable={false}
-              />
-            </Pressable>
+            {make.length !== 0 && (
+              <Pressable
+                onPress={() => onOpenModal('Model')}
+                style={styles.makeInput}>
+                <ProfileInput
+                  label="Model"
+                  value={model}
+                  onChangeText={setModel}
+                  noMargin
+                  editable={false}
+                />
+              </Pressable>
+            )}
             <Box ph={'4%'}>
               <CustomDropdown
                 values={StatusList}

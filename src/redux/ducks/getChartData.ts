@@ -11,6 +11,7 @@ const initialState: ChartState = {
   success: false,
   error: false,
   data: null,
+  message: '',
 };
 
 export default (state = initialState, action: ChartAction): ChartState => {

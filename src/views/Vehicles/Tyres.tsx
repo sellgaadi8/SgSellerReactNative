@@ -123,7 +123,7 @@ export default function Tyres({navigation, route}: TyresProps) {
 
   function onSaveImage(image: ImageType[]) {
     if (image) {
-      dispatch(onUploadImage(image, 'tyres-images'));
+      dispatch(onUploadImage(image[0], 'tyres-images'));
     }
   }
 
@@ -176,9 +176,8 @@ export default function Tyres({navigation, route}: TyresProps) {
 
   function submit() {
     const isValid = validateInputs();
-    if (isValid) {
-      console.log('called');
 
+    if (isValid) {
       setLoading(true);
       if (route.params.from === 'add') {
         dispatch(

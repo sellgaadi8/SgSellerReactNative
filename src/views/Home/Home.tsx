@@ -8,8 +8,10 @@ import CustomText from '../../components/CustomText';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {container} from '../../utils/styles';
 import {
+  BackHandler,
   Dimensions,
   Image,
+  Linking,
   Pressable,
   ScrollView,
   ToastAndroid,
@@ -29,17 +31,15 @@ import {getCharts} from '../../redux/ducks/getChartData';
 import {useAppSelector} from '../../utils/hooks';
 import {LineChartData} from 'react-native-chart-kit/dist/line-chart/LineChart';
 import DownloadCard from '../../components/DownloadCard';
-import RNFS from 'react-native-fs';
 import {getCsvFileDownload} from '../../redux/ducks/getCsvFile';
-import {openLink} from '../../utils/commonFunction';
+import Loader from '../../components/Loader';
+import Snackbar from 'react-native-snackbar';
 const {height, width} = Dimensions.get('window');
 
 export default function Home() {
   const {name} = useContext(GlobalContext);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [fromDate, setFromDate] = useState(
-    moment(new Date()).format('YYYY-MM-DD'),
-  );
+  const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
   const [tooltipPos, setTooltipPos] = useState({
     x: 0,
@@ -51,6 +51,8 @@ export default function Home() {
   const dispatch = useDispatch<any>();
   const selectChartData = useAppSelector(state => state.getChartData);
   const selectCsvDownload = useAppSelector(state => state.getCsvFile);
+  const [downloadStarted, setDownloadStarted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [titles, setTitles] = useState([
     {
       color: 'rgba(178, 223, 138, 1)',
@@ -78,17 +80,68 @@ export default function Home() {
     },
   ]);
 
+  function getOneWeekAgoDateFormatted() {
+    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); // Subtract 7 days in milliseconds
+
+    const year = oneWeekAgo.getFullYear();
+    const month = String(oneWeekAgo.getMonth() + 1).padStart(2, '0');
+    const day = String(oneWeekAgo.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
   useEffect(() => {
-    dispatch(getCharts(fromDate, toDate));
-    // Linking.openURL(
-    //   'https://sellgaadi.s3.ap-south-1.amazonaws.com/user_exported_files/exported_data2023-09-05%2020%3A43%3A07.csv?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAWDZS7NNQ755OGW5Z%2F20230905%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20230905T151307Z&X-Amz-SignedHeaders=host&X-Amz-Expires=172800&X-Amz-Signature=84cbbc5f316c8ef78dbfd8f831e4f7c8be54f96d71ba902dfae9b8308cd9dffc',
-    // );
+    const oneWeekAgoFormatted = getOneWeekAgoDateFormatted();
+    setFromDate(oneWeekAgoFormatted);
+    dispatch(getCharts(oneWeekAgoFormatted, toDate));
   }, []);
+
+  const handleBackButtonPress = () => {
+    if (downloadStarted) {
+      setDownloadStarted(false); // Reset the download status
+      return true; // Prevent the app from exiting
+    }
+    return false; // Allow the app to exit
+  };
+
+  useEffect(() => {
+    if (downloadStarted) {
+      BackHandler.addEventListener('hardwareBackPress', handleBackButtonPress);
+    } else {
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        handleBackButtonPress,
+      );
+    }
+
+    return () => {
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        handleBackButtonPress,
+      );
+    };
+  }, [downloadStarted]);
+
+  const openFileDownloadLink = (uri: string) => {
+    Linking.openURL(uri)
+      .then(() => {
+        setDownloadStarted(true); // Set the download status to true
+        ToastAndroid.show('Download started!', ToastAndroid.SHORT);
+      })
+      .catch(error => {
+        ToastAndroid.show(
+          `An error occurred while opening the URI:', ${error}`,
+          ToastAndroid.SHORT,
+        );
+      });
+  };
 
   useEffect(() => {
     if (selectChartData.called) {
-      const {data} = selectChartData;
-      if (data) {
+      setLoading(false);
+      const {success, data, message} = selectChartData;
+      if (success && data) {
+        setShowCalendar(false);
         setChartsValues(data);
         let temp = [...titles];
         temp[0].count = data.datasets[0].data.reduce(
@@ -108,12 +161,19 @@ export default function Home() {
           0,
         );
         setTitles([...temp]);
+      } else {
+        Snackbar.show({
+          text: message,
+          backgroundColor: 'red',
+          duration: Snackbar.LENGTH_SHORT,
+        });
       }
     }
     if (selectCsvDownload.called) {
-      const {file} = selectCsvDownload;
-      if (file) {
-        openLink(file);
+      setLoading(false);
+      const {file, success} = selectCsvDownload;
+      if (success && file) {
+        openFileDownloadLink(file);
       }
     }
   }, [selectChartData, selectCsvDownload]);
@@ -124,20 +184,23 @@ export default function Home() {
 
   function onDateChange(date: any, type: string) {
     if (date) {
-      let start_date = '';
-      let end_date = '';
+      // Assuming you have state variables fromDate and toDate
+      let start_date = fromDate; // Initialize start_date with current fromDate
+      let end_date = toDate; // Initialize end_date with current toDate
+
       if (type === 'END_DATE') {
         end_date = moment(date).format('YYYY-MM-DD');
-        console.log('end_date', end_date);
-        setToDate(end_date);
       } else {
         start_date = moment(date).format('YYYY-MM-DD');
-        console.log('start_date', start_date);
-        setFromDate(start_date);
       }
+
+      // Update the state variables
+      setFromDate(start_date);
+      setToDate(end_date);
+
       if (type === 'END_DATE') {
-        dispatch(getCharts(fromDate, toDate));
-        setShowCalendar(false);
+        setLoading(true);
+        dispatch(getCharts(start_date, end_date));
       }
     }
   }
@@ -170,6 +233,7 @@ export default function Home() {
           </CustomText>
         </Box>
       </Box>
+      {loading && <Loader />}
       <ScrollView>
         <Box ph={'4%'} pv={'5%'}>
           <CustomText
@@ -204,7 +268,7 @@ export default function Home() {
               withShadow={false}
               bezier
               verticalLabelRotation={
-                chartsValues.datasets[0].data.length > 10 ? 100 : 0
+                chartsValues.datasets[0].data.length > 5 ? 100 : 0
               }
               data={{
                 labels: chartsValues.labels,

@@ -24,11 +24,12 @@ const getCsvFiles = (from: string, to: string, type: string) =>
 
 const getVehicleUrl = (
   vehicle_status: string,
-  model: string,
+  vehicle_model: string,
   from: string,
   to: string,
+  vehicle_make: string,
 ) =>
-  `/vehicle/list?vehicle_status=${vehicle_status}&model=${model}&from=${from}&to=${to}`;
+  `/vehicle/list?vehicle_status=${vehicle_status}&vehicle_model=${vehicle_model}&from=${from}&to=${to}&vehicle_make=${vehicle_make}`;
 const addVehicleFormurl = (id: string) =>
   id ? `/vehicle/createForm/${id}` : '/vehicle/createForm';
 const getDisplayInfoUrl = (id: string) => `/vehicle/display-info/edit/${id}`;

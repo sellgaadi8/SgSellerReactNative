@@ -5,6 +5,7 @@ type ChartState = {
   data: {datasets: {data: number[]}[]; labels: string[]} | null;
   called: boolean;
   error: boolean;
+  message: string;
 };
 
 type ChartAction = {
