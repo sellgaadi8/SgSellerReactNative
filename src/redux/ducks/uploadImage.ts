@@ -1,4 +1,4 @@
-import {AxiosRequestConfig} from 'axios';
+import axios, {AxiosRequestConfig} from 'axios';
 import axiosInstance from '../../axios';
 import {ImageType} from '../../types/propsTypes';
 import {UPLOAD_IMAGE} from '../../utils/api';
@@ -33,35 +33,69 @@ const uploadImageAction = (res: UploadImageState): UploadImageAction => {
 };
 
 export const onUploadImage =
-  (image: ImageType, path: string) => async (dispatch: AppDispatch) => {
+  (image: ImageType, path: string, maxRetries: number = 3) =>
+  async (dispatch: AppDispatch) => {
     const url = UPLOAD_IMAGE;
     const token = await getUserToken();
 
+    console.log('==>', image);
+
     const config: AxiosRequestConfig = {
       headers: {
-        Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
       },
     };
 
     const body = new FormData();
-    body.append('image', image);
     body.append('path', path);
+    body.append('image', image);
 
-    axiosInstance
-      .post(url, body, config)
-      .then(res => {
+    // axiosInstance
+    //   .post(url, body, config)
+    //   .then(res => {
+    //     console.log('res', res.data);
+
+    //     dispatch(uploadImageAction({...res.data, error: false}));
+    //   })
+    //   .catch(err => {
+    //     handleError(err, dispatch);
+    //     if (err?.request?._response) {
+    //       dispatch(
+    //         uploadImageAction({
+    //           ...JSON.parse(err.request._response),
+    //           error: true,
+    //         }),
+    //       );
+    //     }
+    //   });
+
+    let retries = 0;
+
+    const makeRequest = async () => {
+      try {
+        const res = await axiosInstance.post(url, body, config);
+        console.log('res', res.data);
         dispatch(uploadImageAction({...res.data, error: false}));
-      })
-      .catch(err => {
-        handleError(err, dispatch);
-        if (err?.request?._response) {
-          dispatch(
-            uploadImageAction({
-              ...JSON.parse(err.request._response),
-              error: true,
-            }),
-          );
+      } catch (err) {
+        if (retries < maxRetries) {
+          // Retry the request if it fails, up to maxRetries times
+          retries++;
+          console.log(`Attempt ${retries} failed. Retrying...`);
+          await makeRequest();
+        } else {
+          // If maxRetries reached, handle the error
+          handleError(err, dispatch);
+          if (axios.isAxiosError(err)) {
+            dispatch(
+              uploadImageAction({
+                ...JSON.parse(err.request._response),
+                error: true,
+              }),
+            );
+          }
         }
-      });
+      }
+    };
+    await makeRequest();
   };
