@@ -199,12 +199,15 @@ export default function App() {
                   name="AddVehicle"
                 />
                 <RootStack.Screen
-                  options={() => {
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
                     return {
                       header: props => (
                         <Header
                           headerProps={props}
-                          title="Add new vehicle"
+                          title={param.route.params?.title}
                           back
                         />
                       ),
@@ -214,12 +217,15 @@ export default function App() {
                   name="DisplayInfo"
                 />
                 <RootStack.Screen
-                  options={() => {
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
                     return {
                       header: props => (
                         <Header
                           headerProps={props}
-                          title="Add new vehicle"
+                          title={param.route.params?.title}
                           back
                         />
                       ),
@@ -229,12 +235,15 @@ export default function App() {
                   name="CarImages"
                 />
                 <RootStack.Screen
-                  options={() => {
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
                     return {
                       header: props => (
                         <Header
                           headerProps={props}
-                          title="Add new vehicle"
+                          title={param.route.params?.title}
                           back
                         />
                       ),
@@ -244,12 +253,15 @@ export default function App() {
                   name="CarDocuments"
                 />
                 <RootStack.Screen
-                  options={() => {
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
                     return {
                       header: props => (
                         <Header
                           headerProps={props}
-                          title="Add new vehicle"
+                          title={param.route.params?.title}
                           back
                         />
                       ),
@@ -259,12 +271,15 @@ export default function App() {
                   name="Exterior"
                 />
                 <RootStack.Screen
-                  options={() => {
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
                     return {
                       header: props => (
                         <Header
                           headerProps={props}
-                          title="Add new vehicle"
+                          title={param.route.params?.title}
                           back
                         />
                       ),
@@ -274,12 +289,15 @@ export default function App() {
                   name="TwoWheelerExterior"
                 />
                 <RootStack.Screen
-                  options={() => {
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
                     return {
                       header: props => (
                         <Header
                           headerProps={props}
-                          title="Add new vehicle"
+                          title={param.route.params?.title}
                           back
                         />
                       ),
@@ -289,12 +307,15 @@ export default function App() {
                   name="ExternelPanel"
                 />
                 <RootStack.Screen
-                  options={() => {
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
                     return {
                       header: props => (
                         <Header
                           headerProps={props}
-                          title="Add new vehicle"
+                          title={param.route.params?.title}
                           back
                         />
                       ),
@@ -304,12 +325,15 @@ export default function App() {
                   name="HandlingSuspension"
                 />
                 <RootStack.Screen
-                  options={() => {
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
                     return {
                       header: props => (
                         <Header
                           headerProps={props}
-                          title="Add new vehicle"
+                          title={param.route.params?.title}
                           back
                         />
                       ),
@@ -319,12 +343,15 @@ export default function App() {
                   name="Tyres"
                 />
                 <RootStack.Screen
-                  options={() => {
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
                     return {
                       header: props => (
                         <Header
                           headerProps={props}
-                          title="Add new vehicle"
+                          title={param.route.params?.title}
                           back
                         />
                       ),
@@ -334,12 +361,15 @@ export default function App() {
                   name="Engine"
                 />
                 <RootStack.Screen
-                  options={() => {
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
                     return {
                       header: props => (
                         <Header
                           headerProps={props}
-                          title="Add new vehicle"
+                          title={param.route.params?.title}
                           back
                         />
                       ),
@@ -349,12 +379,15 @@ export default function App() {
                   name="Electricals"
                 />
                 <RootStack.Screen
-                  options={() => {
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
                     return {
                       header: props => (
                         <Header
                           headerProps={props}
-                          title="Add new vehicle"
+                          title={param.route.params?.title}
                           back
                         />
                       ),
@@ -364,12 +397,15 @@ export default function App() {
                   name="TwoWheelerElectrical"
                 />
                 <RootStack.Screen
-                  options={() => {
+                  options={(param: {
+                    route: RouteProp<any, any>;
+                    navigation: any;
+                  }) => {
                     return {
                       header: props => (
                         <Header
                           headerProps={props}
-                          title="Add new vehicle"
+                          title={param.route.params?.title}
                           back
                         />
                       ),

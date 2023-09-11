@@ -114,6 +114,9 @@ export default function Tyres({navigation, route}: TyresProps) {
   const [errors, setErrors] = useState<TyresImageError>();
 
   useEffect(() => {
+    navigation.setParams({
+      title: route.params.from === 'add' ? 'Add Vehicle' : 'Edit Vehicle',
+    });
     if (route.params.from === 'edit') {
       setLoading(true);
       dispatch(onGetTyresDetails(vehicleId));

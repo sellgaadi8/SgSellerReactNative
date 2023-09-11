@@ -80,6 +80,9 @@ export default function ExternelPanel({navigation, route}: ExternelPanelProps) {
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
+    navigation.setParams({
+      title: route.params.from === 'add' ? 'Add Vehicle' : 'Edit Vehicle',
+    });
     if (route.params.from === 'edit') {
       setLoading(true);
       dispatch(onGetExternelDetails(vehicleId));

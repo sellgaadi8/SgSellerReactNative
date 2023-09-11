@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useContext, useEffect, useState} from 'react';
 import {
@@ -6,6 +7,7 @@ import {
   ListRenderItemInfo,
   Pressable,
   RefreshControl,
+  ScrollView,
   ToastAndroid,
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -35,6 +37,7 @@ import CustomDropdown from '../../components/CustomDropDown';
 import {StatusList} from '../../utils/constant';
 import {onUpdateStatus} from '../../redux/ducks/updateStatus';
 import Snackbar from 'react-native-snackbar';
+import {isNameValid} from '../../utils/regex';
 const {width, height} = Dimensions.get('window');
 
 export default function Vehicles({navigation}: VehiclesProps) {
@@ -73,7 +76,9 @@ export default function Vehicles({navigation}: VehiclesProps) {
   const [ocblow, setOcbLow] = useState('');
   const [ocbhigh, setOcbHigh] = useState('');
   const [loading, setLoading] = useState(false);
+  const [askingPrice, setAskingPrice] = useState('');
   const {vehicleId} = useContext(GlobalContext);
+  const [errors, setErrors] = useState<StatusErrors>();
   const selectVehicleStatus = useAppSelector(state => state.updateStatus);
 
   useEffect(() => {
@@ -183,7 +188,16 @@ export default function Vehicles({navigation}: VehiclesProps) {
           setFrom(formatDate(date, false, 'YYYY-MM-DD'));
           break;
         case 'to':
-          setTo(formatDate(date, false, 'YYYY-MM-DD'));
+          if (date < new Date(from)) {
+            Snackbar.show({
+              text: 'Please select proper date range',
+              backgroundColor: 'red',
+              duration: Snackbar.LENGTH_SHORT,
+            });
+            setTo('');
+          } else {
+            setTo(formatDate(date, false, 'YYYY-MM-DD'));
+          }
           break;
       }
     }
@@ -272,16 +286,68 @@ export default function Vehicles({navigation}: VehiclesProps) {
     setShowStatus(false);
   }
 
+  function validateInputs() {
+    const tempErrors: StatusErrors = {};
+    if (selectedDropDownStatus === 'in_auction') {
+      if (askingPrice.length === 0) {
+        tempErrors.askingPrice = 'Value is required';
+      } else if (isNameValid(askingPrice)) {
+        tempErrors.askingPrice = 'Enter valid data';
+      }
+    }
+    if (selectedDropDownStatus === 'one_click_buy') {
+      if (ocblow.length === 0) {
+        tempErrors.ocblow = 'Value is required';
+      } else if (isNameValid(ocblow)) {
+        tempErrors.ocblow = 'Enter valid data';
+      } else if (ocblow >= ocbhigh) {
+        tempErrors.ocblow = 'Enter value less then OCB high price';
+      }
+      if (ocbhigh.length === 0) {
+        tempErrors.ocbhigh = 'Value is required';
+      } else if (isNameValid(ocbhigh)) {
+        tempErrors.ocblow = 'Enter valid data';
+      } else if (ocbhigh <= ocblow) {
+        tempErrors.ocblow = 'Enter value greater then OCB low price';
+      }
+    }
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  }
+  console.log(errors, '===>');
+
   function onSubmit() {
-    setLoading(true);
-    dispatch(
-      onUpdateStatus(vehicleId, selectedDropDownStatus, ocblow, ocbhigh),
-    );
+    const isValid = validateInputs();
+    if (isValid) {
+      setLoading(true);
+      dispatch(
+        onUpdateStatus(vehicleId, selectedDropDownStatus, ocblow, ocbhigh),
+      );
+    }
   }
 
   function onRefresh() {
     setRefreshing(true);
     dispatch(onGetVehicleList(status, model, from, to, make));
+  }
+  function onRemove(title: string) {
+    if (title === 'date') {
+      setFrom('');
+      setTo('');
+      dispatch(onGetVehicleList(status, model, '', '', make));
+    }
+    if (title === 'make') {
+      setMake('');
+      dispatch(onGetVehicleList(status, model, from, to, ''));
+    }
+    if (title === 'model') {
+      setModel('');
+      dispatch(onGetVehicleList(status, '', from, to, make));
+    }
+    if (title === 'status') {
+      setStatus('');
+      dispatch(onGetVehicleList('', model, from, to, make));
+    }
   }
 
   return (
@@ -300,10 +366,91 @@ export default function Vehicles({navigation}: VehiclesProps) {
           name="filter-variant"
           size={20}
           color="#201A1B"
-          // eslint-disable-next-line react-native/no-inline-styles
           style={{marginLeft: 5}}
         />
       </Pressable>
+      {!showFilter && (
+        <Box flexDirection="row" ph={'5%'}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {from && to && (
+              <Box style={styles.filterBox}>
+                <Pressable onPress={() => onRemove('date')}>
+                  <Icon
+                    name="close"
+                    size={12}
+                    color={'#FFFFFF'}
+                    style={{right: 5, top: 1}}
+                  />
+                </Pressable>
+                <CustomText
+                  fontFamily="Roboto-Medium"
+                  color="#FFFFFF"
+                  fontSize={12}
+                  lineHeight={18}>
+                  {from + ' - ' + to}
+                </CustomText>
+              </Box>
+            )}
+            {make && (
+              <Box style={styles.filterBox}>
+                <Pressable onPress={() => onRemove('make')}>
+                  <Icon
+                    name="close"
+                    size={12}
+                    color={'#FFFFFF'}
+                    style={{right: 5, top: 1}}
+                  />
+                </Pressable>
+                <CustomText
+                  fontFamily="Roboto-Medium"
+                  color="#FFFFFF"
+                  fontSize={12}
+                  lineHeight={18}>
+                  {make.replace('_', ' ')}
+                </CustomText>
+              </Box>
+            )}
+            {model && (
+              <Box style={styles.filterBox}>
+                <Pressable onPress={() => onRemove('model')}>
+                  <Icon
+                    name="close"
+                    size={12}
+                    color={'#FFFFFF'}
+                    style={{right: 5, top: 1}}
+                  />
+                </Pressable>
+                <CustomText
+                  fontFamily="Roboto-Medium"
+                  color="#FFFFFF"
+                  fontSize={12}
+                  lineHeight={18}>
+                  {model.replace('_', ' ')}
+                </CustomText>
+              </Box>
+            )}
+            {status && (
+              <Box style={styles.filterBox}>
+                <Pressable onPress={() => onRemove('status')}>
+                  <Icon
+                    name="close"
+                    size={12}
+                    color={'#FFFFFF'}
+                    style={{right: 5, top: 1}}
+                  />
+                </Pressable>
+                <CustomText
+                  fontFamily="Roboto-Medium"
+                  color="#FFFFFF"
+                  fontSize={12}
+                  lineHeight={18}>
+                  {status.replace('_', ' ')}
+                </CustomText>
+              </Box>
+            )}
+          </ScrollView>
+        </Box>
+      )}
       {vehicleData?.length !== 0 ? (
         <>
           {loading && <Loader />}
@@ -340,6 +487,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
         onChange={onChangeDate}
         onClosed={closeCalendar}
         maximumDate={new Date()}
+        // minimumDate={calType === 'to' ? new Date(from) : new Date()}
       />
       {showFilter && (
         <Modal
@@ -385,7 +533,8 @@ export default function Vehicles({navigation}: VehiclesProps) {
               </Pressable>
               <Pressable
                 style={styles.input}
-                onPress={() => onPressCalend('to')}>
+                onPress={() => onPressCalend('to')}
+                disabled={from.length !== 0 ? false : true}>
                 <ProfileInput
                   pointerEvents="none"
                   label="End date"
@@ -394,7 +543,8 @@ export default function Vehicles({navigation}: VehiclesProps) {
                   renderEndIcon={() => (
                     <Pressable
                       style={styles.endIcon}
-                      onPress={() => onPressCalend('to')}>
+                      onPress={() => onPressCalend('to')}
+                      disabled={from.length !== 0 ? false : true}>
                       <Icon
                         name="calendar-month"
                         size={20}
@@ -484,7 +634,6 @@ export default function Vehicles({navigation}: VehiclesProps) {
             color="#111111"
             fontSize={18}
             lineHeight={30}
-            // eslint-disable-next-line react-native/no-inline-styles
             style={{textAlign: 'center'}}>
             Status
           </CustomText>
@@ -499,9 +648,11 @@ export default function Vehicles({navigation}: VehiclesProps) {
             <>
               <ProfileInput
                 label="Asking Price"
-                value={ocblow}
-                onChangeText={setOcbLow}
+                value={askingPrice}
+                onChangeText={setAskingPrice}
                 keyboardType="numeric"
+                error={errors?.askingPrice}
+                noMargin
               />
             </>
           )}
@@ -509,15 +660,19 @@ export default function Vehicles({navigation}: VehiclesProps) {
             <>
               <ProfileInput
                 label="OCB High Price"
-                value={ocblow}
-                onChangeText={setOcbLow}
-                keyboardType="numeric"
-              />
-              <ProfileInput
-                label="OCB Low Price"
                 value={ocbhigh}
                 onChangeText={setOcbHigh}
                 keyboardType="numeric"
+                error={errors?.ocblow}
+                noMargin
+              />
+              <ProfileInput
+                label="OCB Low Price"
+                value={ocblow}
+                onChangeText={setOcbLow}
+                keyboardType="numeric"
+                error={errors?.ocbhigh}
+                noMargin
               />
             </>
           )}
@@ -617,5 +772,15 @@ const styles = EStyleSheet.create({
     width: '90%',
     backgroundColor: '#ffffff',
     borderRadius: '0.6rem',
+  },
+  filterBox: {
+    borderRadius: 20,
+    padding: 5,
+    backgroundColor: '#111111',
+    ...contentCenter,
+    marginTop: 10,
+    paddingHorizontal: '1.5rem',
+    marginRight: '1rem',
+    flexDirection: 'row',
   },
 });

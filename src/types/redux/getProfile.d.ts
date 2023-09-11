@@ -8,6 +8,7 @@ type Profile = {
   gst_no: string | null;
   business_pan: string;
   aadhar_no: string | null;
+  email: string;
 };
 
 type GetProfileState = {

@@ -70,96 +70,51 @@ export const onAddExternal =
 
     const body = new FormData();
 
-    if (bonnet_head && bonnet_head.length !== 0) {
-      body.append('bonnet_head', bonnet_head);
-    }
-    if (roof && roof.length !== 0) {
-      body.append('roof', roof);
-    }
+    body.append('bonnet_head', bonnet_head);
 
-    if (dickey_door && dickey_door.length !== 0) {
-      body.append('dickey_door', dickey_door);
-    }
+    body.append('roof', roof);
 
-    if (left_door_front && left_door_front.length !== 0) {
-      body.append('left_door_front', left_door_front);
-    }
+    body.append('dickey_door', dickey_door);
 
-    if (left_door_back && left_door_back.length !== 0) {
-      body.append('left_door_back', left_door_back);
-    }
+    body.append('left_door_front', left_door_front);
 
-    if (right_door_front && right_door_front.length !== 0) {
-      body.append('right_door_front', right_door_front);
-    }
+    body.append('left_door_back', left_door_back);
 
-    if (right_door_back && right_door_back.length !== 0) {
-      body.append('right_door_back', right_door_back);
-    }
+    body.append('right_door_front', right_door_front);
 
-    if (left_fender && left_fender.length !== 0) {
-      body.append('left_fender', left_fender);
-    }
+    body.append('right_door_back', right_door_back);
 
-    if (right_fender && right_fender.length !== 0) {
-      body.append('right_fender', right_fender);
-    }
+    body.append('left_fender', left_fender);
 
-    if (left_quater_panel && left_quater_panel.length !== 0) {
-      body.append('left_quater_panel', left_quater_panel);
-    }
+    body.append('right_fender', right_fender);
 
-    if (right_quater_panel && right_quater_panel.length !== 0) {
-      body.append('right_quater_panel', right_quater_panel);
-    }
+    body.append('left_quater_panel', left_quater_panel);
 
-    if (bonnet_head_image && bonnet_head_image.length !== 0) {
-      body.append('bonnet_head_image', bonnet_head_image);
-    }
+    body.append('right_quater_panel', right_quater_panel);
 
-    if (roof_image && roof_image.length !== 0) {
-      body.append('roof_image', roof_image);
-    }
+    body.append('bonnet_head_image', bonnet_head_image);
 
-    if (dickey_door_image && dickey_door_image.length !== 0) {
-      body.append('dickey_door_image', dickey_door_image);
-    }
+    body.append('roof_image', roof_image);
 
-    if (left_door_front_image && left_door_front_image.length !== 0) {
-      body.append('left_door_front_image', left_door_front_image);
-    }
+    body.append('dickey_door_image', dickey_door_image);
 
-    if (left_door_back_image && left_door_back_image.length !== 0) {
-      body.append('left_door_back_image', left_door_back_image);
-    }
+    body.append('left_door_front_image', left_door_front_image);
 
-    if (right_door_front_image && right_door_front_image.length !== 0) {
-      body.append('right_door_front_image', right_door_front_image);
-    }
+    body.append('left_door_back_image', left_door_back_image);
 
-    if (right_door_back_image && right_door_back_image.length !== 0) {
-      body.append('right_door_back_image', right_door_back_image);
-    }
+    body.append('right_door_front_image', right_door_front_image);
 
-    if (left_fender_image && left_fender_image.length !== 0) {
-      body.append('left_fender_image', left_fender_image);
-    }
+    body.append('right_door_back_image', right_door_back_image);
 
-    if (right_fender_image && right_fender_image.length !== 0) {
-      body.append('right_fender_image', right_fender_image);
-    }
+    body.append('left_fender_image', left_fender_image);
 
-    if (left_quater_panel_image && left_quater_panel_image.length !== 0) {
-      body.append('left_quater_panel_image', left_quater_panel_image);
-    }
+    body.append('right_fender_image', right_fender_image);
 
-    if (right_quater_panel_image && right_quater_panel_image.length !== 0) {
-      body.append('right_quater_panel_image', right_quater_panel_image);
-    }
+    body.append('left_quater_panel_image', left_quater_panel_image);
 
-    if (overall_rating) {
-      body.append('overall_rating', overall_rating);
-    }
+    body.append('right_quater_panel_image', right_quater_panel_image);
+
+    body.append('overall_rating', overall_rating);
 
     axiosInstance
       .post(url, body, config)

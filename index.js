@@ -12,6 +12,11 @@ import React from 'react';
 import {Provider} from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {NetworkLogDebugModal} from './src/components/NetworkLogDebugModal';
+import messaging from '@react-native-firebase/messaging';
+import {onPushNotification} from './src/redux/ducks/pushNotification';
+import PushNotification, {Importance} from 'react-native-push-notification';
+import {NOTIFICATION_CHANNEL} from './src/utils/constant';
+import {navigationRef} from './src/navigation/navigate';
 
 const {width} = Dimensions.get('screen');
 
@@ -30,7 +35,87 @@ function Main() {
   );
 }
 
+PushNotification.createChannel({
+  channelId: NOTIFICATION_CHANNEL, // (required)
+  channelName: 'Default Channel', // (required)
+  channelDescription:
+    'This is the default notification channel of Sellgadi Seller App', // (optional) default: undefined.
+  playSound: true, // (optional) default: true
+  soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
+  importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+  vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.import { NOTIFICATION_CHANNEL } from './constants';
+});
+
+PushNotification.configure({
+  // (optional) Called when Token is generated (iOS and Android)
+  onRegister: console.log,
+  // (required) Called when a remote is received or opened, or local notification is opened
+  onNotification: function (notification) {
+    // const { message, title, userInteraction, foreground, data } = notification;
+    const {click_action} = notification.data;
+
+    // triggerLocalNotification({
+    //   title,
+    //   message,
+    //   id,
+    // });
+
+    console.log('notification.data;', notification.data);
+    if (notification.foreground) {
+    } else {
+      if (click_action) {
+        // setCampaignId(store.getState.selectPushNotification.campaignId);
+        let route = 'HomePageStack';
+        let params = {};
+
+        switch (click_action.page) {
+          case 'UPLOAD_HOSPITAL_DETAILS':
+            break;
+        }
+        navigationRef?.current?.navigate(route, {
+          from: 'NOTIFICATIONS',
+          ...params,
+        });
+      }
+      store.dispatch(
+        onPushNotification({
+          click_action: notification.click_action,
+          called: true,
+          body: notification.body,
+          title: notification.title,
+          foreground: notification.foreground,
+        }),
+      );
+    }
+    // if (!foreground && !userInteraction) {
+    //   triggerLocalNotification({
+    //     title,
+    //     message,
+    //     id,
+    //     buttonLabel,
+    //   });
+    // }
+    PushNotification.removeAllDeliveredNotifications();
+  },
+  popInitialNotification: true,
+});
+
 AppRegistry.registerComponent(appName, () => Main);
+
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log(remoteMessage, 'remoteMessageremoteMessage');
+  const {data} = remoteMessage;
+  if (data) {
+    const {body, title, click_to_action} = data;
+    store.dispatch(
+      onPushNotification({
+        body: body,
+        title: title,
+        click_to_action: click_to_action,
+      }),
+    );
+  }
+});
 
 const styles = StyleSheet.create({
   container: {flex: 1},

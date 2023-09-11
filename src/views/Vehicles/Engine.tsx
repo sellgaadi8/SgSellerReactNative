@@ -60,6 +60,9 @@ export default function Engine({navigation, route}: EngineProps) {
   const selectUploadImage = useAppSelector(state => state.uploadImage);
 
   useEffect(() => {
+    navigation.setParams({
+      title: route.params.from === 'add' ? 'Add Vehicle' : 'Edit Vehicle',
+    });
     if (route.params.from === 'edit') {
       dispatch(onGetEngineDetails(vehicleId));
     }

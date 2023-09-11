@@ -74,6 +74,9 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
   const [type, setType] = useState<ElectType>();
 
   useEffect(() => {
+    navigation.setParams({
+      title: route.params.from === 'add' ? 'Add Vehicle' : 'Edit Vehicle',
+    });
     if (route.params.from === 'edit') {
       setLoading(true);
       dispatch(onGetElectricalDetails(vehicleId));
@@ -88,110 +91,133 @@ export default function Electricals({navigation, route}: ElectricalsProps) {
   }
 
   function submit() {
-    if (route.params.from === 'add') {
-      setLoading(true);
-      dispatch(
-        onAddElectrical(
-          vehicleId,
-          powerWindows,
-          music,
-          electrical,
-          parking,
-          overall,
-          jackTool,
-          lightsCrack,
-          powerWindowsImage,
-          musicImage,
-          electricalImage,
-          parkingImage,
-          overallImage,
-          jackToolImage,
-          lightsCrackImage,
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          rating,
-        ),
-      );
+    if (
+      powerWindows.length !== 0 ||
+      music.length !== 0 ||
+      electrical.length !== 0 ||
+      parking.length !== 0 ||
+      overall.length !== 0 ||
+      jackTool.length !== 0 ||
+      lightsCrack.length !== 0 ||
+      powerWindowsImage.length !== 0 ||
+      musicImage.length !== 0 ||
+      electricalImage.length !== 0 ||
+      parkingImage.length !== 0 ||
+      overallImage.length !== 0 ||
+      jackToolImage.length !== 0 ||
+      lightsCrack.length !== 0
+    ) {
+      if (route.params.from === 'add') {
+        setLoading(true);
+        dispatch(
+          onAddElectrical(
+            vehicleId,
+            powerWindows,
+            music,
+            electrical,
+            parking,
+            overall,
+            jackTool,
+            lightsCrack,
+            powerWindowsImage,
+            musicImage,
+            electricalImage,
+            parkingImage,
+            overallImage,
+            jackToolImage,
+            lightsCrackImage,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            rating,
+          ),
+        );
+      } else {
+        setLoading(true);
+        dispatch(
+          onUpdateElectrical(
+            vehicleId,
+            powerWindows,
+            music,
+            electrical,
+            parking,
+            overall,
+            jackTool,
+            lightsCrack,
+            powerWindowsImage,
+            musicImage,
+            electricalImage,
+            parkingImage,
+            overallImage,
+            jackToolImage,
+            lightsCrackImage,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            rating,
+          ),
+        );
+      }
     } else {
-      setLoading(true);
-      dispatch(
-        onUpdateElectrical(
-          vehicleId,
-          powerWindows,
-          music,
-          electrical,
-          parking,
-          overall,
-          jackTool,
-          lightsCrack,
-          powerWindowsImage,
-          musicImage,
-          electricalImage,
-          parkingImage,
-          overallImage,
-          jackToolImage,
-          lightsCrackImage,
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          rating,
-        ),
-      );
+      Snackbar.show({
+        text: 'Please select atleast one option',
+        backgroundColor: 'red',
+        duration: Snackbar.LENGTH_SHORT,
+      });
     }
   }
 

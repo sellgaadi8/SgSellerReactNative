@@ -64,11 +64,11 @@ export default function HandlingSuspension({
     },
   ]);
   const [openImagePicker, setOpenImagePicker] = useState(false);
-  const [item1, setItem1] = useState('Ok');
-  const [item2, setItem2] = useState('Ok');
-  const [item3, setItem3] = useState('Ok');
-  const [item4, setItem4] = useState('Ok');
-  const [item5, setItem5] = useState('Ok');
+  const [item1, setItem1] = useState('ok');
+  const [item2, setItem2] = useState('ok');
+  const [item3, setItem3] = useState('ok');
+  const [item4, setItem4] = useState('ok');
+  const [item5, setItem5] = useState('ok');
   const [image1, setImage1] = useState('');
   const [image2, setImage2] = useState('');
   const [image3, setImage3] = useState('');
@@ -87,6 +87,9 @@ export default function HandlingSuspension({
   const {vehicleId} = useContext(GlobalContext);
 
   useEffect(() => {
+    navigation.setParams({
+      title: route.params.from === 'add' ? 'Add Vehicle' : 'Edit Vehicle',
+    });
     if (route.params.from === 'edit') {
       setLoading(true);
       dispatch(onGetSuspensionDetails(vehicleId));

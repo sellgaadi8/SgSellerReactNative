@@ -154,6 +154,9 @@ export default function TwoWheelerExterior({navigation, route}: ExteriorProps) {
   const {vehicleId, setVehicleId} = useContext(GlobalContext);
 
   useEffect(() => {
+    navigation.setParams({
+      title: route.params.from === 'add' ? 'Add Vehicle' : 'Edit Vehicle',
+    });
     if (route.params.from === 'edit') {
       setLoading(true);
       dispatch(onGetExteriorData(vehicleId));

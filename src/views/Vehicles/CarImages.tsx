@@ -66,6 +66,9 @@ export default function CarImages({route, navigation}: CarImagesProps) {
   const [mediaType, setMediaType] = useState<'photo' | 'video'>('photo');
 
   useEffect(() => {
+    navigation.setParams({
+      title: route.params.from === 'add' ? 'Add Vehicle' : 'Edit Vehicle',
+    });
     if (route.params.from === 'edit') {
       setLoading(true);
       dispatch(onGetCarImages(vehicleId));

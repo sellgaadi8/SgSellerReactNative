@@ -371,7 +371,7 @@ type VehicleDetailProps = {
 type MonthYearPickerProps = {
   onMonthChange?: (value: any, index: number) => void;
   selectedMonth?: string;
-  months: {label: string; value: string}[];
+  months?: {label: string; value: string}[];
   years: string[];
   selectedYear: string;
   onYearChange: (value: string) => void;

@@ -33,10 +33,12 @@ import {updateDisplayForm} from '../../redux/ducks/updateDisplayInfo';
 import MonthYearPicker from '../../components/MonthYearPicker';
 import {ColorList, Months} from '../../utils/constant';
 import CustomDropdown from '../../components/CustomDropDown';
+import {isNumberValid} from '../../utils/regex';
 const {height, width} = Dimensions.get('window');
 
 export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
   const [years, setYears] = useState<string[]>([]);
+  const [regyears, setRegYears] = useState<string[]>([]);
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
   const [varaint, setVariant] = useState('');
@@ -66,15 +68,21 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
   const [showManufacture, setShowManufacture] = useState(false);
-  const [month, setMonth] = useState('01');
-  const [year, setYear] = useState('1997');
+  const [selectedMonth, setSelectedMonth] = useState('01');
+  const [selectedYear, setSelectedYear] = useState('2023');
+  const [selectedRegYear, setSelectedRegYear] = useState('2023');
 
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
+    navigation.setParams({
+      title: route.params.from === 'add' ? 'Add Vehicle' : 'Edit Vehicle',
+    });
     let temp: string[] = [];
-    for (let i = 1997; i <= new Date().getFullYear(); i++) {
-      temp.push(i.toString());
+    const currentYear = new Date().getFullYear();
+    for (let i = 0; i <= 30; i++) {
+      const year = currentYear - i;
+      temp.push(year.toString());
     }
     setYears(temp);
   }, []);
@@ -157,9 +165,13 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
       tempErrors.run = 'Run in Km should less then 4 lakh';
     } else if (+run < 0) {
       tempErrors.run = 'Run in Km should not be in negative';
+    } else if (!isNumberValid(run)) {
+      tempErrors.run = 'Enter valid data';
     }
     if (owners.length === 0) {
       tempErrors.owners = 'The owners field is required.';
+    } else if (!isNumberValid(owners)) {
+      tempErrors.owners = 'Enter valid data';
     }
     if (registration.length === 0) {
       tempErrors.registration = 'The registration field is required.';
@@ -410,33 +422,36 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
   }
 
   function onMonthChange(value: string) {
-    setMonth(value);
+    setSelectedMonth(value);
   }
 
   function onYearChange(value: string) {
-    setYear(value);
-    // let temp: string[] = [];
-    // for (let i = 1997; i <= +year; i++) {
-    //   temp.push(i.toString());
-    // }
-    // setYears(temp);
+    let temp: string[] = [];
+    const currentYear = new Date().getFullYear();
+    for (let year = +value; year <= currentYear; year++) {
+      temp.push(year.toString());
+    }
+    setSelectedYear(value);
+    setRegYears(temp);
+  }
+
+  function onRegYearChange(value: string) {
+    setSelectedRegYear(value);
   }
 
   function onSubmitMonthYear() {
     setShowCalendar(false);
-    setRegistration(month + '/' + year);
+    setRegistration(selectedMonth + '/' + selectedRegYear);
   }
 
   function onSubmitYear() {
     setShowManufacture(false);
-    setManufacture(year);
+    setManufacture(selectedYear);
   }
 
   function onColorChange(value: string) {
     setColor(value);
   }
-
-  console.log('years', years);
 
   return (
     <Box style={styles.container}>
@@ -547,7 +562,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
               </Box>
             </Box>
           )}
-          <Box>
+          <Box style={{marginTop: -10}}>
             <CustomDropdown
               values={ColorList}
               onValueChange={onColorChange}
@@ -656,11 +671,11 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
         style={styles.monthModal}>
         <MonthYearPicker
           months={Months}
-          years={years}
+          years={regyears}
           onMonthChange={onMonthChange}
-          onYearChange={onYearChange}
-          selectedMonth={month}
-          selectedYear={year}
+          onYearChange={onRegYearChange}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedRegYear}
           onSubmitMonthYear={onSubmitMonthYear}
         />
       </Modal>
@@ -674,7 +689,7 @@ export default function DisplayInfo({navigation, route}: DisplayInfoProps) {
           months={Months}
           years={years}
           onYearChange={onYearChange}
-          selectedYear={year}
+          selectedYear={selectedYear}
           onSubmitMonthYear={onSubmitYear}
           showYear={true}
         />

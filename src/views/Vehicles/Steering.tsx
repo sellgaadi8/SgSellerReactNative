@@ -35,6 +35,9 @@ export default function Steering({navigation, route}: SteeringProps) {
   const [rating, setRating] = useState(0);
 
   useEffect(() => {
+    navigation.setParams({
+      title: route.params.from === 'add' ? 'Add Vehicle' : 'Edit Vehicle',
+    });
     if (route.params.from === 'edit') {
       setLoading(true);
       dispatch(onGetSteeringDetails(vehicleId));
@@ -43,17 +46,37 @@ export default function Steering({navigation, route}: SteeringProps) {
   }, []);
 
   function submit() {
-    setLoading(true);
-    if (route.params.from === 'add') {
+    if (
+      suspension.length !== 0 ||
+      steering.length !== 0 ||
+      brake.length !== 0 ||
+      wheel.length !== 0
+    ) {
       setLoading(true);
-      dispatch(
-        onAddSteering(vehicleId, suspension, steering, brake, wheel, rating),
-      );
+      if (route.params.from === 'add') {
+        setLoading(true);
+        dispatch(
+          onAddSteering(vehicleId, suspension, steering, brake, wheel, rating),
+        );
+      } else {
+        setLoading(true);
+        dispatch(
+          onUpdateSteering(
+            vehicleId,
+            suspension,
+            steering,
+            brake,
+            wheel,
+            rating,
+          ),
+        );
+      }
     } else {
-      setLoading(true);
-      dispatch(
-        onUpdateSteering(vehicleId, suspension, steering, brake, wheel, rating),
-      );
+      Snackbar.show({
+        text: 'Please select atleast one option',
+        backgroundColor: 'red',
+        duration: Snackbar.LENGTH_SHORT,
+      });
     }
   }
 

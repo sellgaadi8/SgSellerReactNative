@@ -83,3 +83,9 @@ type EditProfileErrors = {
   name?: string;
   email?: string;
 };
+
+type StatusErrors = {
+  askingPrice?: string;
+  ocblow?: string;
+  ocbhigh?: string;
+};

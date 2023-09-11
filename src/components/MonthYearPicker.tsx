@@ -29,16 +29,17 @@ export default function MonthYearPicker({
                 style={styles.pickerItemStyle}
                 onValueChange={onMonthChange}
                 selectedValue={selectedMonth}>
-                {months.map((el, index) => {
-                  return (
-                    <Picker.Item
-                      key={index}
-                      style={[styles.pickerItemStyle]}
-                      label={el.label}
-                      value={el.value}
-                    />
-                  );
-                })}
+                {months &&
+                  months.map((el, index) => {
+                    return (
+                      <Picker.Item
+                        key={index}
+                        style={[styles.pickerItemStyle]}
+                        label={el.label}
+                        value={el.value}
+                      />
+                    );
+                  })}
               </Picker>
             </View>
           </View>

@@ -68,14 +68,22 @@ export default function ProfileDetails({navigation}: ProfileDetailsProps) {
       const {data, success} = selectGetProfile;
       if (success && data) {
         setName(data.dealership_name);
-        setAddress1(data.dealership_address);
+        if (data.dealership_address) {
+          setAddress1(data.dealership_address);
+        }
+
         setMobile(data.mobile);
         if (data.gst_no) {
           setGst(data?.gst_no);
         }
-        setPan(data.business_pan);
+        if (data.business_pan) {
+          setPan(data.business_pan);
+        }
         if (data.aadhar_no) {
           setAdhar(data.aadhar_no);
+        }
+        if (data.email) {
+          setEmail(data.email);
         }
       }
     }

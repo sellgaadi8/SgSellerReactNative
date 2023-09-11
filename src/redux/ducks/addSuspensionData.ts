@@ -58,52 +58,27 @@ export const onAddSuspension =
 
     const body = new FormData();
 
-    if (handle && handle.length !== 0) {
-      body.append('handle', handle);
-    }
+    body.append('handle', handle);
 
-    if (front_shock_absorber && front_shock_absorber.length !== 0) {
-      body.append('front_shock_absorber', front_shock_absorber);
-    }
+    body.append('front_shock_absorber', front_shock_absorber);
 
-    if (rear_shock_absorber && rear_shock_absorber.length !== 0) {
-      body.append('rear_shock_absorber', rear_shock_absorber);
-    }
+    body.append('rear_shock_absorber', rear_shock_absorber);
 
-    if (front_brake_condition && front_brake_condition.length !== 0) {
-      body.append('front_brake_condition', front_brake_condition);
-    }
+    body.append('front_brake_condition', front_brake_condition);
 
-    if (rear_brake_condition && rear_brake_condition.length !== 0) {
-      body.append('rear_brake_condition', rear_brake_condition);
-    }
+    body.append('rear_brake_condition', rear_brake_condition);
 
-    if (handle_image && handle_image.length !== 0) {
-      body.append('handle_image', handle_image);
-    }
+    body.append('handle_image', handle_image);
 
-    if (front_shock_absorber_image && front_shock_absorber_image.length !== 0) {
-      body.append('front_shock_absorber_image', front_shock_absorber_image);
-    }
+    body.append('front_shock_absorber_image', front_shock_absorber_image);
 
-    if (rear_shock_absorber_image && rear_shock_absorber_image.length !== 0) {
-      body.append('rear_shock_absorber_image', rear_shock_absorber_image);
-    }
+    body.append('rear_shock_absorber_image', rear_shock_absorber_image);
 
-    if (
-      front_brake_condition_image &&
-      front_brake_condition_image.length !== 0
-    ) {
-      body.append('front_brake_condition_image', front_brake_condition_image);
-    }
+    body.append('front_brake_condition_image', front_brake_condition_image);
 
-    if (rear_brake_condition_image && rear_brake_condition_image.length !== 0) {
-      body.append('rear_brake_condition_image', rear_brake_condition_image);
-    }
+    body.append('rear_brake_condition_image', rear_brake_condition_image);
 
-    if (overall_rating) {
-      body.append('overall_rating', overall_rating);
-    }
+    body.append('overall_rating', overall_rating);
 
     axiosInstance
       .post(url, body, config)

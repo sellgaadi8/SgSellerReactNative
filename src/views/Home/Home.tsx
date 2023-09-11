@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext, useEffect, useState} from 'react';
-import GlobalContext from '../../contexts/GlobalContext';
+import React, {useEffect, useState} from 'react';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -34,13 +33,15 @@ import DownloadCard from '../../components/DownloadCard';
 import {getCsvFileDownload} from '../../redux/ducks/getCsvFile';
 import Loader from '../../components/Loader';
 import Snackbar from 'react-native-snackbar';
+import {onGetProfile} from '../../redux/ducks/getProfile';
 const {height, width} = Dimensions.get('window');
 
 export default function Home() {
-  const {name} = useContext(GlobalContext);
   const [showCalendar, setShowCalendar] = useState(false);
   const [fromDate, setFromDate] = useState('');
+  const [name, setName] = useState('');
   const [toDate, setToDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
+  const selectGetProfile = useAppSelector(state => state.getProfile);
   const [tooltipPos, setTooltipPos] = useState({
     x: 0,
     y: 0,
@@ -93,7 +94,9 @@ export default function Home() {
   useEffect(() => {
     const oneWeekAgoFormatted = getOneWeekAgoDateFormatted();
     setFromDate(oneWeekAgoFormatted);
+    setLoading(true);
     dispatch(getCharts(oneWeekAgoFormatted, toDate));
+    dispatch(onGetProfile());
   }, []);
 
   const handleBackButtonPress = () => {
@@ -176,7 +179,14 @@ export default function Home() {
         openFileDownloadLink(file);
       }
     }
-  }, [selectChartData, selectCsvDownload]);
+    if (selectGetProfile.called) {
+      setLoading(false);
+      const {data, success} = selectGetProfile;
+      if (success && data) {
+        setName(data.dealership_name);
+      }
+    }
+  }, [selectChartData, selectCsvDownload, selectGetProfile]);
 
   function onModalClosed() {
     setShowCalendar(false);
@@ -222,7 +232,7 @@ export default function Home() {
             fontSize={16}
             lineHeight={20}
             color="#111111">
-            Welcome {name}!
+            Welcome {name.split(' ')[0]}!
           </CustomText>
           {/* <CustomText
             fontFamily="Roboto-Bold"
@@ -429,6 +439,7 @@ export default function Home() {
           headerWrapperStyle={styles.headerStyle}
           dayLabelsWrapper={styles.day}
           selectedRangeStyle={styles.rangeStyle}
+          maxRangeDuration={30}
         />
       </Modal>
     </Box>

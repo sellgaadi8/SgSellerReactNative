@@ -74,6 +74,9 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
   const [errors, setErrors] = useState<CarDocumentsError>();
 
   useEffect(() => {
+    navigation.setParams({
+      title: route.params.from === 'add' ? 'Add Vehicle' : 'Edit Vehicle',
+    });
     if (route.params.from === 'edit') {
       setLoading(true);
       dispatch(onGetCarDocuments(vehicleId));
@@ -228,20 +231,62 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
       setLoading(false);
       const {data, error} = selectGetCarDocs;
       if (!error && data) {
-        setRto(data.rto);
-        setNoc(data.rc_noc_issued.toLowerCase());
-        setFitment(data.cng_lpg_fitment);
-        setFitmentEndorsed(data.cng_lpg_fitment_endorsed_on_rc);
-        setFitness(data.fitness_upto);
-        setPermit(data.permit_upto);
-        setChessis(data.chasis_no);
-        setHypo(data.under_hypothication);
-        setInsurance(data.insurance);
-        setKey(data.duplicate_key);
-        setMismatch(data.mismatch_in_rc);
-        setPartipeshi(data.partipeshi_request);
-        setRcAvail(data.rc_availability.toLowerCase());
-        setRoadTax(data.road_tax_paid);
+        if (data.rto) {
+          setRto(data.rto);
+        }
+
+        if (data.rc_noc_issued) {
+          setNoc(data.rc_noc_issued.toLowerCase());
+        }
+
+        if (data.cng_lpg_fitment) {
+          setFitment(data.cng_lpg_fitment);
+        }
+
+        if (data.cng_lpg_fitment_endorsed_on_rc) {
+          setFitmentEndorsed(data.cng_lpg_fitment_endorsed_on_rc);
+        }
+
+        if (data.fitness_upto) {
+          setFitness(data.fitness_upto);
+        }
+
+        if (data.permit_upto) {
+          setPermit(data.permit_upto);
+        }
+
+        if (data.chasis_no) {
+          setChessis(data.chasis_no);
+        }
+
+        if (data.under_hypothication) {
+          setHypo(data.under_hypothication);
+        }
+
+        if (data.insurance) {
+          setInsurance(data.insurance);
+        }
+
+        if (data.duplicate_key) {
+          setKey(data.duplicate_key);
+        }
+
+        if (data.mismatch_in_rc) {
+          setMismatch(data.mismatch_in_rc);
+        }
+
+        if (data.partipeshi_request) {
+          setPartipeshi(data.partipeshi_request);
+        }
+
+        if (data.rc_availability) {
+          setRcAvail(data.rc_availability.toLowerCase());
+        }
+
+        if (data.road_tax_paid) {
+          setRoadTax(data.road_tax_paid);
+        }
+
         let temp = [...carDocsType];
         if (data.rc_availability_image) {
           temp[0].url = data.rc_availability_image.url;
@@ -504,7 +549,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
                   onPressCamera={() => onOpenPicker('key')}
                 />
                 <RadioButtons
-                  label="Chessis Number embossing ( Tracable/Nor tracable)"
+                  label="Chessis Number embossing (Tracable/Not Tracable)"
                   data={[
                     {label: 'Yes', value: 'yes'},
                     {label: 'No', value: 'no'},

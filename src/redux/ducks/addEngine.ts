@@ -64,73 +64,39 @@ export const onAddEngine =
 
     const body = new FormData();
 
-    if (gear_oil_leakage && gear_oil_leakage.length !== 0) {
-      body.append('gear_oil_leakage', gear_oil_leakage);
-    }
+    body.append('gear_oil_leakage', gear_oil_leakage);
 
-    if (exhaust_smoke && exhaust_smoke.length !== 0) {
-      body.append('exhaust_smoke', exhaust_smoke);
-    }
+    body.append('exhaust_smoke', exhaust_smoke);
 
-    if (engine_perm_blow_back && engine_perm_blow_back.length !== 0) {
-      body.append('engine_perm_blow_back', engine_perm_blow_back);
-    }
+    body.append('engine_perm_blow_back', engine_perm_blow_back);
 
-    if (engine_mounting && engine_mounting.length !== 0) {
-      body.append('engine_mounting', engine_mounting);
-    }
+    body.append('engine_mounting', engine_mounting);
 
-    if (engine_sound && engine_sound.length !== 0) {
-      body.append('engine_sound', engine_sound);
-    }
+    body.append('engine_sound', engine_sound);
 
-    if (clutch_bearing_sound && clutch_bearing_sound.length !== 0) {
-      body.append('clutch_bearing_sound', clutch_bearing_sound);
-    }
+    body.append('clutch_bearing_sound', clutch_bearing_sound);
 
-    if (ac && ac.length !== 0) {
-      body.append('ac', ac);
-    }
+    body.append('ac', ac);
 
-    if (cooling && cooling.length !== 0) {
-      body.append('cooling', cooling);
-    }
+    body.append('cooling', cooling);
 
-    if (heater && heater.length !== 0) {
-      body.append('heater', heater);
-    }
+    body.append('heater', heater);
 
-    if (condensor && condensor.length !== 0) {
-      body.append('condensor', condensor);
-    }
+    body.append('condensor', condensor);
 
-    if (gear_oil_leakage_image && gear_oil_leakage_image.length !== 0) {
-      body.append('gear_oil_leakage_image', gear_oil_leakage_image);
-    }
+    body.append('gear_oil_leakage_image', gear_oil_leakage_image);
 
-    if (exhaust_smoke_image && exhaust_smoke_image.length !== 0) {
-      body.append('exhaust_smoke_image', exhaust_smoke_image);
-    }
+    body.append('exhaust_smoke_image', exhaust_smoke_image);
 
-    if (engine_sound_video && engine_sound_video.length !== 0) {
-      body.append('engine_sound_video', engine_sound_video);
-    }
+    body.append('engine_sound_video', engine_sound_video);
 
-    if (engine_coolant_level && engine_coolant_level.length !== 0) {
-      body.append('engine_coolant_level', engine_coolant_level);
-    }
+    body.append('engine_coolant_level', engine_coolant_level);
 
-    if (engine_oil_level && engine_oil_level.length !== 0) {
-      body.append('engine_oil_level', engine_oil_level);
-    }
+    body.append('engine_oil_level', engine_oil_level);
 
-    if (chain_belt_assembly && chain_belt_assembly.length !== 0) {
-      body.append('chain_belt_assembly', chain_belt_assembly);
-    }
+    body.append('chain_belt_assembly', chain_belt_assembly);
 
-    if (overall_rating) {
-      body.append('overall_rating', overall_rating);
-    }
+    body.append('overall_rating', overall_rating);
 
     axiosInstance
       .post(url, body, config)

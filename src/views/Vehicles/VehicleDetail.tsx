@@ -630,7 +630,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                         style={{top: idx === 0 ? 5 : 0}}>
                         {el.title}
                       </CustomText>
-                      {el.ratings !== undefined && (
+                      {el.ratings && (
                         <Box
                           style={[
                             styles.ratingBox,
@@ -643,7 +643,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
                             color="#FFFFFF"
                             fontFamily="Roboto-Bold"
                             fontSize={12}>
-                            {el.ratings ? el.ratings : 0}
+                            {el.ratings}
                           </CustomText>
                         </Box>
                       )}

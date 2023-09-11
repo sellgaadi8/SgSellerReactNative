@@ -50,12 +50,14 @@ export default function Profile({navigation}: ProfileProps) {
     }
   }
   useEffect(() => {
+    setLoading(true);
     dispatch(onGetProfile());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (selectGetProfile.called) {
+      setLoading(false);
       const {data, success} = selectGetProfile;
       if (success && data) {
         setProfleDetail(data);

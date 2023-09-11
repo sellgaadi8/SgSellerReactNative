@@ -188,6 +188,9 @@ export default function TwoWheelerElectrical({
   const [type, setType] = useState<ElectType>();
 
   useEffect(() => {
+    navigation.setParams({
+      title: route.params.from === 'add' ? 'Add Vehicle' : 'Edit Vehicle',
+    });
     if (route.params.from === 'edit') {
       setLoading(true);
       dispatch(onGetElectricalDetails(vehicleId));
