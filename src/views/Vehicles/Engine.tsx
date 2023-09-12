@@ -71,7 +71,7 @@ export default function Engine({navigation, route}: EngineProps) {
 
   function validateInputs() {
     const tempErrors: EngineError = {};
-    if (sound.length === 0) {
+    if (sound && sound.length === 0) {
       tempErrors.sound = 'Engine sound is required';
     }
     if (vehicleType === 'four_wheeler' && cooling.length === 0) {
@@ -84,7 +84,7 @@ export default function Engine({navigation, route}: EngineProps) {
       tempErrors.condensor = 'Condensor is required';
     }
 
-    if (sound === 'major_sound' && soundVideo.length === 0) {
+    if (soundVideo.length === 0) {
       Snackbar.show({
         text: 'Engine sound video is required',
         backgroundColor: 'red',
@@ -210,33 +210,76 @@ export default function Engine({navigation, route}: EngineProps) {
       const {error, data} = selectGetEngine;
       let temp = [...engineImageTypes];
       if (!error && data) {
-        setOilLeak(data.gear_oil_leakage);
-        setSmoke(data.exhaust_smoke);
-        setPermissble(data.engine_perm_blow_back);
-        setMounting(data.engine_mounting);
-        setSound(data.engine_sound);
-        setClutch(data.clutch_bearing_sound);
-        setAc(data.ac);
-        setCooling(data.cooling);
-        setHeater(data.heater);
-        setCondensor(data.condensor);
-        if (data.gear_oil_leakage_image) {
+        if (data.gear_oil_leakage !== null) {
+          setOilLeak(data.gear_oil_leakage);
+        }
+
+        if (data.exhaust_smoke !== null) {
+          setSmoke(data.exhaust_smoke);
+        }
+
+        if (data.engine_perm_blow_back !== null) {
+          setPermissble(data.engine_perm_blow_back);
+        }
+
+        if (data.engine_mounting !== null) {
+          setMounting(data.engine_mounting);
+        }
+
+        if (data.engine_sound !== null) {
+          setSound(data.engine_sound);
+        }
+
+        if (data.clutch_bearing_sound !== null) {
+          setClutch(data.clutch_bearing_sound);
+        }
+
+        if (data.ac !== null) {
+          setAc(data.ac);
+        }
+
+        if (data.cooling !== null) {
+          setCooling(data.cooling);
+        }
+
+        if (data.heater !== null) {
+          setHeater(data.heater);
+        }
+
+        if (data.condensor !== null) {
+          setCondensor(data.condensor);
+        }
+
+        if (data.chain_belt_assembly !== null) {
+          setChain(data.chain_belt_assembly);
+        }
+
+        if (data.engine_oil_level !== null) {
+          setEngineOilLevel(data.engine_oil_level);
+        }
+
+        if (data.engine_coolant_level !== null) {
+          setCoolantLevel(data.engine_coolant_level);
+        }
+
+        if (
+          data.gear_oil_leakage_image &&
+          data.gear_oil_leakage_image !== null
+        ) {
           setOilLeakImage(data.gear_oil_leakage_image.file);
           temp[0].url = data.gear_oil_leakage_image.url;
         }
-        if (data.exhaust_smoke_image) {
+        if (data.exhaust_smoke_image && data.exhaust_smoke_image !== null) {
           setSmokeImage(data.exhaust_smoke_image.file);
           temp[1].url = data.exhaust_smoke_image.url;
         }
-        setChain(data.chain_belt_assembly);
-        setEngineOilLevel(data.engine_oil_level);
-        setCoolantLevel(data.engine_coolant_level);
-        if (data.engine_sound_video) {
+
+        if (data.engine_sound_video && data.engine_sound_video !== null) {
           setSoundVideo(data.engine_sound_video.file);
           temp[2].url = data.engine_sound_video.url;
           setMediaType('video');
         }
-        if (data.overall_rating) {
+        if (data.overall_rating && data.overall_rating !== null) {
           setRating(data.overall_rating);
         }
       }

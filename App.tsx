@@ -35,6 +35,8 @@ import VideoPlayer from './src/components/VideoPlayer';
 import Register from './src/views/Auth/Register';
 import ImageSection from './src/views/Vehicles/ImageSection';
 import messaging from '@react-native-firebase/messaging';
+import PushNotification from 'react-native-push-notification';
+import {navigationRef} from './src/navigation/navigate';
 
 export default function App() {
   const RootStack = createStackNavigator<RootStackParamList>();
@@ -43,6 +45,39 @@ export default function App() {
   const [name, setName] = useState('');
   const [vehicleType, setVehicleType] = useState('');
   const selectLogoutState = useAppSelector(state => state.logout);
+
+  useEffect(() => {
+    PushNotification.configure({
+      onNotification: function (notification) {
+        const {click_to_action} = notification.data;
+        const clickToActionString = click_to_action;
+        const clickToAction = JSON.parse(clickToActionString);
+
+        if (notification.foreground) {
+          // Handle notification when app is in foreground
+        } else {
+          if (clickToAction) {
+            let route: keyof RootStackParamList = 'HomeStack';
+            let params: any = {};
+
+            switch (clickToAction.page) {
+              case 'details_page':
+                route = 'VehicleDetail';
+                params.uuid = clickToAction.id;
+                setVehicleId(clickToAction.id);
+                break;
+            }
+            navigationRef.current?.navigate(route, {
+              from: 'NOTIFICATIONS',
+              ...params,
+            });
+          }
+        }
+        PushNotification.removeAllDeliveredNotifications();
+      },
+      popInitialNotification: true,
+    });
+  }, []);
 
   useEffect(() => {
     if (selectLogoutState.called) {
@@ -91,7 +126,7 @@ export default function App() {
       }}>
       <SafeAreaView style={styles.container}>
         <StatusBar backgroundColor={colors.primary} />
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
           <RootStack.Navigator>
             {!authenticated ? (
               <>

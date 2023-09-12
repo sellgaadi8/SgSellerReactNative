@@ -61,40 +61,7 @@ PushNotification.configure({
     // });
 
     console.log('notification.data;', notification.data);
-    if (notification.foreground) {
-    } else {
-      if (click_action) {
-        // setCampaignId(store.getState.selectPushNotification.campaignId);
-        let route = 'HomePageStack';
-        let params = {};
 
-        switch (click_action.page) {
-          case 'UPLOAD_HOSPITAL_DETAILS':
-            break;
-        }
-        navigationRef?.current?.navigate(route, {
-          from: 'NOTIFICATIONS',
-          ...params,
-        });
-      }
-      store.dispatch(
-        onPushNotification({
-          click_action: notification.click_action,
-          called: true,
-          body: notification.body,
-          title: notification.title,
-          foreground: notification.foreground,
-        }),
-      );
-    }
-    // if (!foreground && !userInteraction) {
-    //   triggerLocalNotification({
-    //     title,
-    //     message,
-    //     id,
-    //     buttonLabel,
-    //   });
-    // }
     PushNotification.removeAllDeliveredNotifications();
   },
   popInitialNotification: true,

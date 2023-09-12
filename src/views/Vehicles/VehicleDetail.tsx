@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {useDispatch} from 'react-redux';
 import Box from '../../components/Box';
@@ -25,6 +25,7 @@ import RectButtonCustom from '../../components/RectButtonCustom';
 import Indicator from '../../components/Indicator';
 import {useAppSelector} from '../../utils/hooks';
 import {VehicleDetailProps} from '../../types/propsTypes';
+import GlobalContext from '../../contexts/GlobalContext';
 const {height, width} = Dimensions.get('window');
 
 export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
@@ -169,6 +170,7 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
   const targetDateString = vehicleDetails?.vehicle.auction_ends_at || ''; // Handle null or undefined target date
   const targetDate = new Date(targetDateString);
   const currentTime = new Date();
+  const {vehicleId} = useContext(GlobalContext);
 
   const [remainingTime, setRemainingTime] = useState(
     targetDateString
@@ -198,7 +200,9 @@ export default function VehicleDetail({route, navigation}: VehicleDetailProps) {
 
   useEffect(() => {
     setLoading(true);
-    dispatch(onGetVehicleDetails(route.params.vehicleId));
+    dispatch(
+      onGetVehicleDetails(vehicleId ? vehicleId : route.params.vehicleId),
+    );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

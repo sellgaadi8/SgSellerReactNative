@@ -519,7 +519,7 @@ export default function Exterior({navigation, route}: ExteriorProps) {
           />
           <BasePicker
             data={list}
-            title="Right Apron Leg"
+            title="Right Apron"
             onValueChange={setRightApron}
             selectedValue={rightApron}
             onPressCamera={() => onOpenPicker('right_apron')}

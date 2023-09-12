@@ -214,50 +214,48 @@ export default function VehicleCard({
             </CustomText>
           </Pressable>
         </Box>
-        <Box
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center">
-          {data.vehicle_status === 'in_auction' && (
-            <Box style={styles.time}>
-              <MaterialCommunityIcons
-                name="clock-outline"
-                size={20}
-                color="#FF0000"
-                style={{marginRight: 5}}
-              />
+        {data.highest_bid && (
+          <Box style={styles.highestbid}>
+            <CustomText
+              color="#FFFFFF"
+              fontSize={16}
+              lineHeight={22}
+              fontFamily="Roboto-Medium">
+              Highest Bid: Rs.{data.highest_bid}
+            </CustomText>
+          </Box>
+        )}
+        {data.vehicle_status === 'one_click_buy' &&
+          data.ocb_value &&
+          data.ocb_value.length !== 0 && (
+            <Box
+              style={[styles.customerexpected, {backgroundColor: '#33A02C'}]}>
               <CustomText
-                color="#FF0000"
-                fontSize={18}
-                lineHeight={24}
+                color="#FFFFFF"
+                fontSize={14}
+                lineHeight={22}
                 fontFamily="Roboto-Medium">
-                {remainingTime}
+                Closing Price: {}Rs.{data.ocb_value}
               </CustomText>
-              <Box ph={'10%'}>
-                <CustomText
-                  color="#34A02C"
-                  fontSize={18}
-                  lineHeight={24}
-                  fontFamily="Roboto-Medium">
-                  Highest Bid: {data.highest_bid}
-                </CustomText>
-              </Box>
             </Box>
           )}
-
-          {data.vehicle_status === 'one_click_buy' &&
-            data.ocb_value.length !== 0 && (
-              <Box ph={'5%'}>
-                <CustomText
-                  color="#34A02C"
-                  fontSize={18}
-                  lineHeight={24}
-                  fontFamily="Roboto-Medium">
-                  OCB Value: {data.ocb_value}
-                </CustomText>
-              </Box>
-            )}
-        </Box>
+        {data.vehicle_status === 'in_auction' && (
+          <Box style={styles.time}>
+            <MaterialCommunityIcons
+              name="clock-outline"
+              size={20}
+              color="#FF0000"
+              style={{marginRight: 5}}
+            />
+            <CustomText
+              color="#FF0000"
+              fontSize={18}
+              lineHeight={24}
+              fontFamily="Roboto-Medium">
+              {remainingTime}
+            </CustomText>
+          </Box>
+        )}
       </Box>
     </Box>
   );
@@ -334,15 +332,27 @@ const styles = EStyleSheet.create({
   },
   time: {
     padding: '0.6rem',
-    marginBottom: '1rem',
+    marginTop: '0.5rem',
     // backgroundColor: '#ECECEC',
-    ...contentCenter,
-    left: 15,
     // borderTopRightRadius: 10,
     // borderBottomRightRadius: 10,
     borderRadius: 20,
     // elevation: 1,
     top: 5,
     flexDirection: 'row',
+  },
+  highestbid: {
+    marginTop: '1rem',
+    marginLeft: '1rem',
+    backgroundColor: '#34A02C',
+    padding: '0.2rem',
+    paddingLeft: '1.5rem',
+  },
+  customerexpected: {
+    marginTop: '1.5rem',
+    marginLeft: '1rem',
+    backgroundColor: colors.secondaryLight,
+    padding: '0.2rem',
+    paddingLeft: '1.5rem',
   },
 });

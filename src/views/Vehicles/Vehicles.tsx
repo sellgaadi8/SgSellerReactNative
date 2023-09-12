@@ -369,88 +369,88 @@ export default function Vehicles({navigation}: VehiclesProps) {
           style={{marginLeft: 5}}
         />
       </Pressable>
-      {!showFilter && (
-        <Box flexDirection="row" ph={'5%'}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {from && to && (
-              <Box style={styles.filterBox}>
-                <Pressable onPress={() => onRemove('date')}>
-                  <Icon
-                    name="close"
-                    size={12}
-                    color={'#FFFFFF'}
-                    style={{right: 5, top: 1}}
-                  />
-                </Pressable>
-                <CustomText
-                  fontFamily="Roboto-Medium"
-                  color="#FFFFFF"
-                  fontSize={12}
-                  lineHeight={18}>
-                  {from + ' - ' + to}
-                </CustomText>
-              </Box>
-            )}
-            {make && (
-              <Box style={styles.filterBox}>
-                <Pressable onPress={() => onRemove('make')}>
-                  <Icon
-                    name="close"
-                    size={12}
-                    color={'#FFFFFF'}
-                    style={{right: 5, top: 1}}
-                  />
-                </Pressable>
-                <CustomText
-                  fontFamily="Roboto-Medium"
-                  color="#FFFFFF"
-                  fontSize={12}
-                  lineHeight={18}>
-                  {make.replace('_', ' ')}
-                </CustomText>
-              </Box>
-            )}
-            {model && (
-              <Box style={styles.filterBox}>
-                <Pressable onPress={() => onRemove('model')}>
-                  <Icon
-                    name="close"
-                    size={12}
-                    color={'#FFFFFF'}
-                    style={{right: 5, top: 1}}
-                  />
-                </Pressable>
-                <CustomText
-                  fontFamily="Roboto-Medium"
-                  color="#FFFFFF"
-                  fontSize={12}
-                  lineHeight={18}>
-                  {model.replace('_', ' ')}
-                </CustomText>
-              </Box>
-            )}
-            {status && (
-              <Box style={styles.filterBox}>
-                <Pressable onPress={() => onRemove('status')}>
-                  <Icon
-                    name="close"
-                    size={12}
-                    color={'#FFFFFF'}
-                    style={{right: 5, top: 1}}
-                  />
-                </Pressable>
-                <CustomText
-                  fontFamily="Roboto-Medium"
-                  color="#FFFFFF"
-                  fontSize={12}
-                  lineHeight={18}>
-                  {status.replace('_', ' ')}
-                </CustomText>
-              </Box>
-            )}
-          </ScrollView>
-        </Box>
-      )}
+
+      <Box flexDirection="row" ph={'5%'}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {(from || to) && (
+            <Box style={styles.filterBox}>
+              <Pressable onPress={() => onRemove('date')}>
+                <Icon
+                  name="close"
+                  size={12}
+                  color={'#FFFFFF'}
+                  style={{right: 5, top: 1}}
+                />
+              </Pressable>
+              <CustomText
+                fontFamily="Roboto-Medium"
+                color="#FFFFFF"
+                fontSize={12}
+                lineHeight={18}>
+                {from + ' - ' + to}
+              </CustomText>
+            </Box>
+          )}
+          {make && (
+            <Box style={styles.filterBox}>
+              <Pressable onPress={() => onRemove('make')}>
+                <Icon
+                  name="close"
+                  size={12}
+                  color={'#FFFFFF'}
+                  style={{right: 5, top: 1}}
+                />
+              </Pressable>
+              <CustomText
+                fontFamily="Roboto-Medium"
+                color="#FFFFFF"
+                fontSize={12}
+                lineHeight={18}>
+                {make.replace(/_/g, ' ')}
+              </CustomText>
+            </Box>
+          )}
+          {model && (
+            <Box style={styles.filterBox}>
+              <Pressable onPress={() => onRemove('model')}>
+                <Icon
+                  name="close"
+                  size={12}
+                  color={'#FFFFFF'}
+                  style={{right: 5, top: 1}}
+                />
+              </Pressable>
+              <CustomText
+                fontFamily="Roboto-Medium"
+                color="#FFFFFF"
+                fontSize={12}
+                lineHeight={18}>
+                {model.replace(/_/g, ' ')}
+              </CustomText>
+            </Box>
+          )}
+          {status && (
+            <Box style={styles.filterBox}>
+              <Pressable onPress={() => onRemove('status')}>
+                <Icon
+                  name="close"
+                  size={12}
+                  color={'#FFFFFF'}
+                  style={{right: 5, top: 1}}
+                />
+              </Pressable>
+              <CustomText
+                fontFamily="Roboto-Medium"
+                color="#FFFFFF"
+                fontSize={12}
+                lineHeight={18}>
+                {status.replace(/_/g, ' ')}
+              </CustomText>
+            </Box>
+          )}
+        </ScrollView>
+      </Box>
+
       {vehicleData?.length !== 0 ? (
         <>
           {loading && <Loader />}
@@ -568,19 +568,17 @@ export default function Vehicles({navigation}: VehiclesProps) {
                 editable={false}
               />
             </Pressable>
-            {make.length !== 0 && (
-              <Pressable
-                onPress={() => onOpenModal('Model')}
-                style={styles.makeInput}>
-                <ProfileInput
-                  label="Model"
-                  value={model}
-                  onChangeText={setModel}
-                  noMargin
-                  editable={false}
-                />
-              </Pressable>
-            )}
+            <Pressable
+              onPress={() => onOpenModal('Model')}
+              style={styles.makeInput}>
+              <ProfileInput
+                label="Model"
+                value={model}
+                onChangeText={setModel}
+                noMargin
+                editable={false}
+              />
+            </Pressable>
             <Box ph={'4%'}>
               <CustomDropdown
                 values={StatusList}

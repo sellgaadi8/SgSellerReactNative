@@ -130,9 +130,9 @@ export default function Tyres({navigation, route}: TyresProps) {
     }
   }
 
-  function validateInputs() {
-    const tempErrors = {};
-    const showErrorSnackbar = (field: string | any[], message: any) => {
+  function validateInputs(): boolean {
+    const tempErrors: Record<string, any> = {};
+    const showErrorSnackbar = (field: string, message: string) => {
       tempErrors[field] = message;
       Snackbar.show({
         text: message,
@@ -142,13 +142,17 @@ export default function Tyres({navigation, route}: TyresProps) {
     };
 
     const checkField = (field: string | any[], message: string) => {
-      if (field.length === 0) {
-        showErrorSnackbar(field, message);
+      if (!field || (Array.isArray(field) && field.length === 0)) {
+        showErrorSnackbar(field as string, message);
       }
     };
 
-    const checkImageFields = (fields: any[], message: string) => {
-      if (fields.some((field: string | any[]) => field.length === 0)) {
+    const checkImageFields = (fields: (string | any[])[], message: string) => {
+      if (
+        fields.some(
+          field => !field || (Array.isArray(field) && field.length === 0),
+        )
+      ) {
         showErrorSnackbar('allImages', message);
       }
     };
