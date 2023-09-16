@@ -214,7 +214,7 @@ export default function VehicleCard({
             </CustomText>
           </Pressable>
         </Box>
-        {data.highest_bid && (
+        {data.highest_bid !== undefined && (
           <Box style={styles.highestbid}>
             <CustomText
               color="#FFFFFF"

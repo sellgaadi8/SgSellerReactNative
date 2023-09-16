@@ -38,7 +38,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
     {id: 'key', url: ''},
     {id: 'chesis', url: ''},
   ]);
-
+  const [regNumber, setRegNumber] = useState('');
   const [rto, setRto] = useState('');
   const [fitness, setFitness] = useState('');
   const [permit, setPermit] = useState('');
@@ -136,6 +136,9 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
         ToastAndroid.show('Rc Image is require', ToastAndroid.LONG);
       }
     }
+    if (regNumber.length === 0) {
+      tempErrors.regno = 'Registration number is required';
+    }
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   }
@@ -171,6 +174,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
             partipeshiImage,
             keyImage,
             chessisImage,
+            regNumber,
           ),
         );
       } else {
@@ -196,6 +200,7 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
             partipeshiImage,
             keyImage,
             chessisImage,
+            regNumber,
           ),
         );
       }
@@ -308,6 +313,9 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
           temp[4].url = data.chasis_no_image.url;
           setChessisImage(data.chasis_no_image.file);
         }
+        if (data.registration_no) {
+          setRegNumber(data.registration_no);
+        }
         // setPermit(data.oer)
       }
     }
@@ -417,6 +425,14 @@ export default function CarDocuments({navigation, route}: CarDocumentsProps) {
             placeholder="( Ex MH02 )"
             isPlaceholder={true}
             error={errors?.rto}
+            noMargin
+          />
+          <ProfileInput
+            label="Registration No."
+            value={regNumber}
+            onChangeText={setRegNumber}
+            isMandatory
+            error={errors?.regno}
             noMargin
           />
           {vehicleType !== 'two_wheeler' && (

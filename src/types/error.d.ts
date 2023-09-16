@@ -49,6 +49,7 @@ type CarDocumentsError = {
   chessisImage?: string;
   fitment?: string;
   fitmentEndorsed?: string;
+  regno?: string;
 };
 
 type CarImagesError = {

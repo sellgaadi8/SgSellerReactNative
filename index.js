@@ -29,7 +29,6 @@ function Main() {
     <Provider store={store}>
       <GestureHandlerRootView style={styles.container}>
         <App />
-        <NetworkLogDebugModal />
       </GestureHandlerRootView>
     </Provider>
   );

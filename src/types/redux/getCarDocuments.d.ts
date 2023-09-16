@@ -35,6 +35,7 @@ type CarDocument = {
     url: string;
     file: string;
   };
+  registration_no: string;
 };
 
 type GetCarDocumentsState = {

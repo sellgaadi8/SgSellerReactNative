@@ -53,6 +53,7 @@ export const onAddCarDocuments =
     partipeshi_request_image: string,
     duplicate_key_image: string,
     chasis_no_image: string,
+    registration_no: string,
   ) =>
   async (dispatch: AppDispatch) => {
     const url = addCarDocumentsUrl(id);
@@ -103,6 +104,8 @@ export const onAddCarDocuments =
     body.append('duplicate_key_image', duplicate_key_image);
 
     body.append('chasis_no_image', chasis_no_image);
+
+    body.append('registration_no', registration_no);
 
     axiosInstance
       .post(url, body, config)
