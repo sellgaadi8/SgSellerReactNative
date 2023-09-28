@@ -37,7 +37,6 @@ import CustomDropdown from '../../components/CustomDropDown';
 import {StatusList} from '../../utils/constant';
 import {onUpdateStatus} from '../../redux/ducks/updateStatus';
 import Snackbar from 'react-native-snackbar';
-import {isNameValid} from '../../utils/regex';
 const {width, height} = Dimensions.get('window');
 
 export default function Vehicles({navigation}: VehiclesProps) {
@@ -76,7 +75,6 @@ export default function Vehicles({navigation}: VehiclesProps) {
   const [ocblow, setOcbLow] = useState('');
   const [ocbhigh, setOcbHigh] = useState('');
   const [loading, setLoading] = useState(false);
-  const [askingPrice, setAskingPrice] = useState('');
   const {vehicleId} = useContext(GlobalContext);
   const [errors, setErrors] = useState<StatusErrors>();
   const selectVehicleStatus = useAppSelector(state => state.updateStatus);
@@ -289,32 +287,27 @@ export default function Vehicles({navigation}: VehiclesProps) {
   function validateInputs() {
     const tempErrors: StatusErrors = {};
     if (selectedDropDownStatus === 'in_auction') {
-      if (askingPrice.length === 0) {
-        tempErrors.askingPrice = 'Value is required';
-      } else if (isNameValid(askingPrice)) {
-        tempErrors.askingPrice = 'Enter valid data';
+      if (ocblow.length === 0) {
+        tempErrors.ocblow = 'Value is required';
       }
     }
     if (selectedDropDownStatus === 'one_click_buy') {
+      const parsedOcbLow = parseFloat(ocblow);
+      const parsedOcbHigh = parseFloat(ocbhigh);
       if (ocblow.length === 0) {
         tempErrors.ocblow = 'Value is required';
-      } else if (isNameValid(ocblow)) {
-        tempErrors.ocblow = 'Enter valid data';
-      } else if (ocblow >= ocbhigh) {
-        tempErrors.ocblow = 'Enter value less then OCB high price';
+      } else if (parsedOcbLow >= parsedOcbHigh) {
+        tempErrors.ocblow = 'Enter value less than OCB high price';
       }
       if (ocbhigh.length === 0) {
         tempErrors.ocbhigh = 'Value is required';
-      } else if (isNameValid(ocbhigh)) {
-        tempErrors.ocblow = 'Enter valid data';
-      } else if (ocbhigh <= ocblow) {
-        tempErrors.ocblow = 'Enter value greater then OCB low price';
+      } else if (parsedOcbHigh <= parsedOcbLow) {
+        tempErrors.ocbhigh = 'Enter value greater than OCB low price';
       }
     }
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   }
-  console.log(errors, '===>');
 
   function onSubmit() {
     const isValid = validateInputs();
@@ -348,6 +341,12 @@ export default function Vehicles({navigation}: VehiclesProps) {
       setStatus('');
       dispatch(onGetVehicleList('', model, from, to, make));
     }
+  }
+
+  function onChangeStatus(val: string) {
+    setSelectedDropDownStatus(val);
+    setOcbHigh('');
+    setOcbLow('');
   }
 
   return (
@@ -638,7 +637,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
           <Box pv={'2%'}>
             <CustomDropdown
               values={Status}
-              onValueChange={setSelectedDropDownStatus}
+              onValueChange={onChangeStatus}
               selectedValue={selectedDropDownStatus}
             />
           </Box>
@@ -646,10 +645,10 @@ export default function Vehicles({navigation}: VehiclesProps) {
             <>
               <ProfileInput
                 label="Asking Price"
-                value={askingPrice}
-                onChangeText={setAskingPrice}
+                value={ocblow}
+                onChangeText={setOcbLow}
                 keyboardType="numeric"
-                error={errors?.askingPrice}
+                error={errors?.ocblow}
                 noMargin
               />
             </>
@@ -661,7 +660,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
                 value={ocbhigh}
                 onChangeText={setOcbHigh}
                 keyboardType="numeric"
-                error={errors?.ocblow}
+                error={errors?.ocbhigh}
                 noMargin
               />
               <ProfileInput
@@ -669,7 +668,7 @@ export default function Vehicles({navigation}: VehiclesProps) {
                 value={ocblow}
                 onChangeText={setOcbLow}
                 keyboardType="numeric"
-                error={errors?.ocbhigh}
+                error={errors?.ocblow}
                 noMargin
               />
             </>
