@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useContext, useEffect, useState} from 'react';
-import {Pressable, View} from 'react-native';
+import {Image, Linking, Pressable, View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Box from '../../components/Box';
 import CustomText from '../../components/CustomText';
@@ -22,11 +22,41 @@ import Snackbar from 'react-native-snackbar';
 import GlobalContext from '../../contexts/GlobalContext';
 import {deleteUserToken, saveTokenValidity} from '../../utils/localStorage';
 import Globals from '../../utils/globals';
+import Modal from 'react-native-modalbox';
 
 const Button = [
   {name: 'Personal details', detail: 'Edit & review personal details'},
   {name: 'Company details', detail: ''},
   {name: 'Support', detail: ''},
+];
+
+const Platforms = [
+  {
+    label: 'Instagram',
+    image: require('../../assets/socialMedia/Instagram.png'),
+    value: 'https://instagram.com/sellgaadi?igshid=YmMyMTA2M2Y=',
+  },
+  {
+    label: 'Facebook',
+    image: require('../../assets/socialMedia/Facebook.png'),
+    value:
+      'https://www.facebook.com/profile.php?id=100090122090624&mibextid=LQQJ4d',
+  },
+  {
+    label: 'X',
+    image: require('../../assets/socialMedia/X.png'),
+    value: 'https://twitter.com/sellgaadi',
+  },
+  {
+    label: 'Linkdin',
+    image: require('../../assets/socialMedia/Linkdin.png'),
+    value: 'https://www.linkedin.com/company/sellgaadi/',
+  },
+  {
+    label: 'Youtube',
+    image: require('../../assets/socialMedia/Youtube.png'),
+    value: 'https://www.youtube.com/@SellGaadi',
+  },
 ];
 
 export default function Profile({navigation}: ProfileProps) {
@@ -35,6 +65,7 @@ export default function Profile({navigation}: ProfileProps) {
   const [profileDetail, setProfleDetail] = useState<Profile>();
   const [loading, setLoading] = useState(false);
   const selectLogout = useAppSelector(state => state.logout);
+  const [showDropDown, setShowDropDown] = useState(false);
   const {setAuthenticated, setName} = useContext(GlobalContext);
 
   function details(index: number) {
@@ -44,6 +75,10 @@ export default function Profile({navigation}: ProfileProps) {
           return navigation.navigate('ProfileDetails', {
             title: profileDetail?.dealership_name,
           });
+        case 1:
+          return setShowDropDown(true);
+        case 2:
+          return Linking.openURL('mailto:Sellgaadi1@gmail.com');
         default:
           break;
       }
@@ -91,6 +126,15 @@ export default function Profile({navigation}: ProfileProps) {
       },
       undefined,
     );
+  }
+
+  function closeModal() {
+    setShowDropDown(false);
+  }
+
+  function onSelectCompDet(link: string) {
+    Linking.openURL(link);
+    setShowDropDown(false);
   }
 
   return (
@@ -171,6 +215,35 @@ export default function Profile({navigation}: ProfileProps) {
           Version 1.0
         </CustomText>
       </Box>
+      <Modal
+        isOpen={showDropDown}
+        onClosed={closeModal}
+        style={{height: 'auto', width: '50%', borderRadius: 8}}>
+        <Box>
+          {Platforms.map((el, index) => {
+            return (
+              <Pressable
+                onPress={() => onSelectCompDet(el.value)}
+                key={index.toString()}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  padding: 10,
+                }}>
+                <Image source={el.image} style={{width: 30, height: 30}} />
+                <CustomText
+                  fontFamily="Roboto-Medium"
+                  fontSize={18}
+                  lineHeight={26}
+                  color="Black"
+                  style={{marginLeft: 10}}>
+                  {el.label}
+                </CustomText>
+              </Pressable>
+            );
+          })}
+        </Box>
+      </Modal>
     </Box>
   );
 }

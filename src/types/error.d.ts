@@ -83,6 +83,10 @@ type EngineError = {
 type EditProfileErrors = {
   name?: string;
   email?: string;
+  address?: string;
+  gst?: string;
+  pan?: string;
+  aadhar?: string;
 };
 
 type StatusErrors = {

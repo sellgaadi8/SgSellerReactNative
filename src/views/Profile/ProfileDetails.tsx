@@ -17,7 +17,13 @@ import {onGetProfile} from '../../redux/ducks/getProfile';
 import {useAppSelector} from '../../utils/hooks';
 import Loader from '../../components/Loader';
 import Snackbar from 'react-native-snackbar';
-import {isEmailValid, isNameValid} from '../../utils/regex';
+import {
+  isEmailValid,
+  isNameValid,
+  validateAadhar,
+  validateGst,
+  validatePAN,
+} from '../../utils/regex';
 
 export default function ProfileDetails({navigation}: ProfileDetailsProps) {
   const [name, setName] = useState('');
@@ -48,6 +54,20 @@ export default function ProfileDetails({navigation}: ProfileDetailsProps) {
     }
     if (!isEmailValid(email)) {
       tempErrors.email = 'Enter a valid email address';
+    }
+    if (address1.length === 0) {
+      tempErrors.address = 'Enter address';
+    }
+    if (!validateGst(gst)) {
+      tempErrors.gst = 'Enter valid GST number';
+    }
+    if (!validatePAN(pan)) {
+      tempErrors.pan = 'Enter valid PAN number';
+    }
+    if (adhar.length === 0) {
+      tempErrors.aadhar = 'Enter Adhar number';
+    } else if (!validateAadhar(adhar)) {
+      tempErrors.aadhar = 'Enter valid Adhar number';
     }
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
@@ -101,6 +121,18 @@ export default function ProfileDetails({navigation}: ProfileDetailsProps) {
     }
   }, [selectGetProfile, selectUpdateProfile]);
 
+  const handlePanNumberChange = (text: string) => {
+    // Convert the input to uppercase
+    text = text.toUpperCase();
+    setPan(text);
+  };
+
+  const handleGstChange = (text: string) => {
+    // Convert the input to uppercase
+    text = text.toUpperCase();
+    setGst(text);
+  };
+
   return (
     <Box style={styles.container}>
       {loading && <Loader status="Loading..." />}
@@ -120,6 +152,8 @@ export default function ProfileDetails({navigation}: ProfileDetailsProps) {
           label="Dealership address"
           value={address1}
           onChangeText={setAddress1}
+          error={errors?.address}
+          noMargin
         />
 
         <ProfileInput
@@ -140,15 +174,19 @@ export default function ProfileDetails({navigation}: ProfileDetailsProps) {
         <ProfileInput
           label="GST number"
           value={gst}
-          onChangeText={setGst}
+          onChangeText={handleGstChange}
           maxLength={15}
+          error={errors?.gst}
+          noMargin
         />
 
         <ProfileInput
           label="Business pan"
           value={pan}
-          onChangeText={setPan}
+          onChangeText={handlePanNumberChange}
           maxLength={10}
+          error={errors?.pan}
+          noMargin
         />
 
         <ProfileInput
@@ -157,6 +195,8 @@ export default function ProfileDetails({navigation}: ProfileDetailsProps) {
           onChangeText={setAdhar}
           maxLength={12}
           keyboardType="numeric"
+          error={errors?.aadhar}
+          noMargin
         />
 
         <PrimaryButton label="Update" onPress={update} />
