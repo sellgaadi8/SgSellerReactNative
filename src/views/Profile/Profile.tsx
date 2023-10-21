@@ -134,7 +134,9 @@ export default function Profile({navigation}: ProfileProps) {
 
   function onSelectCompDet(link: string) {
     Linking.openURL(link);
-    setShowDropDown(false);
+    setTimeout(() => {
+      setShowDropDown(false);
+    }, 1000);
   }
 
   return (

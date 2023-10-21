@@ -45,8 +45,6 @@ export function isNumberValid(value: string) {
 }
 
 export function validatePAN(panNumber: any) {
-  console.log('panNumber', panNumber);
-
   const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
   return panPattern.test(panNumber);
 }
