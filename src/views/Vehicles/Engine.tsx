@@ -84,7 +84,7 @@ export default function Engine({navigation, route}: EngineProps) {
       tempErrors.condensor = 'Condensor is required';
     }
 
-    if (soundVideo.length === 0) {
+    if (sound === 'major_sound' && soundVideo.length === 0) {
       Snackbar.show({
         text: 'Engine sound video is required',
         backgroundColor: 'red',
